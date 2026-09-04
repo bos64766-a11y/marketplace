@@ -1,0 +1,6 @@
+{
+  "name": "SNABTASH — B2B Ta'minot Platformasi",
+  "description": "Korxonalar va tashkilotlar uchun professional B2B mahsulotlar katalogi va zayavka platformasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
