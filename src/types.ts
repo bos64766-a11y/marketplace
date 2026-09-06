@@ -64,7 +64,8 @@ export interface UserProfile {
 
 export interface BannerSlide {
   id: string | number;
-  title: string;
+  image: string;
+  title?: string;
   badge?: string;
   description?: string;
   subtitle?: string;
@@ -72,7 +73,6 @@ export interface BannerSlide {
   ctaText?: string;
   btnLink?: string;
   ctaLink?: string;
-  image: string;
   imageAlt?: string;
   bullets?: string[];
   tag?: string;
@@ -145,3 +145,16 @@ export interface ToastNotification {
   message: string;
   type: 'success' | 'info' | 'error';
 }
+
+export interface HomeShowcaseSection {
+  id: string | number;
+  title: string;
+  subtitle?: string;
+  badge?: string;
+  icon?: string;
+  link?: string;
+  productIds: string[];
+  order: number;
+  isActive: boolean;
+}
+

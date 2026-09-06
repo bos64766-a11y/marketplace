@@ -13,51 +13,37 @@ import {
   Trash2,
   X,
   Image as ImageIcon,
-  CheckCircle2,
   Eye,
   ArrowRight,
-  Layers,
-  Sparkles,
   UploadCloud,
   Loader2,
   Link as LinkIcon,
-  FolderHeart,
   Check,
   RotateCcw,
+  Sparkles,
+  ExternalLink,
 } from 'lucide-react';
 import type { BannerSlide } from '../../types';
-
-const IMAGE_PRESETS = [
-  {
-    name: 'Asosiy B2B Paket',
-    url: '/hero-supply-pack.jpg',
-  },
-  {
-    name: 'Ombor & Logistika',
-    url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1000&auto=format&fit=crop&q=80',
-  },
-  {
-    name: 'Professional Klining',
-    url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1000&auto=format&fit=crop&q=80',
-  },
-  {
-    name: 'Himoya & Xavfsizlik',
-    url: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?w=1000&auto=format&fit=crop&q=80',
-  },
-  {
-    name: 'B2B Rasmiy Shartnoma',
-    url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1000&auto=format&fit=crop&q=80',
-  },
-];
 
 const LINK_PRESETS = [
   { label: 'Katalog (/catalog)', value: '/catalog' },
   { label: 'Maishiy kimyo (/catalog/maishiy-kimyo)', value: '/catalog/maishiy-kimyo' },
   { label: 'Himoya vositalari (/catalog/himoya-vositalari)', value: '/catalog/himoya-vositalari' },
+  { label: 'Kantselyariya (/catalog/kanselyariya)', value: '/catalog/kanselyariya' },
   { label: 'Xo‘jalik mollari (/catalog/xojalik-mollari)', value: '/catalog/xojalik-mollari' },
   { label: 'Zayavka qoldirish (/request)', value: '/request' },
-  { label: 'To‘lov va yetkazish (/delivery-payment)', value: '/delivery-payment' },
   { label: 'Aloqa markazi (/contacts)', value: '/contacts' },
+];
+
+const PRESET_BANNERS = [
+  {
+    name: 'Tozalik yechimlari aksiyasi (SNABTASH)',
+    url: '/banners/banner-clean-promo.png',
+  },
+  {
+    name: 'Asosiy B2B Paket',
+    url: '/hero-supply-pack.jpg',
+  },
 ];
 
 export const AdminBanners: React.FC = () => {
@@ -75,14 +61,10 @@ export const AdminBanners: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   const [formData, setFormData] = useState<Omit<BannerSlide, 'id'>>({
-    badge: 'KORXONALAR UCHUN',
     title: '',
-    description: '',
-    btnText: 'Katalogni ko‘rish',
+    image: '/banners/banner-clean-promo.png',
     btnLink: '/catalog',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: '',
-    order: banners.length + 1,
+    order: (banners?.length || 0) + 1,
     isActive: true,
   });
 
@@ -91,14 +73,10 @@ export const AdminBanners: React.FC = () => {
     setUploadError('');
     setImageTab('upload');
     setFormData({
-      badge: 'YANGI TAKLIF',
       title: '',
-      description: '',
-      btnText: 'Katalogni ko‘rish',
+      image: '/banners/banner-clean-promo.png',
       btnLink: '/catalog',
-      image: '/hero-supply-pack.jpg',
-      imageAlt: '',
-      order: banners.length + 1,
+      order: (banners?.length || 0) + 1,
       isActive: true,
     });
     setIsModalOpen(true);
@@ -107,15 +85,11 @@ export const AdminBanners: React.FC = () => {
   const openEditModal = (banner: BannerSlide) => {
     setEditingBanner(banner);
     setUploadError('');
-    setImageTab(banner.image?.startsWith('/media/') ? 'upload' : 'upload');
+    setImageTab('upload');
     setFormData({
-      badge: banner.badge || 'KORXONALAR UCHUN',
       title: banner.title || '',
-      description: banner.description || banner.subtitle || '',
-      btnText: banner.btnText || banner.ctaText || 'Katalogni ko‘rish',
+      image: banner.image || '/banners/banner-clean-promo.png',
       btnLink: banner.btnLink || banner.ctaLink || '/catalog',
-      image: banner.image || '/hero-supply-pack.jpg',
-      imageAlt: banner.imageAlt || banner.title || '',
       order: banner.order ?? 1,
       isActive: banner.isActive ?? true,
     });
@@ -125,9 +99,8 @@ export const AdminBanners: React.FC = () => {
   const handleFileUpload = async (file: File) => {
     if (!file) return;
 
-    // Check size limit (10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      setUploadError('Fayl hajmi 10MB dan oshmasligi kerak');
+    if (file.size > 15 * 1024 * 1024) {
+      setUploadError('Fayl hajmi 15MB dan oshmasligi kerak');
       return;
     }
 
@@ -139,7 +112,7 @@ export const AdminBanners: React.FC = () => {
       setFormData((prev) => ({
         ...prev,
         image: res.url,
-        imageAlt: prev.imageAlt || file.name.replace(/\.[^/.]+$/, ''),
+        title: prev.title || file.name.replace(/\.[^/.]+$/, ''),
       }));
     } catch (err: any) {
       setUploadError(err.message || 'Rasm yuklashda xatolik yuz berdi');
@@ -157,12 +130,20 @@ export const AdminBanners: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (!formData.title.trim()) return;
+    if (!formData.image.trim()) {
+      setUploadError('Iltimos, banner rasmini yuklang');
+      return;
+    }
+
+    const payload = {
+      ...formData,
+      title: (formData.title || '').trim() || 'Grafik Banner',
+    };
 
     if (editingBanner) {
-      await updateBanner(editingBanner.id, formData);
+      await updateBanner(editingBanner.id, payload);
     } else {
-      await addBanner(formData);
+      await addBanner(payload);
     }
     setIsModalOpen(false);
   };
@@ -176,101 +157,110 @@ export const AdminBanners: React.FC = () => {
     await updateBanner(banner.id, { isActive: !banner.isActive });
   };
 
-  const activeCount = banners.filter((b) => b.isActive !== false).length;
+  const activeCount = (banners || []).filter((b) => b.isActive !== false).length;
 
   return (
     <AdminLayout activeTab="banners">
       <div className="space-y-6">
-        {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Header & Actions */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-3xl border border-[#E2E8F0] shadow-2xs">
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-[#1E293B] tracking-tight">
-              Bannerlar Boshqaruvi
-            </h1>
-            <p className="text-xs sm:text-sm text-[#64748B] mt-1 font-medium">
-              Bosh sahifadagi qahramon (hero) slaydlariga kompyuterdan rasm yuklash, alishtirish va o‘chirish
-            </p>
+            <div className="flex items-center gap-2.5">
+              <div className="w-10 h-10 rounded-2xl bg-[#FF5A00]/10 flex items-center justify-center text-[#FF5A00]">
+                <ImageIcon className="w-5 h-5" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-black text-[#1E293B]">
+                  Bosh sahifa bannerlari
+                </h1>
+                <p className="text-xs sm:text-sm text-[#64748B] font-medium mt-0.5">
+                  Grafik bannerlarni yuklash va boshqarish (barcha matn va aksiyalar rasm ichida bo‘ladi)
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <button
-              onClick={() => navigate('/')}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-bold text-[#64748B] hover:text-[#0F172A] hover:bg-[#F8FAFC] transition-colors cursor-pointer shadow-2xs"
-            >
-              <Eye className="w-3.5 h-3.5" />
-              <span>Saytda ko‘rish</span>
-            </button>
-            <button
-              id="btn-add-banner"
               onClick={openAddModal}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#FF5A00] hover:bg-[#E54A00] text-white text-xs sm:text-sm font-bold shadow-md shadow-[#FF5A00]/25 transition-all cursor-pointer active:scale-97"
+              id="btn-add-banner"
+              className="bg-[#FF5A00] hover:bg-[#e04f00] text-white px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-md shadow-[#FF5A00]/25 transition-all flex items-center gap-2 cursor-pointer active:scale-97"
             >
               <Plus className="w-4 h-4" />
-              <span>Yangi Banner Qo‘shish</span>
+              <span>Yangi Banner Yuklash</span>
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#1E293B] border border-[#E2E8F0] px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <ExternalLink className="w-4 h-4 text-[#64748B]" />
+              <span>Saytda ko‘rish</span>
             </button>
           </div>
         </div>
 
-        {/* Stats Summary Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="bg-white p-4 rounded-2xl border border-[#F1F5F9] shadow-2xs flex items-center justify-between">
+        {/* Stats Strip */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E2E8F0] shadow-2xs flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-bold text-[#94A3B8] uppercase">Jami Bannerlar</p>
-              <p className="text-xl font-black text-[#1E293B] mt-0.5">{banners.length} ta</p>
+              <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">Jami bannerlar</span>
+              <p className="text-2xl font-black text-[#1E293B] mt-1">{banners?.length || 0}</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-[#FFF7ED] text-[#FF5A00] flex items-center justify-center font-bold">
-              <Layers className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 font-black">
+              {banners?.length || 0}
             </div>
           </div>
-          <div className="bg-white p-4 rounded-2xl border border-[#F1F5F9] shadow-2xs flex items-center justify-between">
+
+          <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E2E8F0] shadow-2xs flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-bold text-[#94A3B8] uppercase">Faol Slaydlar</p>
-              <p className="text-xl font-black text-[#10B981] mt-0.5">{activeCount} ta</p>
+              <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">Faol bannerlar</span>
+              <p className="text-2xl font-black text-emerald-600 mt-1">{activeCount}</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#10B981] flex items-center justify-center font-bold">
-              <CheckCircle2 className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-black">
+              {activeCount}
             </div>
           </div>
-          <div className="bg-white p-4 rounded-2xl border border-[#F1F5F9] shadow-2xs flex items-center justify-between">
+
+          <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E2E8F0] shadow-2xs flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-bold text-[#94A3B8] uppercase">Rasm formati</p>
-              <p className="text-xl font-black text-[#64748B] mt-0.5">JPG, PNG, WEBP</p>
+              <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">Format</span>
+              <p className="text-sm font-extrabold text-[#FF5A00] mt-1">To‘liq grafik rasm (Mobil moslashuvchan)</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#FF5A00] flex items-center justify-center font-bold">
-              <UploadCloud className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-[#FFF7ED] text-[#FF5A00] flex items-center justify-center">
+              <Sparkles className="w-5 h-5" />
             </div>
           </div>
         </div>
 
         {/* Banners List */}
         <div className="space-y-4">
-          {banners.length === 0 ? (
-            <div className="bg-white rounded-3xl p-12 text-center border border-[#F1F5F9] shadow-2xs">
-              <ImageIcon className="w-12 h-12 text-[#94A3B8] mx-auto mb-3" />
+          {!banners || banners.length === 0 ? (
+            <div className="bg-white rounded-3xl border border-dashed border-[#CBD5E1] p-12 text-center">
+              <div className="w-16 h-16 rounded-3xl bg-[#FFF7ED] text-[#FF5A00] flex items-center justify-center mx-auto mb-4 border border-[#FF5A00]/20">
+                <ImageIcon className="w-8 h-8" />
+              </div>
               <h3 className="text-base font-bold text-[#1E293B]">Hozircha bannerlar mavjud emas</h3>
-              <p className="text-xs text-[#64748B] mt-1">Yangi banner qo‘shishingiz yoki standart namunalarni tiklashingiz mumkin</p>
+              <p className="text-xs text-[#64748B] mt-1">Yangi grafik banner yuklang yoki standart namunani tiklang</p>
               <div className="mt-5 flex items-center justify-center gap-3">
                 <button
                   onClick={openAddModal}
                   className="px-4 py-2.5 bg-[#FF5A00] hover:bg-[#e04f00] text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer inline-flex items-center gap-1.5"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Banner qo‘shish</span>
+                  <span>Banner yuklash</span>
                 </button>
                 <button
                   onClick={resetDefaultBanners}
                   className="px-4 py-2.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0] rounded-xl text-xs font-bold cursor-pointer inline-flex items-center gap-1.5 transition-all"
                 >
                   <RotateCcw className="w-3.5 h-3.5 text-[#64748B]" />
-                  <span>Standart namunalarni tiklash</span>
+                  <span>Standart namunani tiklash</span>
                 </button>
               </div>
             </div>
           ) : (
             banners.map((banner, index) => {
               const isActive = banner.isActive !== false;
-              const desc = banner.description || banner.subtitle || '';
-              const btn = banner.btnText || banner.ctaText || 'Katalogni ko‘rish';
               const link = banner.btnLink || banner.ctaLink || '/catalog';
               const isUploaded = banner.image?.startsWith('/media/');
 
@@ -281,23 +271,23 @@ export const AdminBanners: React.FC = () => {
                     isActive ? 'border-[#E2E8F0]' : 'border-dashed border-[#CBD5E1] opacity-75'
                   }`}
                 >
-                  {/* Left: Order index & Image Thumbnail */}
-                  <div className="flex items-center gap-3.5 shrink-0">
-                    <div className="w-8 h-8 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center text-xs font-black text-[#64748B]">
-                      #{index + 1}
+                  {/* Left: Order index & Wide Banner Thumbnail */}
+                  <div className="flex items-center gap-4 shrink-0 w-full lg:w-auto">
+                    <div className="w-8 h-8 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center text-xs font-black text-[#64748B] shrink-0">
+                      #{banner.order ?? index + 1}
                     </div>
-                    <div className="w-20 h-16 sm:w-28 sm:h-20 rounded-xl bg-[#FFF8F4] border border-[#FF5A00]/20 overflow-hidden flex items-center justify-center p-1 relative group">
+                    <div className="w-48 sm:w-64 aspect-[2.4/1] rounded-xl bg-[#FFF8F4] border border-[#FF5A00]/20 overflow-hidden flex items-center justify-center relative group shrink-0">
                       <img
-                        src={banner.image || '/hero-supply-pack.jpg'}
-                        alt={banner.title}
-                        className="w-full h-full object-contain"
+                        src={banner.image || '/banners/banner-clean-promo.png'}
+                        alt={banner.title || 'Banner'}
+                        className="w-full h-full object-cover"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/hero-supply-pack.jpg';
+                          (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
                         }}
                       />
                       {isUploaded && (
-                        <span className="absolute bottom-1 right-1 bg-emerald-600 text-white text-[9px] font-bold px-1 rounded shadow-xs">
-                          Yuklangan
+                        <span className="absolute bottom-1 right-1 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+                          Serverda yuklangan
                         </span>
                       )}
                     </div>
@@ -306,36 +296,30 @@ export const AdminBanners: React.FC = () => {
                   {/* Middle: Content details */}
                   <div className="flex-1 min-w-0 space-y-1.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FFF7ED] border border-[#FF5A00]/25 text-[10px] font-extrabold text-[#FF5A00] uppercase tracking-wider">
-                        {banner.badge || 'KORXONALAR UCHUN'}
-                      </span>
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                           isActive
                             ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                             : 'bg-slate-100 text-slate-600 border border-slate-200'
                         }`}
                       >
                         <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-500' : 'bg-slate-400'}`} />
-                        {isActive ? 'Faol' : 'Nofaol'}
+                        {isActive ? 'Faol (Saytda ko‘rinadi)' : 'Nofaol'}
                       </span>
-                      {isUploaded && (
-                        <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                          Serverda saqlangan rasm
-                        </span>
-                      )}
+                      <span className="text-[10px] text-[#64748B] bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
+                        Tartib: #{banner.order ?? index + 1}
+                      </span>
                     </div>
 
                     <h3 className="text-sm sm:text-base font-black text-[#1E293B] truncate">
-                      {banner.title}
+                      {banner.title || `Grafik Banner #${index + 1}`}
                     </h3>
-                    <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
-                      {desc}
-                    </p>
 
-                    <div className="flex items-center gap-2 pt-1">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FF5A00] bg-[#FFF7ED] px-2 py-0.5 rounded">
-                        Tugma: <b>{btn}</b> → <i>{link}</i>
+                    <div className="flex items-center gap-2 pt-0.5">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] px-2.5 py-1 rounded-lg">
+                        <LinkIcon className="w-3.5 h-3.5 text-[#FF5A00]" />
+                        <span>Bosganda o‘tish:</span>
+                        <b className="text-[#1E293B]">{link}</b>
                       </span>
                     </div>
                   </div>
@@ -377,7 +361,7 @@ export const AdminBanners: React.FC = () => {
                       <button
                         onClick={() => setPreviewBanner(banner)}
                         className="p-2.5 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] transition-colors cursor-pointer"
-                        title="Slayd ko‘rinishini tekshirish"
+                        title="To‘liq o‘lchamda ko‘rish"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
@@ -386,8 +370,8 @@ export const AdminBanners: React.FC = () => {
                       <button
                         id={`btn-edit-banner-${banner.id}`}
                         onClick={() => openEditModal(banner)}
-                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#FF5A00]/10 hover:bg-[#FF5A00] text-[#FF5A00] hover:text-white text-xs font-bold transition-all cursor-pointer"
-                        title="Alishtirish / Tahrirlash"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#FF5A00]/10 hover:bg-[#FF5A00] text-[#FF5A00] hover:text-white text-xs font-bold transition-all cursor-pointer"
+                        title="Rasmni alishtirish"
                       >
                         <Pencil className="w-3.5 h-3.5" />
                         <span>Alishtirish</span>
@@ -410,174 +394,39 @@ export const AdminBanners: React.FC = () => {
           )}
         </div>
 
-        {/* Modal: Add or Edit / Replace Banner with File Upload */}
+        {/* Modal: Add or Edit Pure Image Banner */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto">
-            <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-[#F1F5F9] my-8 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs overflow-y-auto">
+            <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-[#F1F5F9] my-6 animate-in fade-in zoom-in-95 duration-200">
+              {/* Modal Header */}
               <div className="flex items-center justify-between pb-4 border-b border-[#F1F5F9]">
                 <div>
-                  <h3 className="text-lg font-black text-[#1E293B]">
-                    {editingBanner ? 'Bannerni Alishtirish / Tahrirlash' : 'Yangi Banner Qo‘shish'}
+                  <h3 className="text-lg sm:text-xl font-black text-[#1E293B]">
+                    {editingBanner ? 'Bannerni alishtirish' : 'Yangi grafik banner yuklash'}
                   </h3>
-                  <p className="text-xs text-[#64748B] mt-0.5">
-                    Bosh sahifadagi qahramon (hero) slayd ma’lumotlarini to‘ldiring va rasm yuklang
+                  <p className="text-xs text-[#64748B] font-medium mt-0.5">
+                    Faqat rasm yuklanadi. Saytda kompyuter va telefonlarda avtomatik moslashadi.
                   </p>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="w-8 h-8 rounded-full bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#64748B] flex items-center justify-center transition-colors cursor-pointer"
+                  className="p-1.5 rounded-xl text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A] transition-colors cursor-pointer"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="space-y-4 pt-5">
-                {/* Live Preview Card */}
-                <div>
-                  <label className="block text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-2">
-                    Jonli Ko‘rinish (Oldindan Ko‘rish)
-                  </label>
-                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-white via-[#FFFBF8] to-[#F8FAFC] border border-[#FF5A00]/20 shadow-xs flex items-center justify-between gap-4">
-                    <div className="space-y-1.5 flex-1 min-w-0">
-                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FFF7ED] border border-[#FF5A00]/20 text-[#FF5A00] font-extrabold text-[10px] uppercase">
-                        {formData.badge || 'BADGE'}
-                      </span>
-                      <h4 className="text-sm sm:text-base font-black text-[#1E293B] truncate">
-                        {formData.title || 'Sarlavha kiritilmagan'}
-                      </h4>
-                      <p className="text-xs text-[#64748B] line-clamp-2">
-                        {formData.description || 'Tavsif matni...'}
-                      </p>
-                      <div className="pt-1">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FF5A00] text-white text-xs font-bold shadow-xs">
-                          <span>{formData.btnText || 'Katalogni ko‘rish'}</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="w-24 h-20 sm:w-32 sm:h-24 rounded-xl bg-white border border-[#E2E8F0] p-1 flex items-center justify-center shrink-0 overflow-hidden relative">
-                      <img
-                        src={formData.image || '/hero-supply-pack.jpg'}
-                        alt={formData.title}
-                        className="w-full h-full object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/hero-supply-pack.jpg';
-                        }}
-                      />
-                      {isUploading && (
-                        <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                          <Loader2 className="w-5 h-5 text-[#FF5A00] animate-spin" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Sarlavha & Badge */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-[#334155] mb-1.5">
-                      Sarlavha *
-                    </label>
-                    <input
-                      id="input-banner-title"
-                      type="text"
-                      value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      placeholder="Masalan: Kompleks ta’minot yechimi"
-                      className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-[#334155] mb-1.5">
-                      Badge Matni (Kichik tegi)
-                    </label>
-                    <input
-                      id="input-banner-badge"
-                      type="text"
-                      value={formData.badge}
-                      onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                      placeholder="KORXONALAR UCHUN, 100% RASMIY..."
-                      className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                {/* Tavsif */}
-                <div>
-                  <label className="block text-xs font-bold text-[#334155] mb-1.5">
-                    Tavsif (Batafsil matn) *
-                  </label>
-                  <textarea
-                    id="input-banner-desc"
-                    rows={3}
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Biz sizning biznesingizga kerakli barcha mahsulotlarni bir joyda jamlaymiz..."
-                    className="w-full p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-medium text-[#0F172A] transition-all focus:outline-none resize-none"
-                  />
-                </div>
-
-                {/* Tugma matni & havolasi */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-[#334155] mb-1.5">
-                      Tugma Matni
-                    </label>
-                    <input
-                      id="input-banner-btn-text"
-                      type="text"
-                      value={formData.btnText}
-                      onChange={(e) => setFormData({ ...formData, btnText: e.target.value })}
-                      placeholder="Katalogni ko‘rish, Zayavka qoldirish..."
-                      className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-[#334155] mb-1.5">
-                      Tugma Havolasi
-                    </label>
-                    <div className="space-y-1.5">
-                      <input
-                        id="input-banner-btn-link"
-                        type="text"
-                        value={formData.btnLink}
-                        onChange={(e) => setFormData({ ...formData, btnLink: e.target.value })}
-                        placeholder="/catalog yoki /request"
-                        className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
-                      />
-                      <div className="flex flex-wrap gap-1">
-                        {LINK_PRESETS.slice(0, 4).map((lp) => (
-                          <button
-                            type="button"
-                            key={lp.value}
-                            onClick={() => setFormData({ ...formData, btnLink: lp.value })}
-                            className={`text-[10px] px-2 py-0.5 rounded cursor-pointer transition-colors ${
-                              formData.btnLink === lp.value
-                                ? 'bg-[#FF5A00] text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                            }`}
-                          >
-                            {lp.label.split(' ')[0]}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* ─── BANNER RASMI UPLOAD & TANLASH ─── */}
-                <div className="bg-[#F8FAFC] p-4 rounded-2xl border border-[#E2E8F0] space-y-3">
+              {/* Form Content */}
+              <div className="space-y-5 pt-5">
+                {/* 1. UPLOAD IMAGE ZONE (PRIMARY) */}
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-xs font-bold text-[#1E293B]">
-                      Banner Rasmi
+                      Banner Rasmi (Tavsiya etiladi: 1200x500 yoki 1280x550) *
                     </label>
 
                     {/* Mode Selector Tabs */}
-                    <div className="flex items-center bg-white p-1 rounded-xl border border-[#E2E8F0] gap-1">
+                    <div className="flex items-center bg-[#F8FAFC] p-1 rounded-xl border border-[#E2E8F0] gap-1">
                       <button
                         type="button"
                         id="tab-mode-upload"
@@ -601,8 +450,8 @@ export const AdminBanners: React.FC = () => {
                             : 'text-[#64748B] hover:text-[#0F172A]'
                         }`}
                       >
-                        <FolderHeart className="w-3.5 h-3.5" />
-                        <span>Tayyor Rasmlar</span>
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Namuna</span>
                       </button>
                       <button
                         type="button"
@@ -645,14 +494,14 @@ export const AdminBanners: React.FC = () => {
                         onDragLeave={() => setIsDragging(false)}
                         onDrop={handleDrop}
                         onClick={() => fileInputRef.current?.click()}
-                        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all bg-white ${
+                        className={`border-2 border-dashed rounded-2xl p-7 text-center cursor-pointer transition-all bg-white ${
                           isDragging
                             ? 'border-[#FF5A00] bg-[#FFF7ED]'
                             : 'border-[#CBD5E1] hover:border-[#FF5A00] hover:bg-[#FFFBF8]'
                         }`}
                       >
                         {isUploading ? (
-                          <div className="py-4 space-y-2">
+                          <div className="py-5 space-y-2">
                             <Loader2 className="w-8 h-8 text-[#FF5A00] animate-spin mx-auto" />
                             <p className="text-xs font-bold text-[#1E293B]">Rasm serverga yuklanmoqda...</p>
                             <p className="text-[11px] text-[#94A3B8]">Biroz kuting</p>
@@ -663,67 +512,28 @@ export const AdminBanners: React.FC = () => {
                               <UploadCloud className="w-6 h-6" />
                             </div>
                             <div>
-                              <p className="text-xs sm:text-sm font-bold text-[#1E293B]">
+                              <p className="text-sm font-bold text-[#1E293B]">
                                 Rasmni bu yerga tashlang yoki <span className="text-[#FF5A00] underline">tanlang</span>
                               </p>
-                              <p className="text-[11px] text-[#64748B] mt-0.5">
-                                PNG, JPG, WEBP, SVG • 10MB gacha
+                              <p className="text-xs text-[#64748B] mt-0.5">
+                                PNG, JPG, WEBP • 15MB gacha
                               </p>
                             </div>
                           </div>
                         )}
                       </div>
-
-                      {/* Current Image Status & Info */}
-                      {formData.image && (
-                        <div className="mt-3 flex items-center justify-between bg-white p-3 rounded-xl border border-[#E2E8F0]">
-                          <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-10 h-10 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-0.5 shrink-0 overflow-hidden">
-                              <img
-                                src={formData.image}
-                                alt="Preview"
-                                className="w-full h-full object-contain"
-                              />
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-xs font-bold text-[#1E293B] truncate max-w-[280px]">
-                                {formData.image}
-                              </p>
-                              <span className="inline-flex items-center gap-1 text-[10px] text-emerald-600 font-bold">
-                                <Check className="w-3 h-3" />
-                                Rasm tayyor
-                              </span>
-                            </div>
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={() => fileInputRef.current?.click()}
-                            className="px-3 py-1.5 rounded-lg text-xs font-bold text-[#FF5A00] hover:bg-[#FFF7ED] transition-colors cursor-pointer shrink-0"
-                          >
-                            Alishtirish
-                          </button>
-                        </div>
-                      )}
-
-                      {uploadError && (
-                        <p className="text-xs text-red-600 font-semibold mt-2 bg-red-50 p-2.5 rounded-xl border border-red-200">
-                          {uploadError}
-                        </p>
-                      )}
                     </div>
                   )}
 
-                  {/* TAB 2: TAYYOR PRESETLAR */}
+                  {/* TAB 2: PRESET BANNERS */}
                   {imageTab === 'preset' && (
                     <div className="space-y-2">
-                      <p className="text-[11px] text-[#64748B]">B2B ta'minot uchun moslashtirilgan sifatli rasmlardan birini tanlang:</p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {IMAGE_PRESETS.map((preset) => (
+                      <div className="grid grid-cols-1 gap-2">
+                        {PRESET_BANNERS.map((preset) => (
                           <button
                             type="button"
                             key={preset.url}
-                            onClick={() => setFormData({ ...formData, image: preset.url })}
+                            onClick={() => setFormData({ ...formData, image: preset.url, title: preset.name })}
                             className={`p-2.5 rounded-xl text-left transition-all cursor-pointer border flex items-center gap-3 bg-white ${
                               formData.image === preset.url
                                 ? 'border-[#FF5A00] ring-2 ring-[#FF5A00]/20 bg-[#FFFBF8]'
@@ -733,7 +543,7 @@ export const AdminBanners: React.FC = () => {
                             <img
                               src={preset.url}
                               alt={preset.name}
-                              className="w-12 h-10 object-contain rounded-lg bg-slate-50 p-0.5 shrink-0"
+                              className="w-20 h-10 object-cover rounded-lg bg-slate-50 shrink-0"
                             />
                             <div className="min-w-0 flex-1">
                               <p className="text-xs font-bold text-[#1E293B] truncate">{preset.name}</p>
@@ -748,23 +558,96 @@ export const AdminBanners: React.FC = () => {
                     </div>
                   )}
 
-                  {/* TAB 3: URL ORQALI */}
+                  {/* TAB 3: URL INPUT */}
                   {imageTab === 'url' && (
                     <div className="space-y-2">
-                      <p className="text-[11px] text-[#64748B]">Internetdagi rasmning to‘g‘ridan-to‘g‘ri havolasini kiriting:</p>
                       <input
                         type="text"
                         value={formData.image}
                         onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                        placeholder="https://images.unsplash.com/... yoki /hero-supply-pack.jpg"
+                        placeholder="https://... yoki /banners/banner-clean-promo.png"
                         className="w-full h-11 px-4 rounded-xl bg-white border border-[#E2E8F0] focus:border-[#FF5A00] text-xs sm:text-sm font-medium text-[#0F172A] transition-all focus:outline-none"
                       />
                     </div>
                   )}
+
+                  {uploadError && (
+                    <p className="text-xs text-red-600 font-semibold bg-red-50 p-2.5 rounded-xl border border-red-200">
+                      {uploadError}
+                    </p>
+                  )}
+
+                  {/* Live Banner Preview inside Modal */}
+                  {formData.image && (
+                    <div className="space-y-1.5 pt-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-[#64748B]">
+                        <span>Saytdagi ko‘rinishi (Jonli oldindan ko‘rish):</span>
+                        <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                          <Check className="w-3.5 h-3.5" /> Rasm tanlangan
+                        </span>
+                      </div>
+                      <div className="w-full rounded-2xl overflow-hidden border border-[#E2E8F0] shadow-xs bg-slate-50">
+                        <img
+                          src={formData.image}
+                          alt="Live Preview"
+                          className="w-full h-auto object-cover block"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Tartib raqami & Faollik */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                {/* 2. LINK INPUT (WHERE BANNER LEADS) */}
+                <div>
+                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5">
+                    Havola (Bannerni bosganda ochiladigan sahifa)
+                  </label>
+                  <div className="space-y-2">
+                    <input
+                      id="input-banner-btn-link"
+                      type="text"
+                      value={formData.btnLink}
+                      onChange={(e) => setFormData({ ...formData, btnLink: e.target.value })}
+                      placeholder="/catalog/maishiy-kimyo yoki /catalog"
+                      className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
+                    />
+                    <div className="flex flex-wrap gap-1.5">
+                      {LINK_PRESETS.map((lp) => (
+                        <button
+                          type="button"
+                          key={lp.value}
+                          onClick={() => setFormData({ ...formData, btnLink: lp.value })}
+                          className={`text-[11px] px-2.5 py-1 rounded-lg cursor-pointer transition-colors font-medium ${
+                            formData.btnLink === lp.value
+                              ? 'bg-[#FF5A00] text-white font-bold'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          }`}
+                        >
+                          {lp.label.split(' ')[0]}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. OPTIONAL NAME & ORDER */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-[#334155] mb-1.5">
+                      Banner Nomi (Admin paneldagi eslatma)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      placeholder="Masalan: Tozalik yechimlari aksiyasi"
+                      className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
+                    />
+                  </div>
+
                   <div>
                     <label className="block text-xs font-bold text-[#334155] mb-1.5">
                       Tartib Raqami
@@ -777,24 +660,25 @@ export const AdminBanners: React.FC = () => {
                       className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
                     />
                   </div>
+                </div>
 
-                  <div className="flex items-center gap-3 pt-6">
-                    <input
-                      type="checkbox"
-                      id="checkbox-banner-active"
-                      checked={formData.isActive}
-                      onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                      className="w-5 h-5 accent-[#FF5A00] rounded cursor-pointer"
-                    />
-                    <label htmlFor="checkbox-banner-active" className="text-xs font-bold text-[#334155] cursor-pointer">
-                      Slayderda ko‘rsatilsin (Faol holatda)
-                    </label>
-                  </div>
+                {/* Active Checkbox */}
+                <div className="flex items-center gap-3 pt-1">
+                  <input
+                    type="checkbox"
+                    id="checkbox-banner-active"
+                    checked={formData.isActive}
+                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                    className="w-5 h-5 accent-[#FF5A00] rounded cursor-pointer"
+                  />
+                  <label htmlFor="checkbox-banner-active" className="text-xs font-bold text-[#334155] cursor-pointer">
+                    Slayderda faol ko‘rsatilsin
+                  </label>
                 </div>
               </div>
 
               {/* Modal Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-6 mt-6 border-t border-[#F1F5F9]">
+              <div className="flex items-center justify-end gap-3 pt-5 mt-6 border-t border-[#F1F5F9]">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -806,11 +690,11 @@ export const AdminBanners: React.FC = () => {
                   id="btn-save-banner"
                   type="button"
                   onClick={handleSave}
-                  disabled={!formData.title.trim() || isUploading}
-                  className="px-6 py-2.5 rounded-xl bg-[#FF5A00] hover:bg-[#E54A00] text-white text-xs font-bold shadow-md shadow-[#FF5A00]/25 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                  disabled={!formData.image || isUploading}
+                  className="px-6 py-2.5 rounded-xl bg-[#FF5A00] hover:bg-[#E54A00] text-white text-xs sm:text-sm font-bold shadow-md shadow-[#FF5A00]/25 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
                 >
                   {isUploading && <Loader2 className="w-4 h-4 animate-spin" />}
-                  <span>{editingBanner ? 'O‘zgarishlarni Saqlash' : 'Bannerni Qo‘shish'}</span>
+                  <span>{editingBanner ? 'O‘zgarishlarni Saqlash' : 'Bannerni Saqlash'}</span>
                 </button>
               </div>
             </div>
@@ -850,10 +734,17 @@ export const AdminBanners: React.FC = () => {
 
         {/* Modal: Full Preview */}
         {previewBanner && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-            <div className="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl border border-[#F1F5F9] animate-in fade-in zoom-in-95 duration-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-xs">
+            <div className="bg-white rounded-3xl max-w-4xl w-full p-5 sm:p-7 shadow-2xl border border-[#F1F5F9] animate-in fade-in zoom-in-95 duration-200">
               <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9]">
-                <h4 className="text-sm font-bold text-[#1E293B]">Bosh sahifadagi to‘liq ko‘rinishi</h4>
+                <div>
+                  <h4 className="text-sm font-bold text-[#1E293B]">
+                    {previewBanner.title || 'Grafik Banner'}
+                  </h4>
+                  <p className="text-xs text-[#64748B]">
+                    Havola: {previewBanner.btnLink || previewBanner.ctaLink || '/catalog'}
+                  </p>
+                </div>
                 <button
                   onClick={() => setPreviewBanner(null)}
                   className="p-1 rounded-lg text-[#64748B] hover:bg-[#F1F5F9] cursor-pointer"
@@ -862,40 +753,18 @@ export const AdminBanners: React.FC = () => {
                 </button>
               </div>
 
-              <div className="mt-5 rounded-3xl bg-gradient-to-br from-white via-[#FFFBF8] to-[#F8FAFC] border border-[#E5EAF2] p-6 sm:p-10 shadow-sm">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                  <div className="md:col-span-7 space-y-3">
-                    <span className="inline-block px-3 py-1 rounded-full bg-[#FFF7ED] border border-[#FF5A00]/20 text-[#FF5A00] font-extrabold text-[11px] uppercase">
-                      {previewBanner.badge || 'KORXONALAR UCHUN'}
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl font-black text-[#1E293B]">
-                      {previewBanner.title}
-                    </h2>
-                    <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
-                      {previewBanner.description || previewBanner.subtitle}
-                    </p>
-                    <div className="pt-2">
-                      <button className="bg-[#FF5A00] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-2xl inline-flex items-center gap-2 shadow-md shadow-[#FF5A00]/25">
-                        <span>{previewBanner.btnText || previewBanner.ctaText || 'Katalogni ko‘rish'}</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-5 flex items-center justify-center">
-                    <img
-                      src={previewBanner.image || '/hero-supply-pack.jpg'}
-                      alt={previewBanner.title}
-                      className="max-h-52 object-contain drop-shadow-md"
-                    />
-                  </div>
-                </div>
+              <div className="mt-4 rounded-2xl overflow-hidden border border-[#E5EAF2] shadow-sm bg-slate-50">
+                <img
+                  src={previewBanner.image || '/banners/banner-clean-promo.png'}
+                  alt={previewBanner.title || 'Banner'}
+                  className="w-full h-auto object-cover block"
+                />
               </div>
 
               <div className="mt-5 flex justify-end">
                 <button
                   onClick={() => setPreviewBanner(null)}
-                  className="px-4 py-2 bg-[#1E293B] text-white rounded-xl text-xs font-bold cursor-pointer"
+                  className="px-5 py-2 bg-[#1E293B] text-white rounded-xl text-xs font-bold cursor-pointer"
                 >
                   Yopish
                 </button>

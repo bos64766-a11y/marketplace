@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Product, Category, CartItem, RequestOrder, UserProfile, ToastNotification, SiteSettings, BannerSlide } from '../types';
+import { Product, Category, CartItem, RequestOrder, UserProfile, ToastNotification, SiteSettings, BannerSlide, HomeShowcaseSection } from '../types';
 import { PRODUCTS as INITIAL_PRODUCTS } from '../data/products';
 import { CATEGORIES as INITIAL_CATEGORIES } from '../data/categories';
 import { api } from '../services/api';
@@ -29,6 +29,13 @@ interface AppContextType {
   updateBanner: (id: string | number, updated: Partial<BannerSlide>) => Promise<void>;
   deleteBanner: (id: string | number) => Promise<void>;
   resetDefaultBanners: () => Promise<void>;
+
+  // Showcase Sections (Biz kimlar uchun xizmat qilamiz)
+  showcaseSections: HomeShowcaseSection[];
+  addShowcaseSection: (data: Omit<HomeShowcaseSection, 'id'>) => Promise<void>;
+  updateShowcaseSection: (id: string | number, updated: Partial<HomeShowcaseSection>) => Promise<void>;
+  deleteShowcaseSection: (id: string | number) => Promise<void>;
+  resetDefaultShowcaseSections: () => Promise<void>;
 
   // Cart
   cart: CartItem[];
@@ -100,49 +107,84 @@ const DEFAULT_SETTINGS: SiteSettings = {
 const DEFAULT_BANNERS: BannerSlide[] = [
   {
     id: 1,
-    badge: 'KORXONALAR UCHUN',
-    title: 'Kompleks ta’minot yechimi',
-    description: 'Biz sizning biznesingizga kerakli barcha mahsulotlarni bir joyda jamlaymiz va vaqtingizni tejaymiz.',
-    btnText: 'Katalogni ko‘rish',
-    btnLink: '/catalog',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: 'Kompleks taʼminot yechimi',
+    title: 'Tozalik yechimlari aksiyasi',
+    image: '/banners/banner-clean-promo.png',
+    btnLink: '/catalog/maishiy-kimyo',
+    order: 1,
+    isActive: true,
+  },
+];
+
+const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
+  {
+    id: 'section-ofislar',
+    title: 'Ofislar uchun',
+    subtitle: 'Kantselyariya, gigiyena va ofis kundalik sarflov vositalari',
+    badge: 'OFISLAR VA BIZNES',
+    icon: 'Building2',
+    link: '/catalog/kanselyariya',
+    productIds: [
+      'snb-paper-svetocopy-a4',
+      'snb-tellux-z2',
+      'snb-soap-5l',
+      'snb-files-binder-black',
+      'snb-trash-bags-60l',
+      'snb-air-freshener-glade',
+    ],
     order: 1,
     isActive: true,
   },
   {
-    id: 2,
-    badge: 'TEZKOR VA ISHONCHLI',
-    title: 'Professional klining va kimyo',
-    description: 'SanPiN talablariga mos klining kimyolari, xo‘jalik inventarlari va tozalash vositalari to‘g‘ridan-to‘g‘ri ombordan.',
-    btnText: 'Katalogni ko‘rish',
-    btnLink: '/catalog/maishiy-kimyo',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: 'Professional klining va tozalash',
+    id: 'section-horeca',
+    title: 'Restoran va mehmonxonalar uchun',
+    subtitle: 'HoReCa professional tozalash, idish yuvish va SanPiN talablariga mos vositalar',
+    badge: 'HORECA & RESTORAN',
+    icon: 'UtensilsCrossed',
+    link: '/catalog/maishiy-kimyo',
+    productIds: [
+      'snb-grass-dish',
+      'snb-elma-napkins',
+      'snb-gloves-black-rubber',
+      'snb-fairy-lemon',
+      'snb-tellux-z2',
+      'snb-domestos-bleach',
+    ],
     order: 2,
     isActive: true,
   },
   {
-    id: 3,
-    badge: 'ISHCHI XAVFSIZLIGI',
-    title: 'Himoya vositalari va qo‘lqoplar',
-    description: 'Ishlab chiqarish va omborlar uchun barcha turdagi sertifikatlangan ishchi qo‘lqoplar va himoya anjomlari.',
-    btnText: 'Katalogni ko‘rish',
-    btnLink: '/catalog/himoya-vositalari',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: 'Himoya vositalari va qo‘lqoplar',
+    id: 'section-klining',
+    title: 'Klining kompaniyalari uchun',
+    subtitle: 'Professional tozalash kimyolari, konsentratlar va mikrofibra inventarlari',
+    badge: 'PROFESSIONAL KLINING',
+    icon: 'Sparkles',
+    link: '/catalog/maishiy-kimyo',
+    productIds: [
+      'snb-grass-universal',
+      'snb-grass-floor',
+      'snb-grass-antigraffiti',
+      'snb-vanish-oxi',
+      'snb-soap-5l',
+      'snb-gloves-latex-pour',
+    ],
     order: 3,
     isActive: true,
   },
   {
-    id: 4,
-    badge: '100% RASMIY SHARTNOMA',
-    title: 'QQS bilan Didox e-faktura',
-    description: 'Barcha korporativ mijozlar uchun qonuniy shartnoma, hisob-faktura va Toshkent bo‘yicha bepul yetkazish.',
-    btnText: 'Zayavka qoldirish',
-    btnLink: '/request',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: '100% Rasmiy B2B taʼminot',
+    id: 'section-zavod',
+    title: 'Zavod va fabrikalar uchun',
+    subtitle: 'Individual himoya vositalari, ishchi qo‘lqoplar va sanoat tozalovchilari',
+    badge: 'SANOAT VA ISHLAB CHIQARISH',
+    icon: 'Factory',
+    link: '/catalog/himoya-vositalari',
+    productIds: [
+      'snb-gloves-orange',
+      'snb-gloves-insulated-300',
+      'snb-gloves-cotton-100',
+      'snb-respirator-3m',
+      'snb-glasses-clear',
+      'snb-gloves-red-dot',
+    ],
     order: 4,
     isActive: true,
   },
@@ -228,6 +270,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setBanners(data);
         try {
           localStorage.setItem('snabtash_admin_banners', JSON.stringify(data));
+        } catch {}
+      }
+    }).catch(() => {});
+
+    api.getShowcaseSections().then((data) => {
+      if (isMounted && Array.isArray(data) && data.length > 0) {
+        setShowcaseSections(data);
+        try {
+          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(data));
         } catch {}
       }
     }).catch(() => {});
@@ -437,6 +488,103 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       localStorage.setItem('snabtash_admin_banners', JSON.stringify(createdList));
     } catch {}
     showToast('✓ Standart bannerlar qayta tiklandi', 'success');
+  };
+
+  // Dynamic Showcase Sections state (Biz kimlar uchun xizmat qilamiz)
+  const [showcaseSections, setShowcaseSections] = useState<HomeShowcaseSection[]>(() => {
+    try {
+      const saved = localStorage.getItem('snabtash_showcase_sections');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return DEFAULT_SHOWCASE_SECTIONS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('snabtash_showcase_sections', JSON.stringify(showcaseSections));
+    } catch {}
+  }, [showcaseSections]);
+
+  const addShowcaseSection = async (data: Omit<HomeShowcaseSection, 'id'>) => {
+    try {
+      const created = await api.createShowcaseSection(data);
+      setShowcaseSections((prev) => {
+        const next = [...prev, created];
+        try {
+          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+      showToast('✓ Yangi bo‘lim muvaffaqiyatli qo‘shildi', 'success');
+    } catch (err) {
+      console.log('API showcase create error, using local fallback:', err);
+      const newSec: HomeShowcaseSection = { ...data, id: `section-${Date.now()}` };
+      setShowcaseSections((prev) => {
+        const next = [...prev, newSec];
+        try {
+          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+      showToast('✓ Yangi bo‘lim saqlandi', 'success');
+    }
+  };
+
+  const updateShowcaseSection = async (id: string | number, updated: Partial<HomeShowcaseSection>) => {
+    const idStr = String(id);
+    setShowcaseSections((prev) => {
+      const next = prev.map((s) => (String(s.id) === idStr ? { ...s, ...updated } : s));
+      try {
+        localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+
+    try {
+      const saved = await api.updateShowcaseSection(id, updated);
+      if (saved && saved.id) {
+        setShowcaseSections((prev) => prev.map((s) => (String(s.id) === idStr ? saved : s)));
+      }
+    } catch (err) {
+      console.log('API showcase update error, using local state:', err);
+    }
+    showToast('Bo‘lim maʼlumotlari yangilandi', 'info');
+  };
+
+  const deleteShowcaseSection = async (id: string | number) => {
+    const idStr = String(id);
+    setShowcaseSections((prev) => {
+      const next = prev.filter((s) => String(s.id) !== idStr);
+      try {
+        localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+
+    try {
+      await api.deleteShowcaseSection(id);
+    } catch (err) {
+      console.log('API showcase delete error:', err);
+    }
+    showToast('Bo‘lim o‘chirildi', 'info');
+  };
+
+  const resetDefaultShowcaseSections = async () => {
+    const createdList: HomeShowcaseSection[] = [];
+    for (const item of DEFAULT_SHOWCASE_SECTIONS) {
+      try {
+        const { id, ...data } = item;
+        const res = await api.createShowcaseSection(data);
+        createdList.push(res);
+      } catch {
+        createdList.push(item);
+      }
+    }
+    setShowcaseSections(createdList);
+    try {
+      localStorage.setItem('snabtash_showcase_sections', JSON.stringify(createdList));
+    } catch {}
+    showToast('✓ Standart sohaviy bo‘limlar qayta tiklandi', 'success');
   };
 
   // Site Settings State
@@ -831,6 +979,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateBanner,
         deleteBanner,
         resetDefaultBanners,
+        showcaseSections,
+        addShowcaseSection,
+        updateShowcaseSection,
+        deleteShowcaseSection,
+        resetDefaultShowcaseSections,
         cart,
         addToCart,
         removeFromCart,

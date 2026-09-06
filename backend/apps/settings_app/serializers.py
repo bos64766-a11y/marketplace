@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SiteSettings, Banner
+from .models import SiteSettings, Banner, ShowcaseSection
 
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
@@ -41,10 +41,14 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
 
 
 class BannerSerializer(serializers.ModelSerializer):
-    btnText = serializers.CharField(source='btn_text', required=False)
-    btnLink = serializers.CharField(source='btn_link', required=False)
-    imageAlt = serializers.CharField(source='image_alt', required=False, allow_blank=True)
-    isActive = serializers.BooleanField(source='is_active', required=False)
+    badge = serializers.CharField(required=False, allow_blank=True, default='')
+    title = serializers.CharField(required=False, allow_blank=True, default='Banner')
+    description = serializers.CharField(required=False, allow_blank=True, default='')
+    btnText = serializers.CharField(source='btn_text', required=False, allow_blank=True, default='')
+    btnLink = serializers.CharField(source='btn_link', required=False, allow_blank=True, default='/catalog')
+    image = serializers.CharField(required=True)
+    imageAlt = serializers.CharField(source='image_alt', required=False, allow_blank=True, default='')
+    isActive = serializers.BooleanField(source='is_active', required=False, default=True)
 
     class Meta:
         model = Banner
@@ -62,3 +66,23 @@ class BannerSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
+
+
+class ShowcaseSectionSerializer(serializers.ModelSerializer):
+    productIds = serializers.ListField(child=serializers.CharField(), source='product_ids', required=False)
+    isActive = serializers.BooleanField(source='is_active', required=False)
+
+    class Meta:
+        model = ShowcaseSection
+        fields = [
+            'id',
+            'title',
+            'subtitle',
+            'badge',
+            'icon',
+            'link',
+            'productIds',
+            'order',
+            'isActive',
+        ]
+

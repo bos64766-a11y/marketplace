@@ -1,61 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
-import { ArrowRight, Building2, Truck, Phone, FileText, Zap, ShieldCheck, Award } from 'lucide-react';
-import { BannerSlide } from '../types';
-
-const DEFAULT_SLIDES: BannerSlide[] = [
-  {
-    id: 'slide-complex-supply',
-    badge: 'KORXONALAR UCHUN',
-    title: 'Kompleks ta’minot yechimi',
-    description:
-      'Biz sizning biznesingizga kerakli barcha mahsulotlarni bir joyda jamlaymiz va vaqtingizni tejaymiz.',
-    btnText: 'Katalogni ko‘rish',
-    btnLink: '/catalog',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: 'Kompleks taʼminot yechimi',
-  },
-  {
-    id: 'slide-cleaning-fast',
-    badge: 'TEZKOR VA ISHONCHLI',
-    title: 'Professional klining va kimyo',
-    description:
-      'SanPiN talablariga mos klining kimyolari, xo‘jalik inventarlari va tozalash vositalari to‘g‘ridan-to‘g‘ri ombordan.',
-    btnText: 'Katalogni ko‘rish',
-    btnLink: '/catalog/maishiy-kimyo',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: 'Professional klining va tozalash',
-  },
-  {
-    id: 'slide-ppe-safety',
-    badge: 'ISHCHI XAVFSIZLIGI',
-    title: 'Himoya vositalari va qo‘lqoplar',
-    description:
-      'Ishlab chiqarish va omborlar uchun barcha turdagi sertifikatlangan ishchi qo‘lqoplar va himoya anjomlari.',
-    btnText: 'Katalogni ko‘rish',
-    btnLink: '/catalog/himoya-vositalari',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: 'Himoya vositalari va qo‘lqoplar',
-  },
-  {
-    id: 'slide-official-vat',
-    badge: '100% RASMIY SHARTNOMA',
-    title: 'QQS bilan Didox e-faktura',
-    description:
-      'Barcha korporativ mijozlar uchun qonuniy shartnoma, hisob-faktura va Toshkent bo‘yicha bepul yetkazish.',
-    btnText: 'Zayavka qoldirish',
-    btnLink: '/request',
-    image: '/hero-supply-pack.jpg',
-    imageAlt: '100% Rasmiy B2B taʼminot',
-  },
-];
+import { Building2, Truck, Phone, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   const { navigate, banners } = useApp();
   const [currentIdx, setCurrentIdx] = useState(0);
 
   const activeBanners = useMemo(() => {
-    return banners.filter((b) => b.isActive !== false);
+    return (banners || []).filter((b) => b.isActive !== false);
   }, [banners]);
 
   useEffect(() => {
@@ -68,7 +20,7 @@ export const HeroSection: React.FC = () => {
     if (activeBanners.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentIdx((prev) => (prev + 1) % activeBanners.length);
-    }, 7000);
+    }, 6500);
     return () => clearInterval(timer);
   }, [activeBanners.length]);
 
@@ -107,94 +59,67 @@ export const HeroSection: React.FC = () => {
 
   return (
     <section id="section-hero-banner" className="max-w-[1536px] mx-auto px-4 sm:px-8 pt-3 sm:pt-4 pb-2 space-y-4">
-      {/* Premium B2B hero canvas */}
+      {/* Graphical Pure Image Banner Slider */}
       {slide && (
-        <div className="relative rounded-3xl bg-gradient-to-br from-white via-[#FFFBF8] to-[#F8FAFC] border border-[#E5EAF2] overflow-hidden px-5 py-6 sm:px-10 sm:py-10 lg:px-14 lg:py-12 shadow-sm transition-all">
-          <div className="w-full grid grid-cols-12 gap-4 sm:gap-8 lg:gap-10 items-center">
-            {/* Left Column: Typography, CTA & Trust Badges */}
-            <div className="col-span-12 md:col-span-7 space-y-3 sm:space-y-4 max-w-xl">
-              {/* Small orange badge */}
-              {slide.badge && (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF7ED] border border-[#FF5A00]/20 text-[#FF5A00] font-extrabold text-[11px] uppercase tracking-wider">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A00] animate-pulse" />
-                  <span>{slide.badge}</span>
-                </div>
-              )}
-
-              {/* Headline */}
-              <h1 className="text-[24px] xs:text-[28px] sm:text-[36px] md:text-[40px] lg:text-[46px] font-black text-[#1E293B] tracking-tight leading-[1.12]">
-                {slide.title}
-              </h1>
-
-              {/* Subtitle */}
-              {slide.description && (
-                <p className="text-[13px] sm:text-[15px] md:text-[16px] text-[#64748B] font-normal leading-[1.5] max-w-lg">
-                  {slide.description}
-                </p>
-              )}
-
-              {/* Action Buttons and Trust row */}
-              <div className="pt-2 sm:pt-3 flex flex-wrap items-center gap-3">
-                <button
-                  id="btn-hero-action"
-                  onClick={() => navigate(slide.btnLink || '/catalog')}
-                  className="bg-[#FF5A00] hover:bg-[#e04f00] active:scale-97 text-white font-bold text-sm sm:text-base px-6 py-3.5 rounded-2xl inline-flex items-center gap-2 shadow-md shadow-[#FF5A00]/25 transition-all cursor-pointer leading-[1.3]"
-                >
-                  <span>{slide.btnText || 'Katalogni ko‘rish'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={() => navigate('/request')}
-                  className="bg-[#F8FAFC] hover:bg-[#FFF7ED] text-[#1E293B] hover:text-[#FF5A00] border border-[#E2E8F0] font-bold text-sm sm:text-base px-5 py-3.5 rounded-2xl inline-flex items-center gap-2 transition-all cursor-pointer"
-                >
-                  <span>Tezkor zayavka</span>
-                </button>
-              </div>
-
-              {/* Micro B2B trust indicators */}
-              <div className="pt-3 flex flex-wrap items-center gap-3 sm:gap-5 text-xs font-semibold text-[#475569]">
-                <span className="inline-flex items-center gap-1.5">
-                  <Zap className="w-4 h-4 text-[#FF5A00]" />
-                  24 soatda yetkazish
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-[#16A34A]" />
-                  Didox & QQS 12%
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-[#081B4B]" />
-                  500+ korxona ishonchi
-                </span>
-              </div>
-            </div>
-
-            {/* Right Column: Natural supply composition image */}
-            <div className="col-span-12 md:col-span-5 flex items-center justify-center md:justify-end">
-              <div className="relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[420px] aspect-[4/3] flex items-center justify-center">
-                <img
-                  src={slide.image || '/hero-supply-pack.jpg'}
-                  alt={slide.imageAlt || slide.title}
-                  className="w-full h-full object-contain drop-shadow-xl transition-transform duration-500 hover:scale-104"
-                />
-              </div>
-            </div>
+        <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs border border-[#E5EAF2] bg-white group">
+          <div
+            onClick={() => navigate(slide.btnLink || slide.ctaLink || '/catalog')}
+            className="w-full block cursor-pointer select-none"
+            role="button"
+            tabIndex={0}
+          >
+            <img
+              src={slide.image || '/banners/banner-clean-promo.png'}
+              alt={slide.title || 'SNABTASH B2B Banner'}
+              className="w-full h-auto object-cover sm:object-contain block transition-transform duration-500 group-hover:scale-[1.008]"
+              loading="eager"
+            />
           </div>
 
-          {/* Slide Dots centered at bottom - only shown if multiple banners */}
+          {/* Navigation Arrows if > 1 banner */}
           {activeBanners.length > 1 && (
-            <div className="flex items-center justify-center gap-1.5 pt-4">
-              {activeBanners.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentIdx(idx)}
-                  className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                    currentIdx === idx ? 'w-6 bg-[#FF5A00]' : 'w-1.5 bg-[#CBD5E1] hover:bg-[#94A3B8]'
-                  }`}
-                  aria-label={`Slide ${idx + 1}`}
-                />
-              ))}
-            </div>
+            <>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentIdx((prev) => (prev - 1 + activeBanners.length) % activeBanners.length);
+                }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/85 hover:bg-white text-[#1E293B] hover:text-[#FF5A00] flex items-center justify-center shadow-lg border border-black/5 opacity-0 group-hover:opacity-100 sm:opacity-80 transition-all cursor-pointer z-10"
+                aria-label="Oldingi banner"
+              >
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentIdx((prev) => (prev + 1) % activeBanners.length);
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/85 hover:bg-white text-[#1E293B] hover:text-[#FF5A00] flex items-center justify-center shadow-lg border border-black/5 opacity-0 group-hover:opacity-100 sm:opacity-80 transition-all cursor-pointer z-10"
+                aria-label="Keyingi banner"
+              >
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+
+              {/* Slide dots at bottom */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/25 backdrop-blur-md px-3 py-1.5 rounded-full z-10">
+                {activeBanners.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentIdx(idx);
+                    }}
+                    className={`h-2 rounded-full transition-all cursor-pointer ${
+                      currentIdx === idx ? 'w-6 bg-[#FF5A00]' : 'w-2 bg-white/70 hover:bg-white'
+                    }`}
+                    aria-label={`Slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </>
           )}
         </div>
       )}

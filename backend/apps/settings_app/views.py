@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
-from .models import SiteSettings, Banner
-from .serializers import SiteSettingsSerializer, BannerSerializer
+from .models import SiteSettings, Banner, ShowcaseSection
+from .serializers import SiteSettingsSerializer, BannerSerializer, ShowcaseSectionSerializer
 
 
 class SiteSettingsView(APIView):
@@ -155,3 +155,47 @@ class FileUploadView(APIView):
             'original_name': file_obj.name,
             'size': file_obj.size,
         }, status=status.HTTP_201_CREATED)
+
+
+class ShowcaseSectionListCreateView(APIView):
+    def get(self, request):
+        sections = ShowcaseSection.objects.all().order_by('order', 'id')
+        active_only = request.query_params.get('active')
+        if active_only == 'true':
+            sections = sections.filter(is_active=True)
+        serializer = ShowcaseSectionSerializer(sections, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ShowcaseSectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ShowcaseSectionDetailView(APIView):
+    def get(self, request, pk):
+        section = get_object_or_404(ShowcaseSection, pk=pk)
+        serializer = ShowcaseSectionSerializer(section)
+        return Response(serializer.data)
+
+    def patch(self, request, pk):
+        section = get_object_or_404(ShowcaseSection, pk=pk)
+        serializer = ShowcaseSectionSerializer(section, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk):
+        return self.patch(request, pk)
+
+    def delete(self, request, pk):
+        try:
+            section = ShowcaseSection.objects.get(pk=pk)
+            section.delete()
+        except (ShowcaseSection.DoesNotExist, ValueError):
+            pass
+        return Response({'message': 'Bo‘lim muvaffaqiyatli o‘chirildi'}, status=status.HTTP_204_NO_CONTENT)
+

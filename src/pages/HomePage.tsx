@@ -5,12 +5,42 @@ import { CategoryPillsSection } from '../components/CategoryPillsSection';
 import { B2BInfoCards } from '../components/B2BInfoCards';
 import { ProductRowSection } from '../components/ProductRowSection';
 import { BundlePacksSection } from '../components/BundlePacksSection';
-import { IndustriesSection } from '../components/IndustriesSection';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { PartnersSection } from '../components/PartnersSection';
+import {
+  Building2,
+  Utensils,
+  Sparkles,
+  Factory,
+  HardHat,
+  Briefcase,
+  Shield,
+  Package,
+} from 'lucide-react';
+
+const getSectionIcon = (iconName?: string) => {
+  switch (iconName) {
+    case 'Building2':
+      return <Building2 className="w-5 h-5" />;
+    case 'Utensils':
+      return <Utensils className="w-5 h-5" />;
+    case 'Sparkles':
+      return <Sparkles className="w-5 h-5" />;
+    case 'Factory':
+      return <Factory className="w-5 h-5" />;
+    case 'HardHat':
+      return <HardHat className="w-5 h-5" />;
+    case 'Briefcase':
+      return <Briefcase className="w-5 h-5" />;
+    case 'Shield':
+      return <Shield className="w-5 h-5" />;
+    default:
+      return <Package className="w-5 h-5" />;
+  }
+};
 
 export const HomePage: React.FC = () => {
-  const { products } = useApp();
+  const { products, showcaseSections } = useApp();
   const [popularTab, setPopularTab] = useState<'all' | 'hit'>('all');
 
   // 1. Ommabop mahsulotlar (Popular Products matching mockup)
@@ -21,17 +51,29 @@ export const HomePage: React.FC = () => {
     return products.filter((p) => p.isPopular);
   }, [products, popularTab]);
 
-  // 2. Individual himoya vositalari (PPE / Gloves)
-  const ppeProducts = useMemo(() => {
-    return products.filter((p) => p.categoryId === 'himoya-vositalari');
-  }, [products]);
+  // 2. Dynamic Active Showcase Sections (Industry-focused sections)
+  const activeShowcaseSections = useMemo(() => {
+    return (showcaseSections || [])
+      .filter((s) => s.isActive !== false)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+  }, [showcaseSections]);
 
-  // 3. Maishiy kimyo va klining vositalari (Chemicals & Detergents)
-  const chemicalProducts = useMemo(() => {
-    return products.filter((p) => p.categoryId === 'maishiy-kimyo');
-  }, [products]);
+  // Map each section to its resolved products
+  const sectionsWithProducts = useMemo(() => {
+    const productMap = new Map(products.map((p) => [p.id, p]));
+    return activeShowcaseSections.map((section) => {
+      const sectionProds = (section.productIds || [])
+        .map((id) => productMap.get(id))
+        .filter((p): p is typeof products[0] => Boolean(p));
 
-  // 4. Yangi kelgan gigiyena tovarlari (New Arrivals)
+      return {
+        section,
+        products: sectionProds,
+      };
+    });
+  }, [activeShowcaseSections, products]);
+
+  // 3. Yangi kelgan gigiyena tovarlari (New Arrivals)
   const newArrivals = useMemo(() => {
     return products.filter((p) => p.isNew);
   }, [products]);
@@ -67,28 +109,26 @@ export const HomePage: React.FC = () => {
         <BundlePacksSection />
       </div>
 
-      {/* 6. Individual himoya vositalari va qo‘lqoplar */}
-      <ProductRowSection
-        id="section-ppe-products"
-        title="Individual himoya vositalari"
-        categoryLink="/catalog/himoya-vositalari"
-        products={ppeProducts}
-        autoScrollSpeed={0.6}
-      />
+      {/* 6. Dynamic Admin-Controlled Industry Showcase Sections */}
+      {sectionsWithProducts.map(({ section, products: secProducts }) => {
+        if (!secProducts || secProducts.length === 0) return null;
 
-      {/* 7. Biz kimlar uchun ishlaymiz? (Industries) */}
-      <IndustriesSection />
+        return (
+          <ProductRowSection
+            key={section.id}
+            id={`section-${section.id}`}
+            title={section.title}
+            subtitle={section.subtitle}
+            badge={section.badge}
+            icon={getSectionIcon(section.icon)}
+            categoryLink={section.link || '/catalog'}
+            products={secProducts}
+            autoScrollSpeed={0.6}
+          />
+        );
+      })}
 
-      {/* 8. Maishiy kimyo va tozalash vositalari */}
-      <ProductRowSection
-        id="section-chemicals-products"
-        title="Maishiy kimyo va tozalash"
-        categoryLink="/catalog/maishiy-kimyo"
-        products={chemicalProducts}
-        autoScrollSpeed={0.6}
-      />
-
-      {/* 9. Yangi kelgan tovarlar (New Arrivals) */}
+      {/* 7. Yangi kelgan tovarlar (New Arrivals) */}
       <ProductRowSection
         id="section-new-arrivals"
         title="Yangi kelgan tovarlar"
@@ -97,13 +137,14 @@ export const HomePage: React.FC = () => {
         autoScrollSpeed={0.6}
       />
 
-      {/* 10. Mijozlarimiz fikrlari with Soft Contrast Band */}
+      {/* 8. Mijozlarimiz fikrlari with Soft Contrast Band */}
       <div className="bg-[#F8FAFC] py-4 border-y border-[#EEF2F6]">
         <TestimonialsSection />
       </div>
 
-      {/* 12. Bizning hamkorlarimiz */}
+      {/* 9. Bizning hamkorlarimiz */}
       <PartnersSection />
     </div>
   );
 };
+

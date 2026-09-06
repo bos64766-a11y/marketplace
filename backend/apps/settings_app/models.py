@@ -35,12 +35,12 @@ class SiteSettings(models.Model):
 
 
 class Banner(models.Model):
-    badge = models.CharField(max_length=100, default='KORXONALAR UCHUN', verbose_name='Badge')
-    title = models.CharField(max_length=255, verbose_name='Sarlavha')
-    description = models.TextField(verbose_name='Tavsif')
-    btn_text = models.CharField(max_length=100, default='Katalogni ko‘rish', verbose_name='Tugma matni')
-    btn_link = models.CharField(max_length=255, default='/catalog', verbose_name='Tugma havolasi')
-    image = models.CharField(max_length=500, default='/hero-supply-pack.jpg', verbose_name='Rasm URL')
+    badge = models.CharField(max_length=100, blank=True, default='', verbose_name='Badge')
+    title = models.CharField(max_length=255, blank=True, default='Banner', verbose_name='Sarlavha')
+    description = models.TextField(blank=True, default='', verbose_name='Tavsif')
+    btn_text = models.CharField(max_length=100, blank=True, default='', verbose_name='Tugma matni')
+    btn_link = models.CharField(max_length=255, blank=True, default='/catalog', verbose_name='Tugma havolasi')
+    image = models.CharField(max_length=500, default='/banners/banner-clean-promo.png', verbose_name='Rasm URL')
     image_alt = models.CharField(max_length=255, blank=True, default='', verbose_name='Rasm tavsifi')
     order = models.IntegerField(default=0, verbose_name='Tartib')
     is_active = models.BooleanField(default=True, verbose_name='Faol')
@@ -53,4 +53,26 @@ class Banner(models.Model):
         ordering = ['order', 'id']
 
     def __str__(self):
-        return f"{self.title} ({self.badge})"
+        return f"{self.title or 'Banner'} ({self.image})"
+
+
+class ShowcaseSection(models.Model):
+    title = models.CharField(max_length=255, verbose_name='Sarlavha')
+    subtitle = models.CharField(max_length=500, blank=True, default='', verbose_name='Quyi sarlavha')
+    badge = models.CharField(max_length=100, blank=True, default='', verbose_name='Badge')
+    icon = models.CharField(max_length=100, blank=True, default='Building2', verbose_name='Icon')
+    link = models.CharField(max_length=255, blank=True, default='/catalog', verbose_name='Havola')
+    product_ids = models.JSONField(default=list, blank=True, verbose_name='Mahsulotlar ID lari')
+    order = models.IntegerField(default=0, verbose_name='Tartib')
+    is_active = models.BooleanField(default=True, verbose_name='Faol')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Bosh sahifa bo‘limi'
+        verbose_name_plural = 'Bosh sahifa bo‘limlari'
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.title
+

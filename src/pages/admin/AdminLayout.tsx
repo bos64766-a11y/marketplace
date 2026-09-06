@@ -19,6 +19,7 @@ import {
   ExternalLink,
   LogOut,
   Image as ImageIcon,
+  LayoutGrid,
 } from 'lucide-react';
 
 interface NavItem {
@@ -46,6 +47,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { id: 'products', label: 'Mahsulotlar', icon: <Package className="w-5 h-5" />, path: '/admin/products' },
       { id: 'categories', label: 'Kategoriyalar', icon: <FolderOpen className="w-5 h-5" />, path: '/admin/categories' },
+      { id: 'sections', label: 'Bo‘limlar', icon: <LayoutGrid className="w-5 h-5" />, path: '/admin/sections' },
       { id: 'banners', label: 'Bannerlar', icon: <ImageIcon className="w-5 h-5" />, path: '/admin/banners' },
     ],
   },

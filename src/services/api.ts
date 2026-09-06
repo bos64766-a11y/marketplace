@@ -1,4 +1,4 @@
-import { Product, Category, RequestOrder, SiteSettings, BannerSlide } from '../types';
+import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcaseSection } from '../types';
 
 const API_BASE = '/api';
 
@@ -171,6 +171,32 @@ export const api = {
 
   deleteBanner: async (id: string | number): Promise<void> => {
     return request<void>(`/banners/${id}/`, {
+      method: 'DELETE',
+    });
+  },
+
+  // --- SHOWCASE SECTIONS (Biz kimlar uchun xizmat qilamiz) ---
+  getShowcaseSections: async (activeOnly = false): Promise<HomeShowcaseSection[]> => {
+    const q = activeOnly ? '?active=true' : '';
+    return request<HomeShowcaseSection[]>(`/showcase-sections/${q}`);
+  },
+
+  createShowcaseSection: async (data: Partial<HomeShowcaseSection>): Promise<HomeShowcaseSection> => {
+    return request<HomeShowcaseSection>('/showcase-sections/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  updateShowcaseSection: async (id: string | number, data: Partial<HomeShowcaseSection>): Promise<HomeShowcaseSection> => {
+    return request<HomeShowcaseSection>(`/showcase-sections/${id}/`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteShowcaseSection: async (id: string | number): Promise<void> => {
+    return request<void>(`/showcase-sections/${id}/`, {
       method: 'DELETE',
     });
   },
