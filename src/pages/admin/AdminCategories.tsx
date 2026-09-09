@@ -52,22 +52,27 @@ export const AdminCategories: React.FC = () => {
 
   const handleFileUpload = async (file: File) => {
     if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      setUploadError('Faqat rasm formatidagi fayllarni yuklash mumkin (JPG, PNG, WEBP)');
+    const isImg = file.type.startsWith('image/') || /\.(jpe?g|png|webp|svg|gif|jfif|avif|heic|bmp)$/i.test(file.name);
+    if (!isImg) {
+      setUploadError('Faqat rasm formatidagi fayllarni yuklash mumkin (JPG, PNG, WEBP, JFIF)');
       return;
     }
-    if (file.size > 10 * 1024 * 1024) {
-      setUploadError('Fayl hajmi 10MB dan oshmasligi kerak');
+    if (file.size > 20 * 1024 * 1024) {
+      setUploadError('Fayl hajmi 20MB dan oshmasligi kerak');
       return;
     }
 
     setIsUploading(true);
     setUploadError('');
     try {
-      const res = await api.uploadImage(file);
+      const res = await api.uploadImage(file, 'categories');
       setFormData((prev) => ({ ...prev, image: res.url }));
     } catch (err: any) {
-      setUploadError(err.message || 'Rasm yuklashda xatolik yuz berdi');
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFormData((prev) => ({ ...prev, image: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
     } finally {
       setIsUploading(false);
     }

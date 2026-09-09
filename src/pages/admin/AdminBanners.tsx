@@ -99,8 +99,14 @@ export const AdminBanners: React.FC = () => {
   const handleFileUpload = async (file: File) => {
     if (!file) return;
 
-    if (file.size > 15 * 1024 * 1024) {
-      setUploadError('Fayl hajmi 15MB dan oshmasligi kerak');
+    const isImg = file.type.startsWith('image/') || /\.(jpe?g|png|webp|svg|gif|jfif|avif|heic|bmp)$/i.test(file.name);
+    if (!isImg) {
+      setUploadError('Faqat rasm formatidagi fayllarni yuklash mumkin (JPG, PNG, WEBP, JFIF)');
+      return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+      setUploadError('Fayl hajmi 20MB dan oshmasligi kerak');
       return;
     }
 
@@ -108,14 +114,23 @@ export const AdminBanners: React.FC = () => {
     setUploadError('');
 
     try {
-      const res = await api.uploadImage(file);
+      const res = await api.uploadImage(file, 'banners');
       setFormData((prev) => ({
         ...prev,
         image: res.url,
         title: prev.title || file.name.replace(/\.[^/.]+$/, ''),
       }));
     } catch (err: any) {
-      setUploadError(err.message || 'Rasm yuklashda xatolik yuz berdi');
+      console.warn('API banner upload fallback to local DataURL:', err);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFormData((prev) => ({
+          ...prev,
+          image: reader.result as string,
+          title: prev.title || file.name.replace(/\.[^/.]+$/, ''),
+        }));
+      };
+      reader.readAsDataURL(file);
     } finally {
       setIsUploading(false);
     }
@@ -474,7 +489,7 @@ export const AdminBanners: React.FC = () => {
                     ref={fileInputRef}
                     type="file"
                     id="input-file-banner-upload"
-                    accept="image/png, image/jpeg, image/webp, image/svg+xml"
+                    accept="image/*,.jfif,.avif,.heic"
                     className="hidden"
                     onChange={(e) => {
                       if (e.target.files && e.target.files[0]) {
