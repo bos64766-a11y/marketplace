@@ -125,73 +125,65 @@ const DEFAULT_BANNERS: BannerSlide[] = [
 
 const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
   {
-    id: 'section-ofislar',
+    id: '1',
     title: 'Ofislar uchun',
     subtitle: 'Kantselyariya, gigiyena va ofis kundalik sarflov vositalari',
-    badge: 'OFISLAR VA BIZNES',
-    icon: 'Building2',
     link: '/catalog/kanselyariya',
     productIds: [
-      'snb-paper-svetocopy-a4',
-      'snb-tellux-z2',
-      'snb-soap-5l',
-      'snb-files-binder-black',
-      'snb-trash-bags-60l',
-      'snb-air-freshener-glade',
+      'snb-012',
+      'snb-004',
+      'snb-001',
+      'snb-tellux-zz2-comfort',
+      'snb-tellux-z2-towels',
+      'snb-glade-aerosol-300',
     ],
     order: 1,
     isActive: true,
   },
   {
-    id: 'section-horeca',
+    id: '2',
     title: 'Restoran va mehmonxonalar uchun',
     subtitle: 'HoReCa professional tozalash, idish yuvish va SanPiN talablariga mos vositalar',
-    badge: 'HORECA & RESTORAN',
-    icon: 'UtensilsCrossed',
     link: '/catalog/maishiy-kimyo',
     productIds: [
-      'snb-grass-dish',
-      'snb-elma-napkins',
-      'snb-gloves-black-rubber',
-      'snb-fairy-lemon',
-      'snb-tellux-z2',
-      'snb-domestos-bleach',
+      'snb-napkins-elma-33',
+      'snb-toilet-paper-mini-2ply',
+      'snb-toilet-paper-giant-roll',
+      'snb-grass-dos-toilet-block',
+      'snb-grass-steel-cleaner',
+      'snb-001',
     ],
     order: 2,
     isActive: true,
   },
   {
-    id: 'section-klining',
+    id: '3',
     title: 'Klining kompaniyalari uchun',
     subtitle: 'Professional tozalash kimyolari, konsentratlar va mikrofibra inventarlari',
-    badge: 'PROFESSIONAL KLINING',
-    icon: 'Sparkles',
     link: '/catalog/maishiy-kimyo',
     productIds: [
-      'snb-grass-universal',
-      'snb-grass-floor',
       'snb-grass-antigraffiti',
-      'snb-vanish-oxi',
-      'snb-soap-5l',
-      'snb-gloves-latex-pour',
+      'snb-vanish-carpet-gold',
+      'snb-grass-polyrole-matte',
+      'snb-vanish-oxi-500',
+      'snb-plastic-bucket',
+      'snb-gloves-latex-korea',
     ],
     order: 3,
     isActive: true,
   },
   {
-    id: 'section-zavod',
+    id: '4',
     title: 'Zavod va fabrikalar uchun',
     subtitle: 'Individual himoya vositalari, ishchi qo‘lqoplar va sanoat tozalovchilari',
-    badge: 'SANOAT VA ISHLAB CHIQARISH',
-    icon: 'Factory',
     link: '/catalog/himoya-vositalari',
     productIds: [
       'snb-gloves-orange',
       'snb-gloves-insulated-300',
-      'snb-gloves-cotton-100',
-      'snb-respirator-3m',
-      'snb-glasses-clear',
-      'snb-gloves-red-dot',
+      'snb-gloves-cotton-45g',
+      'snb-gloves-nitrile-coating',
+      'snb-gloves-latex-zebra',
+      'snb-plastic-barrel',
     ],
     order: 4,
     isActive: true,
@@ -287,6 +279,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setShowcaseSections(data);
         try {
           localStorage.setItem('snabtash_showcase_sections', JSON.stringify(data));
+        } catch {}
+      }
+    }).catch(() => {});
+
+    api.getPartners().then((data) => {
+      if (isMounted && Array.isArray(data) && data.length > 0) {
+        setPartners(data);
+        try {
+          localStorage.setItem('snabtash_partners', JSON.stringify(data));
         } catch {}
       }
     }).catch(() => {});
@@ -613,18 +614,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [partners]);
 
   const addPartner = async (data: Omit<Partner, 'id'>) => {
-    const newPartner: Partner = {
-      ...data,
-      id: `partner-${Date.now()}`,
-    };
-    setPartners((prev) => {
-      const next = [...prev, newPartner];
-      try {
-        localStorage.setItem('snabtash_partners', JSON.stringify(next));
-      } catch {}
-      return next;
-    });
-    showToast('✓ Yangi hamkor muvaffaqiyatli qo‘shildi', 'success');
+    try {
+      const created = await api.createPartner(data);
+      setPartners((prev) => {
+        const next = [...prev, created];
+        try {
+          localStorage.setItem('snabtash_partners', JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+      showToast('✓ Yangi hamkor muvaffaqiyatli qo‘shildi', 'success');
+    } catch (err) {
+      console.warn('API create partner error:', err);
+      // Fallback local creation
+      const newPartner: Partner = {
+        ...data,
+        id: `partner-${Date.now()}`,
+      };
+      setPartners((prev) => {
+        const next = [...prev, newPartner];
+        try {
+          localStorage.setItem('snabtash_partners', JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+      showToast('✓ Yangi hamkor qo‘shildi', 'success');
+    }
   };
 
   const updatePartner = async (id: string, updated: Partial<Partner>) => {
@@ -635,6 +650,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch {}
       return next;
     });
+    api.updatePartner(id, updated).catch((err) => console.warn('API update partner warning:', err));
     showToast('✓ Hamkor ma’lumotlari yangilandi', 'success');
   };
 
@@ -646,6 +662,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch {}
       return next;
     });
+    api.deletePartner(id).catch((err) => console.warn('API delete partner warning:', err));
     showToast('Hamkor o‘chirildi', 'info');
   };
 
@@ -654,6 +671,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       localStorage.setItem('snabtash_partners', JSON.stringify(DEFAULT_PARTNERS));
     } catch {}
+    // Re-fetch or re-seed on API if needed
+    api.getPartners().then((res) => {
+      if (res && res.length > 0) setPartners(res);
+    }).catch(() => {});
     showToast('✓ Standart hamkorlar qayta tiklandi', 'success');
   };
 

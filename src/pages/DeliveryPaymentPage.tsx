@@ -3,7 +3,8 @@ import { useApp } from '../context/AppContext';
 import { Truck, CreditCard, Clock, ShieldCheck, CheckCircle2, AlertCircle, FileSpreadsheet } from 'lucide-react';
 
 export const DeliveryPaymentPage: React.FC = () => {
-  const { navigate } = useApp();
+  const { navigate, siteSettings } = useApp();
+  const freeThreshold = (siteSettings?.freeDeliveryThreshold || 500000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
   return (
     <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
@@ -50,7 +51,7 @@ export const DeliveryPaymentPage: React.FC = () => {
                 <span>Toshkent shahri bo‘ylab:</span>
               </div>
               <p className="text-[#667085] leading-relaxed">
-                Minimal <strong>500 000 so‘m</strong> miqdoridagi B2B buyurtmalarda yetkazib berish mutlaqo <strong>bepul</strong>.
+                Minimal <strong>{freeThreshold} so‘m</strong> miqdoridagi B2B buyurtmalarda yetkazib berish mutlaqo <strong>bepul</strong>.
               </p>
             </div>
 

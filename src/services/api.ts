@@ -1,4 +1,4 @@
-import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcaseSection } from '../types';
+import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcaseSection, Partner } from '../types';
 
 const API_BASE = '/api';
 
@@ -201,12 +201,58 @@ export const api = {
     });
   },
 
+  // --- PARTNERS (Hamkor brendlar) ---
+  getPartners: async (): Promise<Partner[]> => {
+    const data = await request<any[]>('/partners/');
+    return data.map((p) => ({
+      id: String(p.id),
+      name: p.name,
+      logo: p.logo || '',
+      category: p.category || '',
+      order: p.order ?? 0,
+    }));
+  },
+
+  createPartner: async (data: Partial<Partner>): Promise<Partner> => {
+    const p = await request<any>('/partners/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return {
+      id: String(p.id),
+      name: p.name,
+      logo: p.logo || '',
+      category: p.category || '',
+      order: p.order ?? 0,
+    };
+  },
+
+  updatePartner: async (id: string | number, data: Partial<Partner>): Promise<Partner> => {
+    const p = await request<any>(`/partners/${id}/`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+    return {
+      id: String(p.id),
+      name: p.name,
+      logo: p.logo || '',
+      category: p.category || '',
+      order: p.order ?? 0,
+    };
+  },
+
+  deletePartner: async (id: string | number): Promise<void> => {
+    return request<void>(`/partners/${id}/`, {
+      method: 'DELETE',
+    });
+  },
+
   // --- FILE UPLOAD ---
-  uploadImage: async (file: File): Promise<{ url: string; filename: string; original_name?: string; size?: number }> => {
+  uploadImage: async (file: File, type: 'products' | 'banners' | 'categories' | 'uploads' = 'uploads'): Promise<{ url: string; filename: string; original_name?: string; size?: number }> => {
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = await fetch('/api/upload/', {
+    const response = await fetch(`/api/upload/?type=${type}`, {
       method: 'POST',
       body: formData,
     });
@@ -215,8 +261,13 @@ export const api = {
       let msg = 'Rasm yuklashda xatolik yuz berdi';
       try {
         const err = await response.json();
-        msg = err.error || err.message || msg;
-      } catch {}
+        msg = err.error || err.message || err.detail || msg;
+      } catch {
+        try {
+          const text = await response.text();
+          if (text) msg = text.slice(0, 120);
+        } catch {}
+      }
       throw new Error(msg);
     }
 

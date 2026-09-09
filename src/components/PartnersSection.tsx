@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
-import { ChevronLeft, ChevronRight, Handshake } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const PartnersSection: React.FC = () => {
   const { partners } = useApp();
@@ -68,10 +68,6 @@ export const PartnersSection: React.FC = () => {
       {/* Header with Title and Nav Arrows */}
       <div className="flex items-center justify-between gap-4 mb-6">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF7ED] text-[#FF5A00] text-[11px] sm:text-xs font-bold mb-2 border border-[#FF5A00]/20">
-            <Handshake className="w-3.5 h-3.5" />
-            <span>Ishonchli hamkorlik</span>
-          </div>
           <h2 className="text-[20px] sm:text-[24px] md:text-[26px] font-extrabold text-[#1E293B] tracking-tight leading-[1.25]">
             Bizning hamkorlarimiz
           </h2>

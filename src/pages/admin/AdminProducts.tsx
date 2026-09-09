@@ -84,12 +84,13 @@ export const AdminProducts: React.FC = () => {
     const fileList = Array.from(files);
 
     for (const f of fileList) {
-      if (!f.type.startsWith('image/')) {
-        setUploadError('Faqat rasm formatidagi fayllarni yuklash mumkin (JPG, PNG, WEBP, SVG)');
+      const isImg = f.type.startsWith('image/') || /\.(jpe?g|png|webp|svg|gif|jfif|avif|heic|bmp)$/i.test(f.name);
+      if (!isImg) {
+        setUploadError('Faqat rasm formatidagi fayllarni yuklash mumkin (JPG, PNG, WEBP, SVG, JFIF)');
         return;
       }
-      if (f.size > 10 * 1024 * 1024) {
-        setUploadError('Har bir fayl hajmi 10MB dan oshmasligi kerak');
+      if (f.size > 20 * 1024 * 1024) {
+        setUploadError('Har bir fayl hajmi 20MB dan oshmasligi kerak');
         return;
       }
     }
@@ -99,8 +100,19 @@ export const AdminProducts: React.FC = () => {
     try {
       const uploadedUrls: string[] = [];
       for (const f of fileList) {
-        const res = await api.uploadImage(f);
-        uploadedUrls.push(res.url);
+        try {
+          const res = await api.uploadImage(f, 'products');
+          uploadedUrls.push(res.url);
+        } catch (apiErr: any) {
+          console.warn('API upload failed, using local FileReader fallback:', apiErr);
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(f);
+          });
+          uploadedUrls.push(dataUrl);
+        }
       }
       setFormData((prev) => {
         const nextImages = [...(prev.images || []), ...uploadedUrls];
@@ -632,7 +644,7 @@ export const AdminProducts: React.FC = () => {
                   ref={fileInputRef}
                   type="file"
                   multiple
-                  accept="image/jpeg,image/png,image/webp,image/svg+xml"
+                  accept="image/*,.jfif,.avif,.heic"
                   className="hidden"
                   onChange={(e) => {
                     if (e.target.files) handleFileUpload(e.target.files);

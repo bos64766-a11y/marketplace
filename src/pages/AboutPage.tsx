@@ -1,10 +1,10 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { PARTNERS } from '../data/content';
 import { Building2, ShieldCheck, Truck, Users, Award, Target, CheckCircle2 } from 'lucide-react';
 
 export const AboutPage: React.FC = () => {
-  const { navigate } = useApp();
+  const { navigate, partners } = useApp();
+  const displayPartners = partners && partners.length > 0 ? partners : [];
 
   return (
     <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
@@ -76,10 +76,33 @@ export const AboutPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-          {PARTNERS.map((p) => (
-            <div key={p.id} className="p-4 rounded-xl bg-white border border-[#E5EAF2] text-center">
-              <span className="font-extrabold text-xs text-[#0B2E73] block truncate">{p.name}</span>
-              <span className="text-[10px] text-[#667085] truncate block mt-0.5">{p.category}</span>
+          {displayPartners.map((p) => (
+            <div
+              key={p.id}
+              className="p-4 rounded-xl bg-white border border-[#E5EAF2] hover:border-[#0B2E73]/30 hover:shadow-xs transition-all text-center flex flex-col items-center justify-center min-h-[90px]"
+            >
+              {p.logo ? (
+                <img
+                  src={p.logo}
+                  alt={p.name}
+                  className="max-h-8 max-w-[90px] object-contain mb-1.5"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLElement).style.display = 'none';
+                  }}
+                />
+              ) : (
+                <span className="font-extrabold text-xs text-[#0B2E73] block truncate max-w-full">
+                  {p.name}
+                </span>
+              )}
+              <span className="font-bold text-[11px] text-[#1E293B] block truncate max-w-full">
+                {p.name}
+              </span>
+              {p.category && (
+                <span className="text-[10px] text-[#667085] truncate block mt-0.5 max-w-full">
+                  {p.category}
+                </span>
+              )}
             </div>
           ))}
         </div>

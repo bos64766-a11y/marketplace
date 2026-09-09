@@ -34,12 +34,12 @@ export const CatalogMegaMenu: React.FC = () => {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 top-[72px] bg-black/40 z-40 backdrop-blur-[2px] transition-opacity"
+        className="fixed inset-0 top-[100px] sm:top-[104px] bg-black/40 z-40 backdrop-blur-[2px] transition-opacity"
         onClick={() => setIsCatalogOpen(false)}
       />
 
       {/* Menu Container */}
-      <div className="fixed top-[72px] left-0 w-full bg-white border-b border-[#E5EAF2] shadow-xl z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+      <div className="fixed top-[100px] sm:top-[104px] left-0 w-full bg-white border-b border-[#E5EAF2] shadow-xl z-50 animate-in fade-in slide-in-from-top-2 duration-200">
         <div className="max-w-[1536px] mx-auto px-6 py-8">
           <div className="flex items-center justify-between pb-4 mb-6 border-b border-[#E5EAF2]">
             <div>

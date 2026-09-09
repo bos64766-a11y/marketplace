@@ -126,23 +126,10 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-          {icon && (
-            <div className="w-10 h-10 rounded-2xl bg-[#FF5A00]/10 flex items-center justify-center text-[#FF5A00] shrink-0">
-              {icon}
-            </div>
-          )}
           <div>
-            <div className="flex items-center gap-2.5 flex-wrap">
-              {/* H2 section title */}
-              <h2 className="text-[22px] sm:text-[26px] md:text-[28px] font-extrabold text-[#1E293B] tracking-tight leading-[1.25]">
-                {title}
-              </h2>
-              {badge && (
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FF5A00]/10 text-[#FF5A00] border border-[#FF5A00]/20">
-                  {badge}
-                </span>
-              )}
-            </div>
+            <h2 className="text-[22px] sm:text-[26px] md:text-[28px] font-extrabold text-[#1E293B] tracking-tight leading-[1.25]">
+              {title}
+            </h2>
           </div>
 
           {/* Optional Sub-Tabs */}

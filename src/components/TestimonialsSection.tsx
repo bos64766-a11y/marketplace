@@ -7,10 +7,6 @@ export const TestimonialsSection: React.FC = () => {
     <section id="section-testimonials" className="max-w-[1536px] mx-auto px-4 sm:px-8 py-8">
       {/* Section Header */}
       <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF2FC] text-[#0B2E73] text-[12px] font-medium mb-2">
-          <CheckCircle className="w-3.5 h-3.5 text-[#009B5A]" />
-          <span>Ishonchli hamkorlik</span>
-        </div>
         <h2 className="text-[24px] sm:text-[26px] md:text-[30px] lg:text-[32px] font-bold text-[#0B2E73] tracking-[-0.02em] leading-[1.25]">
           Mijozlarimiz biz haqimizda
         </h2>

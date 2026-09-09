@@ -1,23 +1,49 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { CONTACT_INFO } from '../data/content';
-import { Phone, Send, Clock, MapPin, Mail, MessageSquare, Check, ArrowRight } from 'lucide-react';
+import { Phone, Send, Clock, MapPin, Mail, MessageSquare, Check, ArrowRight, Loader2 } from 'lucide-react';
 
 export const ContactsPage: React.FC = () => {
-  const { showToast } = useApp();
+  const { showToast, siteSettings, submitRequest } = useApp();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('+998 ');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const phone1 = siteSettings?.phone1 || CONTACT_INFO.phones[0] || '+998 87 034 97 79';
+  const phone2 = siteSettings?.phone2 || CONTACT_INFO.phones[1] || '+998 90 123 45 67';
+  const telegramBot = siteSettings?.telegramBot || CONTACT_INFO.telegram || '@snabtash_bot';
+  const workHours = siteSettings?.workHours || CONTACT_INFO.workHours || 'Dush - Shan: 08:30 - 18:30';
+  const address = siteSettings?.address || CONTACT_INFO.address || 'Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy';
+  const email = siteSettings?.email || CONTACT_INFO.email || 'info@snabtash.uz';
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || phone.length < 12) {
+    if (!name.trim() || phone.replace(/\D/g, '').length < 9) {
       showToast('Ism va telefon raqamni to‘liq kiriting', 'error');
       return;
     }
-    setSent(true);
-    showToast('Xabaringiz qabul qilindi! Tez orada aloqaga chiqamiz.', 'success');
+
+    setIsSubmitting(true);
+    try {
+      submitRequest({
+        items: [],
+        totalAmount: 0,
+        contact: {
+          name: name.trim(),
+          phone: phone.trim(),
+          comment: `[Aloqa / Murojaat so‘rovi]: ${message.trim() || 'Mijoz aloqa va maslahat so‘radi.'}`,
+        },
+      });
+
+      setSent(true);
+      showToast('Xabaringiz qabul qilindi! Menejerimiz tez orada bog‘lanadi.', 'success');
+    } catch (err) {
+      showToast('Xabar yuborishda xatolik yuz berdi. Iltimos qaytadan urinib ko‘ring.', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -46,17 +72,19 @@ export const ContactsPage: React.FC = () => {
               <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Telefonlar</h3>
               <div className="mt-1.5 space-y-1">
                 <a
-                  href={`tel:${CONTACT_INFO.phones[0]}`}
+                  href={`tel:${phone1.replace(/\s+/g, '')}`}
                   className="text-sm sm:text-base font-bold text-[#14213D] hover:text-[#FF5A00] block"
                 >
-                  {CONTACT_INFO.phones[0]}
+                  {phone1}
                 </a>
-                <a
-                  href={`tel:${CONTACT_INFO.phones[1]}`}
-                  className="text-sm font-semibold text-[#667085] hover:text-[#FF5A00] block"
-                >
-                  {CONTACT_INFO.phones[1]}
-                </a>
+                {phone2 && (
+                  <a
+                    href={`tel:${phone2.replace(/\s+/g, '')}`}
+                    className="text-sm font-semibold text-[#667085] hover:text-[#FF5A00] block"
+                  >
+                    {phone2}
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -69,12 +97,12 @@ export const ContactsPage: React.FC = () => {
             <div>
               <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Telegram Menejer</h3>
               <a
-                href={`https://t.me/${CONTACT_INFO.telegram.replace('@', '')}`}
+                href={`https://t.me/${telegramBot.replace('@', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm sm:text-base font-bold text-[#14213D] hover:text-[#FF5A00] block mt-1.5"
               >
-                {CONTACT_INFO.telegram}
+                {telegramBot}
               </a>
               <span className="text-xs text-[#667085]">Tezkor savol-javob va narxlar</span>
             </div>
@@ -87,8 +115,8 @@ export const ContactsPage: React.FC = () => {
             </div>
             <div>
               <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Ish vaqti</h3>
-              <p className="text-sm font-bold text-[#14213D] mt-1.5">{CONTACT_INFO.workDays}</p>
-              <p className="text-xs text-[#667085]">{CONTACT_INFO.workHours}</p>
+              <p className="text-sm font-bold text-[#14213D] mt-1.5">{workHours}</p>
+              <p className="text-xs text-[#667085]">Buyurtmalar 24/7 qabul qilinadi</p>
             </div>
           </div>
 
@@ -100,10 +128,28 @@ export const ContactsPage: React.FC = () => {
             <div>
               <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Bosh ofis & Ombor</h3>
               <p className="text-xs sm:text-sm text-[#14213D] font-semibold mt-1.5 leading-relaxed">
-                {CONTACT_INFO.address}
+                {address}
               </p>
             </div>
           </div>
+
+          {/* Card 5: Email */}
+          {email && (
+            <div className="p-6 rounded-3xl bg-white border border-[#E5EAF2] shadow-xs flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#F7F9FC] text-[#0B2E73] flex items-center justify-center shrink-0">
+                <Mail className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Elektron pochta</h3>
+                <a
+                  href={`mailto:${email}`}
+                  className="text-sm font-bold text-[#14213D] hover:text-[#FF5A00] block mt-1.5"
+                >
+                  {email}
+                </a>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right: Interactive Consultation / Message Form (7 cols) */}
@@ -181,10 +227,20 @@ export const ContactsPage: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-3.5 px-6 rounded-xl bg-[#0B2E73] hover:bg-[#08245A] text-white font-bold text-sm transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-xs"
+                disabled={isSubmitting}
+                className="w-full py-3.5 px-6 rounded-xl bg-[#0B2E73] hover:bg-[#08245A] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-sm transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-xs"
               >
-                <span>Xabarni yuborish</span>
-                <ArrowRight className="w-4 h-4" />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-white" />
+                    <span>Yuborilmoqda...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Xabarni yuborish</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </form>
           )}

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SiteSettings, Banner, ShowcaseSection
+from .models import SiteSettings, Banner, ShowcaseSection, Partner
 
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
@@ -84,5 +84,22 @@ class ShowcaseSectionSerializer(serializers.ModelSerializer):
             'productIds',
             'order',
             'isActive',
+        ]
+
+
+class PartnerSerializer(serializers.ModelSerializer):
+    logo = serializers.CharField(required=False, allow_blank=True, default='')
+    category = serializers.CharField(required=False, allow_blank=True, default='')
+
+    class Meta:
+        model = Partner
+        fields = [
+            'id',
+            'name',
+            'logo',
+            'category',
+            'order',
+            'created_at',
+            'updated_at',
         ]
 

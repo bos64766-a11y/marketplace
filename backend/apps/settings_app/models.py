@@ -76,3 +76,20 @@ class ShowcaseSection(models.Model):
     def __str__(self):
         return self.title
 
+
+class Partner(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Nomi')
+    logo = models.CharField(max_length=500, blank=True, default='', verbose_name='Logo URL')
+    category = models.CharField(max_length=255, blank=True, default='', verbose_name='Kategoriya')
+    order = models.IntegerField(default=0, verbose_name='Tartib')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Hamkor'
+        verbose_name_plural = 'Hamkorlar'
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.name
+

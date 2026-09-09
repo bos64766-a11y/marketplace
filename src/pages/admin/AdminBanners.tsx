@@ -280,7 +280,7 @@ export const AdminBanners: React.FC = () => {
                       <img
                         src={banner.image || '/banners/banner-clean-promo.png'}
                         alt={banner.title || 'Banner'}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
                         }}
@@ -757,7 +757,7 @@ export const AdminBanners: React.FC = () => {
                 <img
                   src={previewBanner.image || '/banners/banner-clean-promo.png'}
                   alt={previewBanner.title || 'Banner'}
-                  className="w-full h-auto object-cover block"
+                  className="w-full h-auto object-contain block"
                 />
               </div>
 

@@ -40,7 +40,7 @@ export const HeroSection: React.FC = () => {
             <img
               src={slide.image || '/banners/banner-clean-promo.png'}
               alt={slide.title || 'SNABTASH B2B Banner'}
-              className="w-full h-[180px] xs:h-[220px] sm:h-[280px] md:h-[340px] lg:h-[380px] object-cover block transition-transform duration-500 group-hover:scale-[1.006]"
+              className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.006]"
               loading="eager"
             />
           </div>

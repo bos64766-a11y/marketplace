@@ -16,13 +16,6 @@ import {
   Package,
   Layers,
   RotateCcw,
-  Building2,
-  UtensilsCrossed,
-  Sparkles,
-  Factory,
-  Car,
-  GraduationCap,
-  Hospital,
   Check,
   ExternalLink,
   ArrowRight,
@@ -30,16 +23,6 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 import type { HomeShowcaseSection, Product } from '../../types';
-
-const ICON_OPTIONS = [
-  { name: 'Building2', label: 'Ofis / Bino', icon: Building2 },
-  { name: 'UtensilsCrossed', label: 'Restoran / Kafe', icon: UtensilsCrossed },
-  { name: 'Sparkles', label: 'Klining / Tozalash', icon: Sparkles },
-  { name: 'Factory', label: 'Zavod / Fabrika', icon: Factory },
-  { name: 'Car', label: 'Avto / Servis', icon: Car },
-  { name: 'GraduationCap', label: 'Maktab / O‘quv markaz', icon: GraduationCap },
-  { name: 'Hospital', label: 'Shifoxona / Tibbiyot', icon: Hospital },
-];
 
 export const AdminShowcaseSections: React.FC = () => {
   const {
@@ -61,8 +44,8 @@ export const AdminShowcaseSections: React.FC = () => {
   const [formData, setFormData] = useState<Omit<HomeShowcaseSection, 'id'>>({
     title: '',
     subtitle: '',
-    badge: 'KORXONALAR UCHUN',
-    icon: 'Building2',
+    badge: '',
+    icon: '',
     link: '/catalog',
     productIds: [],
     order: showcaseSections.length + 1,
@@ -98,8 +81,8 @@ export const AdminShowcaseSections: React.FC = () => {
     setFormData({
       title: '',
       subtitle: '',
-      badge: 'YANGI SOHA',
-      icon: 'Building2',
+      badge: '',
+      icon: '',
       link: '/catalog',
       productIds: [],
       order: showcaseSections.length + 1,
@@ -115,8 +98,8 @@ export const AdminShowcaseSections: React.FC = () => {
     setFormData({
       title: sec.title || '',
       subtitle: sec.subtitle || '',
-      badge: sec.badge || '',
-      icon: sec.icon || 'Building2',
+      badge: '',
+      icon: '',
       link: sec.link || '/catalog',
       productIds: sec.productIds || [],
       order: sec.order || 1,
@@ -170,12 +153,6 @@ export const AdminShowcaseSections: React.FC = () => {
 
   const activeCount = showcaseSections.filter((s) => s.isActive !== false).length;
   const totalAssignedProducts = showcaseSections.reduce((acc, s) => acc + (s.productIds?.length || 0), 0);
-
-  const renderIcon = (iconName?: string) => {
-    const found = ICON_OPTIONS.find((opt) => opt.name === iconName);
-    const IconComp = found ? found.icon : Building2;
-    return <IconComp className="w-5 h-5" />;
-  };
 
   return (
     <AdminLayout activeTab="sections">
@@ -290,17 +267,8 @@ export const AdminShowcaseSections: React.FC = () => {
                         #{index + 1}
                       </div>
 
-                      <div className="w-12 h-12 rounded-2xl bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/20 flex items-center justify-center shrink-0">
-                        {renderIcon(sec.icon)}
-                      </div>
-
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          {sec.badge && (
-                            <span className="px-2 py-0.5 rounded-full bg-[#FFF7ED] text-[#FF5A00] font-black text-[10px] uppercase tracking-wider border border-[#FF5A00]/20">
-                              {sec.badge}
-                            </span>
-                          )}
                           <span
                             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
                               isActive
@@ -469,53 +437,6 @@ export const AdminShowcaseSections: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Nishon (Badge)</label>
-                  <input
-                    type="text"
-                    value={formData.badge || ''}
-                    onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00]"
-                    placeholder="Masalan: OFISLAR VA BIZNES"
-                  />
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Quyi tavsif (Subtitle)</label>
-                  <input
-                    type="text"
-                    value={formData.subtitle || ''}
-                    onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00]"
-                    placeholder="Masalan: Kantselyariya, gigiyena va kundalik sarflov tovarlari"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Belgisi (Icon)</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {ICON_OPTIONS.map((opt) => {
-                      const IconComp = opt.icon;
-                      const isSelected = formData.icon === opt.name;
-                      return (
-                        <button
-                          key={opt.name}
-                          type="button"
-                          onClick={() => setFormData({ ...formData, icon: opt.name })}
-                          className={`flex items-center gap-2 p-2 rounded-xl border text-xs font-bold cursor-pointer transition-all ${
-                            isSelected
-                              ? 'border-[#FF5A00] bg-[#FFF7ED] text-[#FF5A00]'
-                              : 'border-[#E2E8F0] hover:bg-[#F8FAFC] text-[#475569]'
-                          }`}
-                        >
-                          <IconComp className="w-4 h-4 shrink-0" />
-                          <span className="truncate">{opt.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div>
                   <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Katalog havolasi</label>
                   <input
                     type="text"
@@ -523,6 +444,17 @@ export const AdminShowcaseSections: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, link: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00]"
                     placeholder="/catalog yoki /catalog/kanselyariya"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Quyi tavsif (Subtitle - ixtiyoriy)</label>
+                  <input
+                    type="text"
+                    value={formData.subtitle || ''}
+                    onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00]"
+                    placeholder="Masalan: Kantselyariya, gigiyena va kundalik sarflov tovarlari"
                   />
                   <div className="flex items-center gap-4 mt-3">
                     <label className="flex items-center gap-2 cursor-pointer">

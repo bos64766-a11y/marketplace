@@ -6,6 +6,8 @@ from .views import (
     FileUploadView,
     ShowcaseSectionListCreateView,
     ShowcaseSectionDetailView,
+    PartnerListCreateView,
+    PartnerDetailView,
 )
 
 urlpatterns = [
@@ -14,5 +16,7 @@ urlpatterns = [
     path('banners/<int:pk>/', BannerDetailView.as_view(), name='banner-detail'),
     path('showcase-sections/', ShowcaseSectionListCreateView.as_view(), name='showcase-section-list-create'),
     path('showcase-sections/<int:pk>/', ShowcaseSectionDetailView.as_view(), name='showcase-section-detail'),
+    path('partners/', PartnerListCreateView.as_view(), name='partner-list-create'),
+    path('partners/<int:pk>/', PartnerDetailView.as_view(), name='partner-detail'),
     path('upload/', FileUploadView.as_view(), name='file-upload'),
 ]

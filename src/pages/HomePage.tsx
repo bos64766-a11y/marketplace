@@ -5,37 +5,6 @@ import { CategoryPillsSection } from '../components/CategoryPillsSection';
 import { B2BInfoCards } from '../components/B2BInfoCards';
 import { ProductRowSection } from '../components/ProductRowSection';
 import { PartnersSection } from '../components/PartnersSection';
-import {
-  Building2,
-  Utensils,
-  Sparkles,
-  Factory,
-  HardHat,
-  Briefcase,
-  Shield,
-  Package,
-} from 'lucide-react';
-
-const getSectionIcon = (iconName?: string) => {
-  switch (iconName) {
-    case 'Building2':
-      return <Building2 className="w-5 h-5" />;
-    case 'Utensils':
-      return <Utensils className="w-5 h-5" />;
-    case 'Sparkles':
-      return <Sparkles className="w-5 h-5" />;
-    case 'Factory':
-      return <Factory className="w-5 h-5" />;
-    case 'HardHat':
-      return <HardHat className="w-5 h-5" />;
-    case 'Briefcase':
-      return <Briefcase className="w-5 h-5" />;
-    case 'Shield':
-      return <Shield className="w-5 h-5" />;
-    default:
-      return <Package className="w-5 h-5" />;
-  }
-};
 
 export const HomePage: React.FC = () => {
   const { products, showcaseSections } = useApp();
@@ -56,9 +25,22 @@ export const HomePage: React.FC = () => {
   const sectionsWithProducts = useMemo(() => {
     const productMap = new Map(products.map((p) => [p.id, p]));
     return activeShowcaseSections.map((section) => {
-      const sectionProds = (section.productIds || [])
+      let sectionProds = (section.productIds || [])
         .map((id) => productMap.get(id))
         .filter((p): p is typeof products[0] => Boolean(p));
+
+      // Fallback: If section has no matched productIds, populate with matching category products
+      if (sectionProds.length === 0 && products.length > 0) {
+        const linkSlug = section.link ? section.link.replace('/catalog/', '').replace('/catalog', '').trim() : '';
+        if (linkSlug) {
+          sectionProds = products.filter(
+            (p) => p.categoryId === linkSlug || p.categoryName?.toLowerCase().includes(linkSlug)
+          );
+        }
+        if (sectionProds.length === 0) {
+          sectionProds = products.slice(0, 6);
+        }
+      }
 
       return {
         section,
@@ -99,8 +81,6 @@ export const HomePage: React.FC = () => {
             id={`section-${section.id}`}
             title={section.title}
             subtitle={section.subtitle}
-            badge={section.badge}
-            icon={getSectionIcon(section.icon)}
             categoryLink={section.link || '/catalog'}
             products={secProducts}
             autoScrollSpeed={0.6}
