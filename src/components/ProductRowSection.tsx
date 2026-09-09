@@ -143,11 +143,6 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
                 </span>
               )}
             </div>
-            {subtitle && (
-              <p className="text-xs sm:text-sm text-[#64748B] font-medium mt-0.5">
-                {subtitle}
-              </p>
-            )}
           </div>
 
           {/* Optional Sub-Tabs */}
@@ -237,7 +232,7 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
             {products.map((product, idx) => (
               <div
                 key={`cycle1-${product.id}-${idx}`}
-                className="w-[190px] sm:w-[220px] md:w-[240px] shrink-0 flex flex-col"
+                className="w-[160px] sm:w-[185px] md:w-[200px] shrink-0 flex flex-col"
               >
                 <ProductCard product={product} />
               </div>
@@ -249,7 +244,7 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
             {products.map((product, idx) => (
               <div
                 key={`cycle2-${product.id}-${idx}`}
-                className="w-[190px] sm:w-[220px] md:w-[240px] shrink-0 flex flex-col"
+                className="w-[160px] sm:w-[185px] md:w-[200px] shrink-0 flex flex-col"
               >
                 <ProductCard product={product} />
               </div>
@@ -261,7 +256,7 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
             {products.map((product, idx) => (
               <div
                 key={`cycle3-${product.id}-${idx}`}
-                className="w-[190px] sm:w-[220px] md:w-[240px] shrink-0 flex flex-col"
+                className="w-[160px] sm:w-[185px] md:w-[200px] shrink-0 flex flex-col"
               >
                 <ProductCard product={product} />
               </div>

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { BUNDLE_PACKAGES } from '../data/content';
 import { BundlePackage } from '../types';
-import { PackageCheck, ArrowRight, Check, ShoppingBag, Sparkles, Layers } from 'lucide-react';
+import { ArrowRight, Check, Layers, Heart } from 'lucide-react';
 
 export const BundlePacksSection: React.FC = () => {
-  const { addToCart, showToast, navigate } = useApp();
+  const { addToCart, showToast, navigate, isFavorite, toggleFavorite } = useApp();
   const [addedBundleId, setAddedBundleId] = useState<string | null>(null);
 
   const formatPrice = (price: number) => {
@@ -75,35 +75,23 @@ export const BundlePacksSection: React.FC = () => {
         </button>
       </div>
 
-      {/* Bundles Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* Bundles Grid: 2 columns on mobile, 4 on desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-5">
         {BUNDLE_PACKAGES.map((bundle) => {
           const discountPercent = bundle.oldPrice
             ? Math.round(((bundle.oldPrice - bundle.price) / bundle.oldPrice) * 100)
             : null;
           const isAdded = addedBundleId === bundle.id;
+          const favorite = isFavorite(bundle.id);
 
           return (
             <div
               key={bundle.id}
               id={`bundle-card-${bundle.id}`}
-              className="group bg-white rounded-2xl border border-[#E2E8F0] hover:border-[#FF5A00] hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden p-5 relative"
+              className="group relative flex flex-col justify-between bg-white rounded-2xl sm:rounded-3xl border border-[#E5EAF2] hover:border-[#FF5A00]/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden p-2.5 sm:p-4 h-full"
             >
-              {/* Badge & Discount */}
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <span className="px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-[#EBF2FC] text-[#0B2E73] border border-[#0B2E73]/15">
-                  {bundle.tag}
-                </span>
-
-                {discountPercent && (
-                  <span className="px-2 py-0.5 rounded-md bg-[#FF3B30] text-white text-[11px] font-semibold shadow-xs">
-                    -{discountPercent}% chegirma
-                  </span>
-                )}
-              </div>
-
-              {/* Image Container */}
-              <div className="relative w-full h-44 rounded-xl overflow-hidden bg-[#FAFCFE] mb-4 flex items-center justify-center">
+              {/* Product Image Area - Square Image at top with Heart icon at top-right */}
+              <div className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-[#F8FAFC] mb-2 sm:mb-3">
                 <img
                   src={bundle.image}
                   alt={bundle.title}
@@ -114,57 +102,90 @@ export const BundlePacksSection: React.FC = () => {
                   }}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
+
+                {/* Favorite Heart Button - Top Right on the image */}
+                <button
+                  id={`btn-fav-bundle-${bundle.id}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(bundle.id);
+                  }}
+                  className={`absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm shadow-sm z-10 ${
+                    favorite
+                      ? 'bg-white text-[#FF5A00]'
+                      : 'bg-white/85 hover:bg-white text-[#64748B] hover:text-[#FF5A00]'
+                  }`}
+                  aria-label={favorite ? 'Sevimlilardan o‘chirish' : 'Sevimlilarga qo‘shish'}
+                >
+                  <Heart
+                    className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform active:scale-125 ${
+                      favorite ? 'fill-[#FF5A00] text-[#FF5A00]' : ''
+                    }`}
+                  />
+                </button>
+
+                {/* Discount Badge - Top Left on the image */}
+                {discountPercent && (
+                  <div className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 px-1.5 py-0.5 sm:px-2 rounded-full bg-[#E11D48] text-white text-[9px] sm:text-[10px] font-black shadow-xs z-10">
+                    -{discountPercent}%
+                  </div>
+                )}
               </div>
 
-              {/* Content */}
+              {/* Product Information */}
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-semibold text-[16px] text-[#0F172A] group-hover:text-[#0B2E73] transition-colors line-clamp-1 leading-[1.3]">
+                  {/* Product Name */}
+                  <h3 className="font-bold text-[13px] sm:text-[16px] text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-2 min-h-[34px] sm:min-h-[42px] leading-[1.3] mb-1">
                     {bundle.title}
                   </h3>
-                  <p className="text-[13px] text-[#64748B] font-normal mt-1 line-clamp-2 leading-[1.4]">
-                    {bundle.subtitle}
-                  </p>
 
-                  {/* Included items list pill */}
-                  <div className="mt-3 p-2.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-[12px] text-[#334155] leading-relaxed">
-                    <span className="font-semibold text-[#0B2E73] block mb-0.5">Paket tarkibi:</span>
-                    <span className="line-clamp-2">{bundle.itemsList}</span>
+                  {/* Subtitle / Category info */}
+                  <div className="flex items-center gap-1 text-[10px] sm:text-xs text-[#94A3B8] font-medium mb-2 sm:mb-3 truncate">
+                    <span>{bundle.tag || 'B2B To‘plam'}</span>
+                    <span>•</span>
+                    <span>{bundle.itemsCount} xil tovar</span>
                   </div>
                 </div>
 
-                {/* Price & Add Button */}
-                <div className="mt-4 pt-3 border-t border-[#EEF2F6] flex items-center justify-between gap-2">
-                  <div>
+                {/* Price & "Sotib olish" Button */}
+                <div className="pt-1.5 sm:pt-2 mt-auto space-y-2 sm:space-y-3">
+                  {/* Price display */}
+                  <div className="flex flex-col xs:flex-row xs:items-baseline justify-between gap-0.5">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-[15px] sm:text-[21px] font-black text-[#FF5A00] tracking-tight">
+                        {formatPrice(bundle.price)}
+                      </span>
+                      <span className="text-[11px] sm:text-[13px] font-semibold text-[#94A3B8]">so‘m</span>
+                    </div>
+
                     {bundle.oldPrice && (
-                      <span className="text-[12px] text-[#94A3B8] line-through block font-normal">
+                      <span className="text-[10px] sm:text-[12px] text-[#94A3B8] line-through font-medium">
                         {formatPrice(bundle.oldPrice)} so‘m
                       </span>
                     )}
-                    <span className="text-[16px] font-bold text-[#0F172A]">
-                      {formatPrice(bundle.price)} <span className="text-[12px] font-medium text-[#64748B]">so‘m</span>
-                    </span>
                   </div>
 
+                  {/* Full-width "Sotib olish" Button */}
                   <button
                     id={`btn-add-bundle-${bundle.id}`}
-                    onClick={() => handleAddBundle(bundle)}
-                    className={`px-3.5 py-2.5 rounded-xl font-semibold text-[13px] sm:text-[14px] flex items-center gap-1.5 transition-all cursor-pointer shadow-xs ${
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddBundle(bundle);
+                    }}
+                    className={`w-full h-9 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center gap-1.5 sm:gap-2 text-[12px] sm:text-[14px] font-bold transition-all duration-200 cursor-pointer shadow-md active:scale-98 ${
                       isAdded
-                        ? 'bg-[#009B5A] text-white'
-                        : 'bg-[#FF5A00] hover:bg-[#e04f00] text-white active:scale-95'
+                        ? 'bg-[#16A34A] text-white shadow-[#16A34A]/25'
+                        : 'bg-[#FF5A00] hover:bg-[#e04f00] text-white shadow-[#FF5A00]/25'
                     }`}
                   >
                     {isAdded ? (
                       <>
-                        <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         <span>Qo‘shildi</span>
                       </>
                     ) : (
-                      <>
-                        <ShoppingBag className="w-3.5 h-3.5" />
-                        <span>Savatga</span>
-                      </>
+                      <span>Sotib olish</span>
                     )}
                   </button>
                 </div>

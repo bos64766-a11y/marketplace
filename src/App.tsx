@@ -31,6 +31,7 @@ const AdminCategories = lazy(() => import('./pages/admin/AdminCategories').then(
 const AdminOrders = lazy(() => import('./pages/admin/AdminOrders').then((m) => ({ default: m.AdminOrders })));
 const AdminBanners = lazy(() => import('./pages/admin/AdminBanners').then((m) => ({ default: m.AdminBanners })));
 const AdminShowcaseSections = lazy(() => import('./pages/admin/AdminShowcaseSections').then((m) => ({ default: m.AdminShowcaseSections })));
+const AdminPartners = lazy(() => import('./pages/admin/AdminPartners').then((m) => ({ default: m.AdminPartners })));
 const AdminSettings = lazy(() => import('./pages/admin/AdminSettings').then((m) => ({ default: m.AdminSettings })));
 
 const PageLoader: React.FC = () => (
@@ -63,6 +64,8 @@ const MainRouter: React.FC = () => {
         return <AdminShowcaseSections />;
       case '/admin/banners':
         return <AdminBanners />;
+      case '/admin/partners':
+        return <AdminPartners />;
       case '/admin/settings':
         return <AdminSettings />;
       case '/admin':

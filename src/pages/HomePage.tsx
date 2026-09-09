@@ -1,11 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { HeroSection } from '../components/HeroSection';
 import { CategoryPillsSection } from '../components/CategoryPillsSection';
 import { B2BInfoCards } from '../components/B2BInfoCards';
 import { ProductRowSection } from '../components/ProductRowSection';
-import { BundlePacksSection } from '../components/BundlePacksSection';
-import { TestimonialsSection } from '../components/TestimonialsSection';
 import { PartnersSection } from '../components/PartnersSection';
 import {
   Building2,
@@ -41,15 +39,11 @@ const getSectionIcon = (iconName?: string) => {
 
 export const HomePage: React.FC = () => {
   const { products, showcaseSections } = useApp();
-  const [popularTab, setPopularTab] = useState<'all' | 'hit'>('all');
 
-  // 1. Ommabop mahsulotlar (Popular Products matching mockup)
+  // 1. Ommabop mahsulotlar (Popular Products)
   const popularProducts = useMemo(() => {
-    if (popularTab === 'hit') {
-      return products.filter((p) => p.isPopular && (p.reviewsCount > 100 || p.tag?.includes('savdo')));
-    }
     return products.filter((p) => p.isPopular);
-  }, [products, popularTab]);
+  }, [products]);
 
   // 2. Dynamic Active Showcase Sections (Industry-focused sections)
   const activeShowcaseSections = useMemo(() => {
@@ -86,28 +80,14 @@ export const HomePage: React.FC = () => {
       {/* 2. Minimalist Categories with Arrows Carousel */}
       <CategoryPillsSection />
 
-      {/* 3. B2B Kafolat va Afzalliklar Kartochkalari */}
-      <B2BInfoCards />
-
       {/* 4. Ommabop Mahsulotlar (Popular Product Row) */}
       <ProductRowSection
         id="section-popular-products"
         title="Ommabop mahsulotlar"
         categoryLink="/catalog"
         products={popularProducts}
-        tabs={[
-          { id: 'all', label: 'Barcha xitlar' },
-          { id: 'hit', label: 'Eng ko‘p sotilgan' },
-        ]}
-        activeTab={popularTab}
-        onTabChange={(tabId) => setPopularTab(tabId as 'all' | 'hit')}
         autoScrollSpeed={0.6}
       />
-
-      {/* 5. Tayyor B2B To‘plamlar (#section-bundle-packs) with Soft Contrast Band */}
-      <div className="bg-[#F8FAFC] py-3 border-y border-[#EEF2F6]">
-        <BundlePacksSection />
-      </div>
 
       {/* 6. Dynamic Admin-Controlled Industry Showcase Sections */}
       {sectionsWithProducts.map(({ section, products: secProducts }) => {
@@ -137,10 +117,8 @@ export const HomePage: React.FC = () => {
         autoScrollSpeed={0.6}
       />
 
-      {/* 8. Mijozlarimiz fikrlari with Soft Contrast Band */}
-      <div className="bg-[#F8FAFC] py-4 border-y border-[#EEF2F6]">
-        <TestimonialsSection />
-      </div>
+      {/* B2B Kafolat va Afzalliklar Kartochkalari */}
+      <B2BInfoCards />
 
       {/* 9. Bizning hamkorlarimiz */}
       <PartnersSection />

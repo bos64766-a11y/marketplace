@@ -1,3 +1,8 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { ProductCard } from '../components/ProductCard';
@@ -5,19 +10,13 @@ import {
   Heart,
   ShoppingCart,
   Check,
-  Star,
-  ShieldCheck,
   Truck,
-  RotateCcw,
-  CheckCircle2,
   Share2,
   ChevronRight,
   Boxes,
   Minus,
   Plus,
-  Sparkles,
-  FileText,
-  Download
+  MessageSquare,
 } from 'lucide-react';
 
 interface ProductDetailPageProps {
@@ -25,12 +24,11 @@ interface ProductDetailPageProps {
 }
 
 export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) => {
-  const { navigate, addToCart, isFavorite, toggleFavorite, showToast, products } = useApp();
+  const { navigate, addToCart, isFavorite, toggleFavorite, showToast, products, siteSettings } = useApp();
 
   const product = products.find((p) => p.slug === slug || p.id === slug);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(product?.minOrder || 1);
-  const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'delivery'>('desc');
   const [isAdding, setIsAdding] = useState(false);
 
   if (!product) {
@@ -58,14 +56,24 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   // Related products from same category
   const relatedProducts = products.filter(
     (p) => p.categoryId === product.categoryId && p.id !== product.id
-  ).slice(0, 4);
+  ).slice(0, 6);
+
+  const minOrderAmount = siteSettings?.freeDeliveryThreshold || 500000;
+  const currentTotal = product.price * quantity;
+  const isMinMet = currentTotal >= minOrderAmount;
 
   const handleAddToCart = () => {
     setIsAdding(true);
     addToCart(product, quantity);
+    showToast(`✓ ${product.name} savatga qo‘shildi`, 'success');
     setTimeout(() => {
       setIsAdding(false);
     }, 600);
+  };
+
+  const handleDirectRequest = () => {
+    addToCart(product, quantity);
+    navigate('/request');
   };
 
   const handleShare = () => {
@@ -75,9 +83,18 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
     }
   };
 
+  const handleAskQuestion = () => {
+    if (siteSettings?.telegramBot) {
+      const cleanBot = siteSettings.telegramBot.replace('@', '');
+      window.open(`https://t.me/${cleanBot}`, '_blank');
+    } else {
+      navigate('/contacts');
+    }
+  };
+
   return (
     <div className="max-w-[1536px] mx-auto px-4 sm:px-8 py-6">
-      {/* Breadcrumb matching mockup */}
+      {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-[#667085] mb-6 overflow-x-auto whitespace-nowrap pb-1">
         <button onClick={() => navigate('/')} className="hover:text-[#0B2E73] cursor-pointer">
           Bosh sahifa
@@ -95,342 +112,257 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
         </span>
       </nav>
 
-      {/* Main Product Showcase Box */}
-      <div className="bg-white rounded-[20px] border border-[#E5EAF2] p-6 sm:p-8 shadow-2xs">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Left: Gallery (6 cols) */}
-          <div className="lg:col-span-6 flex flex-col-reverse sm:flex-row gap-4">
+      {/* Main Product Showcase Box (Matches Clean Deli Reference) */}
+      <div className="bg-white rounded-[24px] border border-[#E5EAF2] p-5 sm:p-8 shadow-2xs">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          {/* 1. Left: Gallery (4 cols) */}
+          <div className="lg:col-span-4 xl:col-span-4 flex flex-col-reverse sm:flex-row gap-3 sm:gap-4">
             {/* Thumbnails list */}
             {product.images.length > 1 && (
-              <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto sm:max-h-[420px] pb-2 sm:pb-0">
+              <div className="flex sm:flex-col gap-2.5 overflow-x-auto sm:overflow-y-auto sm:max-h-[460px] pb-1 sm:pb-0 shrink-0">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`w-16 h-16 sm:w-20 sm:h-20 rounded-[12px] overflow-hidden border-2 shrink-0 transition-all cursor-pointer bg-[#F7F9FC] ${
+                    className={`w-16 h-16 sm:w-18 sm:h-18 rounded-xl overflow-hidden border-2 shrink-0 transition-all cursor-pointer bg-[#F8FAFC] ${
                       selectedImage === idx
                         ? 'border-[#FF5A00] shadow-xs'
-                        : 'border-[#E5EAF2] hover:border-slate-400'
+                        : 'border-[#E2E8F0] hover:border-slate-400'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={img} alt="" className="w-full h-full object-contain p-1" />
                   </button>
                 ))}
               </div>
             )}
 
-            {/* Main Large Product Image */}
-            <div className="flex-1 relative aspect-square rounded-[16px] overflow-hidden bg-[#F7F9FC] border border-[#E5EAF2] flex items-center justify-center group">
+            {/* Main Product Image */}
+            <div className="flex-1 relative aspect-square rounded-2xl overflow-hidden bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center group p-4">
               <img
                 src={product.images[selectedImage] || product.images[0]}
                 alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {product.tag && (
-                <span className="absolute top-4 left-4 px-3 py-1 rounded-lg text-xs font-bold bg-[#FFF1E8] text-[#FF5A00] border border-[#FF5A00]/20 shadow-xs">
+                <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/20 shadow-xs">
                   {product.tag}
                 </span>
               )}
             </div>
           </div>
 
-          {/* Right: Product Info & Order Controls (6 cols) */}
-          <div className="lg:col-span-6 flex flex-col justify-between space-y-6">
-            <div className="space-y-4">
-              {/* Product Title + In Stock Tag */}
-              <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#14213D] tracking-tight">
-                  {product.name}
-                </h1>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs border border-emerald-200">
+          {/* 2. Middle: Info & Description (4 cols) */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Top utility links (Ulashish, Savol berish) */}
+            <div className="flex items-center justify-end gap-4 text-xs font-medium text-[#64748B]">
+              <button
+                onClick={handleShare}
+                className="flex items-center gap-1.5 hover:text-[#0B2E73] transition-colors cursor-pointer"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>Ulashish</span>
+              </button>
+              <button
+                onClick={handleAskQuestion}
+                className="flex items-center gap-1.5 text-[#009B5A] hover:text-[#007A46] font-semibold transition-colors cursor-pointer"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Savol berish</span>
+              </button>
+            </div>
+
+            {/* Product Title */}
+            <div>
+              <h1 className="text-xl sm:text-2xl md:text-[25px] font-extrabold text-[#1E293B] tracking-tight leading-snug">
+                {product.name}
+              </h1>
+              <div className="flex items-center gap-2 text-xs text-[#64748B] mt-2">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[11px] border border-emerald-200">
                   Mavjud
                 </span>
-              </div>
-
-              {/* Tag / Subtitle */}
-              <p className="text-sm text-[#667085] font-medium">
-                {product.brand} • {product.tag || 'Antibakterial formula'}
-              </p>
-
-              {/* Rating and SKU Row */}
-              <div className="flex items-center gap-4 text-xs text-[#667085] pb-3 border-b border-[#E5EAF2]">
-                <div className="flex items-center gap-1 text-amber-500">
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <span className="font-bold text-[#14213D]">{product.rating}</span>
-                  <span>({product.reviewsCount} ta baho)</span>
-                </div>
-                <span>|</span>
-                <span>Artikul: <strong className="text-[#14213D]">{product.sku}</strong></span>
-              </div>
-
-              {/* Price */}
-              <div className="py-2">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-[28px] sm:text-[34px] font-bold text-[#14213D] tracking-tight">
-                    {product.price.toLocaleString('uz-UZ')}
-                  </span>
-                  <span className="text-[18px] font-semibold text-[#667085]">so‘m / {product.unit || 'dona'}</span>
-                  <span className="text-[11px] font-semibold text-[#009B5A] bg-[#EBF7F0] px-2 py-0.5 rounded-md ml-2">
-                    100% QQS bilan
-                  </span>
-                </div>
-              </div>
-
-              {/* Wholesale Pricing Tiers (B2B Hajmga qarab narxlar shkalasi) */}
-              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-3.5 sm:p-4 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#0B2E73] uppercase tracking-wider">
-                    Ulgurji (Optom) narxlar shkalasi
-                  </span>
-                  <span className="text-[11px] text-[#64748B]">
-                    Min buyurtma: <strong>{product.minOrder || 1} {product.unit || 'dona'}</strong>
-                  </span>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-white p-2.5 rounded-xl border border-[#EEF2F6]">
-                    <p className="text-[11px] text-[#64748B] font-medium">1 – 9 dona</p>
-                    <p className="text-[13px] font-bold text-[#14213D] mt-0.5">
-                      {product.price.toLocaleString('uz-UZ')}
-                    </p>
-                    <span className="text-[10px] text-[#94A3B8]">Baza narx</span>
-                  </div>
-                  <div className="bg-white p-2.5 rounded-xl border border-[#EEF2F6] relative overflow-hidden">
-                    <span className="absolute top-0 right-0 bg-[#FF5A00] text-white text-[8px] font-bold px-1.5 py-0.2 rounded-bl">
-                      -5%
-                    </span>
-                    <p className="text-[11px] text-[#64748B] font-medium">10 – 49 dona</p>
-                    <p className="text-[13px] font-bold text-[#0B2E73] mt-0.5">
-                      {Math.round(product.price * 0.95).toLocaleString('uz-UZ')}
-                    </p>
-                    <span className="text-[10px] text-[#009B5A] font-semibold">Tejamkor</span>
-                  </div>
-                  <div className="bg-white p-2.5 rounded-xl border border-[#FF5A00]/40 bg-[#FFFBF8] relative overflow-hidden">
-                    <span className="absolute top-0 right-0 bg-[#009B5A] text-white text-[8px] font-bold px-1.5 py-0.2 rounded-bl">
-                      -10%
-                    </span>
-                    <p className="text-[11px] text-[#FF5A00] font-bold">50+ dona</p>
-                    <p className="text-[13px] font-bold text-[#FF5A00] mt-0.5">
-                      {Math.round(product.price * 0.90).toLocaleString('uz-UZ')}
-                    </p>
-                    <span className="text-[10px] text-[#009B5A] font-semibold">Maksimal</span>
-                  </div>
-                </div>
+                <span>•</span>
+                <span>Artikul: <strong className="text-[#1E293B]">{product.sku}</strong></span>
               </div>
             </div>
 
-            {/* Quantity Selector + Add to Cart Button + Favorite */}
-            <div className="space-y-4 pt-1">
-              <div className="flex items-center gap-3">
-                {/* Quantity */}
-                <div className="flex items-center border border-[#E5EAF2] rounded-[10px] bg-[#F7F9FC]">
-                  <button
-                    id="btn-qty-minus"
-                    onClick={() => setQuantity((q) => Math.max(product.minOrder || 1, q - 1))}
-                    className="w-10 h-10 flex items-center justify-center text-[#667085] hover:text-[#0B2E73] hover:bg-[#E5EAF2] rounded-l-[10px] transition-colors cursor-pointer"
-                    aria-label="Kamaytirish"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="w-10 text-center font-bold text-sm text-[#14213D]">
-                    {quantity}
+            {/* Mahsulot haqida (O tovare) with dotted lines */}
+            <div className="pt-2 border-t border-[#F1F5F9]">
+              <h3 className="text-sm font-extrabold text-[#1E293B] mb-3">Mahsulot haqida</h3>
+              <div className="space-y-2.5 text-xs">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-[#64748B] shrink-0">Kategoriya</span>
+                  <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
+                  <span className="font-bold text-[#1E293B] text-right">{product.categoryName}</span>
+                </div>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-[#64748B] shrink-0">Brend</span>
+                  <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
+                  <span className="font-bold text-[#1E293B] text-right">{product.brand}</span>
+                </div>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-[#64748B] shrink-0">O‘lchov birligi</span>
+                  <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
+                  <span className="font-bold text-[#1E293B] text-right">{product.unit || 'dona'}</span>
+                </div>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-[#64748B] shrink-0">Min. buyurtma</span>
+                  <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
+                  <span className="font-bold text-[#1E293B] text-right">
+                    {product.minOrder || 1} {product.unit || 'dona'}
                   </span>
-                  <button
-                    id="btn-qty-plus"
-                    onClick={() => setQuantity((q) => q + 1)}
-                    className="w-10 h-10 flex items-center justify-center text-[#667085] hover:text-[#0B2E73] hover:bg-[#E5EAF2] rounded-r-[10px] transition-colors cursor-pointer"
-                    aria-label="Ko‘paytirish"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
                 </div>
-
-                {/* Savatga qo'shish (Orange CTA) */}
-                <button
-                  id="btn-product-detail-add-cart"
-                  onClick={handleAddToCart}
-                  disabled={isAdding}
-                  className={`flex-1 py-3 px-6 rounded-[10px] font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md active:scale-98 ${
-                    isAdding
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-[#FF5A00] hover:bg-[#e04f00] text-white shadow-[#FF5A00]/25'
-                  }`}
-                >
-                  {isAdding ? (
-                    <>
-                      <Check className="w-5 h-5" />
-                      <span>Savatga qo‘shildi</span>
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="w-5 h-5" />
-                      <span>Savatga qo‘shish</span>
-                    </>
-                  )}
-                </button>
-
-                {/* Heart Button */}
-                <button
-                  id="btn-product-detail-favorite"
-                  onClick={() => toggleFavorite(product.id)}
-                  className={`w-11 h-11 rounded-[10px] flex items-center justify-center border transition-colors cursor-pointer ${
-                    favorite
-                      ? 'bg-[#FFF1E8] border-[#FF5A00] text-[#FF5A00]'
-                      : 'bg-white border-[#E5EAF2] hover:bg-[#F7F9FC] text-[#667085]'
-                  }`}
-                  aria-label="Sevimlilar"
-                >
-                  <Heart className={`w-5 h-5 ${favorite ? 'fill-[#FF5A00]' : ''}`} />
-                </button>
-              </div>
-
-              {/* B2B Action Buttons */}
-              <div className="flex items-center gap-2.5 pt-1">
-                <button
-                  onClick={() => navigate('/request')}
-                  className="flex-1 py-2.5 px-3 rounded-xl border border-[#0B2E73] text-[#0B2E73] hover:bg-[#0B2E73] hover:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                >
-                  <FileText className="w-3.5 h-3.5 text-[#FF5A00]" />
-                  <span>Hisob-faktura so‘rash</span>
-                </button>
-                <button
-                  onClick={() => window.print()}
-                  className="py-2.5 px-3 rounded-xl border border-[#CBD5E1] hover:border-[#0B2E73] text-[#475569] hover:text-[#0B2E73] font-semibold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer bg-white"
-                >
-                  <Download className="w-3.5 h-3.5 text-[#FF5A00]" />
-                  <span>Tijorat taklifi (PDF)</span>
-                </button>
-              </div>
-
-              {/* 3 Service badges matching mockup */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-[#E5EAF2]">
-                <div className="flex items-center gap-2.5 text-xs text-[#667085]">
-                  <Truck className="w-4 h-4 text-[#0B2E73] shrink-0" />
-                  <div>
-                    <span className="font-bold text-[#14213D] block">Yetkazib berish</span>
-                    <span>Toshkent bo‘yicha bepul</span>
+                {Object.entries(product.specifications || {}).map(([key, val]) => (
+                  <div key={key} className="flex items-baseline justify-between gap-2">
+                    <span className="text-[#64748B] shrink-0">{key}</span>
+                    <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
+                    <span className="font-bold text-[#1E293B] text-right">{val}</span>
                   </div>
-                </div>
-                <div className="flex items-center gap-2.5 text-xs text-[#667085]">
-                  <Boxes className="w-4 h-4 text-[#0B2E73] shrink-0" />
-                  <div>
-                    <span className="font-bold text-[#14213D] block">Minimal zayavka</span>
-                    <span>42 000 so‘m</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2.5 text-xs text-[#667085]">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <div>
-                    <span className="font-bold text-[#14213D] block">Mavjudligi</span>
-                    <span>Omborda bor</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Tabs & Description Details Area */}
-      <div className="mt-8 bg-white rounded-[20px] border border-[#E5EAF2] p-6 sm:p-8 shadow-2xs">
-        {/* Tabs Bar */}
-        <div className="flex items-center gap-8 border-b border-[#E5EAF2] pb-3 mb-6">
-          {[
-            { id: 'desc', label: 'Tavsif' },
-            { id: 'specs', label: 'Xususiyatlar' },
-            { id: 'delivery', label: 'Yetkazib berish' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`text-sm font-bold pb-3 relative transition-colors cursor-pointer ${
-                activeTab === tab.id
-                  ? 'text-[#0B2E73]'
-                  : 'text-[#667085] hover:text-[#14213D]'
-              }`}
-            >
-              {tab.label}
-              {activeTab === tab.id && (
-                <div className="absolute bottom-[-13px] left-0 right-0 h-[3px] bg-[#FF5A00] rounded-full" />
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Tab 1: Description & 4 Feature Bullets */}
-        {activeTab === 'desc' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-7 space-y-4 text-xs sm:text-sm text-[#475467] leading-relaxed">
-              <p>{product.description}</p>
-              <p>
-                Ushbu vosita korporativ mijozlar talablariga to‘liq mos keladi. Yuqori konsentratsiya sarf-xarajatlarni tejash imkonini beradi. Har qanday sirtlar va sanuzellar uchun xavfsiz.
-              </p>
-            </div>
-
-            {/* 4 Feature diamonds matching mockup */}
-            <div className="lg:col-span-5 bg-[#F7F9FC] rounded-[16px] p-5 border border-[#E5EAF2] space-y-3">
-              <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-[#0B2E73]">
-                <span className="text-[#FF5A00]">◆</span>
-                <span>Antibakterial himoya</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-[#0B2E73]">
-                <span className="text-[#FF5A00]">◆</span>
-                <span>Yoqimli hid</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-[#0B2E73]">
-                <span className="text-[#FF5A00]">◆</span>
-                <span>Sarf tejamkor</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-[#0B2E73]">
-                <span className="text-[#FF5A00]">◆</span>
-                <span>Professional sifat</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 2: Specifications */}
-        {activeTab === 'specs' && (
-          <div className="max-w-2xl overflow-hidden rounded-[12px] border border-[#E5EAF2]">
-            <table className="w-full text-xs sm:text-sm text-left">
-              <tbody className="divide-y divide-[#E5EAF2]">
-                <tr className="bg-[#F7F9FC]">
-                  <td className="py-3 px-4 font-semibold text-[#0B2E73] w-1/3">Mahsulot nomi</td>
-                  <td className="py-3 px-4 text-[#14213D]">{product.name}</td>
-                </tr>
-                <tr>
-                  <td className="py-3 px-4 font-semibold text-[#0B2E73]">Brend</td>
-                  <td className="py-3 px-4 text-[#14213D]">{product.brand}</td>
-                </tr>
-                <tr className="bg-[#F7F9FC]">
-                  <td className="py-3 px-4 font-semibold text-[#0B2E73]">Kategoriya</td>
-                  <td className="py-3 px-4 text-[#14213D]">{product.categoryName}</td>
-                </tr>
-                <tr>
-                  <td className="py-3 px-4 font-semibold text-[#0B2E73]">Artikul (SKU)</td>
-                  <td className="py-3 px-4 text-[#14213D]">{product.sku}</td>
-                </tr>
-                {Object.entries(product.specifications).map(([key, val], idx) => (
-                  <tr key={key} className={idx % 2 === 0 ? 'bg-[#F7F9FC]' : ''}>
-                    <td className="py-3 px-4 font-semibold text-[#0B2E73]">{key}</td>
-                    <td className="py-3 px-4 text-[#14213D]">{val}</td>
-                  </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+              </div>
+            </div>
 
-        {/* Tab 3: Delivery */}
-        {activeTab === 'delivery' && (
-          <div className="space-y-4 text-xs sm:text-sm text-[#475467] leading-relaxed max-w-2xl">
-            <p>
-              Toshkent shahri bo‘ylab 500 000 so‘mdan yuqori bo‘lgan barcha zayavkalar keyingi kuniyoq to‘g‘ridan-to‘g‘ri ofis yoki korxona omboriga bepul yetkazib beriladi.
-            </p>
-            <p>
-              Barcha rasmiy hujjatlar (shartnoma, hisob-faktura / E-Faktura, ishonchnoma) mahsulot bilan birga yoki elektron tizim orqali taqdim etiladi.
-            </p>
+            {/* Mahsulot tavsifi (Описание товара) */}
+            <div className="pt-2 border-t border-[#F1F5F9]">
+              <h3 className="text-sm font-extrabold text-[#1E293B] mb-2">Mahsulot tavsifi</h3>
+              <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
+                {product.description ||
+                  'Ushbu tovar korxona va tashkilotlar uchun sifatli va ishonchli ta’minot vositasi hisoblanadi. SanPiN standartlariga to‘liq javob beradi.'}
+              </p>
+            </div>
           </div>
-        )}
+
+          {/* 3. Right: Sticky Buy Box Card (4 cols) */}
+          <div className="lg:col-span-4 xl:col-span-4 lg:sticky lg:top-24 space-y-4">
+            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-5 shadow-2xs space-y-4">
+              {/* Price Display */}
+              <div>
+                {product.oldPrice && (
+                  <div className="text-xs text-[#94A3B8] line-through font-semibold mb-0.5">
+                    {product.oldPrice.toLocaleString('uz-UZ')} so‘m
+                  </div>
+                )}
+                <div className="text-2xl sm:text-[28px] font-black text-[#0B2E73] tracking-tight leading-none">
+                  {product.price.toLocaleString('uz-UZ')}{' '}
+                  <span className="text-sm font-semibold text-[#64748B]">so‘m</span>
+                </div>
+                <div className="text-[11px] text-[#64748B] font-medium mt-1">
+                  1 {product.unit || 'dona'} uchun narx
+                </div>
+              </div>
+
+              {/* Quantity Selector */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-[#CBD5E1]">
+                  <span className="text-xs font-semibold text-[#64748B]">
+                    Miqdor:
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      id="btn-qty-minus"
+                      onClick={() => setQuantity((q) => Math.max(product.minOrder || 1, q - 1))}
+                      className="w-7 h-7 flex items-center justify-center text-[#64748B] hover:text-[#0B2E73] hover:bg-[#F1F5F9] rounded-lg transition-colors cursor-pointer"
+                      aria-label="Kamaytirish"
+                    >
+                      <Minus className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="w-12 text-center font-bold text-xs text-[#1E293B]">
+                      {quantity} {product.unit || 'dona'}
+                    </span>
+                    <button
+                      id="btn-qty-plus"
+                      onClick={() => setQuantity((q) => q + 1)}
+                      className="w-7 h-7 flex items-center justify-center text-[#64748B] hover:text-[#0B2E73] hover:bg-[#F1F5F9] rounded-lg transition-colors cursor-pointer"
+                      aria-label="Ko‘paytirish"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Savatga qo'shish + Heart (Full width like reference) */}
+                <div className="flex items-center gap-2">
+                  <button
+                    id="btn-product-detail-add-cart"
+                    onClick={handleAddToCart}
+                    disabled={isAdding}
+                    className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs min-w-0 ${
+                      isAdding
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-[#0B2E73] hover:bg-[#071F4E] text-white'
+                    }`}
+                  >
+                    {isAdding ? (
+                      <>
+                        <Check className="w-4 h-4 shrink-0" />
+                        <span className="truncate">Qo‘shildi</span>
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingCart className="w-4 h-4 shrink-0" />
+                        <span className="truncate">Savatga qo‘shish</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    id="btn-product-detail-favorite"
+                    onClick={() => toggleFavorite(product.id)}
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center border transition-colors cursor-pointer shrink-0 ${
+                      favorite
+                        ? 'bg-[#FFF1E8] border-[#FF5A00] text-[#FF5A00]'
+                        : 'bg-white border-[#CBD5E1] hover:bg-[#F1F5F9] text-[#64748B]'
+                    }`}
+                    aria-label="Sevimlilar"
+                  >
+                    <Heart className={`w-5 h-5 ${favorite ? 'fill-[#FF5A00]' : ''}`} />
+                  </button>
+                </div>
+
+                {/* Total calculated sum for current item */}
+                <div className="flex items-center justify-between text-xs py-1 px-1 border-t border-[#E2E8F0]">
+                  <span className="text-[#64748B]">Jami summa:</span>
+                  <span className="font-extrabold text-[#1E293B]">
+                    {currentTotal.toLocaleString('uz-UZ')} so‘m
+                  </span>
+                </div>
+              </div>
+
+              {/* Minimal Summa & Zayavka berish status */}
+              <div className="pt-2 border-t border-[#E2E8F0] space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-[#1E293B]">Minimal zayavka</span>
+                  <span className="font-extrabold text-[#FF5A00]">
+                    {minOrderAmount.toLocaleString('uz-UZ')} so‘m
+                  </span>
+                </div>
+
+                {isMinMet && (
+                  <button
+                    onClick={handleDirectRequest}
+                    className="w-full py-2.5 rounded-xl bg-[#FF5A00] hover:bg-[#E04F00] text-white text-xs font-extrabold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer mt-2"
+                  >
+                    <span>Zayavka rasmiylashtirish</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
+              {/* Delivery Box (Доставка) */}
+              <div className="pt-2 border-t border-[#E2E8F0]">
+                <div className="font-extrabold text-[#1E293B] text-[11px] uppercase tracking-wider mb-2">
+                  Yetkazib berish
+                </div>
+                <div className="flex items-center justify-between text-xs bg-white p-2.5 rounded-xl border border-[#E2E8F0]">
+                  <div className="flex items-center gap-2 text-[#1E293B] font-bold">
+                    <Truck className="w-4 h-4 text-[#0B2E73]" />
+                    <span>Kuryer orqali</span>
+                  </div>
+                  <span className="font-extrabold text-[#009B5A]">Bepul</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Related Products */}
@@ -445,7 +377,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
               Barchasini ko‘rish →
             </button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}

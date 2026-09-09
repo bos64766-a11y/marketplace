@@ -158,18 +158,7 @@ export const Header: React.FC = () => {
             >
               Bosh sahifa
             </button>
-            <button
-              onClick={() => {
-                navigate('/');
-                setTimeout(() => {
-                  document.getElementById('section-bundle-packs')?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              }}
-              className="hover:text-[#FF5A00] transition-colors cursor-pointer py-1 flex items-center gap-1.5"
-            >
-              <span>To‘plamlar</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-[#FFF7ED] text-[#FF5A00] font-bold">Paket</span>
-            </button>
+
             <button
               onClick={() => navigate('/delivery-payment')}
               className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${

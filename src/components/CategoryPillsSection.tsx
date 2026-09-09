@@ -121,26 +121,21 @@ export const CategoryPillsSection: React.FC = () => {
               key={`cat1-${cat.id}-${idx}`}
               id={`btn-category-item-${cat.slug}`}
               onClick={() => navigate(`/catalog/${cat.slug}`)}
-              className="group w-[130px] sm:w-[150px] md:w-[155px] shrink-0 bg-white hover:bg-[#FAFBFD] border border-[#F1F5F9] hover:border-[#FF5A00]/40 rounded-2xl p-3 sm:p-4 flex flex-col items-center text-center transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-md"
+              className="group w-[136px] sm:w-[155px] md:w-[168px] shrink-0 bg-white hover:bg-[#FAFBFD] border border-[#E2E8F0] hover:border-[#FF5A00]/50 rounded-2xl sm:rounded-3xl p-3 sm:p-3.5 flex flex-col items-center text-center transition-all duration-300 cursor-pointer shadow-xs hover:shadow-lg hover:-translate-y-1"
             >
-              {/* Real Product Image Container */}
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#F8FAFC] group-hover:bg-[#FFF7ED] p-2 flex items-center justify-center transition-all mb-2.5 group-hover:scale-106 overflow-hidden border border-[#F1F5F9]">
+              {/* Large Product Category Image */}
+              <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] border border-[#E2E8F0]/70 group-hover:border-[#FF5A00]/30 transition-all mb-2.5 sm:mb-3 shadow-2xs">
                 <img
                   src={cat.image}
                   alt={cat.name}
-                  className="w-full h-full object-cover rounded-xl"
+                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                   loading="lazy"
                 />
               </div>
 
               {/* Category Name Label */}
-              <span className="text-[13px] sm:text-[14px] font-bold text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-1 leading-[1.3]">
+              <span className="text-[13px] sm:text-[14px] md:text-[15px] font-bold text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-2 leading-[1.3] text-center px-1 flex-1 flex items-center justify-center">
                 {cat.name}
-              </span>
-
-              {/* Product Count Pill */}
-              <span className="text-[11px] font-bold text-[#FF5A00] bg-[#FFF7ED] px-2 py-0.5 rounded-full mt-1.5">
-                {cat.count} ta tovar
               </span>
             </button>
           ))}
@@ -152,23 +147,21 @@ export const CategoryPillsSection: React.FC = () => {
             <button
               key={`cat2-${cat.id}-${idx}`}
               onClick={() => navigate(`/catalog/${cat.slug}`)}
-              className="group w-[130px] sm:w-[150px] md:w-[155px] shrink-0 bg-white hover:bg-[#FAFBFD] border border-[#F1F5F9] hover:border-[#FF5A00]/40 rounded-2xl p-3 sm:p-4 flex flex-col items-center text-center transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-md"
+              className="group w-[136px] sm:w-[155px] md:w-[168px] shrink-0 bg-white hover:bg-[#FAFBFD] border border-[#E2E8F0] hover:border-[#FF5A00]/50 rounded-2xl sm:rounded-3xl p-3 sm:p-3.5 flex flex-col items-center text-center transition-all duration-300 cursor-pointer shadow-xs hover:shadow-lg hover:-translate-y-1"
             >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#F8FAFC] group-hover:bg-[#FFF7ED] p-2 flex items-center justify-center transition-all mb-2.5 group-hover:scale-106 overflow-hidden border border-[#F1F5F9]">
+              {/* Large Product Category Image */}
+              <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] border border-[#E2E8F0]/70 group-hover:border-[#FF5A00]/30 transition-all mb-2.5 sm:mb-3 shadow-2xs">
                 <img
                   src={cat.image}
                   alt={cat.name}
-                  className="w-full h-full object-cover rounded-xl"
+                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                   loading="lazy"
                 />
               </div>
 
-              <span className="text-[13px] sm:text-[14px] font-bold text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-1 leading-[1.3]">
+              {/* Category Name Label */}
+              <span className="text-[13px] sm:text-[14px] md:text-[15px] font-bold text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-2 leading-[1.3] text-center px-1 flex-1 flex items-center justify-center">
                 {cat.name}
-              </span>
-
-              <span className="text-[11px] font-bold text-[#FF5A00] bg-[#FFF7ED] px-2 py-0.5 rounded-full mt-1.5">
-                {cat.count} ta tovar
               </span>
             </button>
           ))}

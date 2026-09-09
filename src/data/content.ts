@@ -151,12 +151,14 @@ export const INDUSTRIES: Industry[] = [
 ];
 
 export const PARTNERS: Partner[] = [
-  { id: '1', name: 'BETOMAX', logo: 'BETOMAX', category: 'Beton & Qurilish' },
-  { id: '2', name: 'BINOKOR', logo: 'BINOKOR', category: 'Temir-beton majmuasi' },
-  { id: '3', name: 'AGROMIR', logo: 'AGROMIR', category: 'Agro holding' },
-  { id: '4', name: 'Beta Plus', logo: 'Beta Plus', category: 'Ishlab chiqarish' },
-  { id: '5', name: 'UZTELECOM', logo: 'UZTELECOM', category: 'Telekom' },
-  { id: '6', name: 'Artel Electronics', logo: 'Artel', category: 'Maishiy texnika' },
+  { id: '1', name: 'Pepsi', logo: '/partners/pepsi.png', category: 'Ichimliklar & Oziq-ovqat' },
+  { id: '2', name: 'Coca-Cola', logo: '/partners/coca-cola.png', category: 'Xalqaro brend' },
+  { id: '3', name: 'Artel Electronics', logo: '/partners/artel.png', category: 'Maishiy texnika' },
+  { id: '4', name: 'BETOMAX', logo: '', category: 'Beton & Qurilish' },
+  { id: '5', name: 'BINOKOR', logo: '', category: 'Temir-beton majmuasi' },
+  { id: '6', name: 'AGROMIR', logo: '', category: 'Agro holding' },
+  { id: '7', name: 'UZTELECOM', logo: '', category: 'Telekom & Aloqa' },
+  { id: '8', name: 'Beta Plus', logo: '', category: 'Ishlab chiqarish' },
 ];
 
 export const B2B_INFO_CARDS = [

@@ -75,7 +75,7 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="font-bold text-sm text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#009B5A]" />
-              <span>Xizmatlar & To‘plamlar</span>
+              <span>Xizmatlar</span>
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm">
               <li>
@@ -85,20 +85,6 @@ export const Footer: React.FC = () => {
                   className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
                 >
                   Barcha mahsulotlar katalogi
-                </button>
-              </li>
-              <li>
-                <button
-                  id="footer-link-bundles"
-                  onClick={() => {
-                    navigate('/');
-                    setTimeout(() => {
-                      document.getElementById('section-bundle-packs')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }}
-                  className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
-                >
-                  Kompleks B2B to‘plamlar
                 </button>
               </li>
               <li>

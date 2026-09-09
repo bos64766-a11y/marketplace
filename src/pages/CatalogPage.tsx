@@ -203,9 +203,12 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
 
       {/* Main Grid: Sidebar + Products */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-        {/* DESKTOP SIDEBAR (3 cols) - Unified Modern Card */}
-        <aside className="hidden lg:block lg:col-span-3 sticky top-24">
-          <div className="bg-white rounded-3xl border border-[#E5EAF2] p-5 sm:p-6 shadow-xs space-y-6">
+        {/* DESKTOP SIDEBAR (3 cols) - Unified Modern Card (Sticky & Fixed in place) */}
+        <aside className="hidden lg:block lg:col-span-3 sticky top-[116px] self-start">
+          <div
+            className="bg-white rounded-3xl border border-[#E5EAF2] p-5 sm:p-6 shadow-xs space-y-6 max-h-[calc(100vh-130px)] overflow-y-auto"
+            style={{ scrollbarWidth: 'thin' }}
+          >
             {/* Header & Reset Button */}
             <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9]">
               <div className="flex items-center gap-2">
@@ -455,9 +458,9 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             )}
           </div>
 
-          {/* Product Grid: 4 columns on desktop */}
+          {/* Product Grid: 4-5 compact columns on desktop, 2-3 on mobile/tablet */}
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-2.5 sm:gap-3.5">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Product, Category, CartItem, RequestOrder, UserProfile, ToastNotification, SiteSettings, BannerSlide, HomeShowcaseSection } from '../types';
+import { Product, Category, CartItem, RequestOrder, UserProfile, ToastNotification, SiteSettings, BannerSlide, HomeShowcaseSection, Partner } from '../types';
 import { PRODUCTS as INITIAL_PRODUCTS } from '../data/products';
 import { CATEGORIES as INITIAL_CATEGORIES } from '../data/categories';
+import { PARTNERS as DEFAULT_PARTNERS } from '../data/content';
 import { api } from '../services/api';
 
 interface AppContextType {
@@ -36,6 +37,13 @@ interface AppContextType {
   updateShowcaseSection: (id: string | number, updated: Partial<HomeShowcaseSection>) => Promise<void>;
   deleteShowcaseSection: (id: string | number) => Promise<void>;
   resetDefaultShowcaseSections: () => Promise<void>;
+
+  // Partners (Hamkorlar - Dynamic Store & Admin)
+  partners: Partner[];
+  addPartner: (partnerData: Omit<Partner, 'id'>) => Promise<void>;
+  updatePartner: (id: string, updated: Partial<Partner>) => Promise<void>;
+  deletePartner: (id: string) => Promise<void>;
+  resetDefaultPartners: () => Promise<void>;
 
   // Cart
   cart: CartItem[];
@@ -587,6 +595,68 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast('✓ Standart sohaviy bo‘limlar qayta tiklandi', 'success');
   };
 
+  // Partners State (Hamkorlar)
+  const [partners, setPartners] = useState<Partner[]>(() => {
+    try {
+      const saved = localStorage.getItem('snabtash_partners');
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return DEFAULT_PARTNERS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('snabtash_partners', JSON.stringify(partners));
+    } catch {}
+  }, [partners]);
+
+  const addPartner = async (data: Omit<Partner, 'id'>) => {
+    const newPartner: Partner = {
+      ...data,
+      id: `partner-${Date.now()}`,
+    };
+    setPartners((prev) => {
+      const next = [...prev, newPartner];
+      try {
+        localStorage.setItem('snabtash_partners', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    showToast('✓ Yangi hamkor muvaffaqiyatli qo‘shildi', 'success');
+  };
+
+  const updatePartner = async (id: string, updated: Partial<Partner>) => {
+    setPartners((prev) => {
+      const next = prev.map((p) => (p.id === id ? { ...p, ...updated } : p));
+      try {
+        localStorage.setItem('snabtash_partners', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    showToast('✓ Hamkor ma’lumotlari yangilandi', 'success');
+  };
+
+  const deletePartner = async (id: string) => {
+    setPartners((prev) => {
+      const next = prev.filter((p) => p.id !== id);
+      try {
+        localStorage.setItem('snabtash_partners', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    showToast('Hamkor o‘chirildi', 'info');
+  };
+
+  const resetDefaultPartners = async () => {
+    setPartners(DEFAULT_PARTNERS);
+    try {
+      localStorage.setItem('snabtash_partners', JSON.stringify(DEFAULT_PARTNERS));
+    } catch {}
+    showToast('✓ Standart hamkorlar qayta tiklandi', 'success');
+  };
+
   // Site Settings State
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => {
     try {
@@ -984,6 +1054,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateShowcaseSection,
         deleteShowcaseSection,
         resetDefaultShowcaseSections,
+        partners,
+        addPartner,
+        updatePartner,
+        deletePartner,
+        resetDefaultPartners,
         cart,
         addToCart,
         removeFromCart,
