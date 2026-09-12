@@ -275,7 +275,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }).catch(() => {});
 
     api.getShowcaseSections().then((data) => {
-      if (isMounted && Array.isArray(data) && data.length > 0) {
+      if (isMounted && Array.isArray(data)) {
         setShowcaseSections(data);
         try {
           localStorage.setItem('snabtash_showcase_sections', JSON.stringify(data));
@@ -284,7 +284,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }).catch(() => {});
 
     api.getPartners().then((data) => {
-      if (isMounted && Array.isArray(data) && data.length > 0) {
+      if (isMounted && Array.isArray(data)) {
         setPartners(data);
         try {
           localStorage.setItem('snabtash_partners', JSON.stringify(data));
@@ -694,7 +694,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch {}
       return next;
     });
-    api.updatePartner(id, updated).catch((err) => console.warn('API update partner warning:', err));
+    try {
+      await api.updatePartner(id, updated);
+    } catch (err) {
+      console.warn('API update partner warning:', err);
+    }
     showToast('✓ Hamkor ma’lumotlari yangilandi', 'success');
   };
 
@@ -706,7 +710,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch {}
       return next;
     });
-    api.deletePartner(id).catch((err) => console.warn('API delete partner warning:', err));
+    try {
+      await api.deletePartner(id);
+    } catch (err) {
+      console.warn('API delete partner warning:', err);
+    }
     showToast('Hamkor o‘chirildi', 'info');
   };
 

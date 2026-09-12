@@ -102,7 +102,7 @@ export const AdminCategories: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.name.trim()) return;
 
     const slug = formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -115,16 +115,16 @@ export const AdminCategories: React.FC = () => {
     };
 
     if (editingCategory) {
-      updateCategory(editingCategory.id, catData);
+      await updateCategory(editingCategory.id, catData);
     } else {
-      addCategory(catData);
+      await addCategory(catData);
     }
     setIsModalOpen(false);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (deleteConfirmId) {
-      deleteCategory(deleteConfirmId);
+      await deleteCategory(deleteConfirmId);
       setDeleteConfirmId(null);
     }
   };
