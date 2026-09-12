@@ -40,7 +40,7 @@ class Banner(models.Model):
     description = models.TextField(blank=True, default='', verbose_name='Tavsif')
     btn_text = models.CharField(max_length=100, blank=True, default='', verbose_name='Tugma matni')
     btn_link = models.CharField(max_length=255, blank=True, default='/catalog', verbose_name='Tugma havolasi')
-    image = models.CharField(max_length=500, default='/banners/banner-clean-promo.png', verbose_name='Rasm URL')
+    image = models.TextField(default='/banners/banner-clean-promo.png', verbose_name='Rasm URL')
     image_alt = models.CharField(max_length=255, blank=True, default='', verbose_name='Rasm tavsifi')
     order = models.IntegerField(default=0, verbose_name='Tartib')
     is_active = models.BooleanField(default=True, verbose_name='Faol')
@@ -53,7 +53,7 @@ class Banner(models.Model):
         ordering = ['order', 'id']
 
     def __str__(self):
-        return f"{self.title or 'Banner'} ({self.image})"
+        return f"{self.title or 'Banner'} ({self.image[:30]}...)"
 
 
 class ShowcaseSection(models.Model):
@@ -79,7 +79,7 @@ class ShowcaseSection(models.Model):
 
 class Partner(models.Model):
     name = models.CharField(max_length=255, verbose_name='Nomi')
-    logo = models.CharField(max_length=500, blank=True, default='', verbose_name='Logo URL')
+    logo = models.TextField(blank=True, default='', verbose_name='Logo URL')
     category = models.CharField(max_length=255, blank=True, default='', verbose_name='Kategoriya')
     order = models.IntegerField(default=0, verbose_name='Tartib')
     created_at = models.DateTimeField(auto_now_add=True)

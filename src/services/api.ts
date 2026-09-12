@@ -1,6 +1,6 @@
 import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcaseSection, Partner } from '../types';
 
-const API_BASE = (import.meta.env.VITE_API_URL as string)?.replace(/\/$/, '') || '/api';
+const API_BASE = ((import.meta as any).env?.VITE_API_URL as string)?.replace(/\/$/, '') || '/api';
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const headers = {

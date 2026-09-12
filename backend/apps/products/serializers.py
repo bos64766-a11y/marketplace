@@ -32,6 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
     )
     # Allow writing category by ID
     category_id = serializers.CharField(write_only=True, required=False)
+    sku = serializers.CharField(required=False, allow_blank=True)
     images_list = serializers.ListField(
         child=serializers.CharField(), write_only=True, required=False
     )
@@ -64,8 +65,9 @@ class ProductSerializer(serializers.ModelSerializer):
             'images_list',
         ]
         extra_kwargs = {
-            'id': {'required': False},
-            'slug': {'required': False},
+            'id': {'required': False, 'allow_blank': True},
+            'slug': {'required': False, 'allow_blank': True},
+            'sku': {'required': False, 'allow_blank': True},
         }
 
     def get_images(self, obj):
@@ -75,16 +77,33 @@ class ProductSerializer(serializers.ModelSerializer):
         return urls
 
     def create(self, validated_data):
+        import uuid
+        from django.utils.text import slugify
+        from django.db.models import Q
+
         images_data = validated_data.pop('images_list', [])
         cat_id = validated_data.pop('category_id', None)
         if cat_id and not validated_data.get('category'):
             try:
-                validated_data['category'] = Category.objects.get(id=cat_id)
+                validated_data['category'] = Category.objects.get(Q(id=cat_id) | Q(slug=cat_id))
             except Category.DoesNotExist:
-                # fallback
                 cat = Category.objects.first()
                 if cat:
                     validated_data['category'] = cat
+        elif not validated_data.get('category'):
+            cat = Category.objects.first()
+            if cat:
+                validated_data['category'] = cat
+
+        if not validated_data.get('sku'):
+            validated_data['sku'] = f"SNB-{uuid.uuid4().hex[:8].upper()}"
+
+        if not validated_data.get('slug'):
+            base_slug = slugify(validated_data.get('name', 'product')) or 'product'
+            validated_data['slug'] = f"{base_slug}-{uuid.uuid4().hex[:6]}"
+
+        if not validated_data.get('id'):
+            validated_data['id'] = f"snb-{validated_data['slug']}"
 
         product = super().create(validated_data)
 

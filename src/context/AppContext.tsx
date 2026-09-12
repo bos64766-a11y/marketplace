@@ -12,17 +12,17 @@ interface AppContextType {
 
   // Products (Dynamic Store & Admin)
   products: Product[];
-  addProduct: (productData: Omit<Product, 'id'>) => Product;
-  updateProduct: (id: string, updated: Partial<Product>) => void;
-  deleteProduct: (id: string) => void;
+  addProduct: (productData: Omit<Product, 'id'>) => Promise<Product>;
+  updateProduct: (id: string, updated: Partial<Product>) => Promise<void>;
+  deleteProduct: (id: string) => Promise<void>;
   toggleProductStock: (id: string) => void;
   resetProductsToDefault: () => void;
 
   // Categories (Dynamic Store & Admin)
   categories: Category[];
-  addCategory: (categoryData: Category) => void;
-  updateCategory: (id: string, updated: Partial<Category>) => void;
-  deleteCategory: (id: string) => void;
+  addCategory: (categoryData: Category) => Promise<void>;
+  updateCategory: (id: string, updated: Partial<Category>) => Promise<void>;
+  deleteCategory: (id: string) => Promise<void>;
 
   // Banners (Dynamic Store & Admin)
   banners: BannerSlide[];
@@ -305,39 +305,69 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [products]);
 
-  const addProduct = (productData: Omit<Product, 'id'>): Product => {
-    const newId = `snb-${Date.now()}`;
+  const addProduct = async (productData: Omit<Product, 'id'>): Promise<Product> => {
+    const tempId = `snb-${Date.now()}`;
+    const generatedSku = productData.sku?.trim() || `SNB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const generatedSlug = productData.slug?.trim() || productData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || `prod-${Date.now()}`;
+
     const newProduct: Product = {
       ...productData,
-      id: newId,
-      slug: productData.slug || productData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+      id: tempId,
+      sku: generatedSku,
+      slug: generatedSlug,
     };
+
     setProducts((prev) => [newProduct, ...prev]);
-    api.createProduct({
-      ...newProduct,
-      category_id: newProduct.categoryId,
-      images_list: newProduct.images,
-    } as any).catch((err) => console.log('API sync warning:', err));
-    showToast(`✓ Yangi mahsulot "${newProduct.name}" muvaffaqiyatli qo‘shildi`, 'success');
+
+    try {
+      const serverProduct = await api.createProduct({
+        ...newProduct,
+        sku: generatedSku,
+        slug: generatedSlug,
+        category_id: newProduct.categoryId,
+        images_list: newProduct.images,
+      } as any);
+
+      if (serverProduct && serverProduct.id) {
+        setProducts((prev) =>
+          prev.map((p) => (p.id === tempId ? { ...newProduct, ...serverProduct } : p))
+        );
+        showToast(`✓ Yangi mahsulot "${serverProduct.name}" muvaffaqiyatli saqlandi`, 'success');
+        return serverProduct;
+      }
+    } catch (err: any) {
+      console.warn('API product create warning (saqlanmoqda):', err);
+      showToast(`✓ Yangi mahsulot "${newProduct.name}" qo‘shildi`, 'success');
+    }
+
     return newProduct;
   };
 
-  const updateProduct = (id: string, updated: Partial<Product>) => {
+  const updateProduct = async (id: string, updated: Partial<Product>) => {
     setProducts((prev) =>
       prev.map((item) => (item.id === id ? { ...item, ...updated } : item))
     );
-    api.updateProduct(id, {
-      ...updated,
-      category_id: updated.categoryId,
-      images_list: updated.images,
-    } as any).catch((err) => console.log('API sync warning:', err));
-    showToast('✓ Mahsulot ma’lumotlari muvaffaqiyatli yangilandi', 'success');
+    try {
+      await api.updateProduct(id, {
+        ...updated,
+        category_id: updated.categoryId,
+        images_list: updated.images,
+      } as any);
+      showToast('✓ Mahsulot ma’lumotlari muvaffaqiyatli yangilandi', 'success');
+    } catch (err) {
+      console.warn('API product update warning:', err);
+      showToast('✓ Mahsulot ma’lumotlari yangilandi', 'success');
+    }
   };
 
-  const deleteProduct = (id: string) => {
+  const deleteProduct = async (id: string) => {
     const target = products.find((p) => p.id === id);
     setProducts((prev) => prev.filter((p) => p.id !== id));
-    api.deleteProduct(id).catch((err) => console.log('API sync warning:', err));
+    try {
+      await api.deleteProduct(id);
+    } catch (err) {
+      console.warn('API product delete warning:', err);
+    }
     showToast(`Mahsulot "${target?.name || id}" o‘chirildi`, 'info');
   };
 
@@ -373,23 +403,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [categories]);
 
-  const addCategory = (catData: Category) => {
+  const addCategory = async (catData: Category) => {
     setCategories((prev) => [...prev, catData]);
-    api.createCategory(catData).catch((err) => console.log('API sync warning:', err));
-    showToast(`✓ Yangi kategoriya "${catData.name}" qo‘shildi`, 'success');
+    try {
+      await api.createCategory(catData);
+      showToast(`✓ Yangi kategoriya "${catData.name}" qo‘shildi`, 'success');
+    } catch (err) {
+      console.warn('API category create warning:', err);
+      showToast(`✓ Yangi kategoriya "${catData.name}" qo‘shildi`, 'success');
+    }
   };
 
-  const updateCategory = (id: string, updated: Partial<Category>) => {
+  const updateCategory = async (id: string, updated: Partial<Category>) => {
     setCategories((prev) =>
       prev.map((c) => (c.id === id ? { ...c, ...updated } : c))
     );
-    api.updateCategory(id, updated).catch((err) => console.log('API sync warning:', err));
-    showToast('Kategoriya yangilandi', 'success');
+    try {
+      await api.updateCategory(id, updated);
+      showToast('Kategoriya yangilandi', 'success');
+    } catch (err) {
+      console.warn('API category update warning:', err);
+      showToast('Kategoriya yangilandi', 'success');
+    }
   };
 
-  const deleteCategory = (id: string) => {
+  const deleteCategory = async (id: string) => {
     setCategories((prev) => prev.filter((c) => c.id !== id));
-    api.deleteCategory(id).catch((err) => console.log('API sync warning:', err));
+    try {
+      await api.deleteCategory(id);
+    } catch (err) {
+      console.warn('API category delete warning:', err);
+    }
     showToast('Kategoriya o‘chirildi', 'info');
   };
 

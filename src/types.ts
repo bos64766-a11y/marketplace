@@ -94,6 +94,7 @@ export interface Partner {
   name: string;
   logo: string;
   category: string;
+  order?: number;
 }
 
 export interface BundlePackage {

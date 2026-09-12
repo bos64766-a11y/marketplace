@@ -42,7 +42,7 @@ class Product(models.Model):
     old_price = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
     in_stock = models.BooleanField(default=True, db_index=True)
     brand = models.CharField(max_length=150, default='SNABTASH')
-    sku = models.CharField(max_length=100, unique=True, db_index=True)
+    sku = models.CharField(max_length=100, unique=True, db_index=True, blank=True)
     unit = models.CharField(max_length=50, default='dona')
     min_order = models.PositiveIntegerField(default=1)
     tag = models.CharField(max_length=100, blank=True, null=True)
@@ -64,10 +64,24 @@ class Product(models.Model):
         return f"{self.name} ({self.sku})"
 
     def save(self, *args, **kwargs):
+        import uuid
+        if not self.sku:
+            self.sku = f"SNB-{uuid.uuid4().hex[:8].upper()}"
         if not self.slug:
-            self.slug = slugify(self.name)
+            base_slug = slugify(self.name) or 'product'
+            candidate = base_slug
+            counter = 1
+            while Product.objects.filter(slug=candidate).exclude(pk=self.pk).exists():
+                candidate = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = candidate
         if not self.id:
-            self.id = f"snb-{self.slug}"
+            candidate_id = f"snb-{self.slug}"
+            counter = 1
+            while Product.objects.filter(id=candidate_id).exclude(pk=self.pk).exists():
+                candidate_id = f"snb-{self.slug}-{counter}"
+                counter += 1
+            self.id = candidate_id
         super().save(*args, **kwargs)
 
     @property

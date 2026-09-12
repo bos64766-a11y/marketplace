@@ -230,7 +230,7 @@ export const AdminProducts: React.FC = () => {
   };
 
   // Save handler
-  const handleSave = () => {
+  const handleSave = async () => {
     // Parse specs
     const specs: Record<string, string> = {};
     specsInput.split('\n').forEach((line) => {
@@ -258,17 +258,17 @@ export const AdminProducts: React.FC = () => {
     };
 
     if (editingProduct) {
-      updateProduct(editingProduct.id, productData);
+      await updateProduct(editingProduct.id, productData);
     } else {
-      addProduct(productData);
+      await addProduct(productData);
     }
     setIsModalOpen(false);
     setEditingProduct(null);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (deleteConfirmId) {
-      deleteProduct(deleteConfirmId);
+      await deleteProduct(deleteConfirmId);
       setDeleteConfirmId(null);
     }
   };
