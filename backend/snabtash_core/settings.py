@@ -12,11 +12,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Add apps folder to sys.path
 sys.path.insert(0, str(BASE_DIR))
 
-SECRET_KEY = 'django-insecure-4fys2#nhdhv5jfvd7ry!7nch6mwi9))y)2tp)0=(hn-k=8im63'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-4fys2#nhdhv5jfvd7ry!7nch6mwi9))y)2tp)0=(hn-k=8im63')
 
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ['*']
+allowed_hosts_env = os.environ.get('DJANGO_ALLOWED_HOSTS')
+if allowed_hosts_env:
+    ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(',') if h.strip()]
+else:
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [

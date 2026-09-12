@@ -8,6 +8,19 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'slug', 'name', 'icon', 'image', 'description', 'count']
+        extra_kwargs = {
+            'id': {'required': False, 'allow_blank': True},
+            'slug': {'required': False, 'allow_blank': True},
+        }
+
+    def create(self, validated_data):
+        from django.utils.text import slugify
+        if not validated_data.get('slug'):
+            base = slugify(validated_data.get('name', 'category')) or 'category'
+            validated_data['slug'] = base
+        if not validated_data.get('id'):
+            validated_data['id'] = validated_data['slug']
+        return super().create(validated_data)
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -26,11 +39,13 @@ class ProductSerializer(serializers.ModelSerializer):
     reviewsCount = serializers.IntegerField(source='reviews_count', default=0)
     isPopular = serializers.BooleanField(source='is_popular', default=False)
     isNew = serializers.BooleanField(source='is_new', default=False)
-    images = serializers.SerializerMethodField()
+    images = serializers.ListField(
+        child=serializers.CharField(), required=False
+    )
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), write_only=True, required=False
     )
-    # Allow writing category by ID
+    # Allow writing category by ID (both camelCase and snake_case)
     category_id = serializers.CharField(write_only=True, required=False)
     sku = serializers.CharField(required=False, allow_blank=True)
     images_list = serializers.ListField(
@@ -70,19 +85,29 @@ class ProductSerializer(serializers.ModelSerializer):
             'sku': {'required': False, 'allow_blank': True},
         }
 
-    def get_images(self, obj):
-        urls = [img.image_url for img in obj.product_images.all()]
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        urls = [img.image_url for img in instance.product_images.all()]
         if not urls:
-            return ['https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=500&auto=format&fit=crop&q=80']
-        return urls
+            urls = ['https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=500&auto=format&fit=crop&q=80']
+        ret['images'] = urls
+        return ret
 
     def create(self, validated_data):
         import uuid
         from django.utils.text import slugify
         from django.db.models import Q
 
-        images_data = validated_data.pop('images_list', [])
+        images_data = validated_data.pop('images', None)
+        if images_data is None:
+            images_data = validated_data.pop('images_list', [])
+        else:
+            validated_data.pop('images_list', None)
+
         cat_id = validated_data.pop('category_id', None)
+        if not cat_id and 'categoryId' in self.initial_data:
+            cat_id = self.initial_data.get('categoryId')
+
         if cat_id and not validated_data.get('category'):
             try:
                 validated_data['category'] = Category.objects.get(Q(id=cat_id) | Q(slug=cat_id))
@@ -115,11 +140,20 @@ class ProductSerializer(serializers.ModelSerializer):
         return product
 
     def update(self, instance, validated_data):
-        images_data = validated_data.pop('images_list', None)
+        images_data = validated_data.pop('images', None)
+        if images_data is None:
+            images_data = validated_data.pop('images_list', None)
+        else:
+            validated_data.pop('images_list', None)
+
         cat_id = validated_data.pop('category_id', None)
+        if not cat_id and 'categoryId' in self.initial_data:
+            cat_id = self.initial_data.get('categoryId')
+
         if cat_id:
             try:
-                instance.category = Category.objects.get(id=cat_id)
+                from django.db.models import Q
+                instance.category = Category.objects.get(Q(id=cat_id) | Q(slug=cat_id))
             except Category.DoesNotExist:
                 pass
 
