@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ArrowRight,
   Clock,
+  Globe,
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -29,6 +30,10 @@ export const Header: React.FC = () => {
     setSearchQuery,
     products,
     siteSettings,
+    language,
+    setLanguage,
+    t,
+    getProductName,
   } = useApp();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -96,14 +101,14 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-3 sm:gap-6 min-w-0">
             <div className="flex items-center gap-1.5 min-w-0 text-white font-medium truncate">
               <MapPin className="w-3.5 h-3.5 text-[#FF5A00] shrink-0" />
-              <span className="truncate">Yetkazib berish: Butun O‘zbekiston</span>
+              <span className="truncate">{t.header.deliveryRegion}</span>
             </div>
             <div className="hidden md:flex items-center gap-1.5 shrink-0 text-[#93C5FD]">
               <ShieldCheck className="w-3.5 h-3.5 text-[#009B5A]" />
-              <span>100% rasmiy shartnoma, QQS va Didox e-faktura</span>
+              <span>{t.header.contractGuarantee}</span>
             </div>
           </div>
-          <div className="flex items-center gap-3 sm:gap-6 shrink-0">
+          <div className="flex items-center gap-3 sm:gap-5 shrink-0">
             <a
               href={`tel:${(siteSettings?.phone1 || '+998870349779').replace(/\s+/g, '')}`}
               className="flex items-center gap-1 text-white hover:text-[#FF5A00] transition-colors font-semibold whitespace-nowrap"
@@ -112,10 +117,40 @@ export const Header: React.FC = () => {
               <span>{siteSettings?.phone1 || '+998 87 034 97 79'}</span>
             </a>
             <span className="hidden sm:inline text-[#64748B]">|</span>
-            <span className="hidden sm:inline text-[#94A3B8] items-center gap-1">
+            <span className="hidden lg:inline text-[#94A3B8] items-center gap-1">
               <Clock className="w-3 h-3 inline mr-1 text-[#64748B]" />
-              {siteSettings?.workHours ? siteSettings.workHours : 'Dush – Shan: 08:30 – 18:30'}
+              {siteSettings?.workHours ? siteSettings.workHours : t.header.workHours}
             </span>
+
+            {/* Language Switcher UZ | RU */}
+            <div className="flex items-center bg-white/10 hover:bg-white/15 rounded-md p-0.5 border border-white/10 text-[11px] font-bold ml-1">
+              <button
+                type="button"
+                id="btn-lang-uz"
+                onClick={() => setLanguage('uz')}
+                className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
+                  language === 'uz'
+                    ? 'bg-[#FF5A00] text-white shadow-2xs font-black'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+                title="O‘zbekcha"
+              >
+                UZ
+              </button>
+              <button
+                type="button"
+                id="btn-lang-ru"
+                onClick={() => setLanguage('ru')}
+                className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
+                  language === 'ru'
+                    ? 'bg-[#FF5A00] text-white shadow-2xs font-black'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+                title="Русский язык"
+              >
+                RU
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -142,10 +177,10 @@ export const Header: React.FC = () => {
                     : 'text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]'
                 }`}
                 aria-expanded={isCatalogOpen}
-                aria-label="Katalogni ochish"
+                aria-label={t.header.catalog}
               >
                 <Menu className="w-4 h-4 text-[#FF5A00]" />
-                <span>Katalog</span>
+                <span>{t.header.catalog}</span>
                 <ChevronDown
                   className={`w-3.5 h-3.5 transition-transform duration-200 ${
                     isCatalogOpen ? 'rotate-180 text-white' : 'text-[#64748B]'
@@ -159,7 +194,7 @@ export const Header: React.FC = () => {
                   currentPath === '/' ? 'text-[#FF5A00] font-bold' : ''
                 }`}
               >
-                Bosh sahifa
+                {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
               </button>
 
               <button
@@ -168,7 +203,7 @@ export const Header: React.FC = () => {
                   currentPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold' : ''
                 }`}
               >
-                To‘lov & Yetkazish
+                {t.footer.deliveryPayment}
               </button>
 
               <button
@@ -177,7 +212,7 @@ export const Header: React.FC = () => {
                   currentPath === '/about' ? 'text-[#FF5A00] font-bold' : ''
                 }`}
               >
-                Biz haqimizda
+                {t.footer.aboutUs}
               </button>
 
               <button
@@ -186,7 +221,7 @@ export const Header: React.FC = () => {
                   currentPath === '/contacts' ? 'text-[#FF5A00] font-bold' : ''
                 }`}
               >
-                Aloqa
+                {t.footer.contacts}
               </button>
             </nav>
           </div>
@@ -204,8 +239,8 @@ export const Header: React.FC = () => {
                     ? 'bg-[#FF5A00] text-white shadow-sm shadow-[#FF5A00]/30'
                     : 'text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]'
                 }`}
-                aria-label="Qidiruv"
-                title="Mahsulotlarni qidirish"
+                aria-label={t.header.searchPlaceholder}
+                title={t.header.searchPlaceholder}
               >
                 {isSearchOpen ? <X className="w-4.5 h-4.5" /> : <Search className="w-4.5 h-4.5 stroke-[2.2]" />}
               </button>
@@ -220,13 +255,13 @@ export const Header: React.FC = () => {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="2,400+ mahsulotdan qidiring..."
+                      placeholder={t.header.searchPlaceholder}
                       className="w-full h-11 bg-[#F8FAFC] border border-[#E2E8F0] rounded-full pl-4 pr-11 text-xs sm:text-sm font-semibold text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:border-[#FF5A00] focus:bg-white focus:ring-2 focus:ring-[#FF5A00]/15 transition-all shadow-2xs"
                     />
                     <button
                       type="submit"
                       className="absolute right-3.5 top-3 text-[#94A3B8] hover:text-[#FF5A00] cursor-pointer"
-                      aria-label="Qidirish"
+                      aria-label="Search"
                     >
                       <Search className="w-4.5 h-4.5" />
                     </button>
@@ -237,10 +272,13 @@ export const Header: React.FC = () => {
                     {searchQuery.trim() === '' ? (
                       <div>
                         <div className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-2">
-                          Ommabop so‘rovlar
+                          {language === 'ru' ? 'Популярные запросы' : 'Ommabop so‘rovlar'}
                         </div>
                         <div className="flex flex-wrap gap-1.5">
-                          {['Qo‘lqoplar', 'Grass', 'Tellux', 'Suyuq sovun 5L', 'A4 qog‘oz'].map((tag) => (
+                          {(language === 'ru'
+                            ? ['Перчатки', 'Grass', 'Tellux', 'Жидкое мыло 5L', 'Бумага A4']
+                            : ['Qo‘lqoplar', 'Grass', 'Tellux', 'Suyuq sovun 5L', 'A4 qog‘oz']
+                          ).map((tag) => (
                             <button
                               key={tag}
                               type="button"
@@ -259,7 +297,7 @@ export const Header: React.FC = () => {
                     ) : searchResults.length > 0 ? (
                       <div className="divide-y divide-[#F1F5F9]">
                         <div className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-2">
-                          Qidiruv natijalari
+                          {language === 'ru' ? 'Результаты поиска' : 'Qidiruv natijalari'}
                         </div>
                         {searchResults.map((product) => (
                           <button
@@ -270,15 +308,15 @@ export const Header: React.FC = () => {
                           >
                             <img
                               src={product.images[0]}
-                              alt={product.name}
+                              alt={getProductName(product)}
                               className="w-10 h-10 object-contain bg-white rounded-xl border border-[#E2E8F0] p-0.5 shrink-0"
                             />
                             <div className="flex-1 min-w-0">
                               <p className="text-xs font-bold text-[#1E293B] group-hover:text-[#FF5A00] truncate">
-                                {product.name}
+                                {getProductName(product)}
                               </p>
                               <p className="text-[11px] font-black text-[#FF5A00]">
-                                {formatPrice(product.price)} so‘m
+                                {formatPrice(product.price)} {t.productCard.sum}
                               </p>
                             </div>
                             <ArrowRight className="w-3.5 h-3.5 text-[#CBD5E1] group-hover:text-[#FF5A00] group-hover:translate-x-0.5 transition-all shrink-0" />
@@ -287,7 +325,9 @@ export const Header: React.FC = () => {
                       </div>
                     ) : (
                       <p className="text-xs text-[#94A3B8] py-4 text-center">
-                        Hech narsa topilmadi. Boshqa so‘z bilan qidirib ko‘ring.
+                        {language === 'ru'
+                          ? 'Ничего не найдено. Попробуйте другой запрос.'
+                          : 'Hech narsa topilmadi. Boshqa so‘z bilan qidirib ko‘ring.'}
                       </p>
                     )}
                   </div>
@@ -300,8 +340,8 @@ export const Header: React.FC = () => {
               id="btn-header-favorites"
               onClick={() => navigate('/favorites')}
               className="relative w-10 h-10 rounded-full border border-[#E2E8F0] hover:border-[#FF5A00] text-[#334155] hover:text-[#FF5A00] hover:bg-[#FFF7ED]/50 flex items-center justify-center transition-all cursor-pointer shrink-0"
-              title="Sevimlilar"
-              aria-label="Sevimlilar"
+              title={t.header.favorites}
+              aria-label={t.header.favorites}
             >
               <Heart
                 className={`w-4.5 h-4.5 transition-transform ${
@@ -320,8 +360,8 @@ export const Header: React.FC = () => {
               id="btn-header-cart"
               onClick={() => navigate('/cart')}
               className="relative w-10 h-10 rounded-full border border-[#CBD5E1] hover:border-[#FF5A00] text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]/50 flex items-center justify-center transition-all cursor-pointer shrink-0"
-              title="Savat"
-              aria-label="Savat"
+              title={t.header.cart}
+              aria-label={t.header.cart}
             >
               <ShoppingCart className="w-4.5 h-4.5 stroke-[1.9]" />
               {cartCount > 0 && (
@@ -336,10 +376,10 @@ export const Header: React.FC = () => {
               id="btn-header-quick-request"
               onClick={() => navigate('/request')}
               className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white bg-[#FF5A00] hover:bg-[#E54A00] shadow-sm hover:shadow-md hover:shadow-[#FF5A00]/25 transition-all cursor-pointer shrink-0 active:scale-97"
-              title="Yuridik shaxslar uchun tezkor zayavka"
+              title={t.header.quickRequest}
             >
               <FileText className="w-4 h-4 stroke-[2.2]" />
-              <span>Tezkor zayavka</span>
+              <span>{t.header.quickRequest}</span>
             </button>
 
             {/* Zayavkalar tarixi link */}
@@ -347,9 +387,9 @@ export const Header: React.FC = () => {
               id="btn-header-orders-history"
               onClick={() => navigate('/requests')}
               className="hidden xl:inline-flex items-center text-xs font-bold text-[#64748B] hover:text-[#FF5A00] transition-colors cursor-pointer px-1"
-              title="Mening zayavkalarim tarixi"
+              title={t.header.ordersHistory}
             >
-              <span>Zayavkalarim</span>
+              <span>{t.header.ordersHistory}</span>
             </button>
 
             {/* Mobile Hamburger Menu Toggle */}
@@ -368,6 +408,38 @@ export const Header: React.FC = () => {
         {/* Mobile Slide-Down Drawer */}
         {isMobileMenuOpen && (
           <div className="lg:hidden pb-5 pt-2 border-t border-[#F1F5F9] animate-in fade-in slide-in-from-top-2 duration-150 space-y-4">
+            {/* Mobile Language Switcher */}
+            <div className="flex items-center justify-between p-2.5 bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0]">
+              <span className="text-xs font-bold text-[#64748B] flex items-center gap-1.5 pl-1">
+                <Globe className="w-4 h-4 text-[#FF5A00]" />
+                {language === 'ru' ? 'Язык сайта:' : 'Sayt tili:'}
+              </span>
+              <div className="flex items-center bg-white rounded-xl p-0.5 border border-[#E2E8F0] text-xs font-bold shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => setLanguage('uz')}
+                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                    language === 'uz'
+                      ? 'bg-[#FF5A00] text-white font-black shadow-2xs'
+                      : 'text-[#64748B] hover:text-[#1E293B]'
+                  }`}
+                >
+                  O‘zbek
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLanguage('ru')}
+                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                    language === 'ru'
+                      ? 'bg-[#FF5A00] text-white font-black shadow-2xs'
+                      : 'text-[#64748B] hover:text-[#1E293B]'
+                  }`}
+                >
+                  Русский
+                </button>
+              </div>
+            </div>
+
             {/* Quick Katalog button */}
             <button
               onClick={() => {
@@ -378,7 +450,7 @@ export const Header: React.FC = () => {
             >
               <div className="flex items-center gap-2.5">
                 <Menu className="w-5 h-5 text-[#FF5A00]" />
-                <span>Mahsulotlar katalogi</span>
+                <span>{t.header.catalog}</span>
               </div>
               <ArrowRight className="w-4 h-4 text-white/70" />
             </button>
@@ -394,7 +466,7 @@ export const Header: React.FC = () => {
                   currentPath === '/' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
                 }`}
               >
-                Bosh sahifa
+                {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
               </button>
 
               <button
@@ -406,7 +478,7 @@ export const Header: React.FC = () => {
                   currentPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
                 }`}
               >
-                To‘lov & Yetkazish
+                {t.footer.deliveryPayment}
               </button>
 
               <button
@@ -418,7 +490,7 @@ export const Header: React.FC = () => {
                   currentPath === '/about' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
                 }`}
               >
-                Biz haqimizda
+                {t.footer.aboutUs}
               </button>
 
               <button
@@ -430,7 +502,7 @@ export const Header: React.FC = () => {
                   currentPath === '/contacts' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
                 }`}
               >
-                Aloqa
+                {t.footer.contacts}
               </button>
 
               <button
@@ -440,7 +512,7 @@ export const Header: React.FC = () => {
                 }}
                 className="py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors text-[#475569]"
               >
-                Mening zayavkalarim
+                {t.header.ordersHistory}
               </button>
             </div>
 
@@ -453,7 +525,7 @@ export const Header: React.FC = () => {
               className="w-full flex items-center justify-center gap-2 py-3 rounded-full text-sm font-bold text-white bg-[#FF5A00] shadow-md shadow-[#FF5A00]/25 cursor-pointer"
             >
               <FileText className="w-4 h-4" />
-              <span>Tezkor zayavka qoldirish</span>
+              <span>{t.header.quickRequest}</span>
             </button>
           </div>
         )}

@@ -36,7 +36,7 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
   onTabChange,
   autoScrollSpeed = 0.7,
 }) => {
-  const { navigate } = useApp();
+  const { navigate, t } = useApp();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const firstCycleRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -158,7 +158,7 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
             onClick={() => navigate(categoryLink)}
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-white bg-[#FF5A00] hover:bg-[#e04f00] px-4 py-2 rounded-2xl transition-all cursor-pointer shadow-md shadow-[#FF5A00]/25 active:scale-97 leading-[1.3]"
           >
-            <span>Barchasini ko‘rish</span>
+            <span>{t.home.viewAll}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 

@@ -7,10 +7,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'slug', 'name', 'icon', 'image', 'description', 'count']
+        fields = ['id', 'slug', 'name', 'name_ru', 'icon', 'image', 'description', 'description_ru', 'count']
         extra_kwargs = {
             'id': {'required': False, 'allow_blank': True},
             'slug': {'required': False, 'allow_blank': True},
+            'name_ru': {'required': False, 'allow_blank': True},
+            'description_ru': {'required': False, 'allow_blank': True},
         }
 
     def create(self, validated_data):
@@ -48,6 +50,9 @@ class ProductSerializer(serializers.ModelSerializer):
     # Allow writing category by ID (both camelCase and snake_case)
     category_id = serializers.CharField(write_only=True, required=False)
     sku = serializers.CharField(required=False, allow_blank=True)
+    name_ru = serializers.CharField(required=False, allow_blank=True)
+    description_ru = serializers.CharField(required=False, allow_blank=True)
+    tag_ru = serializers.CharField(required=False, allow_blank=True)
     images_list = serializers.ListField(
         child=serializers.CharField(), write_only=True, required=False
     )
@@ -58,6 +63,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'id',
             'slug',
             'name',
+            'name_ru',
             'category',
             'category_id',
             'categoryId',
@@ -70,9 +76,11 @@ class ProductSerializer(serializers.ModelSerializer):
             'unit',
             'minOrder',
             'tag',
+            'tag_ru',
             'rating',
             'reviewsCount',
             'description',
+            'description_ru',
             'features',
             'isPopular',
             'isNew',

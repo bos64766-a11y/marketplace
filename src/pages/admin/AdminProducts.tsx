@@ -36,6 +36,7 @@ const ITEMS_PER_PAGE = 15;
 const EMPTY_PRODUCT: Omit<Product, 'id'> = {
   slug: '',
   name: '',
+  name_ru: '',
   categoryId: '',
   categoryName: '',
   brand: '',
@@ -46,9 +47,12 @@ const EMPTY_PRODUCT: Omit<Product, 'id'> = {
   inStock: true,
   images: [],
   description: '',
+  description_ru: '',
   specifications: {},
   unit: 'dona',
   minOrder: 1,
+  tag: '',
+  tag_ru: '',
 };
 
 export const AdminProducts: React.FC = () => {
@@ -167,6 +171,7 @@ export const AdminProducts: React.FC = () => {
       result = result.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
+          (p.name_ru && p.name_ru.toLowerCase().includes(q)) ||
           p.sku.toLowerCase().includes(q) ||
           p.brand.toLowerCase().includes(q)
       );
@@ -201,6 +206,7 @@ export const AdminProducts: React.FC = () => {
     setFormData({
       slug: product.slug,
       name: product.name,
+      name_ru: product.name_ru || '',
       categoryId: product.categoryId,
       categoryName: product.categoryName,
       brand: product.brand,
@@ -212,12 +218,14 @@ export const AdminProducts: React.FC = () => {
       inStock: product.inStock,
       images: product.images,
       description: product.description,
+      description_ru: product.description_ru || '',
       specifications: product.specifications,
       unit: product.unit,
       minOrder: product.minOrder,
       isPopular: product.isPopular,
       isNew: product.isNew,
       tag: product.tag,
+      tag_ru: product.tag_ru || '',
       stockCount: product.stockCount,
     });
     setSpecsInput(
@@ -376,6 +384,9 @@ export const AdminProducts: React.FC = () => {
                         </div>
                         <div className="min-w-0">
                           <p className="text-xs font-bold text-[#0F172A] truncate max-w-[200px]">{product.name}</p>
+                          {product.name_ru && (
+                            <p className="text-[11px] text-[#64748B] truncate max-w-[200px] italic">RU: {product.name_ru}</p>
+                          )}
                           <p className="text-[10px] font-medium text-[#94A3B8]">{product.brand || 'SNABTASH'}</p>
                         </div>
                       </div>
@@ -482,10 +493,13 @@ export const AdminProducts: React.FC = () => {
             </div>
 
             <div className="p-5 space-y-4">
-              {/* Row: Name + SKU */}
+              {/* Row: Name (UZ) + Name (RU) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Mahsulot nomi *</label>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>Mahsulot nomi (O‘zbekcha) *</span>
+                    <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold">UZ</span>
+                  </label>
                   <input
                     type="text"
                     value={formData.name}
@@ -495,6 +509,23 @@ export const AdminProducts: React.FC = () => {
                   />
                 </div>
                 <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>Mahsulot nomi (Ruscha)</span>
+                    <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded font-bold">RU (ixtiyoriy)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name_ru || ''}
+                    onChange={(e) => setFormData({ ...formData, name_ru: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors"
+                    placeholder="Название товара (на русском)"
+                  />
+                </div>
+              </div>
+
+              {/* Row: SKU + Tag (UZ) + Tag (RU) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
                   <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">SKU</label>
                   <input
                     type="text"
@@ -502,6 +533,26 @@ export const AdminProducts: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                     className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors"
                     placeholder="SNB-001"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Tag (UZ)</label>
+                  <input
+                    type="text"
+                    value={formData.tag || ''}
+                    onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors"
+                    placeholder="Xit, Yangilik"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Tag (RU)</label>
+                  <input
+                    type="text"
+                    value={formData.tag_ru || ''}
+                    onChange={(e) => setFormData({ ...formData, tag_ru: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors"
+                    placeholder="Хит, Новинка"
                   />
                 </div>
               </div>
@@ -610,16 +661,34 @@ export const AdminProducts: React.FC = () => {
                 </div>
               </div>
 
-              {/* Description */}
-              <div>
-                <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Ta'rif</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors resize-none"
-                  placeholder="Mahsulot haqida qisqacha..."
-                />
+              {/* Descriptions: UZ & RU */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>Ta'rif (O‘zbekcha)</span>
+                    <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold">UZ</span>
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={3}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors resize-none"
+                    placeholder="Mahsulot haqida qisqacha..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>Ta'rif (Ruscha)</span>
+                    <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded font-bold">RU (ixtiyoriy)</span>
+                  </label>
+                  <textarea
+                    value={formData.description_ru || ''}
+                    onChange={(e) => setFormData({ ...formData, description_ru: e.target.value })}
+                    rows={3}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors resize-none"
+                    placeholder="Краткое описание товара на русском..."
+                  />
+                </div>
               </div>
 
               {/* Multi-Image Upload & Gallery */}

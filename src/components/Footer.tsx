@@ -5,7 +5,7 @@ import { CONTACT_INFO } from '../data/content';
 import { Phone, Send, MapPin, Clock, ShieldCheck, Mail, ArrowUpRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const { navigate, siteSettings } = useApp();
+  const { navigate, siteSettings, t } = useApp();
 
   return (
     <footer className="bg-[#0B1E48] text-white pt-14 pb-24 md:pb-12 mt-16 border-t border-[#1E356D]">
@@ -17,11 +17,11 @@ export const Footer: React.FC = () => {
               <Logo variant="dark" size="lg" />
             </div>
             <p className="text-[14px] text-gray-300 font-normal leading-[1.55]">
-              O‘zbekiston bo‘ylab korxonalar va tashkilotlar uchun rasmiy B2B ta’minot platformasi.
+              {t.footer.aboutDesc}
             </p>
             <div className="flex items-center gap-2 text-[12px] font-medium text-white bg-white/10 px-3.5 py-2 rounded-xl border border-white/15 w-fit">
               <ShieldCheck className="w-4 h-4 text-[#FF5A00]" />
-              <span>Yagona shartnoma & E-faktura</span>
+              <span>{t.footer.b2bContractEfactura}</span>
             </div>
           </div>
 
@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="font-bold text-[14px] text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A00]" />
-              <span>Kompaniya</span>
+              <span>{t.footer.companyTitle}</span>
             </h4>
             <ul className="space-y-2.5 text-[14px] font-normal">
               <li>
@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
                   onClick={() => navigate('/about')}
                   className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
                 >
-                  Biz haqimizda
+                  {t.footer.aboutUs}
                 </button>
               </li>
               <li>
@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
                   onClick={() => navigate('/delivery-payment')}
                   className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
                 >
-                  To‘lov va yetkazib berish
+                  {t.footer.deliveryPayment}
                 </button>
               </li>
               <li>
@@ -56,7 +56,7 @@ export const Footer: React.FC = () => {
                   onClick={() => navigate('/contacts')}
                   className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
                 >
-                  Aloqa va manzil
+                  {t.footer.contacts}
                 </button>
               </li>
               <li>
@@ -65,7 +65,7 @@ export const Footer: React.FC = () => {
                   onClick={() => navigate('/requests')}
                   className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
                 >
-                  Buyurtmalar tarixi
+                  {t.footer.ordersHistory}
                 </button>
               </li>
             </ul>
@@ -75,7 +75,7 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="font-bold text-sm text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#009B5A]" />
-              <span>Xizmatlar</span>
+              <span>{t.footer.servicesTitle}</span>
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm">
               <li>
@@ -84,7 +84,7 @@ export const Footer: React.FC = () => {
                   onClick={() => navigate('/catalog')}
                   className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
                 >
-                  Barcha mahsulotlar katalogi
+                  {t.footer.allCatalog}
                 </button>
               </li>
               <li>
@@ -93,7 +93,7 @@ export const Footer: React.FC = () => {
                   onClick={() => navigate('/request')}
                   className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
                 >
-                  Zayavka qoldirish
+                  {t.footer.leaveRequest}
                 </button>
               </li>
               <li>
@@ -102,7 +102,7 @@ export const Footer: React.FC = () => {
                   onClick={() => navigate('/requests')}
                   className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
                 >
-                  Mening zayavkalarim
+                  {t.footer.myRequests}
                 </button>
               </li>
             </ul>
@@ -112,7 +112,7 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="font-bold text-sm text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span>Aloqa markazi</span>
+              <span>{t.footer.contactCenter}</span>
             </h4>
             <ul className="space-y-3 text-xs sm:text-sm text-gray-300">
               <li className="flex items-start gap-2.5">
@@ -158,7 +158,7 @@ export const Footer: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <span className="flex items-center gap-1.5 font-medium text-white">
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-              2,400+ turdagi B2B tovarlar mavjud
+              {t.footer.availableProducts}
             </span>
             <span>Toshkent shahri, Sergeli tumani, Index A3</span>
           </div>
@@ -168,9 +168,9 @@ export const Footer: React.FC = () => {
               className="text-gray-400 hover:text-[#FF5A00] transition-colors cursor-pointer flex items-center gap-1.5 font-medium"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-[#FF5A00]" />
-              <span>Admin Panel</span>
+              <span>{t.footer.adminLogin}</span>
             </button>
-            <span>© 2026 SNABTASH. Barcha huquqlar himoyalangan.</span>
+            <span>© 2026 SNABTASH. {t.footer.rights}</span>
           </div>
         </div>
       </div>

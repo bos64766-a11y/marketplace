@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Product, Category, CartItem, RequestOrder, UserProfile, ToastNotification, SiteSettings, BannerSlide, HomeShowcaseSection, Partner } from '../types';
+import { Product, Category, CartItem, RequestOrder, UserProfile, ToastNotification, SiteSettings, BannerSlide, HomeShowcaseSection, Partner, Language } from '../types';
+import { translations, Translations } from '../i18n/translations';
 import { PRODUCTS as INITIAL_PRODUCTS } from '../data/products';
 import { CATEGORIES as INITIAL_CATEGORIES } from '../data/categories';
 import { PARTNERS as DEFAULT_PARTNERS } from '../data/content';
@@ -90,6 +91,15 @@ interface AppContextType {
   isAdminAuthenticated: boolean;
   loginAdmin: (login: string, pass: string) => Promise<boolean>;
   logoutAdmin: () => void;
+
+  // Language & i18n
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: Translations;
+  getProductName: (product: Product) => string;
+  getCategoryName: (category: Category) => string;
+  getProductDesc: (product: Product) => string;
+  getProductTag: (product: Product) => string | undefined;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -232,6 +242,52 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTimeout(() => {
       setToast((current) => (current?.id === id ? null : current));
     }, 3000);
+  };
+
+  // Language & i18n state
+  const [language, setLanguageState] = useState<Language>(() => {
+    try {
+      const saved = localStorage.getItem('snabtash_lang');
+      if (saved === 'ru' || saved === 'uz') return saved;
+    } catch {}
+    return 'uz';
+  });
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    try {
+      localStorage.setItem('snabtash_lang', lang);
+    } catch {}
+  };
+
+  const t = useMemo(() => translations[language], [language]);
+
+  const getProductName = (p: Product): string => {
+    if (language === 'ru' && p.name_ru?.trim()) {
+      return p.name_ru.trim();
+    }
+    return p.name;
+  };
+
+  const getCategoryName = (c: Category): string => {
+    if (language === 'ru' && c.name_ru?.trim()) {
+      return c.name_ru.trim();
+    }
+    return c.name;
+  };
+
+  const getProductDesc = (p: Product): string => {
+    if (language === 'ru' && p.description_ru?.trim()) {
+      return p.description_ru.trim();
+    }
+    return p.description;
+  };
+
+  const getProductTag = (p: Product): string | undefined => {
+    if (language === 'ru' && p.tag_ru?.trim()) {
+      return p.tag_ru.trim();
+    }
+    return p.tag;
   };
 
   // Dynamic Products state (persisted to localStorage)
@@ -1162,6 +1218,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         isAdminAuthenticated,
         loginAdmin,
         logoutAdmin,
+        language,
+        setLanguage,
+        t,
+        getProductName,
+        getCategoryName,
+        getProductDesc,
+        getProductTag,
       }}
     >
       {children}

@@ -1,11 +1,15 @@
+export type Language = 'uz' | 'ru';
+
 export interface Category {
   id: string;
   slug: string;
   name: string;
+  name_ru?: string;
   icon: string;
   image?: string;
   imageUrl?: string;
   description: string;
+  description_ru?: string;
   count: number;
 }
 
@@ -13,6 +17,7 @@ export interface Product {
   id: string;
   slug: string;
   name: string;
+  name_ru?: string;
   categoryId: string;
   categoryName: string;
   brand: string;
@@ -24,10 +29,12 @@ export interface Product {
   isPopular?: boolean;
   isNew?: boolean;
   tag?: string;
+  tag_ru?: string;
   inStock: boolean;
   stockCount?: number;
   images: string[];
   description: string;
+  description_ru?: string;
   specifications: Record<string, string>;
   unit: string;
   minOrder: number;

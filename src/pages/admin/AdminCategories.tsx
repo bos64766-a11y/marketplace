@@ -44,9 +44,11 @@ export const AdminCategories: React.FC = () => {
     id: '',
     slug: '',
     name: '',
+    name_ru: '',
     icon: 'Sparkles',
     image: '',
     description: '',
+    description_ru: '',
     count: 0,
   });
 
@@ -86,9 +88,11 @@ export const AdminCategories: React.FC = () => {
       id: '',
       slug: '',
       name: '',
+      name_ru: '',
       icon: 'Sparkles',
       image: '',
       description: '',
+      description_ru: '',
       count: 0,
     });
     setIsModalOpen(true);
@@ -98,7 +102,11 @@ export const AdminCategories: React.FC = () => {
     setEditingCategory(cat);
     setUploadError('');
     setShowUrlInput(false);
-    setFormData({ ...cat });
+    setFormData({
+      ...cat,
+      name_ru: cat.name_ru || '',
+      description_ru: cat.description_ru || '',
+    });
     setIsModalOpen(true);
   };
 
@@ -180,6 +188,9 @@ export const AdminCategories: React.FC = () => {
                     )}
                     <div>
                       <h3 className="text-sm font-bold text-[#1E293B]">{cat.name}</h3>
+                      {cat.name_ru && (
+                        <p className="text-[11px] text-[#64748B] italic">RU: {cat.name_ru}</p>
+                      )}
                       <p className="text-[10px] font-medium text-[#94A3B8]">/{cat.slug}</p>
                     </div>
                   </div>
@@ -252,15 +263,34 @@ export const AdminCategories: React.FC = () => {
             </div>
 
             <div className="p-5 space-y-4">
-              <div>
-                <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Kategoriya nomi *</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors"
-                  placeholder="Kategoriya nomi"
-                />
+              {/* Row: Category Name UZ & RU */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>Kategoriya nomi (O‘zbekcha) *</span>
+                    <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold">UZ</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors"
+                    placeholder="Kategoriya nomi"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>Kategoriya nomi (Ruscha)</span>
+                    <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded font-bold">RU (ixtiyoriy)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name_ru || ''}
+                    onChange={(e) => setFormData({ ...formData, name_ru: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors"
+                    placeholder="Название категории (на русском)"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -288,15 +318,34 @@ export const AdminCategories: React.FC = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Ta'rif</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors resize-none"
-                  placeholder="Kategoriya haqida qisqacha..."
-                />
+              {/* Descriptions: UZ & RU */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>Ta'rif (O‘zbekcha)</span>
+                    <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold">UZ</span>
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={3}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors resize-none"
+                    placeholder="Kategoriya haqida qisqacha..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>Ta'rif (Ruscha)</span>
+                    <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded font-bold">RU (ixtiyoriy)</span>
+                  </label>
+                  <textarea
+                    value={formData.description_ru || ''}
+                    onChange={(e) => setFormData({ ...formData, description_ru: e.target.value })}
+                    rows={3}
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors resize-none"
+                    placeholder="Краткое описание на русском..."
+                  />
+                </div>
               </div>
 
               {/* Image Upload Zone */}

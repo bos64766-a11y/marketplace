@@ -76,10 +76,32 @@ class ProductAPITest(APITestCase):
         """Test Category list and create"""
         create_payload = {
             'name': 'Yangi Kategoriya',
+            'name_ru': 'Новая Категория',
             'icon': 'Sparkles',
-            'description': 'Kategoriya izohi'
+            'description': 'Kategoriya izohi',
+            'description_ru': 'Описание категории'
         }
         res = self.client.post('/api/categories/', create_payload, format='json')
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res.data['name'], 'Yangi Kategoriya')
+        self.assertEqual(res.data['name_ru'], 'Новая Категория')
         self.assertTrue(res.data['slug'])
+
+    def test_multilingual_product(self):
+        """Test product with Russian fields"""
+        payload = {
+            'name': 'Ishchi qo‘lqoplar',
+            'name_ru': 'Перчатки рабочие',
+            'categoryId': 'kanselyariya',
+            'price': 2500.00,
+            'description': 'Paxtali qo‘lqoplar',
+            'description_ru': 'Хлопчатобумажные перчатки',
+            'tag': 'Yangi',
+            'tag_ru': 'Новинка'
+        }
+        res = self.client.post('/api/products/', payload, format='json')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(res.data['name_ru'], 'Перчатки рабочие')
+        self.assertEqual(res.data['description_ru'], 'Хлопчатобумажные перчатки')
+        self.assertEqual(res.data['tag_ru'], 'Новинка')
+

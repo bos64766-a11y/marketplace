@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export const RequestPage: React.FC = () => {
-  const { cart, cartTotal, submitRequest, profile, updateProfile, navigate } = useApp();
+  const { cart, cartTotal, submitRequest, profile, updateProfile, navigate, language, t, getProductName } = useApp();
 
   const hasSavedContact = Boolean(profile?.hasOrderedBefore && profile?.phone && profile?.name);
   const [isEditingContact, setIsEditingContact] = useState(!hasSavedContact);
@@ -41,11 +41,11 @@ export const RequestPage: React.FC = () => {
   const validate = () => {
     const errs: Record<string, string> = {};
     if (!name.trim()) {
-      errs.name = 'Ismingizni kiritish majburiy';
+      errs.name = language === 'ru' ? 'Введите ваше имя' : 'Ismingizni kiritish majburiy';
     }
     const digitsOnly = phone.replace(/\D/g, '');
     if (digitsOnly.length < 12) {
-      errs.phone = 'Telefon raqam to‘liq kiritilmadi (+998 __ ___ __ __)';
+      errs.phone = language === 'ru' ? 'Номер телефона не заполнен полностью (+998 __ ___ __ __)' : 'Telefon raqam to‘liq kiritilmadi (+998 __ ___ __ __)';
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -94,11 +94,11 @@ export const RequestPage: React.FC = () => {
           </div>
 
           <h1 className="text-2xl font-black text-[#1E293B] tracking-tight mb-2">
-            Zayavkangiz qabul qilindi!
+            {t.checkout.successTitle}
           </h1>
 
           <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed mb-6">
-            Buyurtma <span className="font-extrabold text-[#FF5A00]">#{submittedOrderId}</span> raqami bilan qayd etildi. Menejerimiz tez orada siz bilan bog‘lanadi.
+            {t.checkout.orderNumber} <span className="font-extrabold text-[#FF5A00]">#{submittedOrderId}</span>. {t.checkout.successDesc}
           </p>
 
           <div className="space-y-3">
@@ -107,13 +107,13 @@ export const RequestPage: React.FC = () => {
               onClick={() => navigate('/requests')}
               className="w-full py-3.5 px-6 rounded-2xl font-bold text-sm text-white bg-[#FF5A00] hover:bg-[#e04f00] transition-all cursor-pointer shadow-md shadow-[#FF5A00]/25"
             >
-              Zayavka holatini ko‘rish
+              {language === 'ru' ? 'Посмотреть статус заявки' : 'Zayavka holatini ko‘rish'}
             </button>
             <button
               onClick={() => navigate('/')}
               className="w-full py-3 px-6 rounded-2xl font-bold text-xs text-[#64748B] hover:text-[#1E293B] hover:bg-[#F8FAFC] transition-all cursor-pointer"
             >
-              Bosh sahifaga qaytish
+              {t.checkout.backHome}
             </button>
           </div>
         </div>
@@ -129,15 +129,17 @@ export const RequestPage: React.FC = () => {
           <div className="w-16 h-16 rounded-2xl bg-[#FFF1E8] text-[#FF5A00] flex items-center justify-center mx-auto mb-4 border border-[#FF5A00]/20">
             <ShoppingBag className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold text-[#1E293B] mb-2">Zayavka uchun mahsulot tanlanmagan</h2>
+          <h2 className="text-xl font-bold text-[#1E293B] mb-2">
+            {t.cart.emptyTitle}
+          </h2>
           <p className="text-xs sm:text-sm text-[#64748B] mb-6">
-            Zayavka yuborish uchun avval katalogdan kerakli mahsulotlarni savatga qo‘shing.
+            {t.cart.emptyDesc}
           </p>
           <button
             onClick={() => navigate('/catalog')}
             className="w-full py-3.5 rounded-2xl bg-[#FF5A00] text-white font-bold text-sm shadow-md shadow-[#FF5A00]/25 hover:bg-[#e04f00] transition-all cursor-pointer"
           >
-            Katalogga o‘tish
+            {t.cart.toCatalog}
           </button>
         </div>
       </div>
@@ -149,18 +151,18 @@ export const RequestPage: React.FC = () => {
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-[#64748B] mb-5 font-medium">
         <button onClick={() => navigate('/')} className="hover:text-[#FF5A00] transition-colors cursor-pointer">
-          Bosh sahifa
+          {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
         </button>
         <span>/</span>
-        <span className="text-[#FF5A00] font-bold">Zayavka rasmiylashtirish</span>
+        <span className="text-[#FF5A00] font-bold">{t.checkout.title}</span>
       </div>
 
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-black text-[#1E293B] tracking-tight">
-          Zayavka rasmiylashtirish
+          {t.checkout.title}
         </h1>
         <p className="text-xs sm:text-sm text-[#64748B] mt-1">
-          B2B korporativ ta’minot shartnomasi va hisob-faktura uchun so‘rov
+          {t.checkout.b2bGuarantee}
         </p>
       </div>
 
@@ -177,10 +179,12 @@ export const RequestPage: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-extrabold text-[#1E293B]">
-                      Oldingi buyurtma ma’lumotlaringiz
+                      {language === 'ru' ? 'Данные предыдущего заказа' : 'Oldingi buyurtma ma’lumotlaringiz'}
                     </h3>
                     <p className="text-[11px] text-[#64748B]">
-                      Ma’lumotlaringiz avtomatik saqlangan holda to‘ldirildi
+                      {language === 'ru'
+                        ? 'Ваши данные заполнены автоматически'
+                        : 'Ma’lumotlaringiz avtomatik saqlangan holda to‘ldirildi'}
                     </p>
                   </div>
                 </div>
@@ -191,22 +195,24 @@ export const RequestPage: React.FC = () => {
                   className="px-3.5 py-1.5 rounded-2xl bg-white border border-[#FF5A00]/30 hover:bg-[#FFF7ED] text-xs font-bold text-[#FF5A00] transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
-                  <span>O‘zgartirish</span>
+                  <span>{language === 'ru' ? 'Изменить' : 'O‘zgartirish'}</span>
                 </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-[#FF5A00]/15">
                 <div>
-                  <span className="text-[11px] font-medium text-[#64748B]">Qabul qiluvchi:</span>
+                  <span className="text-[11px] font-medium text-[#64748B]">
+                    {language === 'ru' ? 'Получатель:' : 'Qabul qiluvchi:'}
+                  </span>
                   <p className="text-sm font-extrabold text-[#1E293B]">{name}</p>
                 </div>
                 <div>
-                  <span className="text-[11px] font-medium text-[#64748B]">Telefon:</span>
+                  <span className="text-[11px] font-medium text-[#64748B]">{t.checkout.phone}:</span>
                   <p className="text-sm font-extrabold text-[#1E293B]">{phone}</p>
                 </div>
                 {company && (
                   <div className="sm:col-span-2">
-                    <span className="text-[11px] font-medium text-[#64748B]">Kompaniya:</span>
+                    <span className="text-[11px] font-medium text-[#64748B]">{t.checkout.company}:</span>
                     <p className="text-xs font-bold text-[#1E293B]">{company}</p>
                   </div>
                 )}
@@ -217,12 +223,14 @@ export const RequestPage: React.FC = () => {
               <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9]">
                 <div>
                   <h2 className="text-base font-extrabold text-[#1E293B]">
-                    {hasSavedContact ? 'Ma’lumotlarni tahrirlash' : 'Buyurtmachi ma’lumotlari'}
+                    {hasSavedContact
+                      ? (language === 'ru' ? 'Редактирование данных' : 'Ma’lumotlarni tahrirlash')
+                      : t.checkout.contactInfo}
                   </h2>
                   <p className="text-xs text-[#64748B] mt-0.5">
                     {hasSavedContact
-                      ? 'Yangi ma’lumotlaringiz keyingi buyurtmalar uchun saqlanadi'
-                      : 'Birinchi buyurtmangizda saqlanadi va keyingi safar qayta so‘ralmaydi'}
+                      ? (language === 'ru' ? 'Новые данные сохранятся для последующих заказов' : 'Yangi ma’lumotlaringiz keyingi buyurtmalar uchun saqlanadi')
+                      : (language === 'ru' ? 'Сохранится при первом заказе и больше не потребуется вводить' : 'Birinchi buyurtmangizda saqlanadi va keyingi safar qayta so‘ralmaydi')}
                   </p>
                 </div>
 
@@ -232,7 +240,7 @@ export const RequestPage: React.FC = () => {
                     onClick={() => setIsEditingContact(false)}
                     className="text-xs font-bold text-[#64748B] hover:text-[#1E293B] cursor-pointer"
                   >
-                    Bekor qilish
+                    {t.common.cancel}
                   </button>
                 )}
               </div>
@@ -240,7 +248,7 @@ export const RequestPage: React.FC = () => {
               {/* Ism */}
               <div>
                 <label className="block text-xs font-bold text-[#1E293B] mb-1.5">
-                  Ism va familiya <span className="text-red-500">*</span>
+                  {t.checkout.fullName} <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="input-request-name"
@@ -250,7 +258,7 @@ export const RequestPage: React.FC = () => {
                     setName(e.target.value);
                     if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                   }}
-                  placeholder="Masalan: Nodirbek Aliyev"
+                  placeholder={t.checkout.fullNamePlaceholder}
                   className={`w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${
                     errors.name
                       ? 'border-red-500 ring-2 ring-red-200'
@@ -263,7 +271,7 @@ export const RequestPage: React.FC = () => {
               {/* Telefon */}
               <div>
                 <label className="block text-xs font-bold text-[#1E293B] mb-1.5">
-                  Telefon raqami <span className="text-red-500">*</span>
+                  {t.checkout.phone} <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="input-request-phone"
@@ -283,14 +291,14 @@ export const RequestPage: React.FC = () => {
               {/* Kompaniya Nomi */}
               <div>
                 <label className="block text-xs font-bold text-[#1E293B] mb-1.5">
-                  Kompaniya yoki tashkilot nomi (ixtiyoriy)
+                  {t.checkout.company}
                 </label>
                 <input
                   id="input-request-company"
                   type="text"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  placeholder="Masalan: Artel, Akfa yoki MChJ nomi"
+                  placeholder={t.checkout.companyPlaceholder}
                   className="w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border border-[#E2E8F0] focus:outline-none focus:border-[#FF5A00] focus:bg-white transition-all"
                 />
               </div>
@@ -300,21 +308,21 @@ export const RequestPage: React.FC = () => {
           {/* Izoh / Comment for this specific order */}
           <div>
             <label className="block text-xs font-bold text-[#1E293B] mb-1.5">
-              Buyurtmaga qo‘shimcha izoh yoki manzil (ixtiyoriy)
+              {t.checkout.comment}
             </label>
             <textarea
               id="input-request-comment"
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Yetkazish sanasi, shartnoma raqami yoki boshqa istaklar..."
+              placeholder={t.checkout.commentPlaceholder}
               className="w-full p-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-medium text-[#1E293B] border border-[#E2E8F0] focus:outline-none focus:border-[#FF5A00] focus:bg-white transition-all resize-none"
             />
           </div>
 
           <div className="flex items-center gap-2 text-xs font-semibold text-[#16A34A] bg-[#DCFCE7] px-4 py-2.5 rounded-2xl">
             <ShieldCheck className="w-4 h-4 text-[#16A34A] shrink-0" />
-            <span>100% rasmiy B2B shartnoma, QQS 12% va Didox e-faktura taqdim etiladi.</span>
+            <span>{t.checkout.b2bGuarantee}</span>
           </div>
         </div>
 
@@ -323,49 +331,55 @@ export const RequestPage: React.FC = () => {
           <div className="bg-white rounded-3xl border border-[#E5EAF2] p-6 space-y-5 shadow-xs">
             <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9]">
               <h2 className="text-base font-extrabold text-[#1E293B]">
-                Zayavka tarkibi
+                {language === 'ru' ? 'Состав заявки' : 'Zayavka tarkibi'}
               </h2>
               <span className="text-xs font-bold text-[#FF5A00] bg-[#FFF7ED] px-2.5 py-0.5 rounded-full border border-[#FF5A00]/20">
-                {cart.length} xil tovar
+                {cart.length} {language === 'ru' ? 'наименований' : 'xil tovar'}
               </span>
             </div>
 
             <div className="divide-y divide-[#F1F5F9] max-h-[320px] overflow-y-auto pr-1">
-              {cart.map(({ product, quantity }) => (
-                <div key={product.id} className="py-3 flex items-center gap-3">
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-12 h-12 rounded-2xl object-contain border border-[#E2E8F0] bg-white shrink-0 p-1"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-xs font-bold text-[#1E293B] truncate">
-                      {product.name}
-                    </h4>
-                    <span className="text-[11px] font-medium text-[#64748B]">
-                      {quantity} x {product.price.toLocaleString('uz-UZ')} so‘m
-                    </span>
+              {cart.map(({ product, quantity }) => {
+                const productName = getProductName(product);
+
+                return (
+                  <div key={product.id} className="py-3 flex items-center gap-3">
+                    <img
+                      src={product.images[0]}
+                      alt={productName}
+                      className="w-12 h-12 rounded-2xl object-contain border border-[#E2E8F0] bg-white shrink-0 p-1"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs font-bold text-[#1E293B] truncate">
+                        {productName}
+                      </h4>
+                      <span className="text-[11px] font-medium text-[#64748B]">
+                        {quantity} x {product.price.toLocaleString('uz-UZ')} {t.productCard.sum}
+                      </span>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className="text-xs font-black text-[#FF5A00]">
+                        {(product.price * quantity).toLocaleString('uz-UZ')} {t.productCard.sum}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <span className="text-xs font-black text-[#FF5A00]">
-                      {(product.price * quantity).toLocaleString('uz-UZ')} so‘m
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Total */}
             <div className="pt-4 border-t border-[#F1F5F9] space-y-2">
               <div className="flex items-baseline justify-between">
-                <span className="font-bold text-sm text-[#64748B]">Jami summa:</span>
+                <span className="font-bold text-sm text-[#64748B]">{t.cart.total}:</span>
                 <span className="text-2xl font-black text-[#1E293B]">
                   {cartTotal.toLocaleString('uz-UZ')}{' '}
-                  <span className="text-sm font-bold text-[#FF5A00]">so‘m</span>
+                  <span className="text-sm font-bold text-[#FF5A00]">{t.productCard.sum}</span>
                 </span>
               </div>
               <p className="text-[11px] text-[#94A3B8]">
-                * QQS kiritilgan, to‘lov shartnoma bo‘yicha amalga oshiriladi.
+                {language === 'ru'
+                  ? '* Включая НДС, оплата по договору.'
+                  : '* QQS kiritilgan, to‘lov shartnoma bo‘yicha amalga oshiriladi.'}
               </p>
             </div>
 
@@ -379,11 +393,11 @@ export const RequestPage: React.FC = () => {
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Zayavka yuborilmoqda...</span>
+                  <span>{t.checkout.submitting}</span>
                 </span>
               ) : (
                 <>
-                  <span>Zayavkani yuborish</span>
+                  <span>{t.checkout.submit}</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}

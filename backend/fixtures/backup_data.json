@@ -39,9 +39,11 @@
   "fields": {
     "slug": "avtokimyo",
     "name": "Avtokimyo",
+    "name_ru": "",
     "icon": "Car",
     "image": "https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=300&auto=format&fit=crop&q=80",
     "description": "Avtoshampunlar, oynayuvgichlar, antifrizlar va avtoservis kimyolari",
+    "description_ru": "",
     "order": 0,
     "created_at": "2026-09-03T15:41:15.986Z",
     "updated_at": "2026-09-03T15:41:15.986Z"
@@ -53,9 +55,11 @@
   "fields": {
     "slug": "gigiyena",
     "name": "Gigiyena",
+    "name_ru": "",
     "icon": "HeartHandshake",
     "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&auto=format&fit=crop&q=80",
     "description": "Qog‘oz sochiqlar, tualet qog‘ozlari, dispenserlar, antiseptiklar",
+    "description_ru": "",
     "order": 2,
     "created_at": "2026-09-03T15:41:15.997Z",
     "updated_at": "2026-09-03T15:41:15.997Z"
@@ -67,9 +71,11 @@
   "fields": {
     "slug": "himoya-vositalari",
     "name": "Himoya vositalari",
+    "name_ru": "",
     "icon": "HardHat",
     "image": "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=300&auto=format&fit=crop&q=80",
     "description": "Qo‘lqoplar, himoya ko‘zoynaklari, respiratorlar va kaskalar",
+    "description_ru": "",
     "order": 4,
     "created_at": "2026-09-03T15:41:16.007Z",
     "updated_at": "2026-09-03T15:41:16.007Z"
@@ -81,9 +87,11 @@
   "fields": {
     "slug": "kanselyariya",
     "name": "Kanselyariya",
+    "name_ru": "",
     "icon": "FileSpreadsheet",
     "image": "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=300&auto=format&fit=crop&q=80",
     "description": "A4 qog‘ozlari, papkalar, ruchkalar, ofis uchun sarflov materiallari",
+    "description_ru": "",
     "order": 3,
     "created_at": "2026-09-03T15:41:16.003Z",
     "updated_at": "2026-09-03T15:41:16.003Z"
@@ -95,9 +103,11 @@
   "fields": {
     "slug": "maishiy-kimyo",
     "name": "Maishiy kimyo",
+    "name_ru": "",
     "icon": "Sparkles",
     "image": "https://images.unsplash.com/photo-1585421514738-01798e348b17?w=300&auto=format&fit=crop&q=80",
     "description": "Professional yuvish va tozalash vositalari, suyuq sovunlar, xlorli eritmalar",
+    "description_ru": "",
     "order": 1,
     "created_at": "2026-09-03T15:41:15.991Z",
     "updated_at": "2026-09-03T15:41:15.991Z"
@@ -109,9 +119,11 @@
   "fields": {
     "slug": "tekstil-mahsulotlari",
     "name": "Tekstil",
+    "name_ru": "",
     "icon": "Shirt",
     "image": "https://images.unsplash.com/photo-1600369672770-985fd30004eb?w=300&auto=format&fit=crop&q=80",
     "description": "Mikrofibra salfetkalar, mopplar, ishchi xalatlari va fartuklar",
+    "description_ru": "",
     "order": 5,
     "created_at": "2026-09-03T15:41:16.011Z",
     "updated_at": "2026-09-03T15:41:16.011Z"
@@ -123,6 +135,7 @@
   "fields": {
     "slug": "suyuq-sovun-5l",
     "name": "Suyuq sovun 5L SNABTASH",
+    "name_ru": "",
     "category": "maishiy-kimyo",
     "price": "38500.00",
     "old_price": "45000.00",
@@ -132,9 +145,11 @@
     "unit": "kanistra",
     "min_order": 1,
     "tag": "Premium 5L",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 124,
     "description": "Yuqori sifatli antibakterial suyuq sovun. Terini quritmaydi, yoqimli hid va yumshoqlik ta’sirga ega.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -157,6 +172,7 @@
   "fields": {
     "slug": "chiqindi-paketi-60l-20-dona",
     "name": "Chiqindi paketi 60L (20 dona)",
+    "name_ru": "",
     "category": "gigiyena",
     "price": "18900.00",
     "old_price": "22000.00",
@@ -166,9 +182,11 @@
     "unit": "rulon",
     "min_order": 1,
     "tag": "60L, 20 dona",
+    "tag_ru": "",
     "rating": "4.70",
     "reviews_count": 86,
     "description": "Yuqori mustahkamlikka ega bo‘lgan 60 litrli chiqindi xaltalari ruloni. Yirtilishga chidamli polietilen.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -191,6 +209,7 @@
   "fields": {
     "slug": "svetocopy-a4-qogoz",
     "name": "Ofis qog‘ozi SvetoCopy A4 (500 varaq)",
+    "name_ru": "",
     "category": "kanselyariya",
     "price": "46000.00",
     "old_price": null,
@@ -200,9 +219,11 @@
     "unit": "pachka",
     "min_order": 1,
     "tag": "Bestseller",
+    "tag_ru": "",
     "rating": "5.00",
     "reviews_count": 340,
     "description": "Printer va kserokslar uchun C-klass standart 80g/m² ofis qog‘ozi.",
+    "description_ru": "",
     "features": [
       {
         "name": "Formati",
@@ -229,6 +250,7 @@
   "fields": {
     "slug": "glade-havo-xushboylantiruvchi-aerozol-300ml",
     "name": "Glade aerozol 300ml",
+    "name_ru": "",
     "category": "maishiy-kimyo",
     "price": "29792.00",
     "old_price": null,
@@ -238,9 +260,11 @@
     "unit": "dona",
     "min_order": 1,
     "tag": "300 ml",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 195,
     "description": "Ofis va xonalar uchun uzoq vaqt saqlanuvchi tabiiy gul va tog‘ ifori bilan to‘ldirilgan aerozol.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -263,6 +287,7 @@
   "fields": {
     "slug": "trikotaj-ishchi-paxta-qolqoplar-35g",
     "name": "Trikotaj ishchi paxta qo‘lqoplari 35gr",
+    "name_ru": "",
     "category": "himoya-vositalari",
     "price": "1400.00",
     "old_price": null,
@@ -272,9 +297,11 @@
     "unit": "juft",
     "min_order": 50,
     "tag": "35gr x/b",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 230,
     "description": "100% paxta ipli 35 grammli sifatli trikotaj ishchi qo‘lqopi. Qo‘lni terlatmaydi, eng ommabop B2B tanlov.",
+    "description_ru": "",
     "features": [
       {
         "name": "Vazni",
@@ -301,6 +328,7 @@
   "fields": {
     "slug": "trikotaj-ishchi-paxta-qolqoplari-45g",
     "name": "Trikotaj ishchi paxta qo‘lqoplari 45gr",
+    "name_ru": "",
     "category": "himoya-vositalari",
     "price": "1456.00",
     "old_price": null,
@@ -310,9 +338,11 @@
     "unit": "juft",
     "min_order": 50,
     "tag": "Xit savdo",
+    "tag_ru": "",
     "rating": "5.00",
     "reviews_count": 310,
     "description": "Zichligi yuqori 45 grammli qalin paxta ishchi qo‘lqoplari. Og‘ir jismoniy va ombor ishlari uchun mustahkam.",
+    "description_ru": "",
     "features": [
       {
         "name": "Vazni",
@@ -335,6 +365,7 @@
   "fields": {
     "slug": "issiq-qoplamali-qolqoplar-300",
     "name": "Issiq qoplamali qo‘lqoplar 300",
+    "name_ru": "",
     "category": "himoya-vositalari",
     "price": "6944.00",
     "old_price": null,
@@ -344,9 +375,11 @@
     "unit": "juft",
     "min_order": 10,
     "tag": "Uteplenny",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 88,
     "description": "Sovuq sharoitda va sovuq xonalarda ishlash uchun mo‘ljallangan issiq qoplamali to‘liq himoya qo‘lqoplari.",
+    "description_ru": "",
     "features": [
       {
         "name": "Turi",
@@ -373,6 +406,7 @@
   "fields": {
     "slug": "lateks-qoplamali-koreya-qolqoplar",
     "name": "Lateks qoplamali Koreya qo‘lqoplar",
+    "name_ru": "",
     "category": "himoya-vositalari",
     "price": "3808.00",
     "old_price": null,
@@ -382,9 +416,11 @@
     "unit": "juft",
     "min_order": 10,
     "tag": "Koreya",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 112,
     "description": "Qizil rangli yuqori elastiklikka ega Koreya texnologiyasi asosidagi lateks qoplamali ishchi qo‘lqoplari.",
+    "description_ru": "",
     "features": [
       {
         "name": "Turi",
@@ -407,6 +443,7 @@
   "fields": {
     "slug": "lateks-qoplamali-zebra-qolqoplar",
     "name": "Lateks qoplamali Zebra qo‘lqoplar",
+    "name_ru": "",
     "category": "himoya-vositalari",
     "price": "4144.00",
     "old_price": null,
@@ -416,9 +453,11 @@
     "unit": "juft",
     "min_order": 10,
     "tag": "Zebra",
+    "tag_ru": "",
     "rating": "4.70",
     "reviews_count": 65,
     "description": "Ko‘k rangli chidamli lateks qoplamali Zebra modeli. Quruq va nam yuzalarda buyumlarni mustahkam ushlaydi.",
+    "description_ru": "",
     "features": [
       {
         "name": "Material",
@@ -441,6 +480,7 @@
   "fields": {
     "slug": "nitril-qoplamali-qolqoplar",
     "name": "Nitril qoplamali qo‘lqoplar",
+    "name_ru": "",
     "category": "himoya-vositalari",
     "price": "5600.00",
     "old_price": null,
@@ -450,9 +490,11 @@
     "unit": "juft",
     "min_order": 10,
     "tag": "Nitril",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 178,
     "description": "Moy va neft mahsulotlariga chidamli yashil nitril qoplamali professional ishchi qo‘lqoplari.",
+    "description_ru": "",
     "features": [
       {
         "name": "Qoplama",
@@ -475,6 +517,7 @@
   "fields": {
     "slug": "sintetik-apelsin-qolqoplar",
     "name": "Sintetik apelsin qo‘lqoplar",
+    "name_ru": "",
     "category": "himoya-vositalari",
     "price": "7728.00",
     "old_price": null,
@@ -484,9 +527,11 @@
     "unit": "juft",
     "min_order": 10,
     "tag": "Sintetik",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 142,
     "description": "Yorqin apelsin rangli sintetik ishchi qo‘lqoplar. Sirpanishga qarshi qoplama, yuqori chidamlilik va elastiklikka ega.",
+    "description_ru": "",
     "features": [
       {
         "name": "Turi",
@@ -517,6 +562,7 @@
   "fields": {
     "slug": "grass-antigraffiti-dog-ketkazuvchi-vosita",
     "name": "Grass Antigraffiti dog‘ ketkazuvchi vosita",
+    "name_ru": "",
     "category": "maishiy-kimyo",
     "price": "120400.00",
     "old_price": null,
@@ -526,9 +572,11 @@
     "unit": "dona",
     "min_order": 1,
     "tag": "AntiGraffiti",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 84,
     "description": "Bo‘yoq, skotch izlari, marker, graffiti va yopishqoq qoldiqlarni har qanday sirtlardan tozalovchi professional tarkib.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -551,6 +599,7 @@
   "fields": {
     "slug": "grass-dos-hojatxona-osma-bloki-3in1",
     "name": "Grass Dos hojatxona osma bloki 3in1",
+    "name_ru": "",
     "category": "maishiy-kimyo",
     "price": "14504.00",
     "old_price": null,
@@ -560,9 +609,11 @@
     "unit": "dona",
     "min_order": 2,
     "tag": "3in1 Blok",
+    "tag_ru": "",
     "rating": "4.70",
     "reviews_count": 78,
     "description": "Unitaz va sanuzellar uchun yoqimli sitrus iforini taratuvchi, karash va bakteriyalardan saqlovchi osma blok.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hidi",
@@ -585,6 +636,7 @@
   "fields": {
     "slug": "grass-polyrole-mat-plastik-jilolagich",
     "name": "Grass Polyrole mat plastik jilolagich",
+    "name_ru": "",
     "category": "maishiy-kimyo",
     "price": "64400.00",
     "old_price": null,
@@ -594,9 +646,11 @@
     "unit": "dona",
     "min_order": 1,
     "tag": "Matte Finish",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 160,
     "description": "Avtomobil panellari, plastik mebellar va ofis jihozlari uchun porlashsiz mot tozalovchi sprey.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -619,6 +673,7 @@
   "fields": {
     "slug": "grass-zanglamas-polat-tozalash-vositasi",
     "name": "Grass zanglamas po‘lat tozalash vositasi",
+    "name_ru": "",
     "category": "maishiy-kimyo",
     "price": "46200.00",
     "old_price": null,
@@ -628,9 +683,11 @@
     "unit": "dona",
     "min_order": 1,
     "tag": "Inox Cleaner",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 95,
     "description": "Zanglamas po‘lat (inox), xrom va metall buyumlarni yaltiratuvchi va barmoq izlaridan himoya qiluvchi sprey.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -653,6 +710,7 @@
   "fields": {
     "slug": "elma-33x33-classic-salfetkalari",
     "name": "Salfetki Elma 33x33 Classic (221)",
+    "name_ru": "",
     "category": "gigiyena",
     "price": "6944.00",
     "old_price": null,
@@ -662,9 +720,11 @@
     "unit": "qadoq",
     "min_order": 5,
     "tag": "33x33 sm",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 168,
     "description": "Oshxona, kofe-breyk va korporativ tadbirlar uchun oq rangli 1 qavatli Elma salfetkalari.",
+    "description_ru": "",
     "features": [
       {
         "name": "O‘lchami",
@@ -687,6 +747,7 @@
   "fields": {
     "slug": "bochka-plastikovaya-oq-50l",
     "name": "Bochka plastik oq",
+    "name_ru": "",
     "category": "kanselyariya",
     "price": "22960.00",
     "old_price": null,
@@ -696,9 +757,11 @@
     "unit": "dona",
     "min_order": 1,
     "tag": "Keng og‘izli",
+    "tag_ru": "",
     "rating": "4.70",
     "reviews_count": 52,
     "description": "Kimyoviy suyuqliklar, yuvish vositalari va suv saqlash uchun germetik qopqoqli oq plastik bochka.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -721,6 +784,7 @@
   "fields": {
     "slug": "qopqoqli-plastik-chelak-10l",
     "name": "Qopqoqli plastik chelak",
+    "name_ru": "",
     "category": "kanselyariya",
     "price": "27440.00",
     "old_price": null,
@@ -730,9 +794,11 @@
     "unit": "dona",
     "min_order": 1,
     "tag": "Qopqoqli",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 74,
     "description": "Tozalash ishlari va xo‘jalik ehtiyojlari uchun baquvvat metall tutqichli va germetik qopqoqli chelak.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -755,6 +821,7 @@
   "fields": {
     "slug": "tellux-z2-bargli-qogoz-sochiqlar",
     "name": "Bargli qog‘oz sochiqlar Z-taxlam 2 qavat Tellux Action",
+    "name_ru": "",
     "category": "gigiyena",
     "price": "28000.00",
     "old_price": null,
@@ -764,9 +831,11 @@
     "unit": "qadoq",
     "min_order": 2,
     "tag": "2 qavatli",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 62,
     "description": "Dispenserlar uchun Z-shaklda taxlangan 2 qavatli yuqori sifatli yumshoq qog‘oz sochiqlar.",
+    "description_ru": "",
     "features": [
       {
         "name": "Taxlam turi",
@@ -793,6 +862,7 @@
   "fields": {
     "slug": "tellux-zz1-bargli-sochiqlar-standart",
     "name": "Bargli sochiqlar ZZ 1 qavat Standart Tellux",
+    "name_ru": "",
     "category": "gigiyena",
     "price": "23000.00",
     "old_price": null,
@@ -802,9 +872,11 @@
     "unit": "qadoq",
     "min_order": 2,
     "tag": "1 qavat Standart",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 45,
     "description": "Tejamkor 1 qavatli dispenser uchun bargli sochiqlar to‘plami. Katta oqimli sanuzellar uchun ideal.",
+    "description_ru": "",
     "features": [
       {
         "name": "Turi",
@@ -827,6 +899,7 @@
   "fields": {
     "slug": "tellux-zz2-qogoz-sochiqlar-komfort",
     "name": "Bargli qog‘oz sochiqlar ZZ 2 qavat Komfort Tellux",
+    "name_ru": "",
     "category": "gigiyena",
     "price": "22000.00",
     "old_price": null,
@@ -836,9 +909,11 @@
     "unit": "qadoq",
     "min_order": 2,
     "tag": "2 qavat Komfort",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 38,
     "description": "Yumshoqlik va nam tortish xususiyati yuqori bo‘lgan Komfort seriyasidagi 2 qavatli qog‘oz sochiq.",
+    "description_ru": "",
     "features": [
       {
         "name": "Turi",
@@ -861,6 +936,7 @@
   "fields": {
     "slug": "katta-rulonli-tualet-qogozi-standart",
     "name": "Katta rulonli tualet qog‘ozi 1 qavat Standart (Jumbo)",
+    "name_ru": "",
     "category": "gigiyena",
     "price": "54000.00",
     "old_price": null,
@@ -870,9 +946,11 @@
     "unit": "rulon",
     "min_order": 2,
     "tag": "Jumbo Maxi",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 56,
     "description": "Katta dispenserlar uchun mo‘ljallangan diametri katta gigiyenik tualet qog‘ozi ruloni.",
+    "description_ru": "",
     "features": [
       {
         "name": "Rulon uzunligi",
@@ -895,6 +973,7 @@
   "fields": {
     "slug": "mini-rulonli-tualet-qogozi-1-qavat-standart",
     "name": "Mini rulonli tualet qog‘ozi 1 qavat Standart Tellux",
+    "name_ru": "",
     "category": "gigiyena",
     "price": "21000.00",
     "old_price": null,
@@ -904,9 +983,11 @@
     "unit": "qadoq",
     "min_order": 4,
     "tag": "Mini 1 qavat",
+    "tag_ru": "",
     "rating": "4.70",
     "reviews_count": 39,
     "description": "Tejamkor va sifatli mini rulonli Standart seriyasidagi 1 qavatli tualet qog‘ozi.",
+    "description_ru": "",
     "features": [
       {
         "name": "Qatlamlar",
@@ -929,6 +1010,7 @@
   "fields": {
     "slug": "mini-rulonli-tualet-qogozi-2-qavat-komfort",
     "name": "Mini rulonli tualet qog‘ozi 2 qavat Komfort Tellux",
+    "name_ru": "",
     "category": "gigiyena",
     "price": "24000.00",
     "old_price": null,
@@ -938,9 +1020,11 @@
     "unit": "qadoq",
     "min_order": 4,
     "tag": "Mini 2 qavat",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 42,
     "description": "Ixcham dispenserlar va standart hojatxona ushlagichlari uchun 2 qavatli mayin tualet qog‘ozi.",
+    "description_ru": "",
     "features": [
       {
         "name": "Qatlamlar",
@@ -963,6 +1047,7 @@
   "fields": {
     "slug": "vanish-gold-gilam-yuvish-shampuni",
     "name": "Vanish Gold gilam yuvish shampuni",
+    "name_ru": "",
     "category": "maishiy-kimyo",
     "price": "59976.00",
     "old_price": null,
@@ -972,9 +1057,11 @@
     "unit": "dona",
     "min_order": 1,
     "tag": "Gold Pro",
+    "tag_ru": "",
     "rating": "4.80",
     "reviews_count": 115,
     "description": "Gilamlar, kovrolin va yumshoq mebellarni qo‘lda va klining mashinalarida chuqur tozalash uchun konsentrat.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",
@@ -997,6 +1084,7 @@
   "fields": {
     "slug": "vanish-oxi-action-mato-dog-ketkazgich-500ml",
     "name": "Vanish Oxi Action mato dog‘ ketkazgichi 500ml",
+    "name_ru": "",
     "category": "maishiy-kimyo",
     "price": "35952.00",
     "old_price": null,
@@ -1006,9 +1094,11 @@
     "unit": "dona",
     "min_order": 1,
     "tag": "500 ml",
+    "tag_ru": "",
     "rating": "4.90",
     "reviews_count": 140,
     "description": "Rangli va oq matolardagi eng qiyin dog‘larni samarali ketkazuvchi kislorodli suyuq vosita.",
+    "description_ru": "",
     "features": [
       {
         "name": "Hajmi",

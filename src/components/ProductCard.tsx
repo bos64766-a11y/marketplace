@@ -9,7 +9,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '' }) => {
-  const { navigate, addToCart, isFavorite, toggleFavorite } = useApp();
+  const { navigate, addToCart, isFavorite, toggleFavorite, t, getProductName } = useApp();
   const minQty = product.minOrder || 1;
   const [isAdded, setIsAdded] = useState(false);
   const favorite = isFavorite(product.id);
@@ -36,6 +36,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '
     ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
     : 0;
 
+  const productName = getProductName(product);
+
   return (
     <div
       id={`card-product-${product.id}`}
@@ -46,7 +48,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '
       <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] mb-1.5 sm:mb-2">
         <img
           src={product.images[0]}
-          alt={product.name}
+          alt={productName}
           loading="lazy"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
@@ -64,7 +66,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '
               ? 'bg-white text-[#FF5A00]'
               : 'bg-white/85 hover:bg-white text-[#64748B] hover:text-[#FF5A00]'
           }`}
-          aria-label={favorite ? 'Sevimlilardan o‘chirish' : 'Sevimlilarga qo‘shish'}
+          aria-label={favorite ? 'Remove favorite' : 'Add favorite'}
         >
           <Heart
             className={`w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform active:scale-125 ${
@@ -86,7 +88,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '
         <div>
           {/* Product Name */}
           <h3 className="font-bold text-[11.5px] sm:text-[13px] text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-2 min-h-[28px] sm:min-h-[32px] leading-snug mb-1">
-            {product.name}
+            {productName}
           </h3>
 
           {/* Subtitle / Artikul / Min order info */}
@@ -109,17 +111,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '
               <span className="text-[13.5px] sm:text-[16px] font-black text-[#FF5A00] tracking-tight">
                 {formatPrice(product.price)}
               </span>
-              <span className="text-[9.5px] sm:text-[10.5px] font-semibold text-[#94A3B8]">so‘m</span>
+              <span className="text-[9.5px] sm:text-[10.5px] font-semibold text-[#94A3B8]">{t.productCard.sum}</span>
             </div>
 
             {product.oldPrice && (
               <span className="text-[8.5px] sm:text-[9.5px] text-[#94A3B8] line-through font-medium">
-                {formatPrice(product.oldPrice)} so‘m
+                {formatPrice(product.oldPrice)} {t.productCard.sum}
               </span>
             )}
           </div>
 
-          {/* Full-width "Sotib olish" Button matching sample */}
+          {/* Full-width "Sotib olish" / "Купить" Button */}
           <button
             id={`btn-add-cart-${product.id}`}
             onClick={handleAddToCart}
@@ -132,10 +134,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '
             {isAdded ? (
               <>
                 <Check className="w-3 h-3" />
-                <span>Qo‘shildi</span>
+                <span>{t.productCard.inCart}</span>
               </>
             ) : (
-              <span>Sotib olish</span>
+              <span>{t.productCard.addToCart}</span>
             )}
           </button>
         </div>

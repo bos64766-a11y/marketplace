@@ -10,7 +10,18 @@ import {
 } from 'lucide-react';
 
 export const CartPage: React.FC = () => {
-  const { cart, removeFromCart, updateCartQuantity, clearCart, cartTotal, cartCount, navigate } = useApp();
+  const {
+    cart,
+    removeFromCart,
+    updateCartQuantity,
+    clearCart,
+    cartTotal,
+    cartCount,
+    navigate,
+    language,
+    t,
+    getProductName,
+  } = useApp();
 
   if (cart.length === 0) {
     return (
@@ -20,17 +31,17 @@ export const CartPage: React.FC = () => {
             <ShoppingBag className="w-8 h-8" />
           </div>
           <h1 className="text-xl sm:text-2xl font-extrabold text-[#0B2E73] tracking-tight mb-2">
-            Savatingiz bo‘sh
+            {t.cart.emptyTitle}
           </h1>
           <p className="text-xs sm:text-sm text-[#667085] leading-relaxed mb-6">
-            Katalogdan kerakli mahsulotlarni tanlab, savatga qo‘shing va zayavka shakllantiring.
+            {t.cart.emptyDesc}
           </p>
           <button
             id="btn-cart-empty-catalog"
             onClick={() => navigate('/catalog')}
             className="w-full py-3 px-6 rounded-[10px] font-bold text-sm text-white bg-[#0B2E73] hover:bg-[#08245A] transition-all cursor-pointer flex items-center justify-center gap-2"
           >
-            <span>Katalogga o‘tish</span>
+            <span>{t.cart.toCatalog}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -43,20 +54,20 @@ export const CartPage: React.FC = () => {
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-[#667085] mb-4">
         <button onClick={() => navigate('/')} className="hover:text-[#0B2E73] cursor-pointer">
-          Bosh sahifa
+          {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
         </button>
         <span>/</span>
-        <span className="text-[#FF5A00] font-bold">Savat</span>
+        <span className="text-[#FF5A00] font-bold">{t.cart.title}</span>
       </div>
 
       {/* Page Title */}
       <div className="flex items-center justify-between mb-6 pb-2">
         <div className="flex items-baseline gap-3">
           <h1 className="text-2xl font-bold text-[#14213D]">
-            Savat
+            {t.cart.title}
           </h1>
           <span className="text-xs text-[#667085]">
-            {cartCount} ta mahsulot
+            {cartCount} {language === 'ru' ? 'товаров' : 'ta mahsulot'}
           </span>
         </div>
       </div>
@@ -67,6 +78,8 @@ export const CartPage: React.FC = () => {
           <div className="bg-white rounded-[16px] border border-[#E5EAF2] divide-y divide-[#E5EAF2] overflow-hidden">
             {cart.map(({ product, quantity }) => {
               const itemTotal = product.price * quantity;
+              const productName = getProductName(product);
+
               return (
                 <div
                   key={product.id}
@@ -80,18 +93,18 @@ export const CartPage: React.FC = () => {
                   >
                     <img
                       src={product.images[0]}
-                      alt={product.name}
+                      alt={productName}
                       className="w-16 h-16 sm:w-18 sm:h-18 rounded-[12px] object-cover border border-[#E5EAF2] shrink-0 bg-[#F7F9FC]"
                     />
                     <div className="min-w-0">
                       <h3 className="font-bold text-sm text-[#14213D] group-hover:text-[#0B2E73] transition-colors line-clamp-1">
-                        {product.name}
+                        {productName}
                       </h3>
                       <div className="text-xs text-[#667085] mt-0.5 flex items-center gap-1.5 flex-wrap">
-                        <span>{product.brand} • {product.price.toLocaleString('uz-UZ')} so‘m</span>
+                        <span>{product.brand} • {product.price.toLocaleString('uz-UZ')} {t.productCard.sum}</span>
                         {product.minOrder && product.minOrder > 1 && (
                           <span className="px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 text-[10px] font-semibold border border-amber-200">
-                            min: {product.minOrder} {product.unit}
+                            min: {product.minOrder} {product.unit || (language === 'ru' ? 'шт' : 'ta')}
                           </span>
                         )}
                       </div>
@@ -131,7 +144,7 @@ export const CartPage: React.FC = () => {
                     {/* Subtotal */}
                     <div className="text-right min-w-[90px]">
                       <div className="text-sm font-extrabold text-[#14213D]">
-                        {itemTotal.toLocaleString('uz-UZ')} so‘m
+                        {itemTotal.toLocaleString('uz-UZ')} {t.productCard.sum}
                       </div>
                     </div>
 
@@ -139,7 +152,7 @@ export const CartPage: React.FC = () => {
                     <button
                       onClick={() => removeFromCart(product.id)}
                       className="p-1.5 text-[#667085] hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
-                      title="O‘chirish"
+                      title={t.common.delete}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -157,14 +170,14 @@ export const CartPage: React.FC = () => {
               className="text-xs font-semibold text-red-600 hover:text-red-700 flex items-center gap-1.5 px-3 py-2 rounded-[8px] border border-red-200 hover:bg-red-50 transition-colors cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>Savatni tozalash</span>
+              <span>{t.cart.clearCart}</span>
             </button>
 
             <button
               onClick={() => navigate('/catalog')}
               className="text-xs font-bold text-[#0B2E73] hover:text-[#FF5A00] transition-colors cursor-pointer"
             >
-              ← Katalogga qaytish
+              {language === 'ru' ? '← Назад в каталог' : '← Katalogga qaytish'}
             </button>
           </div>
         </div>
@@ -173,14 +186,16 @@ export const CartPage: React.FC = () => {
         <div className="lg:col-span-4 space-y-4">
           <div className="bg-white rounded-[16px] border border-[#E5EAF2] p-6 space-y-5">
             <div className="flex items-baseline justify-between">
-              <span className="font-semibold text-[15px] sm:text-[16px] text-[#14213D]">Jami:</span>
+              <span className="font-semibold text-[15px] sm:text-[16px] text-[#14213D]">{t.cart.total}:</span>
               <span className="text-[22px] sm:text-[24px] font-bold text-[#14213D]">
-                {cartTotal.toLocaleString('uz-UZ')} so‘m
+                {cartTotal.toLocaleString('uz-UZ')} {t.productCard.sum}
               </span>
             </div>
 
             <p className="text-xs text-[#667085] italic">
-              * Yakuniy narx menejer bilan kelishiladi
+              {language === 'ru'
+                ? '* Окончательная цена согласуется с менеджером'
+                : '* Yakuniy narx menejer bilan kelishiladi'}
             </p>
 
             {/* Primary Orange Button: Zayavka yuborish */}
@@ -189,7 +204,7 @@ export const CartPage: React.FC = () => {
               onClick={() => navigate('/request')}
               className="w-full py-3.5 px-6 rounded-[10px] font-bold text-sm text-white bg-[#FF5A00] hover:bg-[#e04f00] shadow-md shadow-[#FF5A00]/25 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 active:scale-98"
             >
-              <span>Zayavka yuborish</span>
+              <span>{t.cart.checkout}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

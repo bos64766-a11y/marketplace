@@ -7,7 +7,7 @@ import { ProductRowSection } from '../components/ProductRowSection';
 import { PartnersSection } from '../components/PartnersSection';
 
 export const HomePage: React.FC = () => {
-  const { products, showcaseSections } = useApp();
+  const { products, showcaseSections, t } = useApp();
 
   // 1. Ommabop mahsulotlar (Popular Products)
   const popularProducts = useMemo(() => {
@@ -65,7 +65,7 @@ export const HomePage: React.FC = () => {
       {/* 4. Ommabop Mahsulotlar (Popular Product Row) */}
       <ProductRowSection
         id="section-popular-products"
-        title="Ommabop mahsulotlar"
+        title={t.home.popularProducts}
         categoryLink="/catalog"
         products={popularProducts}
         autoScrollSpeed={0.6}
@@ -91,7 +91,7 @@ export const HomePage: React.FC = () => {
       {/* 7. Yangi kelgan tovarlar (New Arrivals) */}
       <ProductRowSection
         id="section-new-arrivals"
-        title="Yangi kelgan tovarlar"
+        title={t.home.newProducts}
         categoryLink="/catalog"
         products={newArrivals}
         autoScrollSpeed={0.6}

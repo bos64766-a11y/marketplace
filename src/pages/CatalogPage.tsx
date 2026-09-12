@@ -37,7 +37,17 @@ interface CatalogPageProps {
 }
 
 export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => {
-  const { currentPath, navigate, searchQuery, setSearchQuery, products, categories } = useApp();
+  const {
+    currentPath,
+    navigate,
+    searchQuery,
+    setSearchQuery,
+    products,
+    categories,
+    language,
+    t,
+    getCategoryName,
+  } = useApp();
 
   // Extract selected category from props or pathname
   const [selectedCategory, setSelectedCategory] = useState<string>(() => {
@@ -106,6 +116,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
       list = list.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
+          (p.name_ru && p.name_ru.toLowerCase().includes(q)) ||
           p.brand.toLowerCase().includes(q) ||
           p.categoryName.toLowerCase().includes(q) ||
           p.sku.toLowerCase().includes(q)
@@ -182,7 +193,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-[#64748B] mb-5 font-medium">
         <button onClick={() => navigate('/')} className="hover:text-[#FF5A00] transition-colors cursor-pointer">
-          Bosh sahifa
+          {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
         </button>
         <span>/</span>
         <button
@@ -191,12 +202,12 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             selectedCategory === 'all' ? 'text-[#FF5A00] font-bold' : 'hover:text-[#FF5A00]'
           }`}
         >
-          Katalog
+          {t.header.catalog}
         </button>
         {activeCategoryObj && (
           <>
             <span>/</span>
-            <span className="text-[#FF5A00] font-bold">{activeCategoryObj.name}</span>
+            <span className="text-[#FF5A00] font-bold">{getCategoryName(activeCategoryObj)}</span>
           </>
         )}
       </div>
@@ -214,7 +225,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
               <div className="flex items-center gap-2">
                 <Filter className="w-4 h-4 text-[#FF5A00]" />
                 <h3 className="font-extrabold text-sm text-[#1E293B] uppercase tracking-wider">
-                  Filtrlar
+                  {t.catalogPage.filters}
                 </h3>
               </div>
               {hasActiveFilters && (
@@ -223,7 +234,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                   className="text-xs text-[#FF5A00] hover:text-[#e04f00] font-bold flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <RotateCcw className="w-3 h-3" />
-                  <span>Tozalash</span>
+                  <span>{t.catalogPage.resetFilters}</span>
                 </button>
               )}
             </div>
@@ -231,7 +242,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             {/* Category Navigation */}
             <div>
               <span className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2.5">
-                Kategoriyalar
+                {t.catalogPage.categories}
               </span>
               <div className="space-y-1">
                 <button
@@ -245,7 +256,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                 >
                   <div className="flex items-center gap-2">
                     <Boxes className="w-4 h-4 text-[#FF5A00]" />
-                    <span>Barcha mahsulotlar</span>
+                    <span>{t.catalogPage.allProducts}</span>
                   </div>
                   <span
                     className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${
@@ -279,12 +290,12 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                       <div className="flex items-center gap-2.5 truncate">
                         <span className={`w-4 h-4 rounded overflow-hidden flex items-center justify-center shrink-0 ${isSelected ? 'text-[#FF5A00]' : 'text-[#64748B]'}`}>
                           {cat.image ? (
-                            <img src={cat.image} alt={cat.name} className="w-full h-full object-cover rounded" />
+                            <img src={cat.image} alt={getCategoryName(cat)} className="w-full h-full object-cover rounded" />
                           ) : (
                             iconMap[cat.icon] || <Sparkles className="w-4 h-4" />
                           )}
                         </span>
-                        <span className="truncate">{cat.name}</span>
+                        <span className="truncate">{getCategoryName(cat)}</span>
                       </div>
                       <span
                         className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${
@@ -305,7 +316,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             <div className="pt-2 border-t border-[#F1F5F9]">
               <label className="flex items-center justify-between p-2.5 rounded-2xl hover:bg-[#F8FAFC] cursor-pointer transition-colors">
                 <span className="text-xs font-bold text-[#1E293B]">
-                  Faqat omborda mavjudlar
+                  {t.catalogPage.inStockOnly}
                 </span>
                 <input
                   type="checkbox"
@@ -319,19 +330,19 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             {/* Price Range Filter */}
             <div className="pt-2 border-t border-[#F1F5F9]">
               <span className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">
-                Narx oralig‘i (so‘m)
+                {t.catalogPage.price} ({t.productCard.sum})
               </span>
               <div className="grid grid-cols-2 gap-2">
                 <input
                   type="number"
-                  placeholder="Dan"
+                  placeholder={language === 'ru' ? 'От' : 'Dan'}
                   value={priceRange.min}
                   onChange={(e) => setPriceRange((prev) => ({ ...prev, min: e.target.value }))}
                   className="w-full h-9 px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-xs font-semibold text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:border-[#FF5A00] focus:bg-white"
                 />
                 <input
                   type="number"
-                  placeholder="Gacha"
+                  placeholder={language === 'ru' ? 'До' : 'Gacha'}
                   value={priceRange.max}
                   onChange={(e) => setPriceRange((prev) => ({ ...prev, max: e.target.value }))}
                   className="w-full h-9 px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-xs font-semibold text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:border-[#FF5A00] focus:bg-white"
@@ -343,14 +354,16 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             {brands.length > 0 && (
               <div className="pt-2 border-t border-[#F1F5F9]">
                 <span className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">
-                  Brend bo‘yicha
+                  {language === 'ru' ? 'По бренду' : 'Brend bo‘yicha'}
                 </span>
                 <select
                   value={selectedBrand}
                   onChange={(e) => setSelectedBrand(e.target.value)}
                   className="w-full h-10 px-3 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] text-xs font-bold text-[#1E293B] focus:outline-none focus:border-[#FF5A00] focus:bg-white cursor-pointer"
                 >
-                  <option value="all">Barcha brendlar ({brands.length})</option>
+                  <option value="all">
+                    {language === 'ru' ? 'Все бренды' : 'Barcha brendlar'} ({brands.length})
+                  </option>
                   {brands.map((b) => (
                     <option key={b} value={b}>
                       {b}
@@ -372,7 +385,9 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
               className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[#081B4B] text-white font-bold text-xs shadow-md shadow-[#081B4B]/20 cursor-pointer"
             >
               <SlidersHorizontal className="w-4 h-4 text-[#FF5A00]" />
-              <span>Kategoriyalar va Filtrlar ({filteredProducts.length})</span>
+              <span>
+                {language === 'ru' ? 'Категории и фильтры' : 'Kategoriyalar va Filtrlar'} ({filteredProducts.length})
+              </span>
             </button>
           </div>
 
@@ -381,16 +396,16 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#1E293B] tracking-tight">
-                  {activeCategoryObj ? activeCategoryObj.name : 'Barcha mahsulotlar'}
+                  {activeCategoryObj ? getCategoryName(activeCategoryObj) : t.catalogPage.allProducts}
                 </h1>
                 <span className="text-xs font-bold text-[#FF5A00] bg-[#FFF7ED] border border-[#FF5A00]/20 px-2.5 py-1 rounded-full">
-                  {filteredProducts.length} ta tovar
+                  {filteredProducts.length} {language === 'ru' ? 'товаров' : 'ta tovar'}
                 </span>
               </div>
 
               {/* Modern Sort Select */}
               <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                <span className="text-xs font-medium text-[#64748B] hidden sm:inline">Saralash:</span>
+                <span className="text-xs font-medium text-[#64748B] hidden sm:inline">{t.catalogPage.sortBy}:</span>
                 <div className="relative">
                   <select
                     id="select-product-sort"
@@ -398,10 +413,12 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                     onChange={(e) => setSortBy(e.target.value as any)}
                     className="h-10 pl-3.5 pr-8 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] text-xs font-bold text-[#1E293B] focus:outline-none focus:border-[#FF5A00] cursor-pointer appearance-none shadow-2xs"
                   >
-                    <option value="popular">Ommabopligi</option>
-                    <option value="price-asc">Narx: arzonroq</option>
-                    <option value="price-desc">Narx: qimmatroq</option>
-                    <option value="newest">Yangi qo‘shilgan</option>
+                    <option value="popular">{t.catalogPage.sortPopular}</option>
+                    <option value="price-asc">{t.catalogPage.sortPriceAsc}</option>
+                    <option value="price-desc">{t.catalogPage.sortPriceDesc}</option>
+                    <option value="newest">
+                      {language === 'ru' ? 'Сначала новинки' : 'Yangi qo‘shilgan'}
+                    </option>
                   </select>
                   <ChevronDown className="w-4 h-4 text-[#64748B] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
@@ -411,13 +428,15 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             {/* Active Filter Chips */}
             {hasActiveFilters && (
               <div className="flex items-center gap-2 flex-wrap pt-2 border-t border-[#F1F5F9]">
-                <span className="text-xs text-[#94A3B8] font-medium">Faol:</span>
+                <span className="text-xs text-[#94A3B8] font-medium">
+                  {language === 'ru' ? 'Активные:' : 'Faol:'}
+                </span>
                 {selectedCategory !== 'all' && (
                   <button
                     onClick={() => handleCategorySelect('all')}
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFF7ED] text-[#FF5A00] text-xs font-bold border border-[#FF5A00]/25 hover:bg-[#FFE8D6] transition-colors"
                   >
-                    <span>{activeCategoryObj?.name || selectedCategory}</span>
+                    <span>{activeCategoryObj ? getCategoryName(activeCategoryObj) : selectedCategory}</span>
                     <X className="w-3 h-3" />
                   </button>
                 )}
@@ -426,7 +445,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                     onClick={() => setInStockOnly(false)}
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#DCFCE7] text-[#16A34A] text-xs font-bold border border-[#16A34A]/25 hover:bg-[#BBF7D0] transition-colors"
                   >
-                    <span>Faqat omborda</span>
+                    <span>{language === 'ru' ? 'В наличии' : 'Faqat omborda'}</span>
                     <X className="w-3 h-3" />
                   </button>
                 )}
@@ -452,7 +471,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                   onClick={resetFilters}
                   className="text-xs text-[#94A3B8] hover:text-[#FF5A00] font-semibold underline ml-1 cursor-pointer"
                 >
-                  Hammasini tozalash
+                  {t.catalogPage.resetFilters}
                 </button>
               </div>
             )}
@@ -471,17 +490,17 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                 <Search className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold text-[#1E293B]">
-                Mahsulot topilmadi
+                {t.catalogPage.noProducts}
               </h3>
               <p className="text-sm text-[#64748B] max-w-md mx-auto">
-                Tanlangan filtrlar bo‘yicha tovar topilmadi. Boshqa parametrlarni sinab ko‘ring.
+                {t.catalogPage.noProductsDesc}
               </p>
               <button
                 id="btn-reset-filters-empty"
                 onClick={resetFilters}
                 className="px-6 py-3 rounded-2xl bg-[#FF5A00] hover:bg-[#e04f00] text-white text-xs font-bold transition-all shadow-md shadow-[#FF5A00]/25 cursor-pointer"
               >
-                Filtrlarni tozalash
+                {t.catalogPage.resetFilters}
               </button>
             </div>
           )}
@@ -532,7 +551,9 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
           />
           <div className="fixed inset-x-0 bottom-0 max-h-[88vh] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 flex flex-col z-[71]">
             <div className="flex items-center justify-between p-5 border-b border-[#E5EAF2] shrink-0">
-              <h3 className="text-lg font-bold text-[#1E293B]">Kategoriyalar va Filtrlar</h3>
+              <h3 className="text-lg font-bold text-[#1E293B]">
+                {language === 'ru' ? 'Категории и фильтры' : 'Kategoriyalar va Filtrlar'}
+              </h3>
               <button
                 onClick={() => setIsMobileFilterDrawer(false)}
                 className="w-8 h-8 rounded-full bg-[#F8FAFC] flex items-center justify-center text-[#64748B] hover:bg-[#E2E8F0] transition-colors cursor-pointer"
@@ -545,7 +566,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
             <div className="p-5 overflow-y-auto flex-1 space-y-4">
               <div>
                 <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider block mb-2">
-                  Kategoriyalar
+                  {t.catalogPage.categories}
                 </span>
                 <div className="space-y-1.5">
                   <button
@@ -556,7 +577,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                         : 'bg-[#F8FAFC] text-[#1E293B]'
                     }`}
                   >
-                    <span>Barcha mahsulotlar</span>
+                    <span>{t.catalogPage.allProducts}</span>
                     <span className="text-[11px] px-2 py-0.5 rounded-full font-bold bg-white text-[#64748B]">
                       {products.length}
                     </span>
@@ -574,12 +595,12 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                       <div className="flex items-center gap-2.5">
                         <span className="w-5 h-5 rounded overflow-hidden flex items-center justify-center shrink-0">
                           {cat.image ? (
-                            <img src={cat.image} alt={cat.name} className="w-full h-full object-cover rounded" />
+                            <img src={cat.image} alt={getCategoryName(cat)} className="w-full h-full object-cover rounded" />
                           ) : (
                             iconMap[cat.icon] || <Sparkles className="w-4 h-4" />
                           )}
                         </span>
-                        <span>{cat.name}</span>
+                        <span>{getCategoryName(cat)}</span>
                       </div>
                       <span className="text-[11px] px-2 py-0.5 rounded-full font-bold bg-white text-[#64748B]">
                         {products.filter((p) => p.categoryId === cat.slug || p.categoryId === cat.id).length ||
@@ -597,13 +618,13 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                 onClick={resetFilters}
                 className="py-3 px-4 rounded-2xl border border-[#CBD5E1] text-xs font-bold text-[#64748B] hover:text-[#0F172A] transition-colors cursor-pointer"
               >
-                Tozalash
+                {t.catalogPage.resetFilters}
               </button>
               <button
                 onClick={() => setIsMobileFilterDrawer(false)}
                 className="flex-1 py-3 px-4 rounded-2xl bg-[#FF5A00] text-white text-xs font-bold transition-all shadow-md shadow-[#FF5A00]/25 cursor-pointer text-center"
               >
-                Natijalarni ko‘rish ({filteredProducts.length})
+                {language === 'ru' ? 'Показать результаты' : 'Natijalarni ko‘rish'} ({filteredProducts.length})
               </button>
             </div>
           </div>

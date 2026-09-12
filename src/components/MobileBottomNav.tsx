@@ -3,31 +3,31 @@ import { useApp } from '../context/AppContext';
 import { Home, LayoutGrid, Heart, ShoppingBag, FileText } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
-  const { currentPath, navigate, cartCount, favorites } = useApp();
+  const { currentPath, navigate, cartCount, favorites, t } = useApp();
 
   const navItems = [
     {
       id: 'home',
-      label: 'Bosh',
+      label: t.mobileNav.home,
       path: '/',
       icon: Home,
     },
     {
       id: 'catalog',
-      label: 'Katalog',
+      label: t.mobileNav.catalog,
       path: '/catalog',
       icon: LayoutGrid,
     },
     {
       id: 'favorites',
-      label: 'Sevimli',
+      label: t.mobileNav.favorites,
       path: '/favorites',
       icon: Heart,
       badge: favorites.length > 0 ? favorites.length : null,
     },
     {
       id: 'cart',
-      label: 'Savat',
+      label: t.mobileNav.cart,
       path: '/cart',
       icon: ShoppingBag,
       badge: cartCount > 0 ? cartCount : null,
@@ -35,7 +35,7 @@ export const MobileBottomNav: React.FC = () => {
     },
     {
       id: 'requests',
-      label: 'Zayavkalar',
+      label: t.mobileNav.requests,
       path: '/requests',
       icon: FileText,
     },

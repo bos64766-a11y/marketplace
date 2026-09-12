@@ -24,7 +24,22 @@ interface ProductDetailPageProps {
 }
 
 export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) => {
-  const { navigate, addToCart, isFavorite, toggleFavorite, showToast, products, siteSettings } = useApp();
+  const {
+    navigate,
+    addToCart,
+    isFavorite,
+    toggleFavorite,
+    showToast,
+    products,
+    categories,
+    siteSettings,
+    language,
+    t,
+    getProductName,
+    getProductDesc,
+    getProductTag,
+    getCategoryName,
+  } = useApp();
 
   const product = products.find((p) => p.slug === slug || p.id === slug);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -37,21 +52,30 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
         <div className="w-16 h-16 rounded-full bg-[#FFF1E8] text-[#FF5A00] flex items-center justify-center mx-auto mb-4">
           <Boxes className="w-8 h-8" />
         </div>
-        <h2 className="text-[24px] sm:text-[28px] font-bold text-[#0B2E73] mb-2">Mahsulot topilmadi</h2>
+        <h2 className="text-[24px] sm:text-[28px] font-bold text-[#0B2E73] mb-2">
+          {language === 'ru' ? 'Товар не найден' : 'Mahsulot topilmadi'}
+        </h2>
         <p className="text-[14px] text-[#667085] max-w-md mx-auto mb-6 leading-[1.55] font-normal">
-          Siz qidirgan tovar mavjud emas yoki nomi o‘zgargan bo‘lishi mumkin. Katalogni ko‘rib chiqishingizni tavsiya qilamiz.
+          {language === 'ru'
+            ? 'Товар, который вы ищете, не существует или перемещен.'
+            : 'Siz qidirgan tovar mavjud emas yoki nomi o‘zgargan bo‘lishi mumkin.'}
         </p>
         <button
           onClick={() => navigate('/catalog')}
           className="bg-[#FF5A00] hover:bg-[#e04f00] text-white px-6 py-2.5 rounded-xl font-semibold text-[14px] cursor-pointer shadow-xs transition-all"
         >
-          Katalogga qaytish
+          {t.productDetail.backToCatalog}
         </button>
       </div>
     );
   }
 
   const favorite = isFavorite(product.id);
+  const currentCategory = categories.find((c) => c.id === product.categoryId || c.slug === product.categoryId);
+  const categoryDisplayName = currentCategory ? getCategoryName(currentCategory) : product.categoryName;
+  const productName = getProductName(product);
+  const productDesc = getProductDesc(product);
+  const productTag = getProductTag(product);
 
   // Related products from same category
   const relatedProducts = products.filter(
@@ -65,7 +89,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   const handleAddToCart = () => {
     setIsAdding(true);
     addToCart(product, quantity);
-    showToast(`✓ ${product.name} savatga qo‘shildi`, 'success');
+    showToast(`✓ ${productName} ${t.productCard.inCart.toLowerCase()}`, 'success');
     setTimeout(() => {
       setIsAdding(false);
     }, 600);
@@ -79,7 +103,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   const handleShare = () => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href);
-      showToast('Havola nusxalandi', 'info');
+      showToast(language === 'ru' ? 'Ссылка скопирована' : 'Havola nusxalandi', 'info');
     }
   };
 
@@ -97,18 +121,18 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-[#667085] mb-6 overflow-x-auto whitespace-nowrap pb-1">
         <button onClick={() => navigate('/')} className="hover:text-[#0B2E73] cursor-pointer">
-          Bosh sahifa
+          {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
         </button>
         <ChevronRight className="w-3.5 h-3.5 shrink-0" />
         <button
           onClick={() => navigate(`/catalog/${product.categoryId}`)}
           className="hover:text-[#0B2E73] cursor-pointer"
         >
-          {product.categoryName}
+          {categoryDisplayName}
         </button>
         <ChevronRight className="w-3.5 h-3.5 shrink-0" />
         <span className="text-[#FF5A00] font-semibold truncate max-w-[200px] sm:max-w-none">
-          {product.name}
+          {productName}
         </span>
       </nav>
 
@@ -140,12 +164,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
             <div className="flex-1 relative aspect-square rounded-2xl overflow-hidden bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center group p-4">
               <img
                 src={product.images[selectedImage] || product.images[0]}
-                alt={product.name}
+                alt={productName}
                 className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
               />
-              {product.tag && (
+              {productTag && (
                 <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/20 shadow-xs">
-                  {product.tag}
+                  {productTag}
                 </span>
               )}
             </div>
@@ -160,55 +184,57 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                 className="flex items-center gap-1.5 hover:text-[#0B2E73] transition-colors cursor-pointer"
               >
                 <Share2 className="w-3.5 h-3.5" />
-                <span>Ulashish</span>
+                <span>{language === 'ru' ? 'Поделиться' : 'Ulashish'}</span>
               </button>
               <button
                 onClick={handleAskQuestion}
                 className="flex items-center gap-1.5 text-[#009B5A] hover:text-[#007A46] font-semibold transition-colors cursor-pointer"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
-                <span>Savol berish</span>
+                <span>{language === 'ru' ? 'Задать вопрос' : 'Savol berish'}</span>
               </button>
             </div>
 
             {/* Product Title */}
             <div>
               <h1 className="text-xl sm:text-2xl md:text-[25px] font-extrabold text-[#1E293B] tracking-tight leading-snug">
-                {product.name}
+                {productName}
               </h1>
               <div className="flex items-center gap-2 text-xs text-[#64748B] mt-2">
                 <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[11px] border border-emerald-200">
-                  Mavjud
+                  {t.productCard.inStock}
                 </span>
                 <span>•</span>
-                <span>Artikul: <strong className="text-[#1E293B]">{product.sku}</strong></span>
+                <span>{t.productDetail.sku}: <strong className="text-[#1E293B]">{product.sku}</strong></span>
               </div>
             </div>
 
             {/* Mahsulot haqida (O tovare) with dotted lines */}
             <div className="pt-2 border-t border-[#F1F5F9]">
-              <h3 className="text-sm font-extrabold text-[#1E293B] mb-3">Mahsulot haqida</h3>
+              <h3 className="text-sm font-extrabold text-[#1E293B] mb-3">
+                {language === 'ru' ? 'О товаре' : 'Mahsulot haqida'}
+              </h3>
               <div className="space-y-2.5 text-xs">
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-[#64748B] shrink-0">Kategoriya</span>
+                  <span className="text-[#64748B] shrink-0">{t.productDetail.category}</span>
                   <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
-                  <span className="font-bold text-[#1E293B] text-right">{product.categoryName}</span>
+                  <span className="font-bold text-[#1E293B] text-right">{categoryDisplayName}</span>
                 </div>
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-[#64748B] shrink-0">Brend</span>
+                  <span className="text-[#64748B] shrink-0">{t.productDetail.brand}</span>
                   <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
                   <span className="font-bold text-[#1E293B] text-right">{product.brand}</span>
                 </div>
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-[#64748B] shrink-0">O‘lchov birligi</span>
+                  <span className="text-[#64748B] shrink-0">{language === 'ru' ? 'Единица изм.' : 'O‘lchov birligi'}</span>
                   <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
-                  <span className="font-bold text-[#1E293B] text-right">{product.unit || 'dona'}</span>
+                  <span className="font-bold text-[#1E293B] text-right">{product.unit || (language === 'ru' ? 'шт' : 'dona')}</span>
                 </div>
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-[#64748B] shrink-0">Min. buyurtma</span>
+                  <span className="text-[#64748B] shrink-0">{t.productCard.minOrder}</span>
                   <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
                   <span className="font-bold text-[#1E293B] text-right">
-                    {product.minOrder || 1} {product.unit || 'dona'}
+                    {product.minOrder || 1} {product.unit || (language === 'ru' ? 'шт' : 'dona')}
                   </span>
                 </div>
                 {Object.entries(product.specifications || {}).map(([key, val]) => (
@@ -223,10 +249,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
 
             {/* Mahsulot tavsifi (Описание товара) */}
             <div className="pt-2 border-t border-[#F1F5F9]">
-              <h3 className="text-sm font-extrabold text-[#1E293B] mb-2">Mahsulot tavsifi</h3>
+              <h3 className="text-sm font-extrabold text-[#1E293B] mb-2">{t.productDetail.description}</h3>
               <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                {product.description ||
-                  'Ushbu tovar korxona va tashkilotlar uchun sifatli va ishonchli ta’minot vositasi hisoblanadi. SanPiN standartlariga to‘liq javob beradi.'}
+                {productDesc ||
+                  (language === 'ru'
+                    ? 'Качественные и надежные поставки для предприятий и организаций. Полностью соответствует стандартам качества.'
+                    : 'Ushbu tovar korxona va tashkilotlar uchun sifatli va ishonchli ta’minot vositasi hisoblanadi. SanPiN standartlariga to‘liq javob beradi.')}
               </p>
             </div>
           </div>
@@ -238,15 +266,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
               <div>
                 {product.oldPrice && (
                   <div className="text-xs text-[#94A3B8] line-through font-semibold mb-0.5">
-                    {product.oldPrice.toLocaleString('uz-UZ')} so‘m
+                    {product.oldPrice.toLocaleString('uz-UZ')} {t.productCard.sum}
                   </div>
                 )}
                 <div className="text-2xl sm:text-[28px] font-black text-[#0B2E73] tracking-tight leading-none">
                   {product.price.toLocaleString('uz-UZ')}{' '}
-                  <span className="text-sm font-semibold text-[#64748B]">so‘m</span>
+                  <span className="text-sm font-semibold text-[#64748B]">{t.productCard.sum}</span>
                 </div>
                 <div className="text-[11px] text-[#64748B] font-medium mt-1">
-                  1 {product.unit || 'dona'} uchun narx
+                  1 {product.unit || (language === 'ru' ? 'шт' : 'dona')} {language === 'ru' ? 'цена' : 'uchun narx'}
                 </div>
               </div>
 
@@ -254,7 +282,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
               <div className="space-y-3">
                 <div className="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-[#CBD5E1]">
                   <span className="text-xs font-semibold text-[#64748B]">
-                    Miqdor:
+                    {t.productDetail.quantity}:
                   </span>
                   <div className="flex items-center gap-1">
                     <button
@@ -266,7 +294,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                       <Minus className="w-3.5 h-3.5" />
                     </button>
                     <span className="w-12 text-center font-bold text-xs text-[#1E293B]">
-                      {quantity} {product.unit || 'dona'}
+                      {quantity} {product.unit || (language === 'ru' ? 'шт' : 'dona')}
                     </span>
                     <button
                       id="btn-qty-plus"
@@ -294,12 +322,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                     {isAdding ? (
                       <>
                         <Check className="w-4 h-4 shrink-0" />
-                        <span className="truncate">Qo‘shildi</span>
+                        <span className="truncate">{t.productCard.inCart}</span>
                       </>
                     ) : (
                       <>
                         <ShoppingCart className="w-4 h-4 shrink-0" />
-                        <span className="truncate">Savatga qo‘shish</span>
+                        <span className="truncate">{t.productCard.addToCart}</span>
                       </>
                     )}
                   </button>
@@ -312,7 +340,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                         ? 'bg-[#FFF1E8] border-[#FF5A00] text-[#FF5A00]'
                         : 'bg-white border-[#CBD5E1] hover:bg-[#F1F5F9] text-[#64748B]'
                     }`}
-                    aria-label="Sevimlilar"
+                    aria-label={t.header.favorites}
                   >
                     <Heart className={`w-5 h-5 ${favorite ? 'fill-[#FF5A00]' : ''}`} />
                   </button>
@@ -320,9 +348,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
 
                 {/* Total calculated sum for current item */}
                 <div className="flex items-center justify-between text-xs py-1 px-1 border-t border-[#E2E8F0]">
-                  <span className="text-[#64748B]">Jami summa:</span>
+                  <span className="text-[#64748B]">{t.productDetail.total}:</span>
                   <span className="font-extrabold text-[#1E293B]">
-                    {currentTotal.toLocaleString('uz-UZ')} so‘m
+                    {currentTotal.toLocaleString('uz-UZ')} {t.productCard.sum}
                   </span>
                 </div>
               </div>
@@ -330,9 +358,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
               {/* Minimal Summa & Zayavka berish status */}
               <div className="pt-2 border-t border-[#E2E8F0] space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-[#1E293B]">Minimal zayavka</span>
+                  <span className="font-bold text-[#1E293B]">
+                    {language === 'ru' ? 'Мин. сумма заявки' : 'Minimal zayavka'}
+                  </span>
                   <span className="font-extrabold text-[#FF5A00]">
-                    {minOrderAmount.toLocaleString('uz-UZ')} so‘m
+                    {minOrderAmount.toLocaleString('uz-UZ')} {t.productCard.sum}
                   </span>
                 </div>
 
@@ -341,7 +371,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                     onClick={handleDirectRequest}
                     className="w-full py-2.5 rounded-xl bg-[#FF5A00] hover:bg-[#E04F00] text-white text-xs font-extrabold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer mt-2"
                   >
-                    <span>Zayavka rasmiylashtirish</span>
+                    <span>{t.cart.checkout}</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 )}
@@ -350,14 +380,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
               {/* Delivery Box (Доставка) */}
               <div className="pt-2 border-t border-[#E2E8F0]">
                 <div className="font-extrabold text-[#1E293B] text-[11px] uppercase tracking-wider mb-2">
-                  Yetkazib berish
+                  {t.productDetail.deliveryInfo}
                 </div>
                 <div className="flex items-center justify-between text-xs bg-white p-2.5 rounded-xl border border-[#E2E8F0]">
                   <div className="flex items-center gap-2 text-[#1E293B] font-bold">
                     <Truck className="w-4 h-4 text-[#0B2E73]" />
-                    <span>Kuryer orqali</span>
+                    <span>{language === 'ru' ? 'Курьером' : 'Kuryer orqali'}</span>
                   </div>
-                  <span className="font-extrabold text-[#009B5A]">Bepul</span>
+                  <span className="font-extrabold text-[#009B5A]">{t.cart.free}</span>
                 </div>
               </div>
             </div>
@@ -369,12 +399,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
       {relatedProducts.length > 0 && (
         <div className="mt-12">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-[#14213D]">O‘xshash mahsulotlar</h3>
+            <h3 className="text-xl font-bold text-[#14213D]">{t.productDetail.similarProducts}</h3>
             <button
               onClick={() => navigate(`/catalog/${product.categoryId}`)}
               className="text-xs font-semibold text-[#FF5A00] hover:underline cursor-pointer"
             >
-              Barchasini ko‘rish →
+              {language === 'ru' ? 'Смотреть все →' : 'Barchasini ko‘rish →'}
             </button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">

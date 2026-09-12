@@ -4,7 +4,7 @@ import { CATEGORIES } from '../data/categories';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const CategoryPillsSection: React.FC = () => {
-  const { navigate, categories } = useApp();
+  const { navigate, categories, getCategoryName, language } = useApp();
   const scrollRef = useRef<HTMLDivElement>(null);
   const firstCycleRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -66,10 +66,10 @@ export const CategoryPillsSection: React.FC = () => {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h2 className="text-[22px] sm:text-[26px] md:text-[28px] font-extrabold text-[#1E293B] tracking-tight leading-[1.25]">
-            Kategoriyalar
+            {language === 'ru' ? 'Категории' : 'Kategoriyalar'}
           </h2>
           <p className="text-[14px] sm:text-[15px] text-[#64748B] font-normal leading-[1.5]">
-            Kerakli yo‘nalish bo‘yicha tovarlarni tez toping
+            {language === 'ru' ? 'Быстрый поиск товаров по направлениям' : 'Kerakli yo‘nalish bo‘yicha tovarlarni tez toping'}
           </p>
         </div>
 
@@ -103,18 +103,16 @@ export const CategoryPillsSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Horizontal Scrollable Categories Grid with realistic product images: Infinite Smooth Conveyor to Left */}
+      {/* Infinite Scrolling Track with Pause on Hover */}
       <div
         ref={scrollRef}
-        onScroll={checkScroll}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
         onTouchEnd={() => setIsPaused(false)}
-        className="flex items-stretch overflow-x-auto pb-2 scrollbar-none"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="flex items-stretch overflow-x-auto no-scrollbar py-2 cursor-grab active:cursor-grabbing"
       >
-        {/* Cycle 1: Primary items */}
+        {/* Cycle 1: Original Items */}
         <div ref={firstCycleRef} className="flex items-stretch gap-3.5 sm:gap-4 pr-3.5 sm:pr-4 shrink-0">
           {allDisplayCategories.map((cat, idx) => (
             <button
@@ -127,7 +125,7 @@ export const CategoryPillsSection: React.FC = () => {
               <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] border border-[#E2E8F0]/70 group-hover:border-[#FF5A00]/30 transition-all mb-2.5 sm:mb-3 shadow-2xs">
                 <img
                   src={cat.image}
-                  alt={cat.name}
+                  alt={getCategoryName(cat)}
                   className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                   loading="lazy"
                 />
@@ -135,7 +133,7 @@ export const CategoryPillsSection: React.FC = () => {
 
               {/* Category Name Label */}
               <span className="text-[13px] sm:text-[14px] md:text-[15px] font-bold text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-2 leading-[1.3] text-center px-1 flex-1 flex items-center justify-center">
-                {cat.name}
+                {getCategoryName(cat)}
               </span>
             </button>
           ))}
@@ -153,7 +151,7 @@ export const CategoryPillsSection: React.FC = () => {
               <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] border border-[#E2E8F0]/70 group-hover:border-[#FF5A00]/30 transition-all mb-2.5 sm:mb-3 shadow-2xs">
                 <img
                   src={cat.image}
-                  alt={cat.name}
+                  alt={getCategoryName(cat)}
                   className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                   loading="lazy"
                 />
@@ -161,7 +159,7 @@ export const CategoryPillsSection: React.FC = () => {
 
               {/* Category Name Label */}
               <span className="text-[13px] sm:text-[14px] md:text-[15px] font-bold text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-2 leading-[1.3] text-center px-1 flex-1 flex items-center justify-center">
-                {cat.name}
+                {getCategoryName(cat)}
               </span>
             </button>
           ))}
