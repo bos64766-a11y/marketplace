@@ -294,7 +294,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     if (language === 'ru') {
-      if (cat.name_ru?.trim()) {
+      if (cat.name_ru?.trim() && !cat.name_ru.includes('?')) {
         return cat.name_ru.trim();
       }
       const slugKey = (cat.slug || cat.id || '').toLowerCase().trim();
