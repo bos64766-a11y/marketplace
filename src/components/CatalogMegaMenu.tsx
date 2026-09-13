@@ -1,6 +1,7 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { CATEGORIES } from '../data/categories';
+import { getMediaUrl } from '../services/api';
 import {
   Sparkles,
   HeartHandshake,
@@ -76,7 +77,7 @@ export const CatalogMegaMenu: React.FC = () => {
               >
                 <div className="w-12 h-12 rounded-2xl bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/20 p-1 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
                   {cat.image ? (
-                    <img src={cat.image} alt={getCategoryName(cat)} className="w-full h-full object-cover rounded-xl" />
+                    <img src={getMediaUrl(cat.image)} alt={getCategoryName(cat)} className="w-full h-full object-cover rounded-xl" />
                   ) : (
                     iconMap[cat.icon] || <Boxes className="w-5 h-5" />
                   )}

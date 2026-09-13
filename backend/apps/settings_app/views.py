@@ -156,9 +156,11 @@ class FileUploadView(APIView):
                 for chunk in file_obj.chunks():
                     destination.write(chunk)
 
-            file_url = f"{settings.MEDIA_URL}{subfolder}/{filename}"
+            rel_url = f"{settings.MEDIA_URL}{subfolder}/{filename}"
+            file_url = request.build_absolute_uri(rel_url)
             return Response({
                 'url': file_url,
+                'relative_url': rel_url,
                 'filename': filename,
                 'original_name': file_obj.name,
                 'size': file_obj.size,

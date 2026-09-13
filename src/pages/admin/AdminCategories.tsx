@@ -6,7 +6,7 @@
 import React, { useState, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { AdminLayout } from './AdminLayout';
-import { api } from '../../services/api';
+import { api, getMediaUrl } from '../../services/api';
 import {
   Plus,
   Pencil,
@@ -176,7 +176,7 @@ export const AdminCategories: React.FC = () => {
                     {cat.image ? (
                       <div className="w-12 h-12 rounded-2xl overflow-hidden shrink-0 border border-[#E2E8F0] bg-[#F8FAFC] group-hover:scale-105 transition-transform flex items-center justify-center">
                         <img
-                          src={cat.image}
+                          src={getMediaUrl(cat.image)}
                           alt={cat.name}
                           className="w-full h-full object-cover"
                         />
@@ -229,7 +229,7 @@ export const AdminCategories: React.FC = () => {
                 {/* Image preview */}
                 {cat.image && (
                   <div className="mt-3.5 h-24 rounded-xl overflow-hidden bg-[#F8FAFC] border border-[#F1F5F9]">
-                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
+                    <img src={getMediaUrl(cat.image)} alt={cat.name} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
                   </div>
                 )}
               </div>
@@ -377,7 +377,7 @@ export const AdminCategories: React.FC = () => {
                   <div className="relative rounded-2xl border border-[#E2E8F0] p-3 bg-[#F8FAFC] flex items-center gap-4">
                     <div className="w-16 h-16 rounded-xl overflow-hidden border border-[#CBD5E1] bg-white shrink-0 flex items-center justify-center">
                       <img
-                        src={formData.image}
+                        src={getMediaUrl(formData.image)}
                         alt="Category Preview"
                         className="w-full h-full object-cover"
                       />

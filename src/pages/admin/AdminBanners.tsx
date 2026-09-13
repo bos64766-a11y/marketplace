@@ -6,7 +6,7 @@
 import React, { useState, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { AdminLayout } from './AdminLayout';
-import { api } from '../../services/api';
+import { api, getMediaUrl } from '../../services/api';
 import {
   Plus,
   Pencil,
@@ -277,7 +277,7 @@ export const AdminBanners: React.FC = () => {
             banners.map((banner, index) => {
               const isActive = banner.isActive !== false;
               const link = banner.btnLink || banner.ctaLink || '/catalog';
-              const isUploaded = banner.image?.startsWith('/media/');
+              const isUploaded = banner.image?.includes('/media/');
 
               return (
                 <div
@@ -293,7 +293,7 @@ export const AdminBanners: React.FC = () => {
                     </div>
                     <div className="w-48 sm:w-64 aspect-[2.4/1] rounded-xl bg-[#FFF8F4] border border-[#FF5A00]/20 overflow-hidden flex items-center justify-center relative group shrink-0">
                       <img
-                        src={banner.image || '/banners/banner-clean-promo.png'}
+                        src={getMediaUrl(banner.image) || '/banners/banner-clean-promo.png'}
                         alt={banner.title || 'Banner'}
                         className="w-full h-full object-contain"
                         onError={(e) => {
@@ -603,7 +603,7 @@ export const AdminBanners: React.FC = () => {
                       </div>
                       <div className="w-full rounded-2xl overflow-hidden border border-[#E2E8F0] shadow-xs bg-slate-50">
                         <img
-                          src={formData.image}
+                          src={getMediaUrl(formData.image)}
                           alt="Live Preview"
                           className="w-full h-auto object-cover block"
                           onError={(e) => {
@@ -770,9 +770,12 @@ export const AdminBanners: React.FC = () => {
 
               <div className="mt-4 rounded-2xl overflow-hidden border border-[#E5EAF2] shadow-sm bg-slate-50">
                 <img
-                  src={previewBanner.image || '/banners/banner-clean-promo.png'}
+                  src={getMediaUrl(previewBanner.image) || '/banners/banner-clean-promo.png'}
                   alt={previewBanner.title || 'Banner'}
                   className="w-full h-auto object-contain block"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
+                  }}
                 />
               </div>
 

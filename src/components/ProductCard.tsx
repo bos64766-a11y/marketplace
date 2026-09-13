@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Product } from '../types';
 import { useApp } from '../context/AppContext';
 import { Heart, Check } from 'lucide-react';
+import { getMediaUrl } from '../services/api';
 
 interface ProductCardProps {
   product: Product;
@@ -47,7 +48,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '
       {/* Product Image Area - Image at top with Heart icon at top-right */}
       <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] mb-1.5 sm:mb-2">
         <img
-          src={product.images[0]}
+          src={getMediaUrl(product.images[0])}
           alt={productName}
           loading="lazy"
           onError={(e) => {

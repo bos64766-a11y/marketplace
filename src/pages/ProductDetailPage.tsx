@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { ProductCard } from '../components/ProductCard';
+import { getMediaUrl } from '../services/api';
 import {
   Heart,
   ShoppingCart,
@@ -154,7 +155,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                         : 'border-[#E2E8F0] hover:border-slate-400'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-contain p-1" />
+                    <img src={getMediaUrl(img)} alt="" className="w-full h-full object-contain p-1" />
                   </button>
                 ))}
               </div>
@@ -163,7 +164,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
             {/* Main Product Image */}
             <div className="flex-1 relative aspect-square rounded-2xl overflow-hidden bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center group p-4">
               <img
-                src={product.images[selectedImage] || product.images[0]}
+                src={getMediaUrl(product.images[selectedImage] || product.images[0])}
                 alt={productName}
                 className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
               />

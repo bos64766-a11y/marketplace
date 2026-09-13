@@ -2,6 +2,44 @@ import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcas
 
 const API_BASE = ((import.meta as any).env?.VITE_API_URL as string)?.replace(/\/$/, '') || '/api';
 
+/**
+ * Resolves an image/media URL so that relative paths (e.g. /media/...)
+ * resolve correctly against the backend server in production (Render)
+ * or local dev environment.
+ */
+export function getMediaUrl(path?: string | null): string {
+  if (!path) return '';
+  const trimmed = path.trim();
+  if (!trimmed) return '';
+
+  // Already absolute or data or blob URL
+  if (/^(https?:|data:|blob:)/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  // If path starts with /media/ or media/
+  const normalized = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+  if (normalized.startsWith('/media/')) {
+    const rawApiUrl = ((import.meta as any).env?.VITE_API_URL as string)?.trim() || '';
+    if (rawApiUrl) {
+      const backendHost = rawApiUrl.replace(/\/+$/, '').replace(/\/api\/?$/, '');
+      if (backendHost) {
+        return `${backendHost}${normalized}`;
+      }
+    }
+    // Production fallback: when deployed (not on localhost), use Render backend host
+    if (
+      typeof window !== 'undefined' &&
+      !window.location.hostname.includes('localhost') &&
+      !window.location.hostname.includes('127.0.0.1')
+    ) {
+      return `https://marketplace-0ycw.onrender.com${normalized}`;
+    }
+  }
+
+  return trimmed;
+}
+
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const headers = {
     'Content-Type': 'application/json',
@@ -259,7 +297,11 @@ export const api = {
       });
 
       if (response.ok) {
-        return await response.json();
+        const data = await response.json();
+        return {
+          ...data,
+          url: getMediaUrl(data.url) || data.url,
+        };
       }
 
       console.warn('Upload endpoint responded with non-200, checking fallback:', response.status);

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
+import { getMediaUrl } from '../services/api';
 import {
   Trash2,
   Minus,
@@ -92,7 +93,7 @@ export const CartPage: React.FC = () => {
                     className="flex items-center gap-3.5 flex-1 min-w-0 cursor-pointer group"
                   >
                     <img
-                      src={product.images[0]}
+                      src={getMediaUrl(product.images[0])}
                       alt={productName}
                       className="w-16 h-16 sm:w-18 sm:h-18 rounded-[12px] object-cover border border-[#E5EAF2] shrink-0 bg-[#F7F9FC]"
                     />

@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/media/:path*",
+      "destination": "https://marketplace-0ycw.onrender.com/media/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

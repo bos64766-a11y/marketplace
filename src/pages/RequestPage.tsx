@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { getMediaUrl } from '../services/api';
 import {
   CheckCircle2,
   ArrowRight,
@@ -345,7 +346,7 @@ export const RequestPage: React.FC = () => {
                 return (
                   <div key={product.id} className="py-3 flex items-center gap-3">
                     <img
-                      src={product.images[0]}
+                      src={getMediaUrl(product.images[0])}
                       alt={productName}
                       className="w-12 h-12 rounded-2xl object-contain border border-[#E2E8F0] bg-white shrink-0 p-1"
                     />

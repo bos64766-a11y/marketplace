@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { CATEGORIES } from '../data/categories';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { getMediaUrl } from '../services/api';
 
 export const CategoryPillsSection: React.FC = () => {
   const { navigate, categories, getCategoryName, language } = useApp();
@@ -124,7 +125,7 @@ export const CategoryPillsSection: React.FC = () => {
               {/* Large Product Category Image */}
               <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] border border-[#E2E8F0]/70 group-hover:border-[#FF5A00]/30 transition-all mb-2.5 sm:mb-3 shadow-2xs">
                 <img
-                  src={cat.image}
+                  src={getMediaUrl(cat.image)}
                   alt={getCategoryName(cat)}
                   className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                   loading="lazy"
@@ -150,7 +151,7 @@ export const CategoryPillsSection: React.FC = () => {
               {/* Large Product Category Image */}
               <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] border border-[#E2E8F0]/70 group-hover:border-[#FF5A00]/30 transition-all mb-2.5 sm:mb-3 shadow-2xs">
                 <img
-                  src={cat.image}
+                  src={getMediaUrl(cat.image)}
                   alt={getCategoryName(cat)}
                   className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                   loading="lazy"

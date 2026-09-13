@@ -6,7 +6,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { AdminLayout } from './AdminLayout';
-import { api } from '../../services/api';
+import { api, getMediaUrl } from '../../services/api';
 import {
   Plus,
   Search,
@@ -381,7 +381,7 @@ export const AdminProducts: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-11 h-11 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] overflow-hidden shrink-0 flex items-center justify-center">
                           {product.images?.[0] ? (
-                            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                            <img src={getMediaUrl(product.images[0])} alt={product.name} className="w-full h-full object-cover" />
                           ) : (
                             <Package className="w-5 h-5 text-[#94A3B8]" />
                           )}
@@ -734,7 +734,7 @@ export const AdminProducts: React.FC = () => {
                         className="group relative aspect-square rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] overflow-hidden shadow-2xs"
                       >
                         <img
-                          src={imgUrl}
+                          src={getMediaUrl(imgUrl)}
                           alt={`Product preview ${idx + 1}`}
                           className="w-full h-full object-contain p-1"
                         />

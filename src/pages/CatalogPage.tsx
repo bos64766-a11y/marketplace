@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { ProductCard } from '../components/ProductCard';
+import { getMediaUrl } from '../services/api';
 import {
   SlidersHorizontal,
   X,
@@ -290,7 +291,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                       <div className="flex items-center gap-2.5 truncate">
                         <span className={`w-4 h-4 rounded overflow-hidden flex items-center justify-center shrink-0 ${isSelected ? 'text-[#FF5A00]' : 'text-[#64748B]'}`}>
                           {cat.image ? (
-                            <img src={cat.image} alt={getCategoryName(cat)} className="w-full h-full object-cover rounded" />
+                            <img src={getMediaUrl(cat.image)} alt={getCategoryName(cat)} className="w-full h-full object-cover rounded" />
                           ) : (
                             iconMap[cat.icon] || <Sparkles className="w-4 h-4" />
                           )}
@@ -595,7 +596,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                       <div className="flex items-center gap-2.5">
                         <span className="w-5 h-5 rounded overflow-hidden flex items-center justify-center shrink-0">
                           {cat.image ? (
-                            <img src={cat.image} alt={getCategoryName(cat)} className="w-full h-full object-cover rounded" />
+                            <img src={getMediaUrl(cat.image)} alt={getCategoryName(cat)} className="w-full h-full object-cover rounded" />
                           ) : (
                             iconMap[cat.icon] || <Sparkles className="w-4 h-4" />
                           )}

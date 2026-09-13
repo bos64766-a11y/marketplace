@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { getMediaUrl } from '../services/api';
 
 export const HeroSection: React.FC = () => {
   const { navigate, banners } = useApp();
@@ -38,10 +39,13 @@ export const HeroSection: React.FC = () => {
             tabIndex={0}
           >
             <img
-              src={slide.image || '/banners/banner-clean-promo.png'}
+              src={getMediaUrl(slide.image) || '/banners/banner-clean-promo.png'}
               alt={slide.title || 'SNABTASH B2B Banner'}
               className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.006]"
               loading="eager"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
+              }}
             />
           </div>
 
