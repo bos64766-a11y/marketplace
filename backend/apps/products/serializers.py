@@ -91,6 +91,13 @@ class ProductSerializer(serializers.ModelSerializer):
             'id': {'required': False, 'allow_blank': True},
             'slug': {'required': False, 'allow_blank': True},
             'sku': {'required': False, 'allow_blank': True},
+            'brand': {'required': False, 'allow_blank': True},
+            'unit': {'required': False, 'allow_blank': True},
+            'description': {'required': False, 'allow_blank': True},
+            'description_ru': {'required': False, 'allow_blank': True},
+            'tag': {'required': False, 'allow_blank': True},
+            'tag_ru': {'required': False, 'allow_blank': True},
+            'name_ru': {'required': False, 'allow_blank': True},
         }
 
     def to_representation(self, instance):
@@ -127,6 +134,12 @@ class ProductSerializer(serializers.ModelSerializer):
             cat = Category.objects.first()
             if cat:
                 validated_data['category'] = cat
+
+        if not validated_data.get('brand'):
+            validated_data['brand'] = 'SNABTASH'
+
+        if not validated_data.get('unit'):
+            validated_data['unit'] = 'dona'
 
         if not validated_data.get('sku'):
             validated_data['sku'] = f"SNB-{uuid.uuid4().hex[:8].upper()}"

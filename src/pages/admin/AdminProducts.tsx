@@ -265,13 +265,17 @@ export const AdminProducts: React.FC = () => {
       categoryName: catObj?.name || formData.categoryName || '',
     };
 
-    if (editingProduct) {
-      await updateProduct(editingProduct.id, productData);
-    } else {
-      await addProduct(productData);
+    try {
+      if (editingProduct) {
+        await updateProduct(editingProduct.id, productData);
+      } else {
+        await addProduct(productData);
+      }
+      setIsModalOpen(false);
+      setEditingProduct(null);
+    } catch {
+      // Modal ochiq qoladi, foydalanuvchi kiritgan ma'lumotlar yo'qolmaydi va xatolik ko'rinadi
     }
-    setIsModalOpen(false);
-    setEditingProduct(null);
   };
 
   const handleDeleteConfirm = async () => {

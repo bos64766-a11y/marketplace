@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Product, Category, CartItem, RequestOrder, UserProfile, ToastNotification, SiteSettings, BannerSlide, HomeShowcaseSection, Partner, Language } from '../types';
 import { translations, Translations } from '../i18n/translations';
 import { PRODUCTS as INITIAL_PRODUCTS } from '../data/products';
@@ -301,57 +301,120 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return INITIAL_PRODUCTS;
   });
 
+  // Cross-tab and Cross-window broadcast sync
+  const syncChannelRef = useRef<BroadcastChannel | null>(null);
+
+  const notifySync = useCallback(() => {
+    try {
+      syncChannelRef.current?.postMessage({ type: 'DATA_CHANGED', timestamp: Date.now() });
+    } catch {}
+  }, []);
+
+  // Helper to re-sync all live data from Django backend
+  const refreshFromBackend = useCallback(async () => {
+    try {
+      const [prodsRes, catsRes, ordsRes, settRes, banRes, sectRes, partRes] = await Promise.allSettled([
+        api.getProducts(),
+        api.getCategories(),
+        api.getOrders(),
+        api.getSettings(),
+        api.getBanners(),
+        api.getShowcaseSections(),
+        api.getPartners(),
+      ]);
+
+      if (prodsRes.status === 'fulfilled' && Array.isArray(prodsRes.value) && prodsRes.value.length > 0) {
+        setProducts(prodsRes.value);
+        try {
+          localStorage.setItem('snabtash_admin_products', JSON.stringify(prodsRes.value));
+        } catch {}
+      }
+
+      if (catsRes.status === 'fulfilled' && Array.isArray(catsRes.value) && catsRes.value.length > 0) {
+        setCategories(catsRes.value);
+        try {
+          localStorage.setItem('snabtash_admin_categories', JSON.stringify(catsRes.value));
+        } catch {}
+      }
+
+      if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value)) {
+        setRequests(ordsRes.value);
+      }
+
+      if (settRes.status === 'fulfilled' && settRes.value && settRes.value.companyName) {
+        setSiteSettings(settRes.value);
+      }
+
+      if (banRes.status === 'fulfilled' && Array.isArray(banRes.value)) {
+        setBanners(banRes.value);
+        try {
+          localStorage.setItem('snabtash_admin_banners', JSON.stringify(banRes.value));
+        } catch {}
+      }
+
+      if (sectRes.status === 'fulfilled' && Array.isArray(sectRes.value)) {
+        setShowcaseSections(sectRes.value);
+        try {
+          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(sectRes.value));
+        } catch {}
+      }
+
+      if (partRes.status === 'fulfilled' && Array.isArray(partRes.value)) {
+        setPartners(partRes.value);
+        try {
+          localStorage.setItem('snabtash_partners', JSON.stringify(partRes.value));
+        } catch {}
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   // Load initial live data from Django API on startup
   useEffect(() => {
-    let isMounted = true;
+    refreshFromBackend();
+  }, [refreshFromBackend]);
 
-    api.getProducts().then((data) => {
-      if (isMounted && data && data.length > 0) setProducts(data);
-    }).catch(() => {});
+  // Real-time synchronization across different browser windows, tabs, and focus changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      try {
+        const bc = new BroadcastChannel('snabtash_sync_channel');
+        syncChannelRef.current = bc;
+        bc.onmessage = (event) => {
+          if (event.data?.type === 'DATA_CHANGED') {
+            refreshFromBackend();
+          }
+        };
+      } catch {}
+    }
 
-    api.getCategories().then((data) => {
-      if (isMounted && data && data.length > 0) setCategories(data);
-    }).catch(() => {});
+    const handleFocus = () => {
+      refreshFromBackend();
+    };
 
-    api.getOrders().then((data) => {
-      if (isMounted && data && data.length > 0) setRequests(data);
-    }).catch(() => {});
-
-    api.getSettings().then((data) => {
-      if (isMounted && data && data.companyName) setSiteSettings(data);
-    }).catch(() => {});
-
-    api.getBanners().then((data) => {
-      if (isMounted && Array.isArray(data)) {
-        setBanners(data);
-        try {
-          localStorage.setItem('snabtash_admin_banners', JSON.stringify(data));
-        } catch {}
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refreshFromBackend();
       }
-    }).catch(() => {});
+    };
 
-    api.getShowcaseSections().then((data) => {
-      if (isMounted && Array.isArray(data)) {
-        setShowcaseSections(data);
-        try {
-          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(data));
-        } catch {}
-      }
-    }).catch(() => {});
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    api.getPartners().then((data) => {
-      if (isMounted && Array.isArray(data)) {
-        setPartners(data);
-        try {
-          localStorage.setItem('snabtash_partners', JSON.stringify(data));
-        } catch {}
-      }
-    }).catch(() => {});
+    // Periodic polling (every 6 seconds) ensures 2 distinct browsers (e.g. Chrome & Edge)
+    // stay in sync automatically without requiring manual page reload!
+    const interval = setInterval(refreshFromBackend, 6000);
 
     return () => {
-      isMounted = false;
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearInterval(interval);
+      try {
+        syncChannelRef.current?.close();
+      } catch {}
     };
-  }, []);
+  }, [refreshFromBackend]);
 
   useEffect(() => {
     try {
@@ -362,81 +425,87 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [products]);
 
   const addProduct = async (productData: Omit<Product, 'id'>): Promise<Product> => {
-    const tempId = `snb-${Date.now()}`;
     const generatedSku = productData.sku?.trim() || `SNB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const generatedSlug = productData.slug?.trim() || productData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || `prod-${Date.now()}`;
 
-    const newProduct: Product = {
-      ...productData,
-      id: tempId,
-      sku: generatedSku,
-      slug: generatedSlug,
-    };
-
-    setProducts((prev) => [newProduct, ...prev]);
-
     try {
       const serverProduct = await api.createProduct({
-        ...newProduct,
+        ...productData,
         sku: generatedSku,
         slug: generatedSlug,
-        category_id: newProduct.categoryId,
-        images_list: newProduct.images,
+        category_id: productData.categoryId,
+        images_list: productData.images,
       } as any);
 
       if (serverProduct && serverProduct.id) {
-        setProducts((prev) =>
-          prev.map((p) => (p.id === tempId ? { ...newProduct, ...serverProduct } : p))
-        );
+        setProducts((prev) => [serverProduct, ...prev.filter((p) => p.id !== serverProduct.id)]);
         showToast(`✓ Yangi mahsulot "${serverProduct.name}" muvaffaqiyatli saqlandi`, 'success');
+        notifySync();
         return serverProduct;
       }
+      throw new Error('Serverdan kutilmagan javob qaytdi');
     } catch (err: any) {
-      console.warn('API product create warning (saqlanmoqda):', err);
-      showToast(`✓ Yangi mahsulot "${newProduct.name}" qo‘shildi`, 'success');
+      console.error('API product create error:', err);
+      const errMsg = err?.message || 'Serverga ulanishda xatolik yuz berdi';
+      showToast(`Xatolik: Mahsulot serverda saqlanmadi (${errMsg})`, 'error');
+      throw err;
     }
-
-    return newProduct;
   };
 
   const updateProduct = async (id: string, updated: Partial<Product>) => {
-    setProducts((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updated } : item))
-    );
     try {
-      await api.updateProduct(id, {
+      const serverProduct = await api.updateProduct(id, {
         ...updated,
         category_id: updated.categoryId,
         images_list: updated.images,
       } as any);
+      setProducts((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, ...serverProduct } : item))
+      );
       showToast('✓ Mahsulot ma’lumotlari muvaffaqiyatli yangilandi', 'success');
-    } catch (err) {
-      console.warn('API product update warning:', err);
-      showToast('✓ Mahsulot ma’lumotlari yangilandi', 'success');
+      notifySync();
+    } catch (err: any) {
+      console.error('API product update error:', err);
+      const errMsg = err?.message || 'Serverda xatolik yuz berdi';
+      showToast(`Xatolik: Mahsulot yangilanmadi (${errMsg})`, 'error');
+      throw err;
     }
   };
 
   const deleteProduct = async (id: string) => {
     const target = products.find((p) => p.id === id);
-    setProducts((prev) => prev.filter((p) => p.id !== id));
     try {
       await api.deleteProduct(id);
-    } catch (err) {
-      console.warn('API product delete warning:', err);
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+      showToast(`Mahsulot "${target?.name || id}" o‘chirildi`, 'info');
+      notifySync();
+    } catch (err: any) {
+      console.error('API product delete error:', err);
+      showToast(`Xatolik: Mahsulotni o'chirishda xatolik yuz berdi`, 'error');
+      throw err;
     }
-    showToast(`Mahsulot "${target?.name || id}" o‘chirildi`, 'info');
   };
 
-  const toggleProductStock = (id: string) => {
+  const toggleProductStock = async (id: string) => {
     setProducts((prev) =>
       prev.map((p) => (p.id === id ? { ...p, inStock: !p.inStock } : p))
     );
-    api.toggleStock(id).catch((err) => console.log('API sync warning:', err));
-    showToast('Ombor holati yangilandi', 'info');
+    try {
+      await api.toggleStock(id);
+      showToast('Ombor holati yangilandi', 'info');
+      notifySync();
+    } catch (err) {
+      console.warn('API sync warning:', err);
+      setProducts((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, inStock: !p.inStock } : p))
+      );
+      showToast('Xatolik: Ombor holati o‘zgarmadi', 'error');
+    }
   };
 
   const resetProductsToDefault = () => {
     setProducts(INITIAL_PRODUCTS);
+    notifySync();
     showToast('Mahsulotlar asl holatiga qaytarildi', 'info');
   };
 
@@ -464,6 +533,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       await api.createCategory(catData);
       showToast(`✓ Yangi kategoriya "${catData.name}" qo‘shildi`, 'success');
+      notifySync();
     } catch (err) {
       console.warn('API category create warning:', err);
       showToast(`✓ Yangi kategoriya "${catData.name}" qo‘shildi`, 'success');
@@ -477,6 +547,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       await api.updateCategory(id, updated);
       showToast('Kategoriya yangilandi', 'success');
+      notifySync();
     } catch (err) {
       console.warn('API category update warning:', err);
       showToast('Kategoriya yangilandi', 'success');
@@ -487,6 +558,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCategories((prev) => prev.filter((c) => c.id !== id));
     try {
       await api.deleteCategory(id);
+      notifySync();
     } catch (err) {
       console.warn('API category delete warning:', err);
     }
@@ -522,6 +594,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } catch {}
         return next;
       });
+      notifySync();
       showToast('✓ Yangi banner muvaffaqiyatli qo‘shildi', 'success');
     } catch (err) {
       console.log('API banner create error, using local fallback:', err);
@@ -533,6 +606,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } catch {}
         return next;
       });
+      notifySync();
       showToast('✓ Yangi banner saqlandi', 'success');
     }
   };
@@ -556,9 +630,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } catch {}
         return next;
       });
+      notifySync();
       showToast('✓ Banner muvaffaqiyatli yangilandi', 'success');
     } catch (err) {
       console.log('API banner update error, using local fallback:', err);
+      notifySync();
       showToast('✓ Banner yangilandi', 'success');
     }
   };
@@ -575,6 +651,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     try {
       await api.deleteBanner(id);
+      notifySync();
     } catch (err) {
       console.log('API banner delete error:', err);
     }
@@ -596,6 +673,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       localStorage.setItem('snabtash_admin_banners', JSON.stringify(createdList));
     } catch {}
+    notifySync();
     showToast('✓ Standart bannerlar qayta tiklandi', 'success');
   };
 
@@ -624,6 +702,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } catch {}
         return next;
       });
+      notifySync();
       showToast('✓ Yangi bo‘lim muvaffaqiyatli qo‘shildi', 'success');
     } catch (err) {
       console.log('API showcase create error, using local fallback:', err);
@@ -635,6 +714,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } catch {}
         return next;
       });
+      notifySync();
       showToast('✓ Yangi bo‘lim saqlandi', 'success');
     }
   };
@@ -654,6 +734,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (saved && saved.id) {
         setShowcaseSections((prev) => prev.map((s) => (String(s.id) === idStr ? saved : s)));
       }
+      notifySync();
     } catch (err) {
       console.log('API showcase update error, using local state:', err);
     }
@@ -672,6 +753,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     try {
       await api.deleteShowcaseSection(id);
+      notifySync();
     } catch (err) {
       console.log('API showcase delete error:', err);
     }
@@ -693,6 +775,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       localStorage.setItem('snabtash_showcase_sections', JSON.stringify(createdList));
     } catch {}
+    notifySync();
     showToast('✓ Standart sohaviy bo‘limlar qayta tiklandi', 'success');
   };
 
@@ -723,6 +806,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } catch {}
         return next;
       });
+      notifySync();
       showToast('✓ Yangi hamkor muvaffaqiyatli qo‘shildi', 'success');
     } catch (err) {
       console.warn('API create partner error:', err);
@@ -738,6 +822,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } catch {}
         return next;
       });
+      notifySync();
       showToast('✓ Yangi hamkor qo‘shildi', 'success');
     }
   };
@@ -752,6 +837,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
     try {
       await api.updatePartner(id, updated);
+      notifySync();
     } catch (err) {
       console.warn('API update partner warning:', err);
     }
@@ -768,6 +854,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
     try {
       await api.deletePartner(id);
+      notifySync();
     } catch (err) {
       console.warn('API delete partner warning:', err);
     }
@@ -783,6 +870,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     api.getPartners().then((res) => {
       if (res && res.length > 0) setPartners(res);
     }).catch(() => {});
+    notifySync();
     showToast('✓ Standart hamkorlar qayta tiklandi', 'success');
   };
 
@@ -807,7 +895,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       return next;
     });
-    api.updateSettings(updated).catch((err) => console.log('API sync warning:', err));
+    api.updateSettings(updated).then(() => {
+      notifySync();
+    }).catch((err) => console.log('API sync warning:', err));
     showToast('✓ Sayt sozlamalari muvaffaqiyatli saqlandi', 'success');
   };
 
