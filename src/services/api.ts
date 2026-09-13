@@ -1,6 +1,12 @@
 import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcaseSection, Partner } from '../types';
 
-const API_BASE = ((import.meta as any).env?.VITE_API_URL as string)?.replace(/\/$/, '') || '/api';
+const isLocal =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+const API_BASE =
+  ((import.meta as any).env?.VITE_API_URL as string)?.replace(/\/$/, '') ||
+  (isLocal ? '/api' : 'https://marketplace-0ycw.onrender.com/api');
 
 /**
  * Resolves an image/media URL so that relative paths (e.g. /media/...)
