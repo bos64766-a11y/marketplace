@@ -139,11 +139,10 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
                 <button
                   key={tab.id}
                   onClick={() => onTabChange && onTabChange(tab.id)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    activeTab === tab.id
-                      ? 'bg-[#FF5A00] text-white shadow-md shadow-[#FF5A00]/25'
-                      : 'text-[#64748B] hover:text-[#1E293B]'
-                  }`}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeTab === tab.id
+                    ? 'bg-[#FF5A00] text-white shadow-md shadow-[#FF5A00]/25'
+                    : 'text-[#64748B] hover:text-[#1E293B]'
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -166,11 +165,10 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
             <button
               onClick={() => handleScroll('left')}
               disabled={!canScrollLeft}
-              className={`w-9 h-9 rounded-2xl flex items-center justify-center border transition-all cursor-pointer ${
-                canScrollLeft
-                  ? 'bg-white border-[#E2E8F0] text-[#475569] hover:bg-[#FFF7ED] hover:text-[#FF5A00] hover:border-[#FF5A00]/30 shadow-2xs'
-                  : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50'
-              }`}
+              className={`w-9 h-9 rounded-2xl flex items-center justify-center border transition-all cursor-pointer ${canScrollLeft
+                ? 'bg-white border-[#E2E8F0] text-[#475569] hover:bg-[#FFF7ED] hover:text-[#FF5A00] hover:border-[#FF5A00]/30 shadow-2xs'
+                : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                }`}
               aria-label="Oldingi mahsulotlar"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -178,11 +176,10 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
             <button
               onClick={() => handleScroll('right')}
               disabled={!canScrollRight}
-              className={`w-9 h-9 rounded-2xl flex items-center justify-center border transition-all cursor-pointer ${
-                canScrollRight
-                  ? 'bg-white border-[#E2E8F0] text-[#475569] hover:bg-[#FFF7ED] hover:text-[#FF5A00] hover:border-[#FF5A00]/30 shadow-2xs'
-                  : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50'
-              }`}
+              className={`w-9 h-9 rounded-2xl flex items-center justify-center border transition-all cursor-pointer ${canScrollRight
+                ? 'bg-white border-[#E2E8F0] text-[#475569] hover:bg-[#FFF7ED] hover:text-[#FF5A00] hover:border-[#FF5A00]/30 shadow-2xs'
+                : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                }`}
               aria-label="Keyingi mahsulotlar"
             >
               <ChevronRight className="w-4 h-4" />
@@ -195,9 +192,8 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
       <div className="relative">
         {/* Left Fade Mask */}
         <div
-          className={`absolute left-0 top-0 bottom-4 w-8 sm:w-14 bg-gradient-to-r from-white via-white/70 to-transparent z-10 pointer-events-none transition-opacity duration-300 ${
-            canScrollLeft ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`absolute left-0 top-0 bottom-4 w-8 sm:w-14 bg-gradient-to-r from-white via-white/70 to-transparent z-10 pointer-events-none transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0'
+            }`}
         />
 
         {/* Right Fade Mask */}

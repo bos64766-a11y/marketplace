@@ -188,10 +188,21 @@ export const AdminCategories: React.FC = () => {
                     )}
                     <div>
                       <h3 className="text-sm font-bold text-[#1E293B]">{cat.name}</h3>
-                      {cat.name_ru && (
-                        <p className="text-[11px] text-[#64748B] italic">RU: {cat.name_ru}</p>
+                      {cat.name_ru ? (
+                        <div className="flex items-center gap-1 mt-1">
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            RU: {cat.name_ru}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1 mt-1">
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                            RU nomi kiritilmagan
+                          </span>
+                        </div>
                       )}
-                      <p className="text-[10px] font-medium text-[#94A3B8]">/{cat.slug}</p>
+                      <p className="text-[10px] font-medium text-[#94A3B8] mt-1">/{cat.slug}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5">

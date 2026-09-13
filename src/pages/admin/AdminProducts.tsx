@@ -572,7 +572,9 @@ export const AdminProducts: React.FC = () => {
                   >
                     <option value="">Kategoriyani tanlang</option>
                     {categories.map((cat) => (
-                      <option key={cat.id} value={cat.slug}>{cat.name}</option>
+                      <option key={cat.id} value={cat.slug}>
+                        {cat.name} {cat.name_ru ? `(${cat.name_ru})` : ''}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -611,7 +613,9 @@ export const AdminProducts: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Birlik</label>
+                  <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">
+                    O'lchov Birligi
+                  </label>
                   <input
                     type="text"
                     value={formData.unit}
@@ -619,6 +623,35 @@ export const AdminProducts: React.FC = () => {
                     className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors"
                     placeholder="dona / litr / kg"
                   />
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {[
+                      { key: 'dona', label: 'dona (шт.)' },
+                      { key: 'pachka', label: 'pachka (пач.)' },
+                      { key: 'quti', label: 'quti (кор.)' },
+                      { key: 'qadoq', label: 'qadoq (упак.)' },
+                      { key: 'blok', label: 'blok (блок)' },
+                      { key: 'rulon', label: 'rulon (рул.)' },
+                      { key: 'juft', label: 'juft (пар)' },
+                      { key: 'kanistra', label: 'kanistra (канистра)' },
+                      { key: 'kg', label: 'kg (кг)' },
+                      { key: 'litr', label: 'litr (л)' },
+                      { key: 'to‘plam', label: 'to‘plam (компл.)' },
+                      { key: 'metr', label: 'metr (м)' },
+                    ].map((preset) => (
+                      <button
+                        key={preset.key}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, unit: preset.key })}
+                        className={`px-2 py-0.5 text-[10px] font-semibold rounded-md border transition-all cursor-pointer ${
+                          formData.unit?.toLowerCase() === preset.key.toLowerCase()
+                            ? 'bg-[#FF5A00] text-white border-[#FF5A00]'
+                            : 'bg-white text-[#475569] border-[#E2E8F0] hover:border-[#CBD5E1] hover:bg-[#F8FAFC]'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 

@@ -22,6 +22,7 @@ export const CartPage: React.FC = () => {
     language,
     t,
     getProductName,
+    formatUnit,
   } = useApp();
 
   if (cart.length === 0) {
@@ -105,7 +106,7 @@ export const CartPage: React.FC = () => {
                         <span>{product.brand} • {product.price.toLocaleString('uz-UZ')} {t.productCard.sum}</span>
                         {product.minOrder && product.minOrder > 1 && (
                           <span className="px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 text-[10px] font-semibold border border-amber-200">
-                            min: {product.minOrder} {product.unit || (language === 'ru' ? 'шт' : 'ta')}
+                            min: {product.minOrder} {formatUnit(product.unit)}
                           </span>
                         )}
                       </div>

@@ -10,7 +10,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '' }) => {
-  const { navigate, addToCart, isFavorite, toggleFavorite, t, getProductName } = useApp();
+  const { navigate, addToCart, isFavorite, toggleFavorite, t, getProductName, formatUnit } = useApp();
   const minQty = product.minOrder || 1;
   const [isAdded, setIsAdded] = useState(false);
   const favorite = isFavorite(product.id);
@@ -98,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className = '
             {product.minOrder && (
               <>
                 <span>•</span>
-                <span>Min: {minQty} {product.unit || 'ta'}</span>
+                <span>Min: {minQty} {formatUnit(product.unit)}</span>
               </>
             )}
           </div>

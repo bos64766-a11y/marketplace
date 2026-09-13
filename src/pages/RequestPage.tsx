@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export const RequestPage: React.FC = () => {
-  const { cart, cartTotal, submitRequest, profile, updateProfile, navigate, language, t, getProductName } = useApp();
+  const { cart, cartTotal, submitRequest, profile, updateProfile, navigate, language, t, getProductName, formatUnit } = useApp();
 
   const hasSavedContact = Boolean(profile?.hasOrderedBefore && profile?.phone && profile?.name);
   const [isEditingContact, setIsEditingContact] = useState(!hasSavedContact);
@@ -355,7 +355,7 @@ export const RequestPage: React.FC = () => {
                         {productName}
                       </h4>
                       <span className="text-[11px] font-medium text-[#64748B]">
-                        {quantity} x {product.price.toLocaleString('uz-UZ')} {t.productCard.sum}
+                        {quantity} {formatUnit(product.unit)} x {product.price.toLocaleString('uz-UZ')} {t.productCard.sum}
                       </span>
                     </div>
                     <div className="text-right shrink-0">

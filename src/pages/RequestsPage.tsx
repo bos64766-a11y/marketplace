@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { FileText, ChevronDown, ChevronUp, Clock, CheckCircle2, ArrowRight, Building2, Phone } from 'lucide-react';
 
 export const RequestsPage: React.FC = () => {
-  const { requests, navigate } = useApp();
+  const { requests, navigate, getProductName, formatUnit } = useApp();
   const [expandedId, setExpandedId] = useState<string | null>(requests[0]?.id || null);
 
   const toggleExpand = (id: string) => {
@@ -108,9 +108,9 @@ export const RequestsPage: React.FC = () => {
                               className="w-10 h-10 rounded-lg object-cover border border-[#E5EAF2]"
                             />
                             <div>
-                              <strong className="text-[#14213D] block">{product.name}</strong>
+                              <strong className="text-[#14213D] block">{getProductName(product)}</strong>
                               <span className="text-[#667085]">
-                                {quantity} x {product.price.toLocaleString('uz-UZ')} so‘m
+                                {quantity} {formatUnit(product.unit)} x {product.price.toLocaleString('uz-UZ')} so‘m
                               </span>
                             </div>
                           </div>

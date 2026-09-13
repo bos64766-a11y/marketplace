@@ -426,3 +426,79 @@ export const translations: Record<Language, Translations> = {
     },
   },
 };
+
+export const UNIT_TRANSLATIONS: Record<string, { uz: string; ru: string }> = {
+  dona: { uz: 'dona', ru: 'шт.' },
+  ta: { uz: 'dona', ru: 'шт.' },
+  sht: { uz: 'dona', ru: 'шт.' },
+  'шт': { uz: 'dona', ru: 'шт.' },
+  'шт.': { uz: 'dona', ru: 'шт.' },
+  'штука': { uz: 'dona', ru: 'шт.' },
+  'штук': { uz: 'dona', ru: 'шт.' },
+  'ед': { uz: 'dona', ru: 'ед.' },
+  pachka: { uz: 'pachka', ru: 'пач.' },
+  'пач': { uz: 'pachka', ru: 'пач.' },
+  'пач.': { uz: 'pachka', ru: 'пач.' },
+  'пачка': { uz: 'pachka', ru: 'пач.' },
+  quti: { uz: 'quti', ru: 'кор.' },
+  korobka: { uz: 'quti', ru: 'кор.' },
+  'кор': { uz: 'quti', ru: 'кор.' },
+  'кор.': { uz: 'quti', ru: 'кор.' },
+  'коробка': { uz: 'quti', ru: 'кор.' },
+  qadoq: { uz: 'qadoq', ru: 'упак.' },
+  'упак': { uz: 'qadoq', ru: 'упак.' },
+  'упак.': { uz: 'qadoq', ru: 'упак.' },
+  'упаковка': { uz: 'qadoq', ru: 'упак.' },
+  blok: { uz: 'blok', ru: 'блок' },
+  'блок': { uz: 'blok', ru: 'блок' },
+  rulon: { uz: 'rulon', ru: 'рул.' },
+  'рул': { uz: 'rulon', ru: 'рул.' },
+  'рул.': { uz: 'rulon', ru: 'рул.' },
+  'рулон': { uz: 'rulon', ru: 'рул.' },
+  juft: { uz: 'juft', ru: 'пар' },
+  'пар': { uz: 'juft', ru: 'пар' },
+  'пара': { uz: 'juft', ru: 'пар' },
+  'пары': { uz: 'juft', ru: 'пар' },
+  kanistra: { uz: 'kanistra', ru: 'канистра' },
+  'канистра': { uz: 'kanistra', ru: 'канистра' },
+  kg: { uz: 'kg', ru: 'кг' },
+  'кг': { uz: 'kg', ru: 'кг' },
+  litr: { uz: 'litr', ru: 'л' },
+  l: { uz: 'litr', ru: 'л' },
+  'л': { uz: 'litr', ru: 'л' },
+  'литр': { uz: 'litr', ru: 'л' },
+  toplam: { uz: "to'plam", ru: 'компл.' },
+  'to‘plam': { uz: "to'plam", ru: 'компл.' },
+  "to'plam": { uz: "to'plam", ru: 'компл.' },
+  komplekt: { uz: 'komplekt', ru: 'компл.' },
+  'компл': { uz: 'komplekt', ru: 'компл.' },
+  'компл.': { uz: 'komplekt', ru: 'компл.' },
+  'комплект': { uz: 'komplekt', ru: 'компл.' },
+  metr: { uz: 'metr', ru: 'м' },
+  m: { uz: 'metr', ru: 'м' },
+  'м': { uz: 'metr', ru: 'м' },
+};
+
+export function formatUnit(unit?: string | null, language: Language = 'uz'): string {
+  if (!unit || !unit.trim()) {
+    return language === 'ru' ? 'шт.' : 'dona';
+  }
+  const clean = unit.trim().toLowerCase();
+  const entry = UNIT_TRANSLATIONS[clean];
+  if (entry) {
+    return entry[language] || (language === 'ru' ? entry.ru : entry.uz);
+  }
+  return unit;
+}
+
+export const CATEGORY_FALLBACK_TRANSLATIONS: Record<string, { uz: string; ru: string }> = {
+  avtokimyo: { uz: 'Avtokimyo', ru: 'Автохимия' },
+  'maishiy-kimyo': { uz: 'Maishiy kimyo', ru: 'Бытовая химия' },
+  gigiyena: { uz: 'Gigiyena', ru: 'Гигиена' },
+  kanselyariya: { uz: 'Kanselyariya', ru: 'Канцелярия' },
+  'himoya-vositalari': { uz: 'Himoya vositalari', ru: 'Средства защиты' },
+  'tekstil-mahsulotlari': { uz: 'Tekstil mahsulotlari', ru: 'Текстиль' },
+  tekstil: { uz: 'Tekstil', ru: 'Текстиль' },
+  avtoximiya: { uz: 'Avtokimyo', ru: 'Автохимия' },
+};
+

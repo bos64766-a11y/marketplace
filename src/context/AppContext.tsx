@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Product, Category, CartItem, RequestOrder, UserProfile, ToastNotification, SiteSettings, BannerSlide, HomeShowcaseSection, Partner, Language } from '../types';
-import { translations, Translations } from '../i18n/translations';
+import { translations, Translations, formatUnit as formatUnitHelper, CATEGORY_FALLBACK_TRANSLATIONS } from '../i18n/translations';
 import { PRODUCTS as INITIAL_PRODUCTS } from '../data/products';
 import { CATEGORIES as INITIAL_CATEGORIES } from '../data/categories';
 import { PARTNERS as DEFAULT_PARTNERS } from '../data/content';
@@ -97,9 +97,10 @@ interface AppContextType {
   setLanguage: (lang: Language) => void;
   t: Translations;
   getProductName: (product: Product) => string;
-  getCategoryName: (category: Category) => string;
+  getCategoryName: (categoryOrId?: Category | string | null) => string;
   getProductDesc: (product: Product) => string;
   getProductTag: (product: Product) => string | undefined;
+  formatUnit: (unit?: string | null, customLang?: Language) => string;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -269,11 +270,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return p.name;
   };
 
-  const getCategoryName = (c: Category): string => {
-    if (language === 'ru' && c.name_ru?.trim()) {
-      return c.name_ru.trim();
+  const formatUnit = (unit?: string | null, customLang?: Language): string => {
+    return formatUnitHelper(unit, customLang || language);
+  };
+
+  const getCategoryName = (categoryOrId?: Category | string | null): string => {
+    if (!categoryOrId) return '';
+    let cat: Category | undefined;
+    if (typeof categoryOrId === 'string') {
+      const cleanStr = categoryOrId.trim();
+      cat = categories.find(
+        (c) => c.id === cleanStr || c.slug === cleanStr || c.name.toLowerCase() === cleanStr.toLowerCase()
+      );
+      if (!cat) {
+        const cleanLower = cleanStr.toLowerCase();
+        if (language === 'ru' && CATEGORY_FALLBACK_TRANSLATIONS[cleanLower]) {
+          return CATEGORY_FALLBACK_TRANSLATIONS[cleanLower].ru;
+        }
+        return cleanStr;
+      }
+    } else {
+      cat = categoryOrId;
     }
-    return c.name;
+
+    if (language === 'ru') {
+      if (cat.name_ru?.trim()) {
+        return cat.name_ru.trim();
+      }
+      const slugKey = (cat.slug || cat.id || '').toLowerCase().trim();
+      if (CATEGORY_FALLBACK_TRANSLATIONS[slugKey]) {
+        return CATEGORY_FALLBACK_TRANSLATIONS[slugKey].ru;
+      }
+      const nameKey = cat.name.toLowerCase().trim();
+      if (CATEGORY_FALLBACK_TRANSLATIONS[nameKey]) {
+        return CATEGORY_FALLBACK_TRANSLATIONS[nameKey].ru;
+      }
+    }
+    return cat.name;
   };
 
   const getProductDesc = (p: Product): string => {
@@ -1344,6 +1377,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         getCategoryName,
         getProductDesc,
         getProductTag,
+        formatUnit,
       }}
     >
       {children}

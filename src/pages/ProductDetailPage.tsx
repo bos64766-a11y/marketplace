@@ -40,6 +40,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
     getProductDesc,
     getProductTag,
     getCategoryName,
+    formatUnit,
   } = useApp();
 
   const product = products.find((p) => p.slug === slug || p.id === slug);
@@ -73,7 +74,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
 
   const favorite = isFavorite(product.id);
   const currentCategory = categories.find((c) => c.id === product.categoryId || c.slug === product.categoryId);
-  const categoryDisplayName = currentCategory ? getCategoryName(currentCategory) : product.categoryName;
+  const categoryDisplayName = currentCategory
+    ? getCategoryName(currentCategory)
+    : getCategoryName(product.categoryId || product.categoryName);
   const productName = getProductName(product);
   const productDesc = getProductDesc(product);
   const productTag = getProductTag(product);
@@ -229,13 +232,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="text-[#64748B] shrink-0">{language === 'ru' ? 'Единица изм.' : 'O‘lchov birligi'}</span>
                   <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
-                  <span className="font-bold text-[#1E293B] text-right">{product.unit || (language === 'ru' ? 'шт' : 'dona')}</span>
+                  <span className="font-bold text-[#1E293B] text-right">{formatUnit(product.unit)}</span>
                 </div>
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="text-[#64748B] shrink-0">{t.productCard.minOrder}</span>
                   <span className="border-b border-dotted border-[#CBD5E1] flex-1 mx-2" />
                   <span className="font-bold text-[#1E293B] text-right">
-                    {product.minOrder || 1} {product.unit || (language === 'ru' ? 'шт' : 'dona')}
+                    {product.minOrder || 1} {formatUnit(product.unit)}
                   </span>
                 </div>
                 {Object.entries(product.specifications || {}).map(([key, val]) => (
@@ -275,7 +278,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                   <span className="text-sm font-semibold text-[#64748B]">{t.productCard.sum}</span>
                 </div>
                 <div className="text-[11px] text-[#64748B] font-medium mt-1">
-                  1 {product.unit || (language === 'ru' ? 'шт' : 'dona')} {language === 'ru' ? 'цена' : 'uchun narx'}
+                  {language === 'ru'
+                    ? `Цена за 1 ${formatUnit(product.unit, 'ru')}`
+                    : `1 ${formatUnit(product.unit, 'uz')} uchun narx`}
                 </div>
               </div>
 
@@ -294,8 +299,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span className="w-12 text-center font-bold text-xs text-[#1E293B]">
-                      {quantity} {product.unit || (language === 'ru' ? 'шт' : 'dona')}
+                    <span className="w-16 text-center font-bold text-xs text-[#1E293B] truncate px-1">
+                      {quantity} {formatUnit(product.unit)}
                     </span>
                     <button
                       id="btn-qty-plus"
