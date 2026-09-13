@@ -425,8 +425,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [products]);
 
   const addProduct = async (productData: Omit<Product, 'id'>): Promise<Product> => {
+    const tempId = `snb-${Date.now()}`;
     const generatedSku = productData.sku?.trim() || `SNB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const generatedSlug = productData.slug?.trim() || productData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || `prod-${Date.now()}`;
+
+    const localProduct: Product = {
+      ...productData,
+      id: tempId,
+      sku: generatedSku,
+      slug: generatedSlug,
+    };
 
     try {
       const serverProduct = await api.createProduct({
@@ -446,6 +454,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       throw new Error('Serverdan kutilmagan javob qaytdi');
     } catch (err: any) {
       console.error('API product create error:', err);
+      // Agar Vercel yoki statik hostda backend yo'q bo'lsa (405 Method Not Allowed / 404):
+      if (err?.message?.includes('405') || err?.message?.includes('404') || err?.message?.includes('Failed to fetch')) {
+        setProducts((prev) => [localProduct, ...prev]);
+        notifySync();
+        showToast(`✓ Mahsulot saqlandi (Faqat ushbu brauzerda. Sababi: Serverda Django backend ulanmagan: ${err.message})`, 'info');
+        return localProduct;
+      }
       const errMsg = err?.message || 'Serverga ulanishda xatolik yuz berdi';
       showToast(`Xatolik: Mahsulot serverda saqlanmadi (${errMsg})`, 'error');
       throw err;
@@ -466,6 +481,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       notifySync();
     } catch (err: any) {
       console.error('API product update error:', err);
+      if (err?.message?.includes('405') || err?.message?.includes('404') || err?.message?.includes('Failed to fetch')) {
+        setProducts((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, ...updated } : item))
+        );
+        notifySync();
+        showToast('✓ Mahsulot yangilandi (mahalliy xotirada)', 'info');
+        return;
+      }
       const errMsg = err?.message || 'Serverda xatolik yuz berdi';
       showToast(`Xatolik: Mahsulot yangilanmadi (${errMsg})`, 'error');
       throw err;
@@ -481,6 +504,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       notifySync();
     } catch (err: any) {
       console.error('API product delete error:', err);
+      if (err?.message?.includes('405') || err?.message?.includes('404') || err?.message?.includes('Failed to fetch')) {
+        setProducts((prev) => prev.filter((p) => p.id !== id));
+        notifySync();
+        showToast(`Mahsulot "${target?.name || id}" o‘chirildi (mahalliy)`, 'info');
+        return;
+      }
       showToast(`Xatolik: Mahsulotni o'chirishda xatolik yuz berdi`, 'error');
       throw err;
     }
