@@ -1,0 +1,255 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-09-14T13:46:26.408818",
+  "source": "https://marketplace-0ycw.onrender.com/api",
+  "data": {
+    "categories": [
+      {
+        "id": "avtokimyo",
+        "slug": "avtokimyo",
+        "name": "Avtokimyo",
+        "name_ru": "",
+        "icon": "Car",
+        "image": "https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=300&auto=format&fit=crop&q=80",
+        "description": "Avtoshampunlar, oynayuvgichlar, antifrizlar va avtoservis kimyolari",
+        "description_ru": "",
+        "count": 0
+      },
+      {
+        "id": "maishiy-kimyo",
+        "slug": "maishiy-kimyo",
+        "name": "Maishiy kimyo",
+        "name_ru": "",
+        "icon": "Sparkles",
+        "image": "https://images.unsplash.com/photo-1585421514738-01798e348b17?w=300&auto=format&fit=crop&q=80",
+        "description": "Professional yuvish va tozalash vositalari, suyuq sovunlar, xlorli eritmalar",
+        "description_ru": "",
+        "count": 0
+      },
+      {
+        "id": "gigiyena",
+        "slug": "gigiyena",
+        "name": "Gigiyena",
+        "name_ru": "",
+        "icon": "HeartHandshake",
+        "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&auto=format&fit=crop&q=80",
+        "description": "Qog‘oz sochiqlar, tualet qog‘ozlari, dispenserlar, antiseptiklar",
+        "description_ru": "",
+        "count": 0
+      },
+      {
+        "id": "kanselyariya",
+        "slug": "kanselyariya",
+        "name": "Kanselyariya",
+        "name_ru": "",
+        "icon": "FileSpreadsheet",
+        "image": "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=300&auto=format&fit=crop&q=80",
+        "description": "A4 qog‘ozlari, papkalar, ruchkalar, ofis uchun sarflov materiallari",
+        "description_ru": "",
+        "count": 0
+      },
+      {
+        "id": "himoya-vositalari",
+        "slug": "himoya-vositalari",
+        "name": "Himoya vositalari",
+        "name_ru": "",
+        "icon": "HardHat",
+        "image": "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=300&auto=format&fit=crop&q=80",
+        "description": "Qo‘lqoplar, himoya ko‘zoynaklari, respiratorlar va kaskalar",
+        "description_ru": "",
+        "count": 0
+      },
+      {
+        "id": "tekstil-mahsulotlari",
+        "slug": "tekstil-mahsulotlari",
+        "name": "Tekstil",
+        "name_ru": "",
+        "icon": "Shirt",
+        "image": "https://images.unsplash.com/photo-1600369672770-985fd30004eb?w=300&auto=format&fit=crop&q=80",
+        "description": "Mikrofibra salfetkalar, mopplar, ishchi xalatlari va fartuklar",
+        "description_ru": "",
+        "count": 0
+      }
+    ],
+    "products": [],
+    "showcase-sections": [
+      {
+        "id": 7,
+        "title": "Ofislar uchun",
+        "subtitle": "Kantselyariya, gigiyena va ofis kundalik sarflov vositalari",
+        "badge": "",
+        "icon": "Building2",
+        "link": "/catalog/kanselyariya",
+        "productIds": [
+          "snb-012",
+          "snb-004",
+          "snb-001",
+          "snb-tellux-zz2-comfort",
+          "snb-tellux-z2-towels",
+          "snb-glade-aerosol-300"
+        ],
+        "order": 1,
+        "isActive": true
+      },
+      {
+        "id": 8,
+        "title": "Restoran va mehmonxonalar uchun",
+        "subtitle": "HoReCa professional tozalash, idish yuvish va SanPiN talablariga mos vositalar",
+        "badge": "",
+        "icon": "Building2",
+        "link": "/catalog/maishiy-kimyo",
+        "productIds": [
+          "snb-napkins-elma-33",
+          "snb-toilet-paper-mini-2ply",
+          "snb-toilet-paper-giant-roll",
+          "snb-grass-dos-toilet-block",
+          "snb-grass-steel-cleaner",
+          "snb-001"
+        ],
+        "order": 2,
+        "isActive": true
+      },
+      {
+        "id": 9,
+        "title": "Klining kompaniyalari uchun",
+        "subtitle": "Professional tozalash kimyolari, konsentratlar va mikrofibra inventarlari",
+        "badge": "",
+        "icon": "Building2",
+        "link": "/catalog/maishiy-kimyo",
+        "productIds": [
+          "snb-grass-antigraffiti",
+          "snb-vanish-carpet-gold",
+          "snb-grass-polyrole-matte",
+          "snb-vanish-oxi-500",
+          "snb-plastic-bucket",
+          "snb-gloves-latex-korea"
+        ],
+        "order": 3,
+        "isActive": true
+      }
+    ],
+    "banners": [
+      {
+        "id": 1,
+        "badge": "",
+        "title": "Tozalik yechimlari aksiyasi",
+        "description": "",
+        "btnText": "",
+        "btnLink": "/catalog/maishiy-kimyo",
+        "image": "/media/banners/banner_a857681b07.png",
+        "imageAlt": "",
+        "order": 1,
+        "isActive": true,
+        "created_at": "2026-09-06T15:02:43.595000+05:00",
+        "updated_at": "2026-09-06T15:37:11.504000+05:00"
+      },
+      {
+        "id": 2,
+        "badge": "",
+        "title": "ChatGPT Image Sep 6, 2026, 03_34_04 PM",
+        "description": "",
+        "btnText": "",
+        "btnLink": "/catalog",
+        "image": "/media/banners/banner_239412022d.png",
+        "imageAlt": "",
+        "order": 2,
+        "isActive": true,
+        "created_at": "2026-09-06T15:37:35.780000+05:00",
+        "updated_at": "2026-09-06T15:37:35.780000+05:00"
+      }
+    ],
+    "settings": {
+      "companyName": "SNABTASH B2B",
+      "phone1": "+998 87 034 97 79",
+      "phone2": "+998 90 123 45 67",
+      "email": "info@snabtash.uz",
+      "telegramBot": "@snabtash_bot",
+      "telegramChannel": "https://t.me/snabtash",
+      "address": "Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy",
+      "workHours": "Dush - Shan: 08:30 - 18:30",
+      "inn": "309871234",
+      "mfo": "00440",
+      "bankAccount": "20208000900123456001",
+      "bankName": "ATB \"Kapitalbank\" Chilonzor filiali",
+      "freeDeliveryThreshold": 500000.0,
+      "deliveryCost": 35000.0,
+      "bannerHeadline": "Korxonangiz Uchun Barcha Ta’minot",
+      "bannerSubtitle": "Ishingiz uchun sifatli klining kimyolari, xo‘jalik mollari va gigiyena tovarlarini to‘g‘ridan-to‘g‘ri ombordan oling.",
+      "bannerDiscountBadge": "Maxsus B2B Taklif • 20% Chegirma"
+    },
+    "partners": [
+      {
+        "id": 1,
+        "name": "Pepsi",
+        "logo": "/partners/pepsi.png",
+        "category": "Ichimliklar & Oziq-ovqat",
+        "order": 1,
+        "created_at": "2026-09-09T15:27:56.028000+05:00",
+        "updated_at": "2026-09-09T15:27:56.028000+05:00"
+      },
+      {
+        "id": 2,
+        "name": "Coca-Cola",
+        "logo": "/partners/coca-cola.png",
+        "category": "Xalqaro brend",
+        "order": 2,
+        "created_at": "2026-09-09T15:27:56.033000+05:00",
+        "updated_at": "2026-09-09T15:27:56.033000+05:00"
+      },
+      {
+        "id": 3,
+        "name": "Artel Electronics",
+        "logo": "/partners/artel.png",
+        "category": "Maishiy texnika",
+        "order": 3,
+        "created_at": "2026-09-09T15:27:56.038000+05:00",
+        "updated_at": "2026-09-09T15:27:56.038000+05:00"
+      },
+      {
+        "id": 4,
+        "name": "BETOMAX",
+        "logo": "",
+        "category": "Beton & Qurilish",
+        "order": 4,
+        "created_at": "2026-09-09T15:27:56.042000+05:00",
+        "updated_at": "2026-09-09T15:27:56.042000+05:00"
+      },
+      {
+        "id": 5,
+        "name": "BINOKOR",
+        "logo": "",
+        "category": "Temir-beton majmuasi",
+        "order": 5,
+        "created_at": "2026-09-09T15:27:56.044000+05:00",
+        "updated_at": "2026-09-09T15:27:56.044000+05:00"
+      },
+      {
+        "id": 6,
+        "name": "AGROMIR",
+        "logo": "",
+        "category": "Agro holding",
+        "order": 6,
+        "created_at": "2026-09-09T15:27:56.048000+05:00",
+        "updated_at": "2026-09-09T15:27:56.048000+05:00"
+      },
+      {
+        "id": 7,
+        "name": "UZTELECOM",
+        "logo": "",
+        "category": "Telekom & Aloqa",
+        "order": 7,
+        "created_at": "2026-09-09T15:27:56.052000+05:00",
+        "updated_at": "2026-09-09T15:27:56.052000+05:00"
+      },
+      {
+        "id": 8,
+        "name": "Beta Plus",
+        "logo": "",
+        "category": "Ishlab chiqarish",
+        "order": 8,
+        "created_at": "2026-09-09T15:27:56.055000+05:00",
+        "updated_at": "2026-09-09T15:27:56.055000+05:00"
+      }
+    ]
+  }
+}
