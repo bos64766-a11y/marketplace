@@ -523,8 +523,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const generatedSku = productData.sku?.trim() || `SNB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const generatedSlug = productData.slug?.trim() || productData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || `prod-${Date.now()}`;
 
-    const localProduct: Product = {
+    const resolvedCatId = productData.categoryId?.trim() || categories[0]?.id || categories[0]?.slug || 'maishiy-kimyo';
+    const catObj = categories.find((c) => c.id === resolvedCatId || c.slug === resolvedCatId);
+    const resolvedCatName = catObj?.name || productData.categoryName || '';
+
+    const enrichedProductData: Omit<Product, 'id'> = {
       ...productData,
+      categoryId: resolvedCatId,
+      categoryName: resolvedCatName,
+    };
+
+    const localProduct: Product = {
+      ...enrichedProductData,
       id: tempId,
       sku: generatedSku,
       slug: generatedSlug,
@@ -532,10 +542,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     try {
       const serverProduct = await api.createProduct({
-        ...productData,
+        ...enrichedProductData,
         sku: generatedSku,
         slug: generatedSlug,
-        category_id: productData.categoryId,
+        category_id: resolvedCatId,
         images_list: productData.images,
       } as any);
 
@@ -582,11 +592,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateProduct = async (id: string, updated: Partial<Product>) => {
     try {
-      const serverProduct = await api.updateProduct(id, {
+      const payload: any = {
         ...updated,
-        category_id: updated.categoryId,
         images_list: updated.images,
-      } as any);
+      };
+      if (updated.categoryId && updated.categoryId.trim()) {
+        payload.category_id = updated.categoryId.trim();
+      }
+      const serverProduct = await api.updateProduct(id, payload);
       setProducts((prev) => {
         const next = prev.map((item) => (item.id === id ? { ...item, ...serverProduct } : item));
         try {

@@ -200,7 +200,13 @@ export const AdminProducts: React.FC = () => {
     setUploadError('');
     setShowUrlInput(false);
     setSingleUrlInput('');
-    setFormData(EMPTY_PRODUCT);
+    const defaultCat = categories[0]?.id || categories[0]?.slug || '';
+    const defaultCatName = categories[0]?.name || '';
+    setFormData({
+      ...EMPTY_PRODUCT,
+      categoryId: defaultCat,
+      categoryName: defaultCatName,
+    });
     setSpecsInput('');
     setImageUrlInput('');
     setIsModalOpen(true);
@@ -248,6 +254,11 @@ export const AdminProducts: React.FC = () => {
 
   // Save handler
   const handleSave = async () => {
+    if (!formData.name?.trim()) {
+      alert("Iltimos, mahsulot nomini kiriting!");
+      return;
+    }
+
     // Parse specs
     const specs: Record<string, string> = {};
     specsInput.split('\n').forEach((line) => {
@@ -265,13 +276,15 @@ export const AdminProducts: React.FC = () => {
             .map((s) => s.trim())
             .filter(Boolean);
 
-    const catObj = categories.find((c) => c.id === formData.categoryId || c.slug === formData.categoryId);
+    const resolvedCatId = formData.categoryId?.trim() || categories[0]?.id || categories[0]?.slug || 'maishiy-kimyo';
+    const catObj = categories.find((c) => c.id === resolvedCatId || c.slug === resolvedCatId) || categories[0];
 
     const productData: Omit<Product, 'id'> = {
       ...formData,
+      categoryId: catObj?.id || catObj?.slug || resolvedCatId,
+      categoryName: catObj?.name || formData.categoryName || '',
       specifications: specs,
       images,
-      categoryName: catObj?.name || formData.categoryName || '',
     };
 
     try {
@@ -630,13 +643,19 @@ export const AdminProducts: React.FC = () => {
                 <div>
                   <label className="block text-[11px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Kategoriya *</label>
                   <select
-                    value={formData.categoryId}
-                    onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                    value={formData.categoryId || categories[0]?.id || categories[0]?.slug || ''}
+                    onChange={(e) => {
+                      const selectedCat = categories.find((c) => c.id === e.target.value || c.slug === e.target.value);
+                      setFormData({
+                        ...formData,
+                        categoryId: e.target.value,
+                        categoryName: selectedCat?.name || formData.categoryName,
+                      });
+                    }}
                     className="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00] transition-colors cursor-pointer"
                   >
-                    <option value="">Kategoriyani tanlang</option>
                     {categories.map((cat) => (
-                      <option key={cat.id} value={cat.slug}>
+                      <option key={cat.id} value={cat.id || cat.slug}>
                         {cat.name} {cat.name_ru ? `(${cat.name_ru})` : ''}
                       </option>
                     ))}

@@ -48,7 +48,7 @@ class ProductSerializer(serializers.ModelSerializer):
         queryset=Category.objects.all(), write_only=True, required=False
     )
     # Allow writing category by ID (both camelCase and snake_case)
-    category_id = serializers.CharField(write_only=True, required=False)
+    category_id = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     sku = serializers.CharField(required=False, allow_blank=True)
     name_ru = serializers.CharField(required=False, allow_blank=True)
     description_ru = serializers.CharField(required=False, allow_blank=True)
@@ -120,12 +120,15 @@ class ProductSerializer(serializers.ModelSerializer):
             validated_data.pop('images_list', None)
 
         cat_id = validated_data.pop('category_id', None)
-        if not cat_id and 'categoryId' in self.initial_data:
+        if (not cat_id or not str(cat_id).strip()) and 'categoryId' in self.initial_data:
             cat_id = self.initial_data.get('categoryId')
+        if (not cat_id or not str(cat_id).strip()) and 'category_id' in self.initial_data:
+            cat_id = self.initial_data.get('category_id')
 
-        if cat_id and not validated_data.get('category'):
+        if cat_id and str(cat_id).strip() and not validated_data.get('category'):
+            clean_cat = str(cat_id).strip()
             try:
-                validated_data['category'] = Category.objects.get(Q(id=cat_id) | Q(slug=cat_id))
+                validated_data['category'] = Category.objects.get(Q(id=clean_cat) | Q(slug=clean_cat))
             except Category.DoesNotExist:
                 cat = Category.objects.first()
                 if cat:
@@ -168,13 +171,16 @@ class ProductSerializer(serializers.ModelSerializer):
             validated_data.pop('images_list', None)
 
         cat_id = validated_data.pop('category_id', None)
-        if not cat_id and 'categoryId' in self.initial_data:
+        if (not cat_id or not str(cat_id).strip()) and 'categoryId' in self.initial_data:
             cat_id = self.initial_data.get('categoryId')
+        if (not cat_id or not str(cat_id).strip()) and 'category_id' in self.initial_data:
+            cat_id = self.initial_data.get('category_id')
 
-        if cat_id:
+        if cat_id and str(cat_id).strip():
+            clean_cat = str(cat_id).strip()
             try:
                 from django.db.models import Q
-                instance.category = Category.objects.get(Q(id=cat_id) | Q(slug=cat_id))
+                instance.category = Category.objects.get(Q(id=clean_cat) | Q(slug=clean_cat))
             except Category.DoesNotExist:
                 pass
 
