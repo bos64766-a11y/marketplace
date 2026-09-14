@@ -40,16 +40,32 @@ def run_restore():
         print(f"[XATO] Migratsiyada xatolik: {e}")
         sys.exit(1)
 
-    # 2. Loaddata
-    print("\n2. Zaxiradagi barcha ma'lumotlarni yuklash (loaddata)...")
+    # 2. Check if database already has products - NEVER OVERWRITE EXISTING USER DATA!
+    try:
+        check_cmd = [
+            sys.executable,
+            os.path.join(backend_dir, "manage.py"),
+            "shell",
+            "-c",
+            "from apps.products.models import Product; import sys; sys.exit(0 if Product.objects.count() == 0 else 42)"
+        ]
+        res = subprocess.run(check_cmd, cwd=backend_dir)
+        if res.returncode == 42:
+            print("\n[HIMOYA] Baza bo'sh emas (mahsulotlar allaqachon mavjud).")
+            print("[HIMOYA] Yangi kiritilgan mahsulotlar o'chib ketmasligi uchun zaxiradan qayta yuklanmadi.")
+            return
+    except Exception as e:
+        print(f"[OGOHLANTIRISH] Baza tekshirishda ogohlantirish: {e}")
+
+    # 3. Loaddata only if database is completely empty
+    print("\n2. Yangi bazaga dastlabki ma'lumotlarni yuklash (loaddata)...")
     try:
         subprocess.run(
             [sys.executable, "-Xutf8", os.path.join(backend_dir, "manage.py"), "loaddata", backup_file],
             cwd=backend_dir,
             check=True
         )
-        print("\n[MUVAFFAQIN] Barcha ma'lumotlar muvaffaqiyatli tiklandi!")
-        print("[INFO] Mahsulotlar, toifalar, bannerlar, sayt sozlamalari va admin akkaunti faol holatga keltirildi.")
+        print("\n[MUVAFFAQIN] Dastlabki ma'lumotlar muvaffaqiyatli yuklandi!")
     except subprocess.CalledProcessError as e:
         print(f"[XATO] Ma'lumotlarni yuklashda xatolik: {e}")
         sys.exit(1)

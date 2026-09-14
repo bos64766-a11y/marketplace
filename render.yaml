@@ -12,3 +12,14 @@ services:
         value: "False"
       - key: ALLOWED_HOSTS
         value: "*"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: snabtash-db
+          property: connectionString
+
+databases:
+  - name: snabtash-db
+    databaseName: snabtash
+    user: snabtash_user
+    plan: free
+

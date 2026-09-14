@@ -24,6 +24,9 @@ import {
   Star,
   Check,
   Link as LinkIcon,
+  Download,
+  HardDrive,
+  RefreshCw,
 } from 'lucide-react';
 import type { Product } from '../../types';
 
@@ -63,6 +66,9 @@ export const AdminProducts: React.FC = () => {
     updateProduct,
     deleteProduct,
     toggleProductStock,
+    exportBackupJSON,
+    restoreFromArchive,
+    archiveStats,
   } = useApp();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -296,14 +302,50 @@ export const AdminProducts: React.FC = () => {
               Barcha tovarlar, narxlar va ombor holati ({products.length} ta mahsulot)
             </p>
           </div>
-          <button
-            onClick={openAddModal}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#FF5A00] hover:bg-[#e04f00] text-white text-xs font-bold transition-all shadow-md shadow-[#FF5A00]/25 cursor-pointer shrink-0"
-          >
-            <Plus className="w-4 h-4" />
-            Yangi Mahsulot
-          </button>
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={exportBackupJSON}
+              title="Barcha tovarlar zaxirasini yuklab olish"
+              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl border border-[#E2E8F0] hover:border-[#FF5A00] bg-white text-[#475569] hover:text-[#FF5A00] text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Zaxira (.json)</span>
+            </button>
+            <button
+              onClick={openAddModal}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#FF5A00] hover:bg-[#e04f00] text-white text-xs font-bold transition-all shadow-md shadow-[#FF5A00]/25 cursor-pointer shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              Yangi Mahsulot
+            </button>
+          </div>
         </div>
+
+        {/* Rescue Card if Archive has more products than active list */}
+        {archiveStats.productsCount > products.length && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                <HardDrive className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-amber-950">
+                  Arxivda {archiveStats.productsCount} ta mahsulot topildi (hozir ro'yxatda {products.length} ta)
+                </h4>
+                <p className="text-[11px] text-amber-800 mt-0.5">
+                  Server qayta ishga tushganda mahsulotlar asl holatiga qaytgan bo'lsa, ushbu tugma orqali barcha {archiveStats.productsCount} ta mahsulotingizni darhol tiklashingiz mumkin!
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={restoreFromArchive}
+              className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0 flex items-center gap-2"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Barchasini Qayta Tiklash ({archiveStats.productsCount} ta)</span>
+            </button>
+          </div>
+        )}
 
         {/* Quick Stats Pills */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
