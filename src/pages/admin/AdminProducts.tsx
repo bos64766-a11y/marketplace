@@ -65,6 +65,7 @@ export const AdminProducts: React.FC = () => {
     addProduct,
     updateProduct,
     deleteProduct,
+    clearAllProducts,
     toggleProductStock,
     exportBackupJSON,
     restoreFromArchive,
@@ -78,6 +79,8 @@ export const AdminProducts: React.FC = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState<Omit<Product, 'id'>>(EMPTY_PRODUCT);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [isClearAllModalOpen, setIsClearAllModalOpen] = useState(false);
+  const [dismissRescue, setDismissRescue] = useState(false);
   const [specsInput, setSpecsInput] = useState('');
   const [imageUrlInput, setImageUrlInput] = useState('');
 
@@ -303,6 +306,16 @@ export const AdminProducts: React.FC = () => {
             </p>
           </div>
           <div className="flex items-center gap-2.5">
+            {products.length > 0 && (
+              <button
+                onClick={() => setIsClearAllModalOpen(true)}
+                title="Barcha mahsulotlarni o'chirish (tozalash)"
+                className="flex items-center gap-1.5 px-3 py-2.5 rounded-2xl border border-rose-200 hover:border-rose-400 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                <span>Tozalash (0 ta qilish)</span>
+              </button>
+            )}
             <button
               onClick={exportBackupJSON}
               title="Barcha tovarlar zaxirasini yuklab olish"
@@ -321,29 +334,38 @@ export const AdminProducts: React.FC = () => {
           </div>
         </div>
 
-        {/* Rescue Card if Archive has more products than active list */}
-        {archiveStats.productsCount > products.length && (
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
-            <div className="flex items-center gap-3">
+        {/* Rescue Card if Archive has more products than active list and not dismissed */}
+        {archiveStats.productsCount > products.length && !dismissRescue && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs relative">
+            <div className="flex items-center gap-3 pr-8">
               <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
                 <HardDrive className="w-5 h-5" />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-amber-950">
-                  Arxivda {archiveStats.productsCount} ta mahsulot topildi (hozir ro'yxatda {products.length} ta)
+                  Eski zaxirada {archiveStats.productsCount} ta mahsulot topildi (hozir ro'yxatda {products.length} ta)
                 </h4>
                 <p className="text-[11px] text-amber-800 mt-0.5">
-                  Server qayta ishga tushganda mahsulotlar asl holatiga qaytgan bo'lsa, ushbu tugma orqali barcha {archiveStats.productsCount} ta mahsulotingizni darhol tiklashingiz mumkin!
+                  Agar eski tovarlarni qaytarmoqchi bo'lsangiz tiklashingiz mumkin. Yangi tovarlarni noldan kiritayotgan bo'lsangiz buni yopib qo'yishingiz mumkin.
                 </p>
               </div>
             </div>
-            <button
-              onClick={restoreFromArchive}
-              className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0 flex items-center gap-2"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Barchasini Qayta Tiklash ({archiveStats.productsCount} ta)</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={restoreFromArchive}
+                className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0 flex items-center gap-2"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Qayta Tiklash</span>
+              </button>
+              <button
+                onClick={() => setDismissRescue(true)}
+                className="px-3 py-2 rounded-xl bg-white border border-amber-300 text-amber-800 text-xs font-semibold hover:bg-amber-100 transition-all cursor-pointer"
+                title="Yopish"
+              >
+                Yopish
+              </button>
+            </div>
           </div>
         )}
 
@@ -980,6 +1002,39 @@ export const AdminProducts: React.FC = () => {
                 className="px-5 py-2.5 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] text-white text-xs font-bold cursor-pointer transition-colors"
               >
                 Ha, o'chirish
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Clear All Confirmation Modal */}
+      {isClearAllModalOpen && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center px-4">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-xs" onClick={() => setIsClearAllModalOpen(false)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full z-10 text-center">
+            <div className="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center mx-auto mb-3">
+              <Trash2 className="w-6 h-6 text-rose-600" />
+            </div>
+            <h3 className="text-base font-bold text-[#0F172A] mb-1">Barcha mahsulotlarni tozalash</h3>
+            <p className="text-xs text-[#64748B] mb-5">
+              Haqiqatan ham barcha {products.length} ta mahsulotni bazadan butunlay o'chirib, ro'yxatni 0 ta qilmoqchimisiz?
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={() => setIsClearAllModalOpen(false)}
+                className="px-5 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-bold text-[#64748B] hover:bg-[#F1F5F9] cursor-pointer transition-colors"
+              >
+                Bekor qilish
+              </button>
+              <button
+                onClick={async () => {
+                  setIsClearAllModalOpen(false);
+                  await clearAllProducts();
+                }}
+                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold cursor-pointer transition-colors"
+              >
+                Ha, barchasini tozalash
               </button>
             </div>
           </div>

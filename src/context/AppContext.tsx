@@ -16,6 +16,7 @@ interface AppContextType {
   addProduct: (productData: Omit<Product, 'id'>) => Promise<Product>;
   updateProduct: (id: string, updated: Partial<Product>) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
+  clearAllProducts: () => Promise<void>;
   toggleProductStock: (id: string) => void;
   resetProductsToDefault: () => void;
 
@@ -351,15 +352,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch {}
   };
 
-  // Dynamic Products state (persisted to localStorage)
+  // Dynamic Products state (persisted to localStorage, server is source of truth)
   const [products, setProducts] = useState<Product[]>(() => {
     try {
       const saved = localStorage.getItem('snabtash_admin_products');
-      if (saved) return JSON.parse(saved);
+      if (saved !== null) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
     } catch {
       // fallback
     }
-    return INITIAL_PRODUCTS;
+    return [];
   });
 
   // Archive Stats state for UI
@@ -409,53 +413,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         api.getPartners(),
       ]);
 
-      if (prodsRes.status === 'fulfilled' && Array.isArray(prodsRes.value) && prodsRes.value.length > 0) {
+      if (prodsRes.status === 'fulfilled' && Array.isArray(prodsRes.value)) {
         const serverProducts = prodsRes.value;
-        const deletedProductIds = getDeletedIds('snabtash_deleted_product_ids');
-
-        setProducts((currentProducts) => {
-          const serverIdSet = new Set(serverProducts.map((p) => String(p.id)));
-          const serverSkuSet = new Set(serverProducts.map((p) => p.sku?.trim().toUpperCase()).filter(Boolean));
-
-          // Retain any locally added product that is NOT explicitly deleted by the user
-          // and is not yet in the server's response
-          const missingOnServer = currentProducts.filter((p) => {
-            if (deletedProductIds.has(String(p.id))) return false;
-            const idMatch = serverIdSet.has(String(p.id));
-            const skuMatch = p.sku ? serverSkuSet.has(p.sku.trim().toUpperCase()) : false;
-            return !idMatch && !skuMatch;
-          });
-
-          if (missingOnServer.length > 0) {
-            console.warn(`[SNABTASH RESCUE] Preserving ${missingOnServer.length} local products not on server & auto-uploading...`);
-            missingOnServer.forEach((missing) => {
-              api.createProduct({
-                ...missing,
-                category_id: missing.categoryId,
-                images_list: missing.images,
-              } as any).catch(() => {});
-            });
-
-            const merged = [...serverProducts, ...missingOnServer];
-            try {
-              localStorage.setItem('snabtash_admin_products', JSON.stringify(merged));
-              localStorage.setItem('snabtash_products_archive', JSON.stringify(merged));
-            } catch {}
-            updateArchiveStats();
-            return merged;
-          }
-
-          try {
-            localStorage.setItem('snabtash_admin_products', JSON.stringify(serverProducts));
-            const existingArchive = localStorage.getItem('snabtash_products_archive');
-            const archiveCount = existingArchive ? JSON.parse(existingArchive).length : 0;
-            if (serverProducts.length >= archiveCount) {
-              localStorage.setItem('snabtash_products_archive', JSON.stringify(serverProducts));
-            }
-          } catch {}
-          updateArchiveStats();
-          return serverProducts;
-        });
+        setProducts(serverProducts);
+        try {
+          localStorage.setItem('snabtash_admin_products', JSON.stringify(serverProducts));
+        } catch {}
+        updateArchiveStats();
       }
 
       if (catsRes.status === 'fulfilled' && Array.isArray(catsRes.value) && catsRes.value.length > 0) {
@@ -482,45 +446,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       if (sectRes.status === 'fulfilled' && Array.isArray(sectRes.value)) {
         const serverSections = sectRes.value;
-        const deletedSectionIds = getDeletedIds('snabtash_deleted_section_ids');
-
-        setShowcaseSections((currentSections) => {
-          const serverIdSet = new Set(serverSections.map((s) => String(s.id)));
-          const serverTitleSet = new Set(serverSections.map((s) => s.title.trim().toLowerCase()));
-
-          const missingOnServer = currentSections.filter((s) => {
-            if (deletedSectionIds.has(String(s.id))) return false;
-            const idMatch = serverIdSet.has(String(s.id));
-            const titleMatch = serverTitleSet.has(s.title.trim().toLowerCase());
-            return !idMatch && !titleMatch;
-          });
-
-          if (missingOnServer.length > 0) {
-            console.warn(`[SNABTASH RESCUE] Preserving ${missingOnServer.length} local showcase sections & auto-uploading...`);
-            missingOnServer.forEach((missing) => {
-              api.createShowcaseSection(missing).catch(() => {});
-            });
-
-            const merged = [...serverSections, ...missingOnServer];
-            try {
-              localStorage.setItem('snabtash_showcase_sections', JSON.stringify(merged));
-              localStorage.setItem('snabtash_sections_archive', JSON.stringify(merged));
-            } catch {}
-            updateArchiveStats();
-            return merged;
-          }
-
-          try {
-            localStorage.setItem('snabtash_showcase_sections', JSON.stringify(serverSections));
-            const existingArchive = localStorage.getItem('snabtash_sections_archive');
-            const archiveCount = existingArchive ? JSON.parse(existingArchive).length : 0;
-            if (serverSections.length >= archiveCount) {
-              localStorage.setItem('snabtash_sections_archive', JSON.stringify(serverSections));
-            }
-          } catch {}
-          updateArchiveStats();
-          return serverSections;
-        });
+        setShowcaseSections(serverSections);
+        try {
+          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(serverSections));
+        } catch {}
+        updateArchiveStats();
       }
 
       if (partRes.status === 'fulfilled' && Array.isArray(partRes.value)) {
@@ -709,6 +639,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       console.error('API product delete error:', err);
       showToast(`Mahsulot "${target?.name || id}" o‘chirildi (mahalliy)`, 'info');
       notifySync();
+    }
+  };
+
+  const clearAllProducts = async () => {
+    const toDelete = [...products];
+    setProducts([]);
+    try {
+      localStorage.setItem('snabtash_admin_products', '[]');
+      localStorage.removeItem('snabtash_products_archive');
+    } catch {}
+    updateArchiveStats();
+    notifySync();
+
+    try {
+      await Promise.allSettled(toDelete.map((p) => api.deleteProduct(p.id)));
+      showToast("Barcha mahsulotlar tozalandi (0 ta qoldi)", 'info');
+    } catch (err: any) {
+      showToast(`Xatolik: ${err.message}`, 'error');
     }
   };
 
@@ -1655,6 +1603,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addProduct,
         updateProduct,
         deleteProduct,
+        clearAllProducts,
         toggleProductStock,
         resetProductsToDefault,
         categories,
