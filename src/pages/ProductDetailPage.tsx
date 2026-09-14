@@ -158,7 +158,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                         : 'border-[#E2E8F0] hover:border-slate-400'
                     }`}
                   >
-                    <img src={getMediaUrl(img)} alt="" className="w-full h-full object-contain p-1" />
+                    <img
+                      src={getMediaUrl(img)}
+                      alt=""
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          'https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=500&auto=format&fit=crop&q=80';
+                      }}
+                      className="w-full h-full object-contain p-1"
+                    />
                   </button>
                 ))}
               </div>
@@ -169,6 +177,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
               <img
                 src={getMediaUrl(product.images[selectedImage] || product.images[0])}
                 alt={productName}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    'https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=500&auto=format&fit=crop&q=80';
+                }}
                 className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {productTag && (

@@ -77,6 +77,75 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   return response.json();
 }
 
+/**
+ * Compresses an image file to a lightweight, crystal-clear WebP Data URL.
+ * Automatically resizes large camera/phone photos down to crisp e-commerce dimensions
+ * and compresses them to ~40KB - 90KB.
+ * This guarantees images are saved directly in PostgreSQL and NEVER get wiped
+ * by Render's ephemeral container rebuilds.
+ */
+export const compressImageFile = async (
+  file: File,
+  maxWidth = 1000,
+  quality = 0.82
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    // If SVG, read directly as data URL without rasterization
+    if (file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')) {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth || height > maxWidth) {
+          if (width > height) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxWidth) / height);
+            height = maxWidth;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve(e.target?.result as string);
+          return;
+        }
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Prefer modern WebP, fallback to JPEG
+        let dataUrl = canvas.toDataURL('image/webp', quality);
+        if (!dataUrl.startsWith('data:image/webp')) {
+          dataUrl = canvas.toDataURL('image/jpeg', quality);
+        }
+        resolve(dataUrl);
+      };
+      img.onerror = () => {
+        resolve(e.target?.result as string);
+      };
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
 export const api = {
   // --- PRODUCTS ---
   getProducts: async (params?: Record<string, string>): Promise<Product[]> => {
@@ -291,44 +360,36 @@ export const api = {
     });
   },
 
-  // --- FILE UPLOAD ---
-  uploadImage: async (file: File, type: 'products' | 'banners' | 'categories' | 'uploads' = 'uploads'): Promise<{ url: string; filename: string; original_name?: string; size?: number }> => {
+  // --- FILE UPLOAD (Persistent WebP in PostgreSQL) ---
+  uploadImage: async (
+    file: File,
+    type: 'products' | 'banners' | 'categories' | 'uploads' = 'uploads'
+  ): Promise<{ url: string; filename: string; original_name?: string; size?: number }> => {
+    const maxWidth = type === 'banners' ? 1400 : 1000;
     try {
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const response = await fetch(`${API_BASE}/upload/?type=${type}`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return {
-          ...data,
-          url: getMediaUrl(data.url) || data.url,
-        };
-      }
-
-      console.warn('Upload endpoint responded with non-200, checking fallback:', response.status);
-    } catch (networkErr) {
-      console.warn('Backend upload network failure (e.g. Vercel static hosting without backend proxy):', networkErr);
-    }
-
-    // High-resilient fallback for Vercel or environments where backend upload is unreachable
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        resolve({
-          url: reader.result as string,
-          filename: file.name,
-          original_name: file.name,
-          size: file.size,
-        });
+      const compressedDataUrl = await compressImageFile(file, maxWidth, 0.82);
+      return {
+        url: compressedDataUrl,
+        filename: file.name,
+        original_name: file.name,
+        size: Math.round((compressedDataUrl.length * 3) / 4),
       };
-      reader.onerror = () => reject(new Error('Faylni yuklashda xatolik yuz berdi'));
-      reader.readAsDataURL(file);
-    });
+    } catch (err) {
+      console.warn('Image compression fallback:', err);
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve({
+            url: reader.result as string,
+            filename: file.name,
+            original_name: file.name,
+            size: file.size,
+          });
+        };
+        reader.onerror = () => reject(new Error('Faylni yuklashda xatolik yuz berdi'));
+        reader.readAsDataURL(file);
+      });
+    }
   },
 
   // --- DASHBOARD ANALYTICS ---

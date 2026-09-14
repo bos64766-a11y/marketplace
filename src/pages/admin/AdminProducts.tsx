@@ -458,7 +458,15 @@ export const AdminProducts: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-11 h-11 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] overflow-hidden shrink-0 flex items-center justify-center">
                           {product.images?.[0] ? (
-                            <img src={getMediaUrl(product.images[0])} alt={product.name} className="w-full h-full object-cover" />
+                            <img
+                              src={getMediaUrl(product.images[0])}
+                              alt={product.name}
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src =
+                                  'https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=500&auto=format&fit=crop&q=80';
+                              }}
+                              className="w-full h-full object-cover"
+                            />
                           ) : (
                             <Package className="w-5 h-5 text-[#94A3B8]" />
                           )}
