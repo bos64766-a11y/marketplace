@@ -1,7 +1,7 @@
 """
 SNABTASH Live Cloud Backup Script
-Fetches all live data from the deployed backend REST API and saves
-it to backend/fixtures/live_backup.json and updates backup_data.json.
+Fetches all live data (Products, Orders/Requests, Categories, Sections, Banners, Settings, Partners)
+from the deployed backend REST API and saves it to backend/fixtures/live_backup.json.
 Can be run locally or autonomously via GitHub Actions.
 """
 import os
@@ -43,13 +43,14 @@ def run_export():
     os.makedirs(fixtures_dir, exist_ok=True)
 
     print("=" * 60)
-    print(f"🚀 SNABTASH Jonli Serverdan Zaxira Olish ({BACKEND_API_BASE})")
+    print(f"🚀 SNABTASH Jonli Serverdan To'liq Zaxira Olish ({BACKEND_API_BASE})")
     print(f"Vaqt: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 
     endpoints = [
         ("categories", "Kategoriyalar"),
         ("products", "Mahsulotlar"),
+        ("orders", "Zayavkalar / Buyurtmalar (Zakazlar)"),
         ("showcase-sections", "Bo'limlar (Showcase)"),
         ("banners", "Bannerlar"),
         ("settings", "Sayt Sozlamalari"),
@@ -57,9 +58,10 @@ def run_export():
     ]
 
     backup_bundle = {
-        "version": "1.0",
+        "version": "1.1",
         "exported_at": datetime.now().isoformat(),
         "source": BACKEND_API_BASE,
+        "summary": {},
         "data": {}
     }
 
@@ -70,9 +72,11 @@ def run_export():
         if data is not None:
             backup_bundle["data"][ep] = data
             count = len(data) if isinstance(data, list) else (1 if isinstance(data, dict) else 0)
-            print(f"[OK] ({count} ta element)")
+            backup_bundle["summary"][ep] = count
+            print(f"[OK] ({count} ta)")
             success_count += 1
         else:
+            backup_bundle["summary"][ep] = 0
             print("[O'TKAZILDI]")
 
     if success_count == 0:
@@ -85,7 +89,8 @@ def run_export():
         json.dump(backup_bundle, f, ensure_ascii=False, indent=2)
 
     size_kb = os.path.getsize(output_file) / 1024
-    print(f"\n✅ Zaxira fayli yaratildi: {output_file} ({size_kb:.1f} KB)")
+    print(f"\n✅ To'liq zaxira fayli yaratildi: {output_file} ({size_kb:.1f} KB)")
+    print(f"📊 Xulosa: {backup_bundle['summary']}")
     print("=" * 60)
     return True
 

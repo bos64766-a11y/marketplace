@@ -1,7 +1,16 @@
 {
-  "version": "1.0",
-  "exported_at": "2026-09-14T13:46:26.408818",
+  "version": "1.1",
+  "exported_at": "2026-09-14T13:56:20.946710",
   "source": "https://marketplace-0ycw.onrender.com/api",
+  "summary": {
+    "categories": 6,
+    "products": 28,
+    "orders": 5,
+    "showcase-sections": 7,
+    "banners": 2,
+    "settings": 1,
+    "partners": 8
+  },
   "data": {
     "categories": [
       {
@@ -24,7 +33,7 @@
         "image": "https://images.unsplash.com/photo-1585421514738-01798e348b17?w=300&auto=format&fit=crop&q=80",
         "description": "Professional yuvish va tozalash vositalari, suyuq sovunlar, xlorli eritmalar",
         "description_ru": "",
-        "count": 0
+        "count": 8
       },
       {
         "id": "gigiyena",
@@ -35,7 +44,7 @@
         "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&auto=format&fit=crop&q=80",
         "description": "Qog‘oz sochiqlar, tualet qog‘ozlari, dispenserlar, antiseptiklar",
         "description_ru": "",
-        "count": 0
+        "count": 8
       },
       {
         "id": "kanselyariya",
@@ -46,7 +55,7 @@
         "image": "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=300&auto=format&fit=crop&q=80",
         "description": "A4 qog‘ozlari, papkalar, ruchkalar, ofis uchun sarflov materiallari",
         "description_ru": "",
-        "count": 0
+        "count": 5
       },
       {
         "id": "himoya-vositalari",
@@ -57,7 +66,7 @@
         "image": "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=300&auto=format&fit=crop&q=80",
         "description": "Qo‘lqoplar, himoya ko‘zoynaklari, respiratorlar va kaskalar",
         "description_ru": "",
-        "count": 0
+        "count": 7
       },
       {
         "id": "tekstil-mahsulotlari",
@@ -71,8 +80,1274 @@
         "count": 0
       }
     ],
-    "products": [],
+    "products": [
+      {
+        "id": "snb-1741855200000",
+        "slug": "prod-1741855200000",
+        "name": "hhdsf",
+        "name_ru": "",
+        "categoryId": "kanselyariya",
+        "categoryName": "Kanselyariya",
+        "price": "25000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "dsf",
+        "sku": "dfs",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "",
+        "tag_ru": "",
+        "rating": "4.50",
+        "reviewsCount": 0,
+        "description": "",
+        "description_ru": "",
+        "features": [],
+        "isPopular": false,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=500&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-test-product",
+        "slug": "test-product",
+        "name": "Test Product",
+        "name_ru": "",
+        "categoryId": "kanselyariya",
+        "categoryName": "Kanselyariya",
+        "price": "25000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "TestBrand",
+        "sku": "SNB-TEST01",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": null,
+        "tag_ru": "",
+        "rating": "5.00",
+        "reviewsCount": 0,
+        "description": "Test description",
+        "description_ru": "",
+        "features": [],
+        "isPopular": false,
+        "isNew": false,
+        "images": [
+          "https://example.com/test.jpg"
+        ]
+      },
+      {
+        "id": "snb-012",
+        "slug": "svetocopy-a4-qogoz",
+        "name": "Ofis qog‘ozi SvetoCopy A4 (500 varaq)",
+        "name_ru": "",
+        "categoryId": "kanselyariya",
+        "categoryName": "Kanselyariya",
+        "price": "46000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "SvetoCopy",
+        "sku": "SC-A4",
+        "unit": "pachka",
+        "minOrder": 1,
+        "tag": "Bestseller",
+        "tag_ru": "",
+        "rating": "5.00",
+        "reviewsCount": 340,
+        "description": "Printer va kserokslar uchun C-klass standart 80g/m² ofis qog‘ozi.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Formati",
+            "value": "A4 (210 x 297 mm)"
+          },
+          {
+            "name": "Zichligi",
+            "value": "80 g/m²"
+          },
+          {
+            "name": "Varaqlar soni",
+            "value": "500 varaq / pachka"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-004",
+        "slug": "chiqindi-paketi-60l-20-dona",
+        "name": "Chiqindi paketi 60L (20 dona)",
+        "name_ru": "",
+        "categoryId": "gigiyena",
+        "categoryName": "Gigiyena",
+        "price": "18900.00",
+        "oldPrice": 22000.0,
+        "inStock": true,
+        "brand": "CleanPack",
+        "sku": "CP-60L",
+        "unit": "rulon",
+        "minOrder": 1,
+        "tag": "60L, 20 dona",
+        "tag_ru": "",
+        "rating": "4.70",
+        "reviewsCount": 86,
+        "description": "Yuqori mustahkamlikka ega bo‘lgan 60 litrli chiqindi xaltalari ruloni. Yirtilishga chidamli polietilen.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "60 Litr"
+          },
+          {
+            "name": "Soni",
+            "value": "20 dona / rulon"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-001",
+        "slug": "suyuq-sovun-5l",
+        "name": "Suyuq sovun 5L SNABTASH",
+        "name_ru": "",
+        "categoryId": "maishiy-kimyo",
+        "categoryName": "Maishiy kimyo",
+        "price": "38500.00",
+        "oldPrice": 45000.0,
+        "inStock": true,
+        "brand": "SNABTASH",
+        "sku": "SS-5L",
+        "unit": "kanistra",
+        "minOrder": 1,
+        "tag": "Premium 5L",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 124,
+        "description": "Yuqori sifatli antibakterial suyuq sovun. Terini quritmaydi, yoqimli hid va yumshoqlik ta’sirga ega.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "5 Litr (Kanistra)"
+          },
+          {
+            "name": "Konsentratsiya",
+            "value": "Yuqori ko‘pikli antibakterial formula"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-toilet-paper-mini-1ply",
+        "slug": "mini-rulonli-tualet-qogozi-1-qavat-standart",
+        "name": "Mini rulonli tualet qog‘ozi 1 qavat Standart Tellux",
+        "name_ru": "",
+        "categoryId": "gigiyena",
+        "categoryName": "Gigiyena",
+        "price": "21000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Tellux",
+        "sku": "TLX-MNI-1PL",
+        "unit": "qadoq",
+        "minOrder": 4,
+        "tag": "Mini 1 qavat",
+        "tag_ru": "",
+        "rating": "4.70",
+        "reviewsCount": 39,
+        "description": "Tejamkor va sifatli mini rulonli Standart seriyasidagi 1 qavatli tualet qog‘ozi.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Qatlamlar",
+            "value": "1 qavatli oq"
+          },
+          {
+            "name": "Seriya",
+            "value": "Standart Tellux"
+          }
+        ],
+        "isPopular": false,
+        "isNew": true,
+        "images": [
+          "https://images.unsplash.com/photo-1584556812952-905ffd0c611a?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-toilet-paper-mini-2ply",
+        "slug": "mini-rulonli-tualet-qogozi-2-qavat-komfort",
+        "name": "Mini rulonli tualet qog‘ozi 2 qavat Komfort Tellux",
+        "name_ru": "",
+        "categoryId": "gigiyena",
+        "categoryName": "Gigiyena",
+        "price": "24000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Tellux",
+        "sku": "TLX-MNI-2PL",
+        "unit": "qadoq",
+        "minOrder": 4,
+        "tag": "Mini 2 qavat",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 42,
+        "description": "Ixcham dispenserlar va standart hojatxona ushlagichlari uchun 2 qavatli mayin tualet qog‘ozi.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Qatlamlar",
+            "value": "2 qavatli perforatsiyalangan"
+          },
+          {
+            "name": "Seriya",
+            "value": "Komfort Tellux"
+          }
+        ],
+        "isPopular": false,
+        "isNew": true,
+        "images": [
+          "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-toilet-paper-giant-roll",
+        "slug": "katta-rulonli-tualet-qogozi-standart",
+        "name": "Katta rulonli tualet qog‘ozi 1 qavat Standart (Jumbo)",
+        "name_ru": "",
+        "categoryId": "gigiyena",
+        "categoryName": "Gigiyena",
+        "price": "54000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Tellux Maxi",
+        "sku": "TLX-JMB-54K",
+        "unit": "rulon",
+        "minOrder": 2,
+        "tag": "Jumbo Maxi",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 56,
+        "description": "Katta dispenserlar uchun mo‘ljallangan diametri katta gigiyenik tualet qog‘ozi ruloni.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Rulon uzunligi",
+            "value": "150-200 metr"
+          },
+          {
+            "name": "Standart",
+            "value": "1 qavatli oq"
+          }
+        ],
+        "isPopular": false,
+        "isNew": true,
+        "images": [
+          "https://images.unsplash.com/photo-1584556812952-905ffd0c611a?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-tellux-zz2-comfort",
+        "slug": "tellux-zz2-qogoz-sochiqlar-komfort",
+        "name": "Bargli qog‘oz sochiqlar ZZ 2 qavat Komfort Tellux",
+        "name_ru": "",
+        "categoryId": "gigiyena",
+        "categoryName": "Gigiyena",
+        "price": "22000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Tellux",
+        "sku": "TLX-ZZ2-CMF",
+        "unit": "qadoq",
+        "minOrder": 2,
+        "tag": "2 qavat Komfort",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 38,
+        "description": "Yumshoqlik va nam tortish xususiyati yuqori bo‘lgan Komfort seriyasidagi 2 qavatli qog‘oz sochiq.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Turi",
+            "value": "ZZ 2 qatlam Komfort"
+          },
+          {
+            "name": "Material",
+            "value": "Birlamchi sellyuloza"
+          }
+        ],
+        "isPopular": false,
+        "isNew": true,
+        "images": [
+          "https://images.unsplash.com/photo-1584556812952-905ffd0c611a?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-tellux-zz1-towels",
+        "slug": "tellux-zz1-bargli-sochiqlar-standart",
+        "name": "Bargli sochiqlar ZZ 1 qavat Standart Tellux",
+        "name_ru": "",
+        "categoryId": "gigiyena",
+        "categoryName": "Gigiyena",
+        "price": "23000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Tellux",
+        "sku": "TLX-ZZ1-STD",
+        "unit": "qadoq",
+        "minOrder": 2,
+        "tag": "1 qavat Standart",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 45,
+        "description": "Tejamkor 1 qavatli dispenser uchun bargli sochiqlar to‘plami. Katta oqimli sanuzellar uchun ideal.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Turi",
+            "value": "ZZ 1 qatlam Standart"
+          },
+          {
+            "name": "Qadoqda",
+            "value": "250 dona"
+          }
+        ],
+        "isPopular": false,
+        "isNew": true,
+        "images": [
+          "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-tellux-z2-towels",
+        "slug": "tellux-z2-bargli-qogoz-sochiqlar",
+        "name": "Bargli qog‘oz sochiqlar Z-taxlam 2 qavat Tellux Action",
+        "name_ru": "",
+        "categoryId": "gigiyena",
+        "categoryName": "Gigiyena",
+        "price": "28000.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Tellux",
+        "sku": "TLX-Z2-ACT",
+        "unit": "qadoq",
+        "minOrder": 2,
+        "tag": "2 qavatli",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 62,
+        "description": "Dispenserlar uchun Z-shaklda taxlangan 2 qavatli yuqori sifatli yumshoq qog‘oz sochiqlar.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Taxlam turi",
+            "value": "Z-taxlam (multifold)"
+          },
+          {
+            "name": "Qatlamlar",
+            "value": "2 qavatli 100% sellyuloza"
+          },
+          {
+            "name": "Qadoqda",
+            "value": "200 dona"
+          }
+        ],
+        "isPopular": false,
+        "isNew": true,
+        "images": [
+          "https://images.unsplash.com/photo-1584556812952-905ffd0c611a?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-napkins-elma-33",
+        "slug": "elma-33x33-classic-salfetkalari",
+        "name": "Salfetki Elma 33x33 Classic (221)",
+        "name_ru": "",
+        "categoryId": "gigiyena",
+        "categoryName": "Gigiyena",
+        "price": "6944.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Elma",
+        "sku": "SLF-ELM-33",
+        "unit": "qadoq",
+        "minOrder": 5,
+        "tag": "33x33 sm",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 168,
+        "description": "Oshxona, kofe-breyk va korporativ tadbirlar uchun oq rangli 1 qavatli Elma salfetkalari.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "O‘lchami",
+            "value": "33 x 33 sm"
+          },
+          {
+            "name": "Soni",
+            "value": "100 dona qadoqda"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584556812952-905ffd0c611a?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-plastic-bucket",
+        "slug": "qopqoqli-plastik-chelak-10l",
+        "name": "Qopqoqli plastik chelak",
+        "name_ru": "",
+        "categoryId": "kanselyariya",
+        "categoryName": "Kanselyariya",
+        "price": "27440.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "CleanTub",
+        "sku": "CHK-PLT-10L",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "Qopqoqli",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 74,
+        "description": "Tozalash ishlari va xo‘jalik ehtiyojlari uchun baquvvat metall tutqichli va germetik qopqoqli chelak.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "10 Litr"
+          },
+          {
+            "name": "Tutqich",
+            "value": "Mustahkam metall"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-plastic-barrel",
+        "slug": "bochka-plastikovaya-oq-50l",
+        "name": "Bochka plastik oq",
+        "name_ru": "",
+        "categoryId": "kanselyariya",
+        "categoryName": "Kanselyariya",
+        "price": "22960.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "PlastMaster",
+        "sku": "BCH-PLT-50L",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "Keng og‘izli",
+        "tag_ru": "",
+        "rating": "4.70",
+        "reviewsCount": 52,
+        "description": "Kimyoviy suyuqliklar, yuvish vositalari va suv saqlash uchun germetik qopqoqli oq plastik bochka.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "50 Litr"
+          },
+          {
+            "name": "Material",
+            "value": "Birlamchi oziq-ovqat va kimyo plastigi"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-glade-aerosol-300",
+        "slug": "glade-havo-xushboylantiruvchi-aerozol-300ml",
+        "name": "Glade aerozol 300ml",
+        "name_ru": "",
+        "categoryId": "maishiy-kimyo",
+        "categoryName": "Maishiy kimyo",
+        "price": "29792.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Glade",
+        "sku": "AIR-GLD-300",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "300 ml",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 195,
+        "description": "Ofis va xonalar uchun uzoq vaqt saqlanuvchi tabiiy gul va tog‘ ifori bilan to‘ldirilgan aerozol.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "300 ml"
+          },
+          {
+            "name": "Brend",
+            "value": "Glade SC Johnson"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-gloves-cotton-45g",
+        "slug": "trikotaj-ishchi-paxta-qolqoplari-45g",
+        "name": "Trikotaj ishchi paxta qo‘lqoplari 45gr",
+        "name_ru": "",
+        "categoryId": "himoya-vositalari",
+        "categoryName": "Himoya vositalari",
+        "price": "1456.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "TextilePro",
+        "sku": "GLV-COT-45G",
+        "unit": "juft",
+        "minOrder": 50,
+        "tag": "Xit savdo",
+        "tag_ru": "",
+        "rating": "5.00",
+        "reviewsCount": 310,
+        "description": "Zichligi yuqori 45 grammli qalin paxta ishchi qo‘lqoplari. Og‘ir jismoniy va ombor ishlari uchun mustahkam.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Vazni",
+            "value": "45 gramm"
+          },
+          {
+            "name": "Material",
+            "value": "X/B paxta"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-grass-antigraffiti",
+        "slug": "grass-antigraffiti-dog-ketkazuvchi-vosita",
+        "name": "Grass Antigraffiti dog‘ ketkazuvchi vosita",
+        "name_ru": "",
+        "categoryId": "maishiy-kimyo",
+        "categoryName": "Maishiy kimyo",
+        "price": "120400.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Grass",
+        "sku": "CHM-GRS-GRF",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "AntiGraffiti",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 84,
+        "description": "Bo‘yoq, skotch izlari, marker, graffiti va yopishqoq qoldiqlarni har qanday sirtlardan tozalovchi professional tarkib.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "600 ml"
+          },
+          {
+            "name": "Kategoriya",
+            "value": "Maxsus professional tozalagich"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-vanish-carpet-gold",
+        "slug": "vanish-gold-gilam-yuvish-shampuni",
+        "name": "Vanish Gold gilam yuvish shampuni",
+        "name_ru": "",
+        "categoryId": "maishiy-kimyo",
+        "categoryName": "Maishiy kimyo",
+        "price": "59976.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Vanish",
+        "sku": "CHM-VNS-GLD",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "Gold Pro",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 115,
+        "description": "Gilamlar, kovrolin va yumshoq mebellarni qo‘lda va klining mashinalarida chuqur tozalash uchun konsentrat.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "450 ml"
+          },
+          {
+            "name": "Brend",
+            "value": "Vanish Gold"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1585670270608-b404fb88dd21?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-grass-polyrole-matte",
+        "slug": "grass-polyrole-mat-plastik-jilolagich",
+        "name": "Grass Polyrole mat plastik jilolagich",
+        "name_ru": "",
+        "categoryId": "maishiy-kimyo",
+        "categoryName": "Maishiy kimyo",
+        "price": "64400.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Grass",
+        "sku": "CHM-GRS-PLR",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "Matte Finish",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 160,
+        "description": "Avtomobil panellari, plastik mebellar va ofis jihozlari uchun porlashsiz mot tozalovchi sprey.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "500 ml trigger"
+          },
+          {
+            "name": "Effekt",
+            "value": "Tabiiy mat ko‘rinish va chang qaytaruvchi antistatik qatlam"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-grass-dos-toilet-block",
+        "slug": "grass-dos-hojatxona-osma-bloki-3in1",
+        "name": "Grass Dos hojatxona osma bloki 3in1",
+        "name_ru": "",
+        "categoryId": "maishiy-kimyo",
+        "categoryName": "Maishiy kimyo",
+        "price": "14504.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Grass",
+        "sku": "CHM-GRS-DOS",
+        "unit": "dona",
+        "minOrder": 2,
+        "tag": "3in1 Blok",
+        "tag_ru": "",
+        "rating": "4.70",
+        "reviewsCount": 78,
+        "description": "Unitaz va sanuzellar uchun yoqimli sitrus iforini taratuvchi, karash va bakteriyalardan saqlovchi osma blok.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hidi",
+            "value": "Sitrus / Limon"
+          },
+          {
+            "name": "Funksiyalari",
+            "value": "Tozalash, gigiyena, xushbo‘ylantirish"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-grass-steel-cleaner",
+        "slug": "grass-zanglamas-polat-tozalash-vositasi",
+        "name": "Grass zanglamas po‘lat tozalash vositasi",
+        "name_ru": "",
+        "categoryId": "maishiy-kimyo",
+        "categoryName": "Maishiy kimyo",
+        "price": "46200.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Grass",
+        "sku": "CHM-GRS-STL",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "Inox Cleaner",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 95,
+        "description": "Zanglamas po‘lat (inox), xrom va metall buyumlarni yaltiratuvchi va barmoq izlaridan himoya qiluvchi sprey.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "600 ml purkagich"
+          },
+          {
+            "name": "Ishlab chiqaruvchi",
+            "value": "Grass Professional"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-vanish-oxi-500",
+        "slug": "vanish-oxi-action-mato-dog-ketkazgich-500ml",
+        "name": "Vanish Oxi Action mato dog‘ ketkazgichi 500ml",
+        "name_ru": "",
+        "categoryId": "maishiy-kimyo",
+        "categoryName": "Maishiy kimyo",
+        "price": "35952.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "Vanish",
+        "sku": "CHM-VNS-500",
+        "unit": "dona",
+        "minOrder": 1,
+        "tag": "500 ml",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 140,
+        "description": "Rangli va oq matolardagi eng qiyin dog‘larni samarali ketkazuvchi kislorodli suyuq vosita.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Hajmi",
+            "value": "500 ml"
+          },
+          {
+            "name": "Brend",
+            "value": "Vanish Oxi Action"
+          },
+          {
+            "name": "Turi",
+            "value": "Suyuq mato tozalagich"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1585670270608-b404fb88dd21?w=800&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-gloves-cotton-35g",
+        "slug": "trikotaj-ishchi-paxta-qolqoplar-35g",
+        "name": "Trikotaj ishchi paxta qo‘lqoplari 35gr",
+        "name_ru": "",
+        "categoryId": "himoya-vositalari",
+        "categoryName": "Himoya vositalari",
+        "price": "1400.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "TextilePro",
+        "sku": "GLV-COT-35G",
+        "unit": "juft",
+        "minOrder": 50,
+        "tag": "35gr x/b",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 230,
+        "description": "100% paxta ipli 35 grammli sifatli trikotaj ishchi qo‘lqopi. Qo‘lni terlatmaydi, eng ommabop B2B tanlov.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Vazni",
+            "value": "35 gramm"
+          },
+          {
+            "name": "Tarkibi",
+            "value": "X/B paxta ipi"
+          },
+          {
+            "name": "Klass",
+            "value": "10-klass to‘qima"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-gloves-nitrile-coating",
+        "slug": "nitril-qoplamali-qolqoplar",
+        "name": "Nitril qoplamali qo‘lqoplar",
+        "name_ru": "",
+        "categoryId": "himoya-vositalari",
+        "categoryName": "Himoya vositalari",
+        "price": "5600.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "NitriMax",
+        "sku": "GLV-NTR-GRN",
+        "unit": "juft",
+        "minOrder": 10,
+        "tag": "Nitril",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 178,
+        "description": "Moy va neft mahsulotlariga chidamli yashil nitril qoplamali professional ishchi qo‘lqoplari.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Qoplama",
+            "value": "Yashil to‘liq nitril qoplama"
+          },
+          {
+            "name": "Xususiyati",
+            "value": "Moy, moylash vositalari va kimyoviy ta’sirlarga chidamli"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-gloves-latex-korea",
+        "slug": "lateks-qoplamali-koreya-qolqoplar",
+        "name": "Lateks qoplamali Koreya qo‘lqoplar",
+        "name_ru": "",
+        "categoryId": "himoya-vositalari",
+        "categoryName": "Himoya vositalari",
+        "price": "3808.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "KoreaTech",
+        "sku": "GLV-KOR-RED",
+        "unit": "juft",
+        "minOrder": 10,
+        "tag": "Koreya",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 112,
+        "description": "Qizil rangli yuqori elastiklikka ega Koreya texnologiyasi asosidagi lateks qoplamali ishchi qo‘lqoplari.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Turi",
+            "value": "Qizil lateks dushli qoplama"
+          },
+          {
+            "name": "Standart",
+            "value": "EN388"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-gloves-latex-zebra",
+        "slug": "lateks-qoplamali-zebra-qolqoplar",
+        "name": "Lateks qoplamali Zebra qo‘lqoplar",
+        "name_ru": "",
+        "categoryId": "himoya-vositalari",
+        "categoryName": "Himoya vositalari",
+        "price": "4144.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "ZebraPro",
+        "sku": "GLV-LTX-ZBR",
+        "unit": "juft",
+        "minOrder": 10,
+        "tag": "Zebra",
+        "tag_ru": "",
+        "rating": "4.70",
+        "reviewsCount": 65,
+        "description": "Ko‘k rangli chidamli lateks qoplamali Zebra modeli. Quruq va nam yuzalarda buyumlarni mustahkam ushlaydi.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Material",
+            "value": "Trikotaj + Ko‘k lateks qoplama"
+          },
+          {
+            "name": "Chidamlilik",
+            "value": "Ayniqsa nam sharoitda yuqori ushlab turish"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-gloves-insulated-300",
+        "slug": "issiq-qoplamali-qolqoplar-300",
+        "name": "Issiq qoplamali qo‘lqoplar 300",
+        "name_ru": "",
+        "categoryId": "himoya-vositalari",
+        "categoryName": "Himoya vositalari",
+        "price": "6944.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "ThermoGrip",
+        "sku": "GLV-THM-300",
+        "unit": "juft",
+        "minOrder": 10,
+        "tag": "Uteplenny",
+        "tag_ru": "",
+        "rating": "4.80",
+        "reviewsCount": 88,
+        "description": "Sovuq sharoitda va sovuq xonalarda ishlash uchun mo‘ljallangan issiq qoplamali to‘liq himoya qo‘lqoplari.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Turi",
+            "value": "Issiq lateks qoplamali"
+          },
+          {
+            "name": "Model",
+            "value": "300 Series"
+          },
+          {
+            "name": "Xususiyati",
+            "value": "Sovuqqa chidamli yumshoq astar"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=800&auto=format&fit=crop&q=80"
+        ]
+      },
+      {
+        "id": "snb-gloves-orange",
+        "slug": "sintetik-apelsin-qolqoplar",
+        "name": "Sintetik apelsin qo‘lqoplar",
+        "name_ru": "",
+        "categoryId": "himoya-vositalari",
+        "categoryName": "Himoya vositalari",
+        "price": "7728.00",
+        "oldPrice": null,
+        "inStock": true,
+        "brand": "SafeWork",
+        "sku": "GLV-ORG-01",
+        "unit": "juft",
+        "minOrder": 10,
+        "tag": "Sintetik",
+        "tag_ru": "",
+        "rating": "4.90",
+        "reviewsCount": 142,
+        "description": "Yorqin apelsin rangli sintetik ishchi qo‘lqoplar. Sirpanishga qarshi qoplama, yuqori chidamlilik va elastiklikka ega.",
+        "description_ru": "",
+        "features": [
+          {
+            "name": "Turi",
+            "value": "Sintetik ishchi qo‘lqop"
+          },
+          {
+            "name": "Rangi",
+            "value": "Apelsin / Qora manjet"
+          },
+          {
+            "name": "Qo‘llanishi",
+            "value": "Ombor, montaj va qurilish ishlari"
+          },
+          {
+            "name": "Qadoqda",
+            "value": "12 juft / 120 juft"
+          }
+        ],
+        "isPopular": true,
+        "isNew": false,
+        "images": [
+          "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=800&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=800&auto=format&fit=crop&q=80"
+        ]
+      }
+    ],
+    "orders": [
+      {
+        "id": "1044",
+        "date": "03.09.2026",
+        "items": [
+          {
+            "product": {
+              "id": "item-9",
+              "name": "B2B Tovar",
+              "sku": "SKU-DEMO",
+              "price": 50000.0,
+              "images": [],
+              "unit": "dona",
+              "inStock": true
+            },
+            "quantity": 40
+          }
+        ],
+        "totalAmount": 2000000.0,
+        "status": "Bekor qilingan",
+        "contact": {
+          "name": "Alisher Vohidov",
+          "phone": "+998 99 888 11 22",
+          "company": "Grand Pharm Retail",
+          "inn": "307819201",
+          "comment": "Mijoz boshqa partiya bilan birlashtirishni so‘radi."
+        },
+        "created_at": "2026-09-03T20:41:16.387000+05:00"
+      },
+      {
+        "id": "1045",
+        "date": "03.09.2026",
+        "items": [
+          {
+            "product": {
+              "id": "item-7",
+              "name": "B2B Tovar",
+              "sku": "SKU-DEMO",
+              "price": 50000.0,
+              "images": [],
+              "unit": "dona",
+              "inStock": true
+            },
+            "quantity": 50
+          },
+          {
+            "product": {
+              "id": "item-8",
+              "name": "B2B Tovar",
+              "sku": "SKU-DEMO",
+              "price": 50000.0,
+              "images": [],
+              "unit": "dona",
+              "inStock": true
+            },
+            "quantity": 12
+          }
+        ],
+        "totalAmount": 3100000.0,
+        "status": "Bajarildi",
+        "contact": {
+          "name": "Javohir Zokirov",
+          "phone": "+998 97 712 33 44",
+          "company": "Murad Buildings Qurilish",
+          "inn": "304918239",
+          "comment": "Barcha tovarlar qabul qilindi, shartnoma yopildi."
+        },
+        "created_at": "2026-09-03T20:41:16.356000+05:00"
+      },
+      {
+        "id": "1046",
+        "date": "03.09.2026",
+        "items": [
+          {
+            "product": {
+              "id": "item-5",
+              "name": "B2B Tovar",
+              "sku": "SKU-DEMO",
+              "price": 50000.0,
+              "images": [],
+              "unit": "dona",
+              "inStock": true
+            },
+            "quantity": 8
+          },
+          {
+            "product": {
+              "id": "item-6",
+              "name": "B2B Tovar",
+              "sku": "SKU-DEMO",
+              "price": 50000.0,
+              "images": [],
+              "unit": "dona",
+              "inStock": true
+            },
+            "quantity": 6
+          }
+        ],
+        "totalAmount": 700000.0,
+        "status": "Yetkazilmoqda",
+        "contact": {
+          "name": "Nodirbek Quchqarov",
+          "phone": "+998 90 123 45 67",
+          "company": "Orient Group Holding",
+          "inn": "301298455",
+          "comment": "Haydovchi yetib borsa, qorovulxonadan qo‘ng‘iroq qilsin."
+        },
+        "created_at": "2026-09-03T20:41:16.329000+05:00"
+      },
+      {
+        "id": "1047",
+        "date": "03.09.2026",
+        "items": [
+          {
+            "product": {
+              "id": "item-3",
+              "name": "B2B Tovar",
+              "sku": "SKU-DEMO",
+              "price": 50000.0,
+              "images": [],
+              "unit": "dona",
+              "inStock": true
+            },
+            "quantity": 10
+          },
+          {
+            "product": {
+              "id": "item-4",
+              "name": "B2B Tovar",
+              "sku": "SKU-DEMO",
+              "price": 50000.0,
+              "images": [],
+              "unit": "dona",
+              "inStock": true
+            },
+            "quantity": 5
+          }
+        ],
+        "totalAmount": 750000.0,
+        "status": "Tasdiqlangan",
+        "contact": {
+          "name": "Dilshod Rahmatov",
+          "phone": "+998 90 987 65 43",
+          "company": "Artel Ta’minot Bo‘limi",
+          "inn": "305128941",
+          "comment": "Ertaga soat 14:00 gacha zavod omboriga yetkazish zarur."
+        },
+        "created_at": "2026-09-03T20:41:16.302000+05:00"
+      },
+      {
+        "id": "1048",
+        "date": "03.09.2026",
+        "items": [
+          {
+            "product": {
+              "id": "item-2",
+              "name": "B2B Tovar",
+              "sku": "SKU-DEMO",
+              "price": 50000.0,
+              "images": [],
+              "unit": "dona",
+              "inStock": true
+            },
+            "quantity": 15
+          },
+          {
+            "product": {
+              "id": "snb-gloves-orange",
+              "slug": "sintetik-apelsin-qolqoplar",
+              "name": "Sintetik apelsin qo‘lqoplar",
+              "name_ru": "",
+              "categoryId": "himoya-vositalari",
+              "categoryName": "Himoya vositalari",
+              "price": "7728.00",
+              "oldPrice": null,
+              "inStock": true,
+              "brand": "SafeWork",
+              "sku": "GLV-ORG-01",
+              "unit": "juft",
+              "minOrder": 10,
+              "tag": "Sintetik",
+              "tag_ru": "",
+              "rating": "4.90",
+              "reviewsCount": 142,
+              "description": "Yorqin apelsin rangli sintetik ishchi qo‘lqoplar. Sirpanishga qarshi qoplama, yuqori chidamlilik va elastiklikka ega.",
+              "description_ru": "",
+              "features": [
+                {
+                  "name": "Turi",
+                  "value": "Sintetik ishchi qo‘lqop"
+                },
+                {
+                  "name": "Rangi",
+                  "value": "Apelsin / Qora manjet"
+                },
+                {
+                  "name": "Qo‘llanishi",
+                  "value": "Ombor, montaj va qurilish ishlari"
+                },
+                {
+                  "name": "Qadoqda",
+                  "value": "12 juft / 120 juft"
+                }
+              ],
+              "isPopular": true,
+              "isNew": false,
+              "images": [
+                "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=800&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=800&auto=format&fit=crop&q=80"
+              ]
+            },
+            "quantity": 20
+          }
+        ],
+        "totalAmount": 904560.0,
+        "status": "Ko‘rib chiqilmoqda",
+        "contact": {
+          "name": "Otabek Mahkamov",
+          "phone": "+998 93 456 78 90",
+          "company": "Akfa Engineering MChJ",
+          "inn": "201948271",
+          "comment": "Didox orqali hisob-faktura yuboring, to‘lov 100% o‘tkazma."
+        },
+        "created_at": "2026-09-03T20:41:16.272000+05:00"
+      }
+    ],
     "showcase-sections": [
+      {
+        "id": 1,
+        "title": "Ofislar uchun",
+        "subtitle": "Kantselyariya, gigiyena va ofis kundalik sarflov vositalari",
+        "badge": "",
+        "icon": "Building2",
+        "link": "/catalog/kanselyariya",
+        "productIds": [
+          "snb-012",
+          "snb-004",
+          "snb-001",
+          "snb-tellux-zz2-comfort",
+          "snb-tellux-z2-towels",
+          "snb-glade-aerosol-300"
+        ],
+        "order": 1,
+        "isActive": true
+      },
       {
         "id": 7,
         "title": "Ofislar uchun",
@@ -89,6 +1364,24 @@
           "snb-glade-aerosol-300"
         ],
         "order": 1,
+        "isActive": true
+      },
+      {
+        "id": 2,
+        "title": "Restoran va mehmonxonalar uchun",
+        "subtitle": "HoReCa professional tozalash, idish yuvish va SanPiN talablariga mos vositalar",
+        "badge": "",
+        "icon": "Building2",
+        "link": "/catalog/maishiy-kimyo",
+        "productIds": [
+          "snb-napkins-elma-33",
+          "snb-toilet-paper-mini-2ply",
+          "snb-toilet-paper-giant-roll",
+          "snb-grass-dos-toilet-block",
+          "snb-grass-steel-cleaner",
+          "snb-001"
+        ],
+        "order": 2,
         "isActive": true
       },
       {
@@ -110,6 +1403,24 @@
         "isActive": true
       },
       {
+        "id": 3,
+        "title": "Klining kompaniyalari uchun",
+        "subtitle": "Professional tozalash kimyolari, konsentratlar va mikrofibra inventarlari",
+        "badge": "",
+        "icon": "Building2",
+        "link": "/catalog/maishiy-kimyo",
+        "productIds": [
+          "snb-grass-antigraffiti",
+          "snb-vanish-carpet-gold",
+          "snb-grass-polyrole-matte",
+          "snb-vanish-oxi-500",
+          "snb-plastic-bucket",
+          "snb-gloves-latex-korea"
+        ],
+        "order": 3,
+        "isActive": true
+      },
+      {
         "id": 9,
         "title": "Klining kompaniyalari uchun",
         "subtitle": "Professional tozalash kimyolari, konsentratlar va mikrofibra inventarlari",
@@ -125,6 +1436,24 @@
           "snb-gloves-latex-korea"
         ],
         "order": 3,
+        "isActive": true
+      },
+      {
+        "id": 4,
+        "title": "Zavod va fabrikalar uchun",
+        "subtitle": "Individual himoya vositalari, ishchi qo‘lqoplar va sanoat tozalovchilari",
+        "badge": "",
+        "icon": "Building2",
+        "link": "/catalog/himoya-vositalari",
+        "productIds": [
+          "snb-gloves-orange",
+          "snb-gloves-insulated-300",
+          "snb-gloves-cotton-45g",
+          "snb-gloves-nitrile-coating",
+          "snb-gloves-latex-zebra",
+          "snb-plastic-barrel"
+        ],
+        "order": 4,
         "isActive": true
       }
     ],

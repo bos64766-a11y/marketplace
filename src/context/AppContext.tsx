@@ -1489,15 +1489,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const backupData = {
         app: 'snabtash-marketplace',
-        version: '1.0',
+        version: '1.1',
         exportedAt: new Date().toISOString(),
         productsCount: products.length,
         sectionsCount: showcaseSections.length,
+        ordersCount: requests.length,
         products,
         categories,
         showcaseSections,
         banners,
         partners,
+        requests,
+        orders: requests,
         siteSettings,
       };
 
@@ -1513,7 +1516,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
 
-      showToast(`✓ Barcha ma'lumotlar zaxira fayli yuklab olindi (${products.length} ta tovar)`, 'success');
+      showToast(`✓ Barcha ma'lumotlar zaxira fayli yuklab olindi (${products.length} ta tovar, ${requests.length} ta zayavka)`, 'success');
     } catch (err: any) {
       showToast(`Xatolik: Zaxira faylini yaratib bo'lmadi (${err.message})`, 'error');
     }
@@ -1527,6 +1530,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       let restoredProducts = 0;
       let restoredSections = 0;
+      let restoredOrders = 0;
 
       if (Array.isArray(jsonData.products) && jsonData.products.length > 0) {
         setProducts(jsonData.products);
@@ -1559,6 +1563,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
       }
 
+      const incomingRequests = jsonData.requests || jsonData.orders;
+      if (Array.isArray(incomingRequests) && incomingRequests.length > 0) {
+        setRequests(incomingRequests);
+        try {
+          localStorage.setItem('snabtash_requests', JSON.stringify(incomingRequests));
+        } catch {}
+        restoredOrders = incomingRequests.length;
+      }
+
       if (Array.isArray(jsonData.categories) && jsonData.categories.length > 0) {
         setCategories(jsonData.categories);
         try {
@@ -1582,7 +1595,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       updateArchiveStats();
       notifySync();
-      showToast(`✓ Zaxiradan muvaffaqiyatli tiklandi: ${restoredProducts} ta tovar, ${restoredSections} ta bo'lim`, 'success');
+      showToast(`✓ Zaxiradan muvaffaqiyatli tiklandi: ${restoredProducts} ta tovar, ${restoredOrders} ta zayavka, ${restoredSections} ta bo'lim`, 'success');
       return true;
     } catch (err: any) {
       showToast(`Xatolik: Zaxirani tiklashda xatolik yuz berdi (${err.message})`, 'error');

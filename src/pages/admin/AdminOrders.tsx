@@ -15,6 +15,7 @@ import {
   Building2,
   MessageSquare,
   Package,
+  Download,
 } from 'lucide-react';
 import type { RequestOrder } from '../../types';
 
@@ -39,7 +40,7 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> =
 type FilterTab = 'all' | RequestOrder['status'];
 
 export const AdminOrders: React.FC = () => {
-  const { requests, updateRequestStatus } = useApp();
+  const { requests, updateRequestStatus, exportBackupJSON } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<FilterTab>('all');
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
@@ -84,6 +85,16 @@ export const AdminOrders: React.FC = () => {
             <p className="text-xs font-medium text-[#94A3B8] mt-0.5">
               Barcha kelib tushgan B2B buyurtmalar va so'rovlar ({requests.length} ta)
             </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={exportBackupJSON}
+              className="px-4 py-2.5 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition-all cursor-pointer"
+              title="Barcha zayavkalar, tovarlar va sozlamalarni .json zaxira fayliga yuklab olish"
+            >
+              <Download className="w-4 h-4 text-gray-500" />
+              <span>Zaxira (.json)</span>
+            </button>
           </div>
         </div>
 
