@@ -7,6 +7,7 @@ Can be run locally or autonomously via GitHub Actions.
 import os
 import sys
 import json
+import time
 import urllib.request
 import urllib.error
 from datetime import datetime
@@ -19,23 +20,46 @@ if hasattr(sys.stderr, 'reconfigure'):
 
 BACKEND_API_BASE = os.environ.get("BACKEND_API_BASE", "https://marketplace-0ycw.onrender.com/api")
 
-def fetch_endpoint(name):
+def wake_up_server():
+    """Wakes up Render free tier container if sleeping."""
+    print("-> Server holati tekshirilmoqda (Ping)...")
+    url = f"{BACKEND_API_BASE.rstrip('/')}/categories/"
+    for attempt in range(1, 4):
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent": "SnabtashBackupBot/1.0", "Accept": "application/json"}
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                if resp.status in (200, 301, 302):
+                    print("   ✅ Server faol va tayyor!")
+                    return True
+        except Exception as e:
+            print(f"   ⏳ Server uyg'onmoqda (urinish {attempt}/3, kutilmoqda...): {e}")
+            time.sleep(12)
+    return False
+
+def fetch_endpoint(name, retries=2):
     url = f"{BACKEND_API_BASE.rstrip('/')}/{name.strip('/')}/"
     req = urllib.request.Request(
         url,
         headers={"User-Agent": "SnabtashBackupBot/1.0", "Accept": "application/json"}
     )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            if resp.status == 200:
-                raw = resp.read().decode('utf-8')
-                return json.loads(raw)
-            else:
-                print(f"[OGOHLANTIRISH] {name} status: {resp.status}")
-                return None
-    except urllib.error.URLError as e:
-        print(f"[XATO] {name} yuklab olinmadi: {e}")
-        return None
+    for attempt in range(retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                if resp.status == 200:
+                    raw = resp.read().decode('utf-8')
+                    return json.loads(raw)
+                else:
+                    print(f"[OGOHLANTIRISH] {name} status: {resp.status}")
+        except Exception as e:
+            if attempt < retries:
+                time.sleep(5)
+                continue
+            print(f"[XATO] {name} yuklab olinmadi: {e}")
+            return None
+    return None
 
 def run_export():
     backend_dir = os.path.dirname(os.path.abspath(__file__))
@@ -46,6 +70,8 @@ def run_export():
     print(f"🚀 SNABTASH Jonli Serverdan To'liq Zaxira Olish ({BACKEND_API_BASE})")
     print(f"Vaqt: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
+
+    wake_up_server()
 
     endpoints = [
         ("categories", "Kategoriyalar"),
