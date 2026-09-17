@@ -39,12 +39,14 @@ export const HeroSection: React.FC = () => {
             tabIndex={0}
           >
             <img
-              src={getMediaUrl(slide.image) || '/banners/banner-clean-promo.png'}
+              src={getMediaUrl(slide.image) || '/banners/banner-clean-promo.webp'}
               alt={slide.title || 'SNABTASH B2B Banner'}
               className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.006]"
               loading="eager"
+              fetchPriority="high"
+              decoding="async"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
+                (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.webp';
               }}
             />
           </div>

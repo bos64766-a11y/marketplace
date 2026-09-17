@@ -131,9 +131,17 @@ const DEFAULT_BANNERS: BannerSlide[] = [
   {
     id: 1,
     title: 'Tozalik yechimlari aksiyasi',
-    image: '/banners/banner-clean-promo.png',
+    image: '/banners/banner-clean-promo.webp',
     btnLink: '/catalog/maishiy-kimyo',
     order: 1,
+    isActive: true,
+  },
+  {
+    id: 2,
+    title: 'ChatGPT Image Sep 6, 2026, 03_34_04 PM',
+    image: '/banners/banner-second.webp',
+    btnLink: '/catalog',
+    order: 2,
     isActive: true,
   },
 ];
