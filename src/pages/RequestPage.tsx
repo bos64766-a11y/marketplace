@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { getMediaUrl } from '../services/api';
 import {
   CheckCircle2,
+  Check,
   ArrowRight,
   ShoppingBag,
   Building2,
@@ -172,17 +173,17 @@ export const RequestPage: React.FC = () => {
         <div className="lg:col-span-7 bg-white rounded-3xl border border-[#E5EAF2] p-6 sm:p-8 shadow-xs space-y-5">
           {/* Smart Customer Card for repeat orders */}
           {hasSavedContact && !isEditingContact ? (
-            <div className="bg-[#FFF7ED] border border-[#FF5A00]/25 rounded-3xl p-5 sm:p-6 transition-all">
-              <div className="flex items-center justify-between gap-3 mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-2xl bg-[#FF5A00] text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                    ✓
+            <div className="bg-[#FFF7ED] border border-[#FF5A00]/25 rounded-3xl p-4 sm:p-6 transition-all">
+              <div className="flex items-start sm:items-center justify-between gap-3 mb-4">
+                <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 min-w-0">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#FF5A00] text-white flex items-center justify-center shrink-0 shadow-sm shadow-[#FF5A00]/25 mt-0.5 sm:mt-0">
+                    <Check className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.5]" />
                   </div>
-                  <div>
-                    <h3 className="text-sm font-extrabold text-[#1E293B]">
+                  <div className="min-w-0">
+                    <h3 className="text-xs sm:text-sm font-extrabold text-[#1E293B] leading-tight">
                       {language === 'ru' ? 'Данные предыдущего заказа' : 'Oldingi buyurtma ma’lumotlaringiz'}
                     </h3>
-                    <p className="text-[11px] text-[#64748B]">
+                    <p className="text-[10.5px] sm:text-[11px] text-[#64748B] mt-0.5 leading-snug">
                       {language === 'ru'
                         ? 'Ваши данные заполнены автоматически'
                         : 'Ma’lumotlaringiz avtomatik saqlangan holda to‘ldirildi'}
@@ -193,9 +194,9 @@ export const RequestPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsEditingContact(true)}
-                  className="px-3.5 py-1.5 rounded-2xl bg-white border border-[#FF5A00]/30 hover:bg-[#FFF7ED] text-xs font-bold text-[#FF5A00] transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                  className="px-2.5 sm:px-3.5 py-1.5 rounded-xl sm:rounded-2xl bg-white border border-[#FF5A00]/30 hover:bg-[#FFF7ED] text-[11px] sm:text-xs font-bold text-[#FF5A00] transition-all cursor-pointer flex items-center gap-1 sm:gap-1.5 shadow-2xs shrink-0"
                 >
-                  <Edit3 className="w-3.5 h-3.5" />
+                  <Edit3 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   <span>{language === 'ru' ? 'Изменить' : 'O‘zgartirish'}</span>
                 </button>
               </div>
