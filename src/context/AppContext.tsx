@@ -72,9 +72,12 @@ interface AppContextType {
   siteSettings: SiteSettings;
   updateSiteSettings: (updated: Partial<SiteSettings>) => void;
 
-  // User Profile
+  // User Profile & Customer Account
   profile: UserProfile;
   updateProfile: (profile: Partial<UserProfile>) => void;
+  loginCustomer: (phone: string, company?: string, name?: string, inn?: string) => Promise<boolean>;
+  logoutCustomer: () => void;
+  customerOrders: RequestOrder[];
 
   // Toast
   toast: ToastNotification | null;
@@ -1106,144 +1109,63 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast('✓ Sayt sozlamalari muvaffaqiyatli saqlandi', 'success');
   };
 
-  // Cart state persisted to localStorage
+  // Cart state persisted to localStorage (v2 clean isolated cart per browser)
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
-      const saved = localStorage.getItem('snabtash_cart');
+      const saved = localStorage.getItem('snabtash_cart_v2');
       if (saved) return JSON.parse(saved);
     } catch {
       // ignore
     }
-    const initialProduct1 = INITIAL_PRODUCTS[0];
-    const initialProduct2 = INITIAL_PRODUCTS[1];
-    return [
-      { product: initialProduct1, quantity: 3 },
-      { product: initialProduct2, quantity: 5 },
-    ];
+    return [];
   });
 
   useEffect(() => {
     try {
-      localStorage.setItem('snabtash_cart', JSON.stringify(cart));
+      localStorage.setItem('snabtash_cart_v2', JSON.stringify(cart));
+      // Clean up legacy v1 demo cart with 8 mock items if present
+      localStorage.removeItem('snabtash_cart');
     } catch {
       // ignore
     }
   }, [cart]);
 
-  // Favorites state persisted to localStorage
+  // Favorites state persisted to localStorage (v2 clean isolated favorites)
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('snabtash_favs');
+      const saved = localStorage.getItem('snabtash_favs_v2');
       if (saved) return JSON.parse(saved);
     } catch {
       // ignore
     }
-    return ['snb-gloves-orange', 'snb-grass-universal'];
+    return [];
   });
 
   useEffect(() => {
     try {
-      localStorage.setItem('snabtash_favs', JSON.stringify(favorites));
+      localStorage.setItem('snabtash_favs_v2', JSON.stringify(favorites));
+      // Clean up legacy v1 demo favorites if present
+      localStorage.removeItem('snabtash_favs');
     } catch {
       // ignore
     }
   }, [favorites]);
 
-  // Requests state (Zayavkalar with rich initial B2B demo requests for analytics)
+  // Requests state (Zayavkalar - clean real orders only, no mock demo items)
   const [requests, setRequests] = useState<RequestOrder[]>(() => {
     try {
       const saved = localStorage.getItem('snabtash_requests');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          // Filter out legacy hardcoded mock demo orders (1042, 1041, 1040, 1039, 1038)
+          return parsed.filter((o) => !['1042', '1041', '1040', '1039', '1038'].includes(String(o.id)));
+        }
+      }
     } catch {
       // ignore
     }
-    return [
-      {
-        id: '1042',
-        date: '28.08.2026',
-        items: [
-          { product: INITIAL_PRODUCTS[0], quantity: 20 },
-          { product: INITIAL_PRODUCTS[1], quantity: 15 },
-          { product: INITIAL_PRODUCTS[3], quantity: 10 },
-        ],
-        totalAmount: 1850000,
-        status: 'Ko‘rib chiqilmoqda',
-        contact: {
-          name: 'Javohir Toshmatov',
-          phone: '+998 90 987 65 43',
-          company: 'Universal Logistic MCHJ',
-          inn: '308912445',
-          comment: 'Shoshilinch yetkazib berish kerak, e-faktura yuboring',
-        },
-      },
-      {
-        id: '1041',
-        date: '28.08.2026',
-        items: [
-          { product: INITIAL_PRODUCTS[2], quantity: 12 },
-          { product: INITIAL_PRODUCTS[4], quantity: 8 },
-        ],
-        totalAmount: 740000,
-        status: 'Tasdiqlangan',
-        contact: {
-          name: 'Shahlo Karimova',
-          phone: '+998 93 512 34 56',
-          company: 'Grand Med Klinika',
-          inn: '304871922',
-          comment: 'Gigiyena vositalari sertifikati bilan birga',
-        },
-      },
-      {
-        id: '1040',
-        date: '27.08.2026',
-        items: [
-          { product: INITIAL_PRODUCTS[5], quantity: 50 },
-          { product: INITIAL_PRODUCTS[0], quantity: 40 },
-        ],
-        totalAmount: 3250000,
-        status: 'Yetkazilmoqda',
-        contact: {
-          name: 'Ulug‘bek Rustamov',
-          phone: '+998 97 123 88 99',
-          company: 'Tashkent City Hotel',
-          inn: '301982733',
-          comment: 'Omborxona qabul qiladi, yuk xati ilova qilinsin',
-        },
-      },
-      {
-        id: '1039',
-        date: '26.08.2026',
-        items: [
-          { product: INITIAL_PRODUCTS[1], quantity: 10 },
-          { product: INITIAL_PRODUCTS[2], quantity: 6 },
-        ],
-        totalAmount: 512000,
-        status: 'Bajarildi',
-        contact: {
-          name: 'Nodirbek Quchqarov',
-          phone: '+998 90 123 45 67',
-          company: 'Artel R&D Center',
-          inn: '305128941',
-          comment: 'Didox orqali imzolandi',
-        },
-      },
-      {
-        id: '1038',
-        date: '25.08.2026',
-        items: [
-          { product: INITIAL_PRODUCTS[3], quantity: 25 },
-        ],
-        totalAmount: 1125000,
-        status: 'Bajarildi',
-        contact: {
-          name: 'Dilshod Aliyev',
-          phone: '+998 91 333 22 11',
-          company: 'Pepsi Bottlers Uzbekistan',
-          inn: '302819002',
-          comment: 'Muntazam oylik xarid',
-        },
-      },
-    ];
+    return [];
   });
 
   useEffect(() => {
@@ -1308,6 +1230,114 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return next;
     });
   };
+
+  // Helper to normalize phone digits for flexible matching
+  const normalizePhone = (phoneStr?: string): string => {
+    return (phoneStr || '').replace(/\D/g, '');
+  };
+
+  // Filter orders belonging exclusively to the currently identified customer
+  const customerOrders = useMemo(() => {
+    const userPhoneDigits = normalizePhone(profile.phone);
+    if (!userPhoneDigits || userPhoneDigits.length < 7) {
+      return [];
+    }
+    const last7 = userPhoneDigits.slice(-7);
+    return requests.filter((ord) => {
+      const ordPhoneDigits = normalizePhone(ord.contact?.phone);
+      if (!ordPhoneDigits) return false;
+      return ordPhoneDigits.endsWith(last7) || userPhoneDigits.endsWith(ordPhoneDigits.slice(-7));
+    });
+  }, [requests, profile.phone]);
+
+  // Customer B2B Phone Login / Identification
+  const loginCustomer = async (phone: string, company?: string, name?: string, inn?: string): Promise<boolean> => {
+    const cleanPhone = phone.trim();
+    if (!cleanPhone) return false;
+
+    try {
+      // 1. Lookup existing customer records from Django API
+      const lookupRes = await api.lookupCustomer(cleanPhone);
+      let customerName = name || '';
+      let customerCompany = company || '';
+      let customerInn = inn || '';
+
+      if (lookupRes.found && lookupRes.customer) {
+        customerName = customerName || lookupRes.customer.name || '';
+        customerCompany = customerCompany || lookupRes.customer.company || '';
+        customerInn = customerInn || lookupRes.customer.inn || '';
+      }
+
+      // 2. Save profile
+      updateProfile({
+        phone: cleanPhone,
+        name: customerName,
+        company: customerCompany,
+        inn: customerInn,
+        hasOrderedBefore: true,
+      });
+
+      // 3. Fetch orders for this customer from backend
+      try {
+        const remoteOrders = await api.getOrders({ phone: cleanPhone });
+        if (Array.isArray(remoteOrders) && remoteOrders.length > 0) {
+          setRequests((prev) => {
+            const existingIds = new Set(prev.map((o) => String(o.id)));
+            const newOrders = remoteOrders.filter((o) => !existingIds.has(String(o.id)));
+            return [...newOrders, ...prev];
+          });
+        }
+      } catch (ordErr) {
+        console.warn('Could not fetch customer orders from server:', ordErr);
+      }
+
+      showToast(`Xush kelibsiz! ${customerCompany ? customerCompany + ' hisobi' : cleanPhone} faollashtirildi`, 'success');
+      return true;
+    } catch (err) {
+      console.error('Customer login error:', err);
+      // Local fallback
+      updateProfile({
+        phone: cleanPhone,
+        name: name || '',
+        company: company || '',
+        inn: inn || '',
+        hasOrderedBefore: true,
+      });
+      showToast('Hisob faollashtirildi', 'success');
+      return true;
+    }
+  };
+
+  const logoutCustomer = () => {
+    setProfile({
+      name: '',
+      phone: '',
+      company: '',
+      inn: '',
+      email: '',
+      hasOrderedBefore: false,
+    });
+    try {
+      localStorage.removeItem('snabtash_profile');
+    } catch {}
+    showToast('Hisobdan chiqildi', 'info');
+  };
+
+  // Auto-sync customer orders on mount or when profile.phone changes
+  useEffect(() => {
+    const clean = normalizePhone(profile.phone);
+    if (clean.length >= 7) {
+      api.getOrders({ phone: profile.phone }).then((remoteOrders) => {
+        if (Array.isArray(remoteOrders) && remoteOrders.length > 0) {
+          setRequests((prev) => {
+            const existingIds = new Set(prev.map((o) => String(o.id)));
+            const newOrders = remoteOrders.filter((o) => !existingIds.has(String(o.id)));
+            return [...newOrders, ...prev];
+          });
+        }
+      }).catch((err) => console.log('Auto order sync note:', err));
+    }
+  }, [profile.phone]);
 
   // Cart operations
   const addToCart = (product: Product, quantity = 1) => {
@@ -1390,6 +1420,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setRequests((prev) => [newOrder, ...prev]);
     clearCart();
+
+    // Automatically remember contact details and activate customer session
+    if (orderData.contact && orderData.contact.phone) {
+      updateProfile({
+        name: orderData.contact.name || '',
+        phone: orderData.contact.phone || '',
+        company: orderData.contact.company || '',
+        inn: orderData.contact.inn || '',
+        hasOrderedBefore: true,
+      });
+    }
 
     // Sync with Django REST API
     api.createOrder({
@@ -1665,6 +1706,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateSiteSettings,
         profile,
         updateProfile,
+        loginCustomer,
+        logoutCustomer,
+        customerOrders,
         toast,
         showToast,
         searchQuery,

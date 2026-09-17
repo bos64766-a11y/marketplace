@@ -16,6 +16,7 @@ import {
   ArrowRight,
   Clock,
   Globe,
+  Building2,
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -34,6 +35,8 @@ export const Header: React.FC = () => {
     setLanguage,
     t,
     getProductName,
+    profile,
+    customerOrders,
   } = useApp();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -382,14 +385,30 @@ export const Header: React.FC = () => {
               <span>{t.header.quickRequest}</span>
             </button>
 
-            {/* Zayavkalar tarixi link */}
+            {/* Zayavkalar tarixi / Mijoz hisobi */}
             <button
               id="btn-header-orders-history"
               onClick={() => navigate('/requests')}
-              className="hidden xl:inline-flex items-center text-xs font-bold text-[#64748B] hover:text-[#FF5A00] transition-colors cursor-pointer px-1"
-              title={t.header.ordersHistory}
+              className={`hidden xl:inline-flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer px-2.5 py-1.5 rounded-xl ${
+                profile?.phone
+                  ? 'bg-[#FFF1E8] text-[#FF5A00] hover:bg-[#FFE4D4] border border-[#FFD8BF]'
+                  : 'text-[#64748B] hover:text-[#FF5A00]'
+              }`}
+              title={profile?.phone ? `${profile.company || profile.name || profile.phone} - Zayavkalarim` : t.header.ordersHistory}
             >
-              <span>{t.header.ordersHistory}</span>
+              {profile?.phone ? (
+                <>
+                  <Building2 className="w-3.5 h-3.5 text-[#FF5A00]" />
+                  <span className="max-w-[120px] truncate">{profile.company || profile.name || profile.phone}</span>
+                  {customerOrders.length > 0 && (
+                    <span className="w-4 h-4 rounded-full bg-[#FF5A00] text-white text-[10px] font-bold flex items-center justify-center">
+                      {customerOrders.length}
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span>{t.header.ordersHistory}</span>
+              )}
             </button>
 
             {/* Mobile Hamburger Menu Toggle */}
@@ -510,9 +529,19 @@ export const Header: React.FC = () => {
                   navigate('/requests');
                   setIsMobileMenuOpen(false);
                 }}
-                className="py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors text-[#475569]"
+                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors flex items-center justify-between ${
+                  profile?.phone || currentPath === '/requests' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : 'text-[#475569]'
+                }`}
               >
-                {t.header.ordersHistory}
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-4 h-4" />
+                  <span>{profile?.phone ? (profile.company || profile.name || profile.phone) : t.header.ordersHistory}</span>
+                </div>
+                {profile?.phone && customerOrders.length > 0 && (
+                  <span className="text-[10px] bg-[#FF5A00] text-white px-2 py-0.5 rounded-full font-bold">
+                    {customerOrders.length} ta
+                  </span>
+                )}
               </button>
             </div>
 

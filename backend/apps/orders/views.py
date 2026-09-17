@@ -36,7 +36,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         # Phone filter (for customer's personal history)
         phone = params.get('phone')
         if phone:
-            qs = qs.filter(customer_phone=phone)
+            digits = ''.join(filter(str.isdigit, phone))
+            if len(digits) >= 9:
+                qs = qs.filter(Q(customer_phone=phone) | Q(customer_phone__icontains=digits[-9:]))
+            else:
+                qs = qs.filter(customer_phone=phone)
 
         return qs
 
