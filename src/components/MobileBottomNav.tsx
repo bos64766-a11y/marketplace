@@ -42,8 +42,8 @@ export const MobileBottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#F1F5F9] px-2 py-1.5 shadow-lg safe-area-pb">
-      <div className="grid grid-cols-5 items-center w-full">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#F1F5F9] px-1 sm:px-2 py-1 shadow-lg safe-area-pb">
+      <div className="grid grid-cols-5 items-center w-full max-w-lg mx-auto">
         {navItems.map((item) => {
           const isActive =
             item.path === '/'
@@ -59,17 +59,17 @@ export const MobileBottomNav: React.FC = () => {
               onClick={() => {
                 navigate(item.path);
               }}
-              className="relative flex flex-col items-center justify-center py-0.5 px-0.5 transition-colors cursor-pointer"
+              className="relative flex flex-col items-center justify-center py-1 px-0.5 transition-colors cursor-pointer min-w-0"
             >
               <div
-                className={`relative flex items-center justify-center w-11 h-7 rounded-2xl transition-all ${
+                className={`relative flex items-center justify-center w-10 h-7 rounded-xl transition-all ${
                   isActive
                     ? 'bg-[#FFF7ED] text-[#FF5A00]'
                     : 'text-[#64748B] hover:text-[#1E293B]'
                 }`}
               >
                 <IconComponent
-                  className={`w-4.5 h-4.5 ${
+                  className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${
                     isActive ? 'stroke-[2.25]' : 'stroke-[1.75]'
                   } ${item.id === 'favorites' && favorites.length > 0 && isActive ? 'fill-[#FF5A00]' : ''}`}
                 />
@@ -84,7 +84,7 @@ export const MobileBottomNav: React.FC = () => {
                 )}
               </div>
               <span
-                className={`text-[10px] mt-0.5 leading-tight ${
+                className={`text-[9.5px] sm:text-[10px] mt-0.5 leading-tight truncate max-w-full ${
                   isActive ? 'font-black text-[#FF5A00]' : 'font-semibold text-[#64748B]'
                 }`}
               >

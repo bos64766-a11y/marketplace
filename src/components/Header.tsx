@@ -100,23 +100,24 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-40 bg-white/98 backdrop-blur-md border-b border-[#F1F5F9] shrink-0 shadow-2xs">
       {/* 1. Top B2B Corporate Utility Bar */}
       <div className="bg-[#081B4B] text-[#94A3B8] text-[11px] sm:text-[12px] border-b border-[#1E293B]/60">
-        <div className="max-w-[1536px] mx-auto px-4 sm:px-8 h-8 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 sm:gap-6 min-w-0">
-            <div className="flex items-center gap-1.5 min-w-0 text-white font-medium truncate">
+        <div className="max-w-[1536px] mx-auto px-3 sm:px-8 h-8 flex items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-6 min-w-0">
+            <div className="flex items-center gap-1.5 min-w-0 text-white font-medium">
               <MapPin className="w-3.5 h-3.5 text-[#FF5A00] shrink-0" />
-              <span className="truncate">{t.header.deliveryRegion}</span>
+              <span className="truncate hidden sm:inline">{t.header.deliveryRegion}</span>
+              <span className="truncate sm:hidden text-[10.5px]">{language === 'ru' ? 'Весь Узбекистан' : 'Butun O‘zbekiston'}</span>
             </div>
             <div className="hidden md:flex items-center gap-1.5 shrink-0 text-[#93C5FD]">
               <ShieldCheck className="w-3.5 h-3.5 text-[#009B5A]" />
               <span>{t.header.contractGuarantee}</span>
             </div>
           </div>
-          <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-5 shrink-0">
             <a
               href={`tel:${(siteSettings?.phone1 || '+998870349779').replace(/\s+/g, '')}`}
-              className="flex items-center gap-1 text-white hover:text-[#FF5A00] transition-colors font-semibold whitespace-nowrap"
+              className="flex items-center gap-1 text-white hover:text-[#FF5A00] transition-colors font-semibold text-[11px] sm:text-xs whitespace-nowrap"
             >
-              <Phone className="w-3.5 h-3.5 text-[#FF5A00]" />
+              <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FF5A00] shrink-0" />
               <span>{siteSettings?.phone1 || '+998 87 034 97 79'}</span>
             </a>
             <span className="hidden sm:inline text-[#64748B]">|</span>
@@ -158,11 +159,11 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Main FreshDirect-Style Minimalist Navigation Bar */}
-      <div className="max-w-[1536px] mx-auto px-4 sm:px-8">
-        <div className="flex items-center justify-between h-[68px] sm:h-[72px] gap-4 lg:gap-8">
+      {/* 2. Main Minimalist Navigation Bar */}
+      <div className="max-w-[1536px] mx-auto px-3 sm:px-8">
+        <div className="flex items-center justify-between h-[64px] sm:h-[72px] gap-2 sm:gap-4 lg:gap-8">
           {/* Left: Brand Logo & Inline Navigation */}
-          <div className="flex items-center gap-6 xl:gap-10 min-w-0">
+          <div className="flex items-center gap-4 sm:gap-6 xl:gap-10 min-w-0">
             {/* Logo */}
             <div className="shrink-0">
               <Logo />
@@ -229,15 +230,15 @@ export const Header: React.FC = () => {
             </nav>
           </div>
 
-          {/* Right: FreshDirect Action Elements */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Right: Action Elements */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             {/* Search Trigger (Icon or Expandable Box) */}
             <div ref={searchContainerRef} className="relative">
               <button
                 id="btn-header-search-toggle"
                 type="button"
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all cursor-pointer ${
                   isSearchOpen
                     ? 'bg-[#FF5A00] text-white shadow-sm shadow-[#FF5A00]/30'
                     : 'text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]'
@@ -245,7 +246,7 @@ export const Header: React.FC = () => {
                 aria-label={t.header.searchPlaceholder}
                 title={t.header.searchPlaceholder}
               >
-                {isSearchOpen ? <X className="w-4.5 h-4.5" /> : <Search className="w-4.5 h-4.5 stroke-[2.2]" />}
+                {isSearchOpen ? <X className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> : <Search className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.2]" />}
               </button>
 
               {/* Floating Expandable Search Dropdown */}
@@ -338,11 +339,11 @@ export const Header: React.FC = () => {
               )}
             </div>
 
-            {/* Sevimlilar (Favorites Heart Button) */}
+            {/* Sevimlilar (Favorites Heart Button) - Hidden on mobile screens to prevent cramping since MobileBottomNav has it */}
             <button
               id="btn-header-favorites"
               onClick={() => navigate('/favorites')}
-              className="relative w-10 h-10 rounded-full border border-[#E2E8F0] hover:border-[#FF5A00] text-[#334155] hover:text-[#FF5A00] hover:bg-[#FFF7ED]/50 flex items-center justify-center transition-all cursor-pointer shrink-0"
+              className="hidden sm:flex relative w-10 h-10 rounded-full border border-[#E2E8F0] hover:border-[#FF5A00] text-[#334155] hover:text-[#FF5A00] hover:bg-[#FFF7ED]/50 items-center justify-center transition-all cursor-pointer shrink-0"
               title={t.header.favorites}
               aria-label={t.header.favorites}
             >
@@ -358,17 +359,17 @@ export const Header: React.FC = () => {
               )}
             </button>
 
-            {/* FreshDirect Style Circular Cart Button */}
+            {/* Circular Cart Button */}
             <button
               id="btn-header-cart"
               onClick={() => navigate('/cart')}
-              className="relative w-10 h-10 rounded-full border border-[#CBD5E1] hover:border-[#FF5A00] text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]/50 flex items-center justify-center transition-all cursor-pointer shrink-0"
+              className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#CBD5E1] hover:border-[#FF5A00] text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]/50 flex items-center justify-center transition-all cursor-pointer shrink-0"
               title={t.header.cart}
               aria-label={t.header.cart}
             >
-              <ShoppingCart className="w-4.5 h-4.5 stroke-[1.9]" />
+              <ShoppingCart className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[1.9]" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#FF5A00] text-white text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-white shadow-xs">
+                <span className="absolute -top-1 -right-1 bg-[#FF5A00] text-white text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center border-2 border-white shadow-xs">
                   {cartCount}
                 </span>
               )}
@@ -416,10 +417,10 @@ export const Header: React.FC = () => {
               id="btn-header-mobile-menu-toggle"
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden w-10 h-10 rounded-full border border-[#E2E8F0] hover:border-[#FF5A00] text-[#1E293B] flex items-center justify-center cursor-pointer transition-colors"
+              className="lg:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#E2E8F0] hover:border-[#FF5A00] text-[#1E293B] flex items-center justify-center cursor-pointer transition-colors shrink-0"
               aria-label="Menyu"
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMobileMenuOpen ? <X className="w-4.5 h-4.5 sm:w-5 sm:h-5" /> : <Menu className="w-4.5 h-4.5 sm:w-5 sm:h-5" />}
             </button>
           </div>
         </div>
