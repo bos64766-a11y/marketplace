@@ -70,6 +70,7 @@ export const AdminProducts: React.FC = () => {
     exportBackupJSON,
     restoreFromArchive,
     archiveStats,
+    resetProductsToDefault,
   } = useApp();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -528,7 +529,23 @@ export const AdminProducts: React.FC = () => {
                   <tr>
                     <td colSpan={6} className="px-4 py-12 text-center">
                       <Package className="w-8 h-8 text-[#CBD5E1] mx-auto mb-2" />
-                      <p className="text-xs text-[#94A3B8]">Mahsulot topilmadi</p>
+                      <p className="text-xs text-[#94A3B8]">
+                        {searchQuery || filterCategory !== 'all'
+                          ? "Qidiruv bo'yicha mahsulot topilmadi"
+                          : "Mahsulotlar ro'yxati bo'sh"}
+                      </p>
+                      {products.length === 0 && (
+                        <div className="mt-3">
+                          <button
+                            type="button"
+                            onClick={resetProductsToDefault}
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FF5A00] hover:bg-[#e04f00] text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+                          >
+                            <RefreshCw className="w-3.5 h-3.5" />
+                            Standart tovarlarni tiklash (37 ta)
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 )}

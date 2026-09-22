@@ -13,6 +13,17 @@ export const CATEGORIES: Category[] = [
     count: 36,
   },
   {
+    id: 'xojalikmollari',
+    slug: 'xojalikmollari',
+    name: 'Xo\'jalik mollari',
+    name_ru: 'Хозтовары',
+    icon: 'Sparkles',
+    image: 'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=300&auto=format&fit=crop&q=80',
+    description: 'Chelaklar, hokandozlar, supurgilar, chiqindi qoplari va boshqa xo\'jalik tovarlari',
+    description_ru: 'Ведра, совки, веники, мешки для мусора и другие хозтовары',
+    count: 42,
+  },
+  {
     id: 'maishiy-kimyo',
     slug: 'maishiy-kimyo',
     name: 'Maishiy kimyo',

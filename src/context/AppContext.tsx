@@ -369,12 +369,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const saved = localStorage.getItem('snabtash_admin_products');
       if (saved !== null) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
     } catch {
       // fallback
     }
-    return [];
+    return INITIAL_PRODUCTS;
   });
 
   // Archive Stats state for UI
@@ -383,11 +383,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const pRaw = localStorage.getItem('snabtash_products_archive');
       const sRaw = localStorage.getItem('snabtash_sections_archive');
       return {
-        productsCount: pRaw ? JSON.parse(pRaw).length : 0,
+        productsCount: pRaw ? JSON.parse(pRaw).length : INITIAL_PRODUCTS.length,
         sectionsCount: sRaw ? JSON.parse(sRaw).length : 0,
       };
     } catch {
-      return { productsCount: 0, sectionsCount: 0 };
+      return { productsCount: INITIAL_PRODUCTS.length, sectionsCount: 0 };
     }
   });
 
@@ -396,7 +396,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const pRaw = localStorage.getItem('snabtash_products_archive');
       const sRaw = localStorage.getItem('snabtash_sections_archive');
       setArchiveStats({
-        productsCount: pRaw ? JSON.parse(pRaw).length : 0,
+        productsCount: pRaw ? JSON.parse(pRaw).length : INITIAL_PRODUCTS.length,
         sectionsCount: sRaw ? JSON.parse(sRaw).length : 0,
       });
     } catch {}
@@ -424,13 +424,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         api.getPartners(),
       ]);
 
-      if (prodsRes.status === 'fulfilled' && Array.isArray(prodsRes.value)) {
+      if (prodsRes.status === 'fulfilled' && Array.isArray(prodsRes.value) && prodsRes.value.length > 0) {
         const serverProducts = prodsRes.value;
         setProducts(serverProducts);
         try {
           localStorage.setItem('snabtash_admin_products', JSON.stringify(serverProducts));
+          localStorage.setItem('snabtash_products_archive', JSON.stringify(serverProducts));
         } catch {}
         updateArchiveStats();
+      } else {
+        // If backend is offline or sleeping or suspended (503), ensure fresh browsers never show 0 products!
+        setProducts((current) => {
+          if (!current || current.length === 0) {
+            try {
+              localStorage.setItem('snabtash_admin_products', JSON.stringify(INITIAL_PRODUCTS));
+              localStorage.setItem('snabtash_products_archive', JSON.stringify(INITIAL_PRODUCTS));
+            } catch {}
+            return INITIAL_PRODUCTS;
+          }
+          return current;
+        });
       }
 
       if (catsRes.status === 'fulfilled' && Array.isArray(catsRes.value) && catsRes.value.length > 0) {
@@ -438,6 +451,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         try {
           localStorage.setItem('snabtash_admin_categories', JSON.stringify(catsRes.value));
         } catch {}
+      } else {
+        setCategories((current) => {
+          if (!current || current.length === 0) {
+            try {
+              localStorage.setItem('snabtash_admin_categories', JSON.stringify(INITIAL_CATEGORIES));
+            } catch {}
+            return INITIAL_CATEGORIES;
+          }
+          return current;
+        });
       }
 
       if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value)) {
@@ -448,14 +471,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSiteSettings(settRes.value);
       }
 
-      if (banRes.status === 'fulfilled' && Array.isArray(banRes.value)) {
+      if (banRes.status === 'fulfilled' && Array.isArray(banRes.value) && banRes.value.length > 0) {
         setBanners(banRes.value);
         try {
           localStorage.setItem('snabtash_admin_banners', JSON.stringify(banRes.value));
         } catch {}
       }
 
-      if (sectRes.status === 'fulfilled' && Array.isArray(sectRes.value)) {
+      if (sectRes.status === 'fulfilled' && Array.isArray(sectRes.value) && sectRes.value.length > 0) {
         const serverSections = sectRes.value;
         setShowcaseSections(serverSections);
         try {
@@ -464,7 +487,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateArchiveStats();
       }
 
-      if (partRes.status === 'fulfilled' && Array.isArray(partRes.value)) {
+      if (partRes.status === 'fulfilled' && Array.isArray(partRes.value) && partRes.value.length > 0) {
         setPartners(partRes.value);
         try {
           localStorage.setItem('snabtash_partners', JSON.stringify(partRes.value));
@@ -703,8 +726,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const resetProductsToDefault = () => {
     setProducts(INITIAL_PRODUCTS);
+    try {
+      localStorage.setItem('snabtash_admin_products', JSON.stringify(INITIAL_PRODUCTS));
+      localStorage.setItem('snabtash_products_archive', JSON.stringify(INITIAL_PRODUCTS));
+    } catch {}
+    updateArchiveStats();
     notifySync();
-    showToast('Mahsulotlar asl holatiga qaytarildi', 'info');
+    showToast(`✓ Mahsulotlar asl holatiga qaytarildi (${INITIAL_PRODUCTS.length} ta tovar)`, 'info');
   };
 
   // Dynamic Categories state
