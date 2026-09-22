@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://marketplace-0ycw.onrender.com/api/:path*"
+      "destination": "https://marketplace-production-6690.up.railway.app/api/:path*"
     },
     {
       "source": "/media/:path*",
-      "destination": "https://marketplace-0ycw.onrender.com/media/:path*"
+      "destination": "https://marketplace-production-6690.up.railway.app/media/:path*"
     },
     {
       "source": "/(.*)",
