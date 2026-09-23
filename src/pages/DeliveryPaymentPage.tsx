@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { Truck, CreditCard, Clock, ShieldCheck, CheckCircle2, AlertCircle, FileSpreadsheet } from 'lucide-react';
 

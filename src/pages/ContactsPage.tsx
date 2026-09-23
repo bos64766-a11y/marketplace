@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { CONTACT_INFO } from '../data/content';
 import { Phone, Send, Clock, MapPin, Mail, MessageSquare, Check, ArrowRight, Loader2 } from 'lucide-react';

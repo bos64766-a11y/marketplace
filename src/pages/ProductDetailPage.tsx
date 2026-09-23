@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { ProductCard } from '../components/ProductCard';
 import { getMediaUrl } from '../services/api';
@@ -80,6 +81,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   const productName = getProductName(product);
   const productDesc = getProductDesc(product);
   const productTag = getProductTag(product);
+
+  useSEO({
+    title: `${productName} — ${language === 'ru' ? 'Купить оптом' : 'Ulgurji Narxda'}`,
+    description: `${productName}. ${productDesc ? productDesc.slice(0, 150) + '... ' : ''}${language === 'ru' ? 'Оптовые поставки в Ташкенте по выгодным ценам — SNABTASH.' : 'Toshkent bo\'ylab arzon narxlarda ulgurji ta\'minot — SNABTASH.'}`,
+    image: product.image ? getMediaUrl(product.image) : undefined,
+  });
 
   // Related products from same category
   const relatedProducts = products.filter(

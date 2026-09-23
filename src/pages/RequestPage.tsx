@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { getMediaUrl } from '../services/api';
 import {

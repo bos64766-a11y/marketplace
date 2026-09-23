@@ -3,22 +3,96 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SNABTASH — B2B Ta'minot Platformasi</title>
-    <meta name="description" content="Korxonalar va tashkilotlar uchun professional B2B mahsulotlar katalogi va zayavka platformasi." />
-    <meta property="og:title" content="SNABTASH — B2B Ta'minot Platformasi" />
-    <meta property="og:description" content="Korxonalar va tashkilotlar uchun professional B2B mahsulotlar katalogi va zayavka platformasi." />
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>SNABTASH — B2B Ta'minot va Ulgurji Savdo Platformasi</title>
+    <meta name="title" content="SNABTASH — B2B Ta'minot va Ulgurji Savdo Platformasi" />
+    <meta name="description" content="SNABTASH — O'zbekiston korxona va ofislari uchun maishiy kimyo, tozalash vositalari, kantselyariya va xo'jalik mollarining ulgurji savdosi. Toshkent bo'ylab tezkor yetkazib berish va B2B zayavka tizimi." />
+    <meta name="keywords" content="snabtash, b2b ta'minot, ulgurji savdo toshkent, maishiy kimyo optom, kantselyariya toshkent, xo'jalik mollari ulgurji, optom sklad toshkent, tozalik vositalari, снабжение ташкент, оптом бытовая химия, хозтовары оптом, канцтовары ташкент" />
+    <meta name="author" content="SNABTASH" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#FF5A00" />
+
+    <!-- Canonical and Multi-Language URLs -->
+    <link rel="canonical" href="https://snabtash.uz/" />
+    <link rel="alternate" hreflang="uz" href="https://snabtash.uz/" />
+    <link rel="alternate" hreflang="ru" href="https://snabtash.uz/?lang=ru" />
+    <link rel="alternate" hreflang="x-default" href="https://snabtash.uz/" />
+
+    <!-- Open Graph / Facebook / Telegram / WhatsApp -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://snabtash.uz/" />
+    <meta property="og:site_name" content="SNABTASH B2B" />
+    <meta property="og:title" content="SNABTASH — B2B Ta'minot va Ulgurji Savdo" />
+    <meta property="og:description" content="Korxonalar va ofislar uchun maishiy kimyo, kantselyariya, tozalash vositalari ulgurji savdosi. Toshkent bo'ylab zayavka va tezkor yetkazib berish." />
+    <meta property="og:image" content="https://snabtash.uz/logo-horizontal.png" />
+    <meta property="og:image:secure_url" content="https://snabtash.uz/logo-horizontal.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SNABTASH B2B Ta'minot" />
+    <meta property="og:locale" content="uz_UZ" />
+    <meta property="og:locale:alternate" content="ru_RU" />
+
+    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://snabtash.uz/" />
+    <meta name="twitter:title" content="SNABTASH — B2B Ta'minot va Ulgurji Savdo" />
+    <meta name="twitter:description" content="Korxonalar uchun professional B2B mahsulotlar katalogi va zayavka platformasi." />
+    <meta name="twitter:image" content="https://snabtash.uz/logo-horizontal.png" />
+
+    <!-- Local / Geo SEO (Tashkent, Uzbekistan) -->
+    <meta name="geo.region" content="UZ-TO" />
+    <meta name="geo.placename" content="Tashkent" />
+
+    <!-- Favicons & Icons -->
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/logo-icon.png" />
+
+    <!-- Google Fonts & Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="preload" as="image" href="/banners/banner-clean-promo.webp" type="image/webp" fetchpriority="high" />
+
+    <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://snabtash.uz/#organization",
+          "name": "SNABTASH",
+          "url": "https://snabtash.uz",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://snabtash.uz/logo.png"
+          },
+          "description": "O'zbekiston korxona va tashkilotlari uchun professional B2B ta'minot va ulgurji savdo platformasi.",
+          "email": "info@snabtash.uz",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Toshkent",
+            "addressCountry": "UZ"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://snabtash.uz/#website",
+          "url": "https://snabtash.uz",
+          "name": "SNABTASH",
+          "description": "B2B Ta'minot va Ulgurji Savdo Platformasi",
+          "publisher": {
+            "@id": "https://snabtash.uz/#organization"
+          },
+          "inLanguage": ["uz", "ru"]
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="bg-white text-[#14213D] font-sans antialiased selection:bg-[#FFF1E8] selection:text-[#FF5A00]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

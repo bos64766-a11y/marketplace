@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { ProductCard } from '../components/ProductCard';
 import { getMediaUrl } from '../services/api';
@@ -56,6 +57,22 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
     const pathOnly = currentPath.split(/[?#]/)[0];
     const match = pathOnly.match(/^\/catalog\/([^/]+)/);
     return match ? match[1] : 'all';
+  });
+
+  const activeCatObj = categories.find((c) => c.slug === selectedCategory || c.id === selectedCategory);
+  const activeCatName = activeCatObj
+    ? getCategoryName(activeCatObj)
+    : (selectedCategory === 'all'
+        ? (language === 'ru' ? 'Все товары' : 'Barcha mahsulotlar')
+        : selectedCategory);
+
+  useSEO({
+    title: selectedCategory !== 'all'
+      ? `${activeCatName} — ${language === 'ru' ? 'Каталог оптом' : 'Ulgurji Savdo'}`
+      : (language === 'ru' ? 'Каталог товаров — Оптовые поставки' : 'Mahsulotlar Katalogi — B2B Ulgurji Savdo'),
+    description: language === 'ru'
+      ? `Каталог товаров категории ${activeCatName}. Бытовая химия, хозтовары, канцтовары оптом для организаций в Ташкенте — SNABTASH.`
+      : `B2B korxonalar uchun ${activeCatName} mahsulotlari katalogi. Maishiy kimyo, xo'jalik mollari va kantselyariya ulgurji savdosi — SNABTASH.`,
   });
 
   const [currentPage, setCurrentPage] = useState(1);

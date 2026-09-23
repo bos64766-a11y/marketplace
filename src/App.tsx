@@ -9,6 +9,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Toast } from './components/Toast';
+import { useSEO } from './hooks/useSEO';
 
 // Lazy loaded pages for performance & code-splitting
 const HomePage = lazy(() => import('./pages/HomePage').then((m) => ({ default: m.HomePage })));
@@ -115,6 +116,10 @@ const AppContent: React.FC = () => {
   const pathOnly = currentPath.split(/[?#]/)[0] || '/';
   const isHomePage = pathOnly === '/';
   const isAdminPage = pathOnly.startsWith('/admin');
+
+  useSEO({
+    noindex: isAdminPage,
+  });
 
   // Admin pages get their own layout — no Header, Footer, or MobileBottomNav
   if (isAdminPage) {

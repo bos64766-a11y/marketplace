@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { Building2, ShieldCheck, Truck, Users, Award, Target, CheckCircle2 } from 'lucide-react';
 
