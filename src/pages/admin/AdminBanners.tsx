@@ -485,10 +485,10 @@ export const AdminBanners: React.FC = () => {
 
         {/* Modal: Add or Edit Pure Image Banner */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs overflow-y-auto">
-            <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-[#F1F5F9] my-6 animate-in fade-in zoom-in-95 duration-200">
-              {/* Modal Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-[#F1F5F9]">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-[#F1F5F9] animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+              {/* Modal Header (Sticky Top) */}
+              <div className="flex items-center justify-between px-6 py-4.5 border-b border-[#F1F5F9] shrink-0 bg-white">
                 <div>
                   <h3 className="text-lg sm:text-xl font-black text-[#1E293B]">
                     {editingBanner ? 'Bannerni tahrirlash' : 'Yangi grafik banner yuklash'}
@@ -505,8 +505,8 @@ export const AdminBanners: React.FC = () => {
                 </button>
               </div>
 
-              {/* Form Content */}
-              <div className="space-y-5 pt-5">
+              {/* Form Content (Scrollable Body) */}
+              <div className="overflow-y-auto px-6 py-5 space-y-5 flex-1">
                 {/* LANGUAGE SELECTOR TABS */}
                 <div className="flex items-center gap-2 p-1.5 bg-[#F1F5F9] rounded-2xl border border-[#E2E8F0]">
                   <button
@@ -763,11 +763,11 @@ export const AdminBanners: React.FC = () => {
                           <Check className="w-3.5 h-3.5" /> Rasm tanlangan
                         </span>
                       </div>
-                      <div className="w-full rounded-2xl overflow-hidden border border-[#E2E8F0] shadow-xs bg-slate-50">
+                      <div className="w-full max-h-56 sm:max-h-64 rounded-2xl overflow-hidden border border-[#E2E8F0] shadow-xs bg-slate-900/5 flex items-center justify-center p-1">
                         <img
                           src={getMediaUrl(activeModalImage)}
                           alt="Live Preview"
-                          className="w-full h-auto object-cover block"
+                          className="max-h-52 sm:max-h-60 w-full object-contain block rounded-xl"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
                           }}
@@ -869,12 +869,12 @@ export const AdminBanners: React.FC = () => {
                 </div>
               </div>
 
-              {/* Modal Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-5 mt-6 border-t border-[#F1F5F9]">
+              {/* Modal Buttons (Sticky Bottom) */}
+              <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#F1F5F9] bg-[#F8FAFC] shrink-0 rounded-b-3xl">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-bold text-[#64748B] hover:bg-[#F8FAFC] cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl border border-[#E2E8F0] text-xs font-bold text-[#64748B] hover:bg-white hover:text-[#0F172A] transition-colors cursor-pointer"
                 >
                   Bekor qilish
                 </button>
@@ -927,8 +927,8 @@ export const AdminBanners: React.FC = () => {
         {/* Modal: Full Preview */}
         {previewBanner && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-xs">
-            <div className="bg-white rounded-3xl max-w-4xl w-full p-5 sm:p-7 shadow-2xl border border-[#F1F5F9] animate-in fade-in zoom-in-95 duration-200">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#F1F5F9]">
+            <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col p-5 sm:p-7 shadow-2xl border border-[#F1F5F9] animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#F1F5F9] shrink-0">
                 <div>
                   <h4 className="text-sm font-bold text-[#1E293B]">
                     {previewLang === 'ru'
@@ -976,7 +976,7 @@ export const AdminBanners: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-4 rounded-2xl overflow-hidden border border-[#E5EAF2] shadow-sm bg-slate-50 relative">
+              <div className="my-4 rounded-2xl overflow-hidden border border-[#E5EAF2] shadow-sm bg-slate-900/5 relative flex-1 flex items-center justify-center p-2 min-h-0">
                 {previewLang === 'ru' && !previewBanner.image_ru && (
                   <div className="absolute top-3 left-3 z-10 bg-amber-500/90 backdrop-blur-xs text-white text-[11px] font-bold px-3 py-1 rounded-lg shadow-sm">
                     ⚠️ Ruscha rasm yuklanmagan — O‘zbekcha rasm ko‘rsatilmoqda
@@ -991,17 +991,17 @@ export const AdminBanners: React.FC = () => {
                     ) || '/banners/banner-clean-promo.png'
                   }
                   alt={previewBanner.title || 'Banner'}
-                  className="w-full h-auto object-contain block"
+                  className="max-h-[60vh] w-auto max-w-full object-contain block mx-auto rounded-xl"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
                   }}
                 />
               </div>
 
-              <div className="mt-5 flex justify-end">
+              <div className="flex justify-end shrink-0 pt-2 border-t border-[#F1F5F9]">
                 <button
                   onClick={() => setPreviewBanner(null)}
-                  className="px-5 py-2 bg-[#1E293B] text-white rounded-xl text-xs font-bold cursor-pointer"
+                  className="px-5 py-2 bg-[#1E293B] hover:bg-[#0F172A] text-white rounded-xl text-xs font-bold cursor-pointer transition-colors"
                 >
                   Yopish
                 </button>
