@@ -175,7 +175,9 @@ class FileUploadView(APIView):
 DEFAULT_SHOWCASE_SECTIONS = [
     {
         'title': 'Ofislar uchun',
+        'title_ru': 'Для офисов',
         'subtitle': 'Kantselyariya, gigiyena va ofis kundalik sarflov vositalari',
+        'subtitle_ru': 'Канцелярия, гигиена и ежедневные расходные материалы для офиса',
         'link': '/catalog/kanselyariya',
         'product_ids': ['snb-012', 'snb-004', 'snb-001', 'snb-tellux-zz2-comfort', 'snb-tellux-z2-towels', 'snb-glade-aerosol-300'],
         'order': 1,
@@ -183,7 +185,9 @@ DEFAULT_SHOWCASE_SECTIONS = [
     },
     {
         'title': 'Restoran va mehmonxonalar uchun',
+        'title_ru': 'Для ресторанов и отелей',
         'subtitle': 'HoReCa professional tozalash, idish yuvish va SanPiN talablariga mos vositalar',
+        'subtitle_ru': 'HoReCa профессиональная уборка, мытье посуды и средства по стандартам СанПиН',
         'link': '/catalog/maishiy-kimyo',
         'product_ids': ['snb-napkins-elma-33', 'snb-toilet-paper-mini-2ply', 'snb-toilet-paper-giant-roll', 'snb-grass-dos-toilet-block', 'snb-grass-steel-cleaner', 'snb-001'],
         'order': 2,
@@ -191,7 +195,9 @@ DEFAULT_SHOWCASE_SECTIONS = [
     },
     {
         'title': 'Klining kompaniyalari uchun',
+        'title_ru': 'Для клининговых компаний',
         'subtitle': 'Professional tozalash kimyolari, konsentratlar va mikrofibra inventarlari',
+        'subtitle_ru': 'Профессиональная химия для клининга, концентраты и инвентарь из микрофибры',
         'link': '/catalog/maishiy-kimyo',
         'product_ids': ['snb-grass-antigraffiti', 'snb-vanish-carpet-gold', 'snb-grass-polyrole-matte', 'snb-vanish-oxi-500', 'snb-plastic-bucket', 'snb-gloves-latex-korea'],
         'order': 3,
@@ -199,7 +205,9 @@ DEFAULT_SHOWCASE_SECTIONS = [
     },
     {
         'title': 'Zavod va fabrikalar uchun',
+        'title_ru': 'Для заводов и фабрик',
         'subtitle': 'Individual himoya vositalari, ishchi qo‘lqoplar va sanoat tozalovchilari',
+        'subtitle_ru': 'Средства индивидуальной защиты, рабочие перчатки и промышленный клининг',
         'link': '/catalog/himoya-vositalari',
         'product_ids': ['snb-gloves-orange', 'snb-gloves-insulated-300', 'snb-gloves-cotton-45g', 'snb-gloves-nitrile-coating', 'snb-gloves-latex-zebra', 'snb-plastic-barrel'],
         'order': 4,

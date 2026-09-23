@@ -157,7 +157,9 @@ export interface ToastNotification {
 export interface HomeShowcaseSection {
   id: string | number;
   title: string;
+  title_ru?: string;
   subtitle?: string;
+  subtitle_ru?: string;
   badge?: string;
   icon?: string;
   link?: string;

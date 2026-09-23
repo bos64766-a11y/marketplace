@@ -130,6 +130,11 @@ export const ProductRowSection: React.FC<ProductRowSectionProps> = ({
             <h2 className="text-[22px] sm:text-[26px] md:text-[28px] font-extrabold text-[#1E293B] tracking-tight leading-[1.25]">
               {title}
             </h2>
+            {subtitle && (
+              <p className="text-xs sm:text-sm text-[#64748B] mt-0.5 font-medium">
+                {subtitle}
+              </p>
+            )}
           </div>
 
           {/* Optional Sub-Tabs */}

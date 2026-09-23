@@ -58,7 +58,9 @@ class Banner(models.Model):
 
 class ShowcaseSection(models.Model):
     title = models.CharField(max_length=255, verbose_name='Sarlavha')
+    title_ru = models.CharField(max_length=255, blank=True, default='', verbose_name='Sarlavha (RU)')
     subtitle = models.CharField(max_length=500, blank=True, default='', verbose_name='Quyi sarlavha')
+    subtitle_ru = models.CharField(max_length=500, blank=True, default='', verbose_name='Quyi sarlavha (RU)')
     badge = models.CharField(max_length=100, blank=True, default='', verbose_name='Badge')
     icon = models.CharField(max_length=100, blank=True, default='Building2', verbose_name='Icon')
     link = models.CharField(max_length=255, blank=True, default='/catalog', verbose_name='Havola')

@@ -7,7 +7,7 @@ import { ProductRowSection } from '../components/ProductRowSection';
 import { PartnersSection } from '../components/PartnersSection';
 
 export const HomePage: React.FC = () => {
-  const { products, showcaseSections, t } = useApp();
+  const { products, showcaseSections, t, language } = useApp();
 
   // 1. Ommabop mahsulotlar (Popular Products)
   const popularProducts = useMemo(() => {
@@ -75,12 +75,15 @@ export const HomePage: React.FC = () => {
       {sectionsWithProducts.map(({ section, products: secProducts }) => {
         if (!secProducts || secProducts.length === 0) return null;
 
+        const displayTitle = language === 'ru' && section.title_ru ? section.title_ru : section.title;
+        const displaySubtitle = language === 'ru' && section.subtitle_ru ? section.subtitle_ru : section.subtitle;
+
         return (
           <ProductRowSection
             key={section.id}
             id={`section-${section.id}`}
-            title={section.title}
-            subtitle={section.subtitle}
+            title={displayTitle}
+            subtitle={displaySubtitle}
             categoryLink={section.link || '/catalog'}
             products={secProducts}
             autoScrollSpeed={0.6}

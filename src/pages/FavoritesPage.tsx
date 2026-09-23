@@ -5,7 +5,7 @@ import { ProductCard } from '../components/ProductCard';
 import { Heart, ArrowRight } from 'lucide-react';
 
 export const FavoritesPage: React.FC = () => {
-  const { favorites, navigate, products } = useApp();
+  const { favorites, navigate, products, t } = useApp();
 
   const favoriteProducts = products.filter((p) => favorites.includes(p.id));
 
@@ -14,10 +14,10 @@ export const FavoritesPage: React.FC = () => {
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#E5EAF2]">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B2E73] tracking-tight">
-            Sevimlilar
+            {t.favoritesPage.title}
           </h1>
           <p className="text-xs sm:text-sm text-[#667085] mt-1">
-            Siz saqlab qo‘ygan B2B mahsulotlar ({favoriteProducts.length} ta)
+            {t.favoritesPage.subtitle} ({favoriteProducts.length} {t.favoritesPage.countUnit})
           </p>
         </div>
       </div>
@@ -34,17 +34,17 @@ export const FavoritesPage: React.FC = () => {
             <Heart className="w-8 h-8" />
           </div>
           <h2 className="text-xl font-bold text-[#0B2E73] mb-2">
-            Hozircha sevimli mahsulotlar yo‘q
+            {t.favoritesPage.emptyTitle}
           </h2>
           <p className="text-xs sm:text-sm text-[#667085] mb-6">
-            Katalogdan kerakli mahsulotlarni yurakcha belgisini bosib saqlab qo‘yishingiz mumkin.
+            {t.favoritesPage.emptyDesc}
           </p>
           <button
             id="btn-favorites-go-catalog"
             onClick={() => navigate('/catalog')}
             className="w-full py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-[#0B2E73] hover:bg-[#08245A] transition-all cursor-pointer flex items-center justify-center gap-2"
           >
-            <span>Katalogni ko‘rish</span>
+            <span>{t.favoritesPage.viewCatalog}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

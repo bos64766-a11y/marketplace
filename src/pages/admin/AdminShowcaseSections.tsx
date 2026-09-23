@@ -43,7 +43,9 @@ export const AdminShowcaseSections: React.FC = () => {
   // Form state
   const [formData, setFormData] = useState<Omit<HomeShowcaseSection, 'id'>>({
     title: '',
+    title_ru: '',
     subtitle: '',
+    subtitle_ru: '',
     badge: '',
     icon: '',
     link: '/catalog',
@@ -80,7 +82,9 @@ export const AdminShowcaseSections: React.FC = () => {
     setPickerCategory('all');
     setFormData({
       title: '',
+      title_ru: '',
       subtitle: '',
+      subtitle_ru: '',
       badge: '',
       icon: '',
       link: '/catalog',
@@ -97,7 +101,9 @@ export const AdminShowcaseSections: React.FC = () => {
     setPickerCategory('all');
     setFormData({
       title: sec.title || '',
+      title_ru: sec.title_ru || '',
       subtitle: sec.subtitle || '',
+      subtitle_ru: sec.subtitle_ru || '',
       badge: '',
       icon: '',
       link: sec.link || '/catalog',
@@ -283,8 +289,20 @@ export const AdminShowcaseSections: React.FC = () => {
                           </span>
                         </div>
 
-                        <h3 className="text-base font-extrabold text-[#1E293B]">{sec.title}</h3>
+                        <h3 className="text-base font-extrabold text-[#1E293B]">
+                          {sec.title}
+                          {sec.title_ru && (
+                            <span className="ml-2 text-[11px] font-semibold text-[#0284C7] bg-[#E0F2FE] px-2 py-0.5 rounded-md inline-block">
+                              RU: {sec.title_ru}
+                            </span>
+                          )}
+                        </h3>
                         {sec.subtitle && <p className="text-xs text-[#64748B] font-medium">{sec.subtitle}</p>}
+                        {sec.subtitle_ru && (
+                          <p className="text-[11px] text-[#0284C7] italic">
+                            RU: {sec.subtitle_ru}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -425,7 +443,10 @@ export const AdminShowcaseSections: React.FC = () => {
               {/* Section Details Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Bo‘lim nomi *</label>
+                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5 flex items-center justify-between">
+                    <span>Bo‘lim nomi (O‘zbekcha) *</span>
+                    <span className="text-[10px] text-gray-400 font-semibold">UZ</span>
+                  </label>
                   <input
                     type="text"
                     required
@@ -437,18 +458,24 @@ export const AdminShowcaseSections: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Katalog havolasi</label>
+                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5 flex items-center justify-between">
+                    <span>Bo‘lim nomi (Ruscha)</span>
+                    <span className="text-[10px] text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded">RU</span>
+                  </label>
                   <input
                     type="text"
-                    value={formData.link || ''}
-                    onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                    value={formData.title_ru || ''}
+                    onChange={(e) => setFormData({ ...formData, title_ru: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00]"
-                    placeholder="/catalog yoki /catalog/kanselyariya"
+                    placeholder="Например: Для офисов"
                   />
                 </div>
 
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Quyi tavsif (Subtitle - ixtiyoriy)</label>
+                <div>
+                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5 flex items-center justify-between">
+                    <span>Quyi tavsif (Subtitle - UZ)</span>
+                    <span className="text-[10px] text-gray-400 font-semibold">UZ</span>
+                  </label>
                   <input
                     type="text"
                     value={formData.subtitle || ''}
@@ -456,16 +483,45 @@ export const AdminShowcaseSections: React.FC = () => {
                     className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00]"
                     placeholder="Masalan: Kantselyariya, gigiyena va kundalik sarflov tovarlari"
                   />
-                  <div className="flex items-center gap-4 mt-3">
-                    <label className="flex items-center gap-2 cursor-pointer">
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#1E293B] mb-1.5 flex items-center justify-between">
+                    <span>Quyi tavsif (Subtitle - RU)</span>
+                    <span className="text-[10px] text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded">RU</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.subtitle_ru || ''}
+                    onChange={(e) => setFormData({ ...formData, subtitle_ru: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00]"
+                    placeholder="Например: Канцелярия, гигиена и расходные материалы для офиса"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <label className="block text-xs font-bold text-[#1E293B] mb-1.5">Katalog havolasi</label>
                       <input
-                        type="checkbox"
-                        checked={formData.isActive}
-                        onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                        className="w-4 h-4 accent-[#FF5A00] rounded"
+                        type="text"
+                        value={formData.link || ''}
+                        onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0F172A] focus:outline-none focus:border-[#FF5A00]"
+                        placeholder="/catalog yoki /catalog/kanselyariya"
                       />
-                      <span className="text-xs font-bold text-[#1E293B]">Bosh sahifada faol bo‘lsin</span>
-                    </label>
+                    </div>
+                    <div className="sm:pt-5">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.isActive}
+                          onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                          className="w-4 h-4 accent-[#FF5A00] rounded"
+                        />
+                        <span className="text-xs font-bold text-[#1E293B]">Bosh sahifada faol bo‘lsin</span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>

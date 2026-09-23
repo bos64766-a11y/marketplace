@@ -69,6 +69,8 @@ class BannerSerializer(serializers.ModelSerializer):
 
 
 class ShowcaseSectionSerializer(serializers.ModelSerializer):
+    title_ru = serializers.CharField(required=False, allow_blank=True, default='')
+    subtitle_ru = serializers.CharField(required=False, allow_blank=True, default='')
     productIds = serializers.ListField(child=serializers.CharField(), source='product_ids', required=False)
     isActive = serializers.BooleanField(source='is_active', required=False)
 
@@ -77,7 +79,9 @@ class ShowcaseSectionSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'title',
+            'title_ru',
             'subtitle',
+            'subtitle_ru',
             'badge',
             'icon',
             'link',

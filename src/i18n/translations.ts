@@ -130,6 +130,14 @@ export interface Translations {
     allSupplies: string;
     orderNow: string;
   };
+  favoritesPage: {
+    title: string;
+    subtitle: string;
+    countUnit: string;
+    emptyTitle: string;
+    emptyDesc: string;
+    viewCatalog: string;
+  };
   common: {
     loading: string;
     error: string;
@@ -273,6 +281,14 @@ export const translations: Record<Language, Translations> = {
       allSupplies: "Korxonangiz Uchun Barcha Ta’minot",
       orderNow: "Buyurtma berish",
     },
+    favoritesPage: {
+      title: "Sevimlilar",
+      subtitle: "Siz saqlab qo‘ygan B2B mahsulotlar",
+      countUnit: "ta",
+      emptyTitle: "Hozircha sevimli mahsulotlar yo‘q",
+      emptyDesc: "Katalogdan kerakli mahsulotlarni yurakcha belgisini bosib saqlab qo‘yishingiz mumkin.",
+      viewCatalog: "Katalogni ko‘rish",
+    },
     common: {
       loading: "Yuklanmoqda...",
       error: "Xatolik yuz berdi",
@@ -413,6 +429,14 @@ export const translations: Record<Language, Translations> = {
       b2bOffer: "Специальное B2B предложение • Скидка 20%",
       allSupplies: "Все снабжение для вашего бизнеса",
       orderNow: "Оформить заказ",
+    },
+    favoritesPage: {
+      title: "Избранное",
+      subtitle: "Сохраненные вами B2B товары",
+      countUnit: "шт.",
+      emptyTitle: "В избранном пока нет товаров",
+      emptyDesc: "Вы можете сохранить нужные товары из каталога, нажав на значок сердечка.",
+      viewCatalog: "Перейти в каталог",
     },
     common: {
       loading: "Загрузка...",

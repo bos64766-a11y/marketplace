@@ -153,7 +153,9 @@ const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
   {
     id: '1',
     title: 'Ofislar uchun',
+    title_ru: 'Для офисов',
     subtitle: 'Kantselyariya, gigiyena va ofis kundalik sarflov vositalari',
+    subtitle_ru: 'Канцелярия, гигиена и ежедневные расходные материалы для офиса',
     link: '/catalog/kanselyariya',
     productIds: [
       'snb-012',
@@ -169,7 +171,9 @@ const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
   {
     id: '2',
     title: 'Restoran va mehmonxonalar uchun',
+    title_ru: 'Для ресторанов и отелей',
     subtitle: 'HoReCa professional tozalash, idish yuvish va SanPiN talablariga mos vositalar',
+    subtitle_ru: 'HoReCa профессиональная уборка, мытье посуды и средства по стандартам СанПиН',
     link: '/catalog/maishiy-kimyo',
     productIds: [
       'snb-napkins-elma-33',
@@ -185,7 +189,9 @@ const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
   {
     id: '3',
     title: 'Klining kompaniyalari uchun',
+    title_ru: 'Для клининговых компаний',
     subtitle: 'Professional tozalash kimyolari, konsentratlar va mikrofibra inventarlari',
+    subtitle_ru: 'Профессиональная химия для клининга, концентраты и инвентарь из микрофибры',
     link: '/catalog/maishiy-kimyo',
     productIds: [
       'snb-grass-antigraffiti',
@@ -201,7 +207,9 @@ const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
   {
     id: '4',
     title: 'Zavod va fabrikalar uchun',
+    title_ru: 'Для заводов и фабрик',
     subtitle: 'Individual himoya vositalari, ishchi qo‘lqoplar va sanoat tozalovchilari',
+    subtitle_ru: 'Средства индивидуальной защиты, рабочие перчатки и промышленный клининг',
     link: '/catalog/himoya-vositalari',
     productIds: [
       'snb-gloves-orange',
