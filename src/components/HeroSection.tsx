@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getMediaUrl } from '../services/api';
 
 export const HeroSection: React.FC = () => {
-  const { navigate, banners } = useApp();
+  const { navigate, banners, language } = useApp();
   const [currentIdx, setCurrentIdx] = useState(0);
 
   const activeBanners = useMemo(() => {
@@ -27,6 +27,15 @@ export const HeroSection: React.FC = () => {
 
   const slide = activeBanners[currentIdx] || activeBanners[0];
 
+  // Language-based dynamic image and title selection
+  const currentBannerImage = (language === 'ru' && slide?.image_ru)
+    ? slide.image_ru
+    : slide?.image;
+
+  const currentBannerTitle = (language === 'ru' && slide?.title_ru)
+    ? slide.title_ru
+    : slide?.title;
+
   return (
     <section id="section-hero-banner" className="max-w-[1536px] mx-auto px-4 sm:px-8 pt-3 sm:pt-4 pb-2 space-y-4">
       {/* Graphical Pure Image Banner Slider - Aligned with 4 cards below */}
@@ -39,8 +48,9 @@ export const HeroSection: React.FC = () => {
             tabIndex={0}
           >
             <img
-              src={getMediaUrl(slide.image) || '/banners/banner-clean-promo.webp'}
-              alt={slide.title || 'SNABTASH B2B Banner'}
+              key={`${slide.id}-${language}`}
+              src={getMediaUrl(currentBannerImage) || '/banners/banner-clean-promo.webp'}
+              alt={currentBannerTitle || 'SNABTASH B2B Banner'}
               className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.006]"
               loading="eager"
               fetchPriority="high"
@@ -61,7 +71,7 @@ export const HeroSection: React.FC = () => {
                   setCurrentIdx((prev) => (prev - 1 + activeBanners.length) % activeBanners.length);
                 }}
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/85 hover:bg-white text-[#1E293B] hover:text-[#FF5A00] flex items-center justify-center shadow-lg border border-black/5 opacity-0 group-hover:opacity-100 sm:opacity-80 transition-all cursor-pointer z-10"
-                aria-label="Oldingi banner"
+                aria-label={language === 'ru' ? 'Предыдущий баннер' : 'Oldingi banner'}
               >
                 <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
@@ -73,7 +83,7 @@ export const HeroSection: React.FC = () => {
                   setCurrentIdx((prev) => (prev + 1) % activeBanners.length);
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/85 hover:bg-white text-[#1E293B] hover:text-[#FF5A00] flex items-center justify-center shadow-lg border border-black/5 opacity-0 group-hover:opacity-100 sm:opacity-80 transition-all cursor-pointer z-10"
-                aria-label="Keyingi banner"
+                aria-label={language === 'ru' ? 'Следующий баннер' : 'Keyingi banner'}
               >
                 <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>

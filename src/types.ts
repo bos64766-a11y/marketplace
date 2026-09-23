@@ -72,12 +72,19 @@ export interface UserProfile {
 export interface BannerSlide {
   id: string | number;
   image: string;
+  image_ru?: string;
   title?: string;
+  title_ru?: string;
   badge?: string;
+  badge_ru?: string;
   description?: string;
+  description_ru?: string;
   subtitle?: string;
+  subtitle_ru?: string;
   btnText?: string;
+  btnText_ru?: string;
   ctaText?: string;
+  ctaText_ru?: string;
   btnLink?: string;
   ctaLink?: string;
   imageAlt?: string;

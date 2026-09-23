@@ -22,6 +22,7 @@ import {
   RotateCcw,
   Sparkles,
   ExternalLink,
+  Globe,
 } from 'lucide-react';
 import type { BannerSlide } from '../../types';
 
@@ -52,6 +53,10 @@ export const AdminBanners: React.FC = () => {
   const [editingBanner, setEditingBanner] = useState<BannerSlide | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | number | null>(null);
   const [previewBanner, setPreviewBanner] = useState<BannerSlide | null>(null);
+  const [previewLang, setPreviewLang] = useState<'uz' | 'ru'>('uz');
+
+  // Language Tab in Modal
+  const [bannerLangTab, setBannerLangTab] = useState<'uz' | 'ru'>('uz');
 
   // Upload States
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -62,7 +67,9 @@ export const AdminBanners: React.FC = () => {
 
   const [formData, setFormData] = useState<Omit<BannerSlide, 'id'>>({
     title: '',
+    title_ru: '',
     image: '/banners/banner-clean-promo.png',
+    image_ru: '',
     btnLink: '/catalog',
     order: (banners?.length || 0) + 1,
     isActive: true,
@@ -72,9 +79,12 @@ export const AdminBanners: React.FC = () => {
     setEditingBanner(null);
     setUploadError('');
     setImageTab('upload');
+    setBannerLangTab('uz');
     setFormData({
       title: '',
+      title_ru: '',
       image: '/banners/banner-clean-promo.png',
+      image_ru: '',
       btnLink: '/catalog',
       order: (banners?.length || 0) + 1,
       isActive: true,
@@ -86,9 +96,12 @@ export const AdminBanners: React.FC = () => {
     setEditingBanner(banner);
     setUploadError('');
     setImageTab('upload');
+    setBannerLangTab('uz');
     setFormData({
       title: banner.title || '',
+      title_ru: banner.title_ru || '',
       image: banner.image || '/banners/banner-clean-promo.png',
+      image_ru: banner.image_ru || '',
       btnLink: banner.btnLink || banner.ctaLink || '/catalog',
       order: banner.order ?? 1,
       isActive: banner.isActive ?? true,
@@ -113,12 +126,14 @@ export const AdminBanners: React.FC = () => {
     setIsUploading(true);
     setUploadError('');
 
+    const isRu = bannerLangTab === 'ru';
+
     try {
       const res = await api.uploadImage(file, 'banners');
       setFormData((prev) => ({
         ...prev,
-        image: res.url,
-        title: prev.title || file.name.replace(/\.[^/.]+$/, ''),
+        [isRu ? 'image_ru' : 'image']: res.url,
+        [isRu ? 'title_ru' : 'title']: (isRu ? prev.title_ru : prev.title) || file.name.replace(/\.[^/.]+$/, ''),
       }));
     } catch (err: any) {
       console.warn('API banner upload fallback to local DataURL:', err);
@@ -126,8 +141,8 @@ export const AdminBanners: React.FC = () => {
       reader.onload = () => {
         setFormData((prev) => ({
           ...prev,
-          image: reader.result as string,
-          title: prev.title || file.name.replace(/\.[^/.]+$/, ''),
+          [isRu ? 'image_ru' : 'image']: reader.result as string,
+          [isRu ? 'title_ru' : 'title']: (isRu ? prev.title_ru : prev.title) || file.name.replace(/\.[^/.]+$/, ''),
         }));
       };
       reader.readAsDataURL(file);
@@ -146,13 +161,15 @@ export const AdminBanners: React.FC = () => {
 
   const handleSave = async () => {
     if (!formData.image.trim()) {
-      setUploadError('Iltimos, banner rasmini yuklang');
+      setUploadError('Iltimos, o\'zbekcha (asosiy) banner rasmini yuklang');
       return;
     }
 
     const payload = {
       ...formData,
       title: (formData.title || '').trim() || 'Grafik Banner',
+      title_ru: (formData.title_ru || '').trim() || undefined,
+      image_ru: (formData.image_ru || '').trim() || undefined,
     };
 
     if (editingBanner) {
@@ -174,6 +191,9 @@ export const AdminBanners: React.FC = () => {
 
   const activeCount = (banners || []).filter((b) => b.isActive !== false).length;
 
+  // Active image for current modal tab
+  const activeModalImage = bannerLangTab === 'ru' ? (formData.image_ru || '') : formData.image;
+
   return (
     <AdminLayout activeTab="banners">
       <div className="space-y-6">
@@ -189,7 +209,7 @@ export const AdminBanners: React.FC = () => {
                   Bosh sahifa bannerlari
                 </h1>
                 <p className="text-xs sm:text-sm text-[#64748B] font-medium mt-0.5">
-                  Grafik bannerlarni yuklash va boshqarish (barcha matn va aksiyalar rasm ichida bo‘ladi)
+                  Ikki tilda (O‘zbekcha va Ruscha) grafik bannerlarni yuklash va boshqarish
                 </p>
               </div>
             </div>
@@ -238,11 +258,11 @@ export const AdminBanners: React.FC = () => {
 
           <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E2E8F0] shadow-2xs flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">Format</span>
-              <p className="text-sm font-extrabold text-[#FF5A00] mt-1">To‘liq grafik rasm (Mobil moslashuvchan)</p>
+              <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">Ko‘p tilli (i18n)</span>
+              <p className="text-sm font-extrabold text-[#FF5A00] mt-1">🇺🇿 UZ va 🇷🇺 RU avto-almashadi</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-[#FFF7ED] text-[#FF5A00] flex items-center justify-center">
-              <Sparkles className="w-5 h-5" />
+              <Globe className="w-5 h-5" />
             </div>
           </div>
         </div>
@@ -278,6 +298,7 @@ export const AdminBanners: React.FC = () => {
               const isActive = banner.isActive !== false;
               const link = banner.btnLink || banner.ctaLink || '/catalog';
               const isUploaded = banner.image?.includes('/media/');
+              const hasRu = Boolean(banner.image_ru && banner.image_ru.trim());
 
               return (
                 <div
@@ -291,19 +312,49 @@ export const AdminBanners: React.FC = () => {
                     <div className="w-8 h-8 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center text-xs font-black text-[#64748B] shrink-0">
                       #{banner.order ?? index + 1}
                     </div>
-                    <div className="w-48 sm:w-64 aspect-[2.4/1] rounded-xl bg-[#FFF8F4] border border-[#FF5A00]/20 overflow-hidden flex items-center justify-center relative group shrink-0">
-                      <img
-                        src={getMediaUrl(banner.image) || '/banners/banner-clean-promo.png'}
-                        alt={banner.title || 'Banner'}
-                        className="w-full h-full object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
-                        }}
-                      />
-                      {isUploaded && (
-                        <span className="absolute bottom-1 right-1 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs">
-                          Serverda yuklangan
+
+                    <div className="flex items-center gap-2">
+                      {/* Uzbek Banner Thumbnail */}
+                      <div className="w-36 sm:w-48 aspect-[2.4/1] rounded-xl bg-[#FFF8F4] border border-[#FF5A00]/20 overflow-hidden flex items-center justify-center relative group shrink-0">
+                        <img
+                          src={getMediaUrl(banner.image) || '/banners/banner-clean-promo.png'}
+                          alt={banner.title || 'Banner'}
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
+                          }}
+                        />
+                        <span className="absolute top-1 left-1 bg-black/60 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                          🇺🇿 UZ
                         </span>
+                        {isUploaded && (
+                          <span className="absolute bottom-1 right-1 bg-emerald-600 text-white text-[8px] font-bold px-1 py-0.5 rounded shadow-xs">
+                            Serverda
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Russian Banner Thumbnail (If uploaded) */}
+                      {hasRu ? (
+                        <div className="w-36 sm:w-48 aspect-[2.4/1] rounded-xl bg-[#F8FAFC] border border-blue-200 overflow-hidden flex items-center justify-center relative group shrink-0">
+                          <img
+                            src={getMediaUrl(banner.image_ru!) || '/banners/banner-clean-promo.png'}
+                            alt={banner.title_ru || 'Banner RU'}
+                            className="w-full h-full object-contain"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.png';
+                            }}
+                          />
+                          <span className="absolute top-1 left-1 bg-blue-700/80 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                            🇷🇺 RU
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="hidden sm:flex w-28 aspect-[2.4/1] rounded-xl border border-dashed border-slate-200 items-center justify-center text-center p-1 bg-slate-50 shrink-0">
+                          <span className="text-[10px] text-slate-400 font-medium leading-tight">
+                            🇷🇺 RU rasm yo‘q<br />(UZ ko‘rinadi)
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -330,10 +381,30 @@ export const AdminBanners: React.FC = () => {
                       {banner.title || `Grafik Banner #${index + 1}`}
                     </h3>
 
-                    <div className="flex items-center gap-2 pt-0.5">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] px-2.5 py-1 rounded-lg">
-                        <LinkIcon className="w-3.5 h-3.5 text-[#FF5A00]" />
-                        <span>Bosganda o‘tish:</span>
+                    {banner.title_ru && (
+                      <p className="text-xs text-[#64748B] truncate font-medium">
+                        🇷🇺 {banner.title_ru}
+                      </p>
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
+                        🇺🇿 O‘zbekcha banner: Bor
+                      </span>
+                      {hasRu ? (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                          <Check className="w-3 h-3 text-emerald-600" />
+                          <span>🇷🇺 Ruscha banner: Bor</span>
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
+                          🇷🇺 Ruscha: UZ nusxasi
+                        </span>
+                      )}
+
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] px-2.5 py-0.5 rounded-lg">
+                        <LinkIcon className="w-3 h-3 text-[#FF5A00]" />
+                        <span>Havola:</span>
                         <b className="text-[#1E293B]">{link}</b>
                       </span>
                     </div>
@@ -374,7 +445,10 @@ export const AdminBanners: React.FC = () => {
 
                       {/* Preview Button */}
                       <button
-                        onClick={() => setPreviewBanner(banner)}
+                        onClick={() => {
+                          setPreviewBanner(banner);
+                          setPreviewLang('uz');
+                        }}
                         className="p-2.5 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] transition-colors cursor-pointer"
                         title="To‘liq o‘lchamda ko‘rish"
                       >
@@ -389,7 +463,7 @@ export const AdminBanners: React.FC = () => {
                         title="Rasmni alishtirish"
                       >
                         <Pencil className="w-3.5 h-3.5" />
-                        <span>Alishtirish</span>
+                        <span>Tahrirlash</span>
                       </button>
 
                       {/* Delete Button */}
@@ -417,10 +491,10 @@ export const AdminBanners: React.FC = () => {
               <div className="flex items-center justify-between pb-4 border-b border-[#F1F5F9]">
                 <div>
                   <h3 className="text-lg sm:text-xl font-black text-[#1E293B]">
-                    {editingBanner ? 'Bannerni alishtirish' : 'Yangi grafik banner yuklash'}
+                    {editingBanner ? 'Bannerni tahrirlash' : 'Yangi grafik banner yuklash'}
                   </h3>
                   <p className="text-xs text-[#64748B] font-medium mt-0.5">
-                    Faqat rasm yuklanadi. Saytda kompyuter va telefonlarda avtomatik moslashadi.
+                    O‘zbekcha va Ruscha banner rasmlarini alohida yuklang. Saytda tilga qarab avto-almashadi.
                   </p>
                 </div>
                 <button
@@ -433,11 +507,76 @@ export const AdminBanners: React.FC = () => {
 
               {/* Form Content */}
               <div className="space-y-5 pt-5">
-                {/* 1. UPLOAD IMAGE ZONE (PRIMARY) */}
+                {/* LANGUAGE SELECTOR TABS */}
+                <div className="flex items-center gap-2 p-1.5 bg-[#F1F5F9] rounded-2xl border border-[#E2E8F0]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBannerLangTab('uz');
+                      setImageTab('upload');
+                    }}
+                    className={`flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      bannerLangTab === 'uz'
+                        ? 'bg-white text-[#1E293B] shadow-sm'
+                        : 'text-[#64748B] hover:text-[#1E293B]'
+                    }`}
+                  >
+                    <span>🇺🇿 O‘zbekcha banner</span>
+                    {formData.image && <span className="w-2 h-2 rounded-full bg-emerald-500" title="Yuklangan" />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBannerLangTab('ru');
+                      setImageTab('upload');
+                    }}
+                    className={`flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      bannerLangTab === 'ru'
+                        ? 'bg-white text-[#1E293B] shadow-sm'
+                        : 'text-[#64748B] hover:text-[#1E293B]'
+                    }`}
+                  >
+                    <span>🇷🇺 Ruscha banner (Русская)</span>
+                    {formData.image_ru ? (
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" title="Yuklangan" />
+                    ) : (
+                      <span className="text-[10px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded font-medium border border-amber-200">
+                        Ixtiyoriy
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {/* Russian Note if in RU Tab */}
+                {bannerLangTab === 'ru' && (
+                  <div className="p-3 bg-blue-50/80 border border-blue-200/80 rounded-2xl text-xs text-blue-900 flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-2">
+                      <span className="text-base leading-none">💡</span>
+                      <p className="leading-relaxed">
+                        <strong>Ruscha versiya:</strong> Foydalanuvchi saytda rus tilini tanlaganda ushbu rasm ko‘rsatiladi. Agar yuklamasangiz, avtomatik ravishda <strong>asosiy (o‘zbekcha) banner</strong> ko‘rinadi.
+                      </p>
+                    </div>
+                    {formData.image_ru && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, image_ru: '' })}
+                        className="text-[11px] font-bold text-red-600 hover:text-red-700 shrink-0 hover:underline cursor-pointer"
+                      >
+                        O‘chirish
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* 1. UPLOAD IMAGE ZONE */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-xs font-bold text-[#1E293B]">
-                      Banner Rasmi (Tavsiya etiladi: 1200x500 yoki 1280x550) *
+                      {bannerLangTab === 'uz' ? '🇺🇿 O‘zbekcha Rasm (Asosiy) *' : '🇷🇺 Ruscha Rasm (Ixtiyoriy)'}
+                      <span className="text-[#64748B] font-normal ml-1">
+                        (Tavsiya: 1200x500 yoki 1280x550)
+                      </span>
                     </label>
 
                     {/* Mode Selector Tabs */}
@@ -453,21 +592,23 @@ export const AdminBanners: React.FC = () => {
                         }`}
                       >
                         <UploadCloud className="w-3.5 h-3.5" />
-                        <span>Fayl Yuklash</span>
+                        <span>Fayl</span>
                       </button>
-                      <button
-                        type="button"
-                        id="tab-mode-preset"
-                        onClick={() => setImageTab('preset')}
-                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                          imageTab === 'preset'
-                            ? 'bg-[#FF5A00] text-white shadow-xs'
-                            : 'text-[#64748B] hover:text-[#0F172A]'
-                        }`}
-                      >
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>Namuna</span>
-                      </button>
+                      {bannerLangTab === 'uz' && (
+                        <button
+                          type="button"
+                          id="tab-mode-preset"
+                          onClick={() => setImageTab('preset')}
+                          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                            imageTab === 'preset'
+                              ? 'bg-[#FF5A00] text-white shadow-xs'
+                              : 'text-[#64748B] hover:text-[#0F172A]'
+                          }`}
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Namuna</span>
+                        </button>
+                      )}
                       <button
                         type="button"
                         id="tab-mode-url"
@@ -518,7 +659,9 @@ export const AdminBanners: React.FC = () => {
                         {isUploading ? (
                           <div className="py-5 space-y-2">
                             <Loader2 className="w-8 h-8 text-[#FF5A00] animate-spin mx-auto" />
-                            <p className="text-xs font-bold text-[#1E293B]">Rasm serverga yuklanmoqda...</p>
+                            <p className="text-xs font-bold text-[#1E293B]">
+                              {bannerLangTab === 'uz' ? "O‘zbekcha" : "Ruscha"} rasm serverga yuklanmoqda...
+                            </p>
                             <p className="text-[11px] text-[#94A3B8]">Biroz kuting</p>
                           </div>
                         ) : (
@@ -528,10 +671,11 @@ export const AdminBanners: React.FC = () => {
                             </div>
                             <div>
                               <p className="text-sm font-bold text-[#1E293B]">
-                                Rasmni bu yerga tashlang yoki <span className="text-[#FF5A00] underline">tanlang</span>
+                                {bannerLangTab === 'uz' ? "O‘zbekcha" : "Ruscha"} rasmni bu yerga tashlang yoki{' '}
+                                <span className="text-[#FF5A00] underline">tanlang</span>
                               </p>
                               <p className="text-xs text-[#64748B] mt-0.5">
-                                PNG, JPG, WEBP • 15MB gacha
+                                PNG, JPG, WEBP — 20MB gacha
                               </p>
                             </div>
                           </div>
@@ -540,7 +684,7 @@ export const AdminBanners: React.FC = () => {
                     </div>
                   )}
 
-                  {/* TAB 2: PRESET BANNERS */}
+                  {/* TAB 2: PRESET BANNERS (UZ only) */}
                   {imageTab === 'preset' && (
                     <div className="space-y-2">
                       <div className="grid grid-cols-1 gap-2">
@@ -548,9 +692,15 @@ export const AdminBanners: React.FC = () => {
                           <button
                             type="button"
                             key={preset.url}
-                            onClick={() => setFormData({ ...formData, image: preset.url, title: preset.name })}
+                            onClick={() => {
+                              if (bannerLangTab === 'uz') {
+                                setFormData({ ...formData, image: preset.url, title: preset.name });
+                              } else {
+                                setFormData({ ...formData, image_ru: preset.url, title_ru: preset.name });
+                              }
+                            }}
                             className={`p-2.5 rounded-xl text-left transition-all cursor-pointer border flex items-center gap-3 bg-white ${
-                              formData.image === preset.url
+                              activeModalImage === preset.url
                                 ? 'border-[#FF5A00] ring-2 ring-[#FF5A00]/20 bg-[#FFFBF8]'
                                 : 'border-[#E2E8F0] hover:border-[#FF5A00]/40'
                             }`}
@@ -564,7 +714,7 @@ export const AdminBanners: React.FC = () => {
                               <p className="text-xs font-bold text-[#1E293B] truncate">{preset.name}</p>
                               <p className="text-[10px] text-[#94A3B8] truncate">{preset.url}</p>
                             </div>
-                            {formData.image === preset.url && (
+                            {activeModalImage === preset.url && (
                               <Check className="w-4 h-4 text-[#FF5A00] shrink-0" />
                             )}
                           </button>
@@ -578,9 +728,19 @@ export const AdminBanners: React.FC = () => {
                     <div className="space-y-2">
                       <input
                         type="text"
-                        value={formData.image}
-                        onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                        placeholder="https://... yoki /banners/banner-clean-promo.png"
+                        value={activeModalImage}
+                        onChange={(e) => {
+                          if (bannerLangTab === 'uz') {
+                            setFormData({ ...formData, image: e.target.value });
+                          } else {
+                            setFormData({ ...formData, image_ru: e.target.value });
+                          }
+                        }}
+                        placeholder={
+                          bannerLangTab === 'uz'
+                            ? "https://... yoki /banners/banner-clean-promo.png"
+                            : "https://... yoki /banners/banner-clean-promo-ru.png"
+                        }
                         className="w-full h-11 px-4 rounded-xl bg-white border border-[#E2E8F0] focus:border-[#FF5A00] text-xs sm:text-sm font-medium text-[#0F172A] transition-all focus:outline-none"
                       />
                     </div>
@@ -593,17 +753,19 @@ export const AdminBanners: React.FC = () => {
                   )}
 
                   {/* Live Banner Preview inside Modal */}
-                  {formData.image && (
+                  {activeModalImage && (
                     <div className="space-y-1.5 pt-2">
                       <div className="flex items-center justify-between text-xs font-bold text-[#64748B]">
-                        <span>Saytdagi ko‘rinishi (Jonli oldindan ko‘rish):</span>
+                        <span>
+                          {bannerLangTab === 'uz' ? "🇺🇿 O‘zbekcha" : "🇷🇺 Ruscha"} banner ko‘rinishi:
+                        </span>
                         <span className="text-emerald-600 font-semibold flex items-center gap-1">
                           <Check className="w-3.5 h-3.5" /> Rasm tanlangan
                         </span>
                       </div>
                       <div className="w-full rounded-2xl overflow-hidden border border-[#E2E8F0] shadow-xs bg-slate-50">
                         <img
-                          src={getMediaUrl(formData.image)}
+                          src={getMediaUrl(activeModalImage)}
                           alt="Live Preview"
                           className="w-full h-auto object-cover block"
                           onError={(e) => {
@@ -648,11 +810,11 @@ export const AdminBanners: React.FC = () => {
                   </div>
                 </div>
 
-                {/* 3. OPTIONAL NAME & ORDER */}
+                {/* 3. BILINGUAL NAME & ORDER */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-[#334155] mb-1.5">
-                      Banner Nomi (Admin paneldagi eslatma)
+                      🇺🇿 Banner Nomi (O‘zbekcha eslatma)
                     </label>
                     <input
                       type="text"
@@ -665,6 +827,21 @@ export const AdminBanners: React.FC = () => {
 
                   <div>
                     <label className="block text-xs font-bold text-[#334155] mb-1.5">
+                      🇷🇺 Banner Nomi (Ruscha eslatma / Название)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.title_ru || ''}
+                      onChange={(e) => setFormData({ ...formData, title_ru: e.target.value })}
+                      placeholder="Например: Акция решений для чистоты"
+                      className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-[#334155] mb-1.5">
                       Tartib Raqami
                     </label>
                     <input
@@ -675,20 +852,20 @@ export const AdminBanners: React.FC = () => {
                       className="w-full h-11 px-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white text-xs sm:text-sm font-semibold text-[#0F172A] transition-all focus:outline-none"
                     />
                   </div>
-                </div>
 
-                {/* Active Checkbox */}
-                <div className="flex items-center gap-3 pt-1">
-                  <input
-                    type="checkbox"
-                    id="checkbox-banner-active"
-                    checked={formData.isActive}
-                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                    className="w-5 h-5 accent-[#FF5A00] rounded cursor-pointer"
-                  />
-                  <label htmlFor="checkbox-banner-active" className="text-xs font-bold text-[#334155] cursor-pointer">
-                    Slayderda faol ko‘rsatilsin
-                  </label>
+                  {/* Active Checkbox */}
+                  <div className="flex items-center gap-3 pt-6">
+                    <input
+                      type="checkbox"
+                      id="checkbox-banner-active"
+                      checked={formData.isActive}
+                      onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                      className="w-5 h-5 accent-[#FF5A00] rounded cursor-pointer"
+                    />
+                    <label htmlFor="checkbox-banner-active" className="text-xs font-bold text-[#334155] cursor-pointer">
+                      Slayderda faol ko‘rsatilsin
+                    </label>
+                  </div>
                 </div>
               </div>
 
@@ -751,26 +928,68 @@ export const AdminBanners: React.FC = () => {
         {previewBanner && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-xs">
             <div className="bg-white rounded-3xl max-w-4xl w-full p-5 sm:p-7 shadow-2xl border border-[#F1F5F9] animate-in fade-in zoom-in-95 duration-200">
-              <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#F1F5F9]">
                 <div>
                   <h4 className="text-sm font-bold text-[#1E293B]">
-                    {previewBanner.title || 'Grafik Banner'}
+                    {previewLang === 'ru'
+                      ? (previewBanner.title_ru || previewBanner.title || 'Grafik Banner (RU)')
+                      : (previewBanner.title || 'Grafik Banner (UZ)')}
                   </h4>
                   <p className="text-xs text-[#64748B]">
                     Havola: {previewBanner.btnLink || previewBanner.ctaLink || '/catalog'}
                   </p>
                 </div>
-                <button
-                  onClick={() => setPreviewBanner(null)}
-                  className="p-1 rounded-lg text-[#64748B] hover:bg-[#F1F5F9] cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+
+                {/* Preview Language Toggles */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center bg-[#F1F5F9] p-1 rounded-xl border border-[#E2E8F0] gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewLang('uz')}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        previewLang === 'uz'
+                          ? 'bg-white text-[#1E293B] shadow-xs'
+                          : 'text-[#64748B] hover:text-[#1E293B]'
+                      }`}
+                    >
+                      🇺🇿 O‘zbekcha
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewLang('ru')}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        previewLang === 'ru'
+                          ? 'bg-white text-[#1E293B] shadow-xs'
+                          : 'text-[#64748B] hover:text-[#1E293B]'
+                      }`}
+                    >
+                      🇷🇺 Ruscha {previewBanner.image_ru ? '✓' : '(Fallback)'}
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => setPreviewBanner(null)}
+                    className="p-1 rounded-lg text-[#64748B] hover:bg-[#F1F5F9] cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
 
-              <div className="mt-4 rounded-2xl overflow-hidden border border-[#E5EAF2] shadow-sm bg-slate-50">
+              <div className="mt-4 rounded-2xl overflow-hidden border border-[#E5EAF2] shadow-sm bg-slate-50 relative">
+                {previewLang === 'ru' && !previewBanner.image_ru && (
+                  <div className="absolute top-3 left-3 z-10 bg-amber-500/90 backdrop-blur-xs text-white text-[11px] font-bold px-3 py-1 rounded-lg shadow-sm">
+                    ⚠️ Ruscha rasm yuklanmagan — O‘zbekcha rasm ko‘rsatilmoqda
+                  </div>
+                )}
                 <img
-                  src={getMediaUrl(previewBanner.image) || '/banners/banner-clean-promo.png'}
+                  src={
+                    getMediaUrl(
+                      previewLang === 'ru' && previewBanner.image_ru
+                        ? previewBanner.image_ru
+                        : previewBanner.image
+                    ) || '/banners/banner-clean-promo.png'
+                  }
                   alt={previewBanner.title || 'Banner'}
                   className="w-full h-auto object-contain block"
                   onError={(e) => {
