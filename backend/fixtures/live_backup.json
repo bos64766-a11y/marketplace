@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "exported_at": "2026-09-24T10:59:14.910272",
+  "exported_at": "2026-09-24T16:22:19.630116",
   "source": "https://marketplace-production-6690.up.railway.app/api",
   "summary": {
     "categories": 7,
@@ -3308,18 +3308,18 @@
     "settings": {
       "companyName": "SNABTASH B2B",
       "phone1": "+998 87 034 97 79",
-      "phone2": "+998 90 123 45 67",
+      "phone2": "+998 87 382 97 79",
       "email": "info@snabtash.uz",
-      "telegramBot": "@snabtash_bot",
+      "telegramBot": "@snabtash_manager",
       "telegramChannel": "https://t.me/snabtash",
       "address": "Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy",
-      "workHours": "Dush - Shan: 08:30 - 18:30",
+      "workHours": "Dush - Juma: 09:00 - 17:00",
       "inn": "309871234",
       "mfo": "00440",
       "bankAccount": "20208000900123456001",
       "bankName": "ATB \"Kapitalbank\" Chilonzor filiali",
-      "freeDeliveryThreshold": 500000.0,
-      "deliveryCost": 35000.0,
+      "freeDeliveryThreshold": 1500000.0,
+      "deliveryCost": 0.0,
       "bannerHeadline": "Korxonangiz Uchun Barcha Ta’minot",
       "bannerSubtitle": "Ishingiz uchun sifatli klining kimyolari, xo‘jalik mollari va gigiyena tovarlarini to‘g‘ridan-to‘g‘ri ombordan oling.",
       "bannerDiscountBadge": "Maxsus B2B Taklif • 20% Chegirma"
