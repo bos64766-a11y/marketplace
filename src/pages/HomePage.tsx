@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useApp } from '../context/AppContext';
+import { useApp, DEFAULT_SHOWCASE_SECTIONS } from '../context/AppContext';
 import { HeroSection } from '../components/HeroSection';
 import { CategoryPillsSection } from '../components/CategoryPillsSection';
 import { B2BInfoCards } from '../components/B2BInfoCards';
@@ -75,8 +75,17 @@ export const HomePage: React.FC = () => {
       {sectionsWithProducts.map(({ section, products: secProducts }) => {
         if (!secProducts || secProducts.length === 0) return null;
 
-        const displayTitle = language === 'ru' && section.title_ru ? section.title_ru : section.title;
-        const displaySubtitle = language === 'ru' && section.subtitle_ru ? section.subtitle_ru : section.subtitle;
+        const fallback = DEFAULT_SHOWCASE_SECTIONS.find(
+          (d) =>
+            String(d.id) === String(section.id) ||
+            d.title.toLowerCase().trim() === (section.title || '').toLowerCase().trim()
+        );
+        const displayTitle = language === 'ru'
+          ? (section.title_ru || fallback?.title_ru || section.title)
+          : section.title;
+        const displaySubtitle = language === 'ru'
+          ? (section.subtitle_ru || fallback?.subtitle_ru || section.subtitle)
+          : section.subtitle;
 
         return (
           <ProductRowSection

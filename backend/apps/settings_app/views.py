@@ -229,6 +229,41 @@ DEFAULT_SHOWCASE_SECTIONS = [
         'order': 4,
         'is_active': True,
     },
+    {
+        'title': 'Avtosalon va avtoservislar uchun',
+        'title_ru': 'Для автосалонов и автосервисов',
+        'subtitle': 'Polirovka disklari, Polirovka pastalari, Gillar, Oyna tozalagichlar',
+        'subtitle_ru': 'Полировальные диски, пасты, глина и средства для очистки стекол',
+        'link': '/catalog',
+        'product_ids': [
+            'snb-ironoff-disk-tozalagichi-750-ml',
+            'snb-motor-clean-dvigatel-tozalagichi-750-ml',
+            'snb-glossy-glass-oyna-tozalagichi-750-ml',
+            'snb-abrasiveprep-abraziv-oyna-tozalagichi-450-ml',
+            'snb-125-mm-polirovka-disklari',
+            'snb-universal-tozalagich-va-yogsizlantirgich-eraser',
+            'snb-pulimax-profy-avtomobil-saloni-yuzalarini-kimyoviy-tozalash-vositasi-4l',
+            'snb-lavr-qoplamalar-uchun-kopik-tozalagich-650-ml',
+            'snb-plastik-uchun-tozalovchi-polirovka-vositasi',
+            'snb-lavr-universal-silikon-moyi-1-l',
+            'snb-aim-one-silikon-spreyi',
+            'snb-dry-monster-mikrofibra-4040-sm',
+            'snb-koch-chemie-h801-heavy-cut-abraziv-polirovka-pastasi-1-l',
+            'snb-abraziv-polirovka-pastasi-1-l',
+            'snb-koch-chemie-micro-cut-m302-fini-polirovka-pastasi-1-l',
+            'snb-koch-chemie-kok-tozalovchi-polirovka-gili-200-g',
+            'snb-chemprint-bron-plyonkasi-uchun-spirt-20-l',
+            'snb-vintex-alumax-avtomobil-kuzovi-pastki-qismini-tozalash-uchun-kislotali-vosita',
+            'snb-kwazar-venus-purkagichi-2-l',
+            'snb-scholl-concepts-s2-black-abraziv-polirovka-pastasi-500-g',
+            'snb-fini-abraziv-polirovka-pastasi-s40',
+            'snb-3m-trizact-3000-abraziv-polirovka-diski-150-mm',
+            'snb-junli-polirovka-diski',
+            'snb-avtomobil-uchun-latta',
+        ],
+        'order': 5,
+        'is_active': True,
+    },
 ]
 
 
@@ -237,6 +272,21 @@ class ShowcaseSectionListCreateView(APIView):
         if ShowcaseSection.objects.count() == 0:
             for item in DEFAULT_SHOWCASE_SECTIONS:
                 ShowcaseSection.objects.create(**item)
+        else:
+            for item in DEFAULT_SHOWCASE_SECTIONS:
+                sec = ShowcaseSection.objects.filter(title__iexact=item['title']).first()
+                if sec:
+                    changed = False
+                    if not sec.title_ru and item.get('title_ru'):
+                        sec.title_ru = item['title_ru']
+                        changed = True
+                    if not sec.subtitle_ru and item.get('subtitle_ru'):
+                        sec.subtitle_ru = item['subtitle_ru']
+                        changed = True
+                    if changed:
+                        sec.save(update_fields=['title_ru', 'subtitle_ru'])
+                else:
+                    ShowcaseSection.objects.create(**item)
 
         sections = ShowcaseSection.objects.all().order_by('order', 'id')
         active_only = request.query_params.get('active')
@@ -248,8 +298,13 @@ class ShowcaseSectionListCreateView(APIView):
     def post(self, request):
         serializer = ShowcaseSectionSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            section = serializer.save()
+            if 'title_ru' in request.data:
+                section.title_ru = request.data.get('title_ru', '') or ''
+            if 'subtitle_ru' in request.data:
+                section.subtitle_ru = request.data.get('subtitle_ru', '') or ''
+            section.save(update_fields=['title_ru', 'subtitle_ru'])
+            return Response(ShowcaseSectionSerializer(section).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -261,10 +316,15 @@ class ShowcaseSectionDetailView(APIView):
 
     def patch(self, request, pk):
         section = get_object_or_404(ShowcaseSection, pk=pk)
+        if 'title_ru' in request.data:
+            section.title_ru = request.data.get('title_ru', '') or ''
+        if 'subtitle_ru' in request.data:
+            section.subtitle_ru = request.data.get('subtitle_ru', '') or ''
         serializer = ShowcaseSectionSerializer(section, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            section.refresh_from_db()
+            return Response(ShowcaseSectionSerializer(section).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk):

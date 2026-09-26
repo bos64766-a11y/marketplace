@@ -149,7 +149,7 @@ const DEFAULT_BANNERS: BannerSlide[] = [
   },
 ];
 
-const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
+export const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
   {
     id: '1',
     title: 'Ofislar uchun',
@@ -222,7 +222,56 @@ const DEFAULT_SHOWCASE_SECTIONS: HomeShowcaseSection[] = [
     order: 4,
     isActive: true,
   },
+  {
+    id: '5',
+    title: 'Avtosalon va avtoservislar uchun',
+    title_ru: 'Для автосалонов и автосервисов',
+    subtitle: 'Polirovka disklari, Polirovka pastalari, Gillar, Oyna tozalagichlar',
+    subtitle_ru: 'Полировальные диски, пасты, глина и средства для очистки стекол',
+    link: '/catalog',
+    productIds: [
+      'snb-ironoff-disk-tozalagichi-750-ml',
+      'snb-motor-clean-dvigatel-tozalagichi-750-ml',
+      'snb-glossy-glass-oyna-tozalagichi-750-ml',
+      'snb-abrasiveprep-abraziv-oyna-tozalagichi-450-ml',
+      'snb-125-mm-polirovka-disklari',
+      'snb-universal-tozalagich-va-yogsizlantirgich-eraser',
+      'snb-pulimax-profy-avtomobil-saloni-yuzalarini-kimyoviy-tozalash-vositasi-4l',
+      'snb-lavr-qoplamalar-uchun-kopik-tozalagich-650-ml',
+      'snb-plastik-uchun-tozalovchi-polirovka-vositasi',
+      'snb-lavr-universal-silikon-moyi-1-l',
+      'snb-aim-one-silikon-spreyi',
+      'snb-dry-monster-mikrofibra-4040-sm',
+      'snb-koch-chemie-h801-heavy-cut-abraziv-polirovka-pastasi-1-l',
+      'snb-abraziv-polirovka-pastasi-1-l',
+      'snb-koch-chemie-micro-cut-m302-fini-polirovka-pastasi-1-l',
+      'snb-koch-chemie-kok-tozalovchi-polirovka-gili-200-g',
+      'snb-chemprint-bron-plyonkasi-uchun-spirt-20-l',
+      'snb-vintex-alumax-avtomobil-kuzovi-pastki-qismini-tozalash-uchun-kislotali-vosita',
+      'snb-kwazar-venus-purkagichi-2-l',
+      'snb-scholl-concepts-s2-black-abraziv-polirovka-pastasi-500-g',
+      'snb-fini-abraziv-polirovka-pastasi-s40',
+      'snb-3m-trizact-3000-abraziv-polirovka-diski-150-mm',
+      'snb-junli-polirovka-diski',
+      'snb-avtomobil-uchun-latta',
+    ],
+    order: 5,
+    isActive: true,
+  },
 ];
+
+export const enrichShowcaseSectionWithDefaults = (sec: HomeShowcaseSection): HomeShowcaseSection => {
+  const def = DEFAULT_SHOWCASE_SECTIONS.find(
+    (d) =>
+      String(d.id) === String(sec.id) ||
+      d.title.toLowerCase().trim() === (sec.title || '').toLowerCase().trim()
+  );
+  return {
+    ...sec,
+    title_ru: (sec.title_ru && sec.title_ru.trim()) ? sec.title_ru : (def?.title_ru || ''),
+    subtitle_ru: (sec.subtitle_ru && sec.subtitle_ru.trim()) ? sec.subtitle_ru : (def?.subtitle_ru || ''),
+  };
+};
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -488,10 +537,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       if (sectRes.status === 'fulfilled' && Array.isArray(sectRes.value) && sectRes.value.length > 0) {
         const serverSections = sectRes.value;
-        setShowcaseSections(serverSections);
-        try {
-          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(serverSections));
-        } catch {}
+        setShowcaseSections((prev) => {
+          const merged = serverSections.map((srv) => {
+            const local = prev.find((p) => String(p.id) === String(srv.id));
+            const def = DEFAULT_SHOWCASE_SECTIONS.find(
+              (d) =>
+                String(d.id) === String(srv.id) ||
+                d.title.toLowerCase().trim() === (srv.title || '').toLowerCase().trim()
+            );
+            return {
+              ...srv,
+              title_ru:
+                (srv.title_ru && srv.title_ru.trim()) ||
+                (local?.title_ru && local.title_ru.trim()) ||
+                def?.title_ru ||
+                '',
+              subtitle_ru:
+                (srv.subtitle_ru && srv.subtitle_ru.trim()) ||
+                (local?.subtitle_ru && local.subtitle_ru.trim()) ||
+                def?.subtitle_ru ||
+                '',
+            };
+          });
+          try {
+            localStorage.setItem('snabtash_showcase_sections', JSON.stringify(merged));
+          } catch {}
+          return merged;
+        });
         updateArchiveStats();
       }
 
@@ -915,7 +987,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [showcaseSections, setShowcaseSections] = useState<HomeShowcaseSection[]>(() => {
     try {
       const saved = localStorage.getItem('snabtash_showcase_sections');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((s) => enrichShowcaseSectionWithDefaults(s));
+        }
+      }
     } catch {}
     return DEFAULT_SHOWCASE_SECTIONS;
   });
@@ -930,8 +1007,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const created = await api.createShowcaseSection(data);
       unmarkIdDeleted('snabtash_deleted_section_ids', created.id);
+      const enrichedCreated: HomeShowcaseSection = {
+        ...data,
+        ...created,
+        title_ru: (data.title_ru !== undefined && data.title_ru !== null) ? data.title_ru : (created.title_ru || ''),
+        subtitle_ru: (data.subtitle_ru !== undefined && data.subtitle_ru !== null) ? data.subtitle_ru : (created.subtitle_ru || ''),
+      };
       setShowcaseSections((prev) => {
-        const next = [...prev, created];
+        const next = [...prev, enrichedCreated];
         try {
           localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
           localStorage.setItem('snabtash_sections_archive', JSON.stringify(next));
@@ -962,7 +1045,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateShowcaseSection = async (id: string | number, updated: Partial<HomeShowcaseSection>) => {
     const idStr = String(id);
     setShowcaseSections((prev) => {
-      const next = prev.map((s) => (String(s.id) === idStr ? { ...s, ...updated } : s));
+      const next = prev.map((s) => {
+        if (String(s.id) === idStr) {
+          return {
+            ...s,
+            ...updated,
+            title_ru: (updated.title_ru !== undefined && updated.title_ru !== null) ? updated.title_ru : (s.title_ru || ''),
+            subtitle_ru: (updated.subtitle_ru !== undefined && updated.subtitle_ru !== null) ? updated.subtitle_ru : (s.subtitle_ru || ''),
+          };
+        }
+        return s;
+      });
       try {
         localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
         localStorage.setItem('snabtash_sections_archive', JSON.stringify(next));
@@ -973,7 +1066,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const saved = await api.updateShowcaseSection(id, updated);
       if (saved && saved.id) {
-        setShowcaseSections((prev) => prev.map((s) => (String(s.id) === idStr ? saved : s)));
+        setShowcaseSections((prev) =>
+          prev.map((s) => {
+            if (String(s.id) === idStr) {
+              return {
+                ...s,
+                ...saved,
+                title_ru:
+                  updated.title_ru !== undefined && updated.title_ru !== null
+                    ? updated.title_ru
+                    : (saved.title_ru || s.title_ru || ''),
+                subtitle_ru:
+                  updated.subtitle_ru !== undefined && updated.subtitle_ru !== null
+                    ? updated.subtitle_ru
+                    : (saved.subtitle_ru || s.subtitle_ru || ''),
+              };
+            }
+            return s;
+          })
+        );
       }
       notifySync();
     } catch (err) {
@@ -1010,7 +1121,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         const { id, ...data } = item;
         const res = await api.createShowcaseSection(data);
-        createdList.push(res);
+        createdList.push({
+          ...item,
+          ...res,
+          title_ru: item.title_ru || res.title_ru || '',
+          subtitle_ru: item.subtitle_ru || res.subtitle_ru || '',
+        });
       } catch {
         createdList.push(item);
       }
@@ -1018,6 +1134,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setShowcaseSections(createdList);
     try {
       localStorage.setItem('snabtash_showcase_sections', JSON.stringify(createdList));
+      localStorage.setItem('snabtash_sections_archive', JSON.stringify(createdList));
     } catch {}
     notifySync();
     showToast('✓ Standart sohaviy bo‘limlar qayta tiklandi', 'success');

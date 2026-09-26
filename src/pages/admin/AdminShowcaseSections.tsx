@@ -23,6 +23,7 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 import type { HomeShowcaseSection, Product } from '../../types';
+import { DEFAULT_SHOWCASE_SECTIONS } from '../../context/AppContext';
 
 export const AdminShowcaseSections: React.FC = () => {
   const {
@@ -96,14 +97,19 @@ export const AdminShowcaseSections: React.FC = () => {
   };
 
   const openEditModal = (sec: HomeShowcaseSection) => {
+    const fallback = DEFAULT_SHOWCASE_SECTIONS.find(
+      (d) =>
+        String(d.id) === String(sec.id) ||
+        d.title.toLowerCase().trim() === (sec.title || '').toLowerCase().trim()
+    );
     setEditingSection(sec);
     setPickerSearch('');
     setPickerCategory('all');
     setFormData({
       title: sec.title || '',
-      title_ru: sec.title_ru || '',
+      title_ru: sec.title_ru || fallback?.title_ru || '',
       subtitle: sec.subtitle || '',
-      subtitle_ru: sec.subtitle_ru || '',
+      subtitle_ru: sec.subtitle_ru || fallback?.subtitle_ru || '',
       badge: '',
       icon: '',
       link: sec.link || '/catalog',
@@ -289,20 +295,34 @@ export const AdminShowcaseSections: React.FC = () => {
                           </span>
                         </div>
 
-                        <h3 className="text-base font-extrabold text-[#1E293B]">
-                          {sec.title}
-                          {sec.title_ru && (
-                            <span className="ml-2 text-[11px] font-semibold text-[#0284C7] bg-[#E0F2FE] px-2 py-0.5 rounded-md inline-block">
-                              RU: {sec.title_ru}
-                            </span>
-                          )}
-                        </h3>
-                        {sec.subtitle && <p className="text-xs text-[#64748B] font-medium">{sec.subtitle}</p>}
-                        {sec.subtitle_ru && (
-                          <p className="text-[11px] text-[#0284C7] italic">
-                            RU: {sec.subtitle_ru}
-                          </p>
-                        )}
+                        {(() => {
+                          const fallback = DEFAULT_SHOWCASE_SECTIONS.find(
+                            (d) =>
+                              String(d.id) === String(sec.id) ||
+                              d.title.toLowerCase().trim() === (sec.title || '').toLowerCase().trim()
+                          );
+                          const ruTitle = sec.title_ru || fallback?.title_ru || '';
+                          const ruSubtitle = sec.subtitle_ru || fallback?.subtitle_ru || '';
+
+                          return (
+                            <>
+                              <h3 className="text-base font-extrabold text-[#1E293B]">
+                                {sec.title}
+                                {ruTitle && (
+                                  <span className="ml-2 text-[11px] font-semibold text-[#0284C7] bg-[#E0F2FE] px-2 py-0.5 rounded-md inline-block">
+                                    RU: {ruTitle}
+                                  </span>
+                                )}
+                              </h3>
+                              {sec.subtitle && <p className="text-xs text-[#64748B] font-medium">{sec.subtitle}</p>}
+                              {ruSubtitle && (
+                                <p className="text-[11px] text-[#0284C7] italic">
+                                  RU: {ruSubtitle}
+                                </p>
+                              )}
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
 

@@ -161,12 +161,12 @@ def import_from_live_backup(bundle_path, backend_dir):
                 'title_ru': s.get('title_ru', '') or '',
                 'subtitle': s.get('subtitle', '') or '',
                 'subtitle_ru': s.get('subtitle_ru', '') or '',
-                'icon': s.get('icon', 'Star') or 'Star',
-                'target_slug': str(s.get('targetSlug') or s.get('target_slug') or ''),
+                'badge': s.get('badge', '') or '',
+                'icon': s.get('icon', 'Building2') or 'Building2',
+                'link': s.get('link', '/catalog') or '/catalog',
+                'product_ids': s.get('productIds', []) or s.get('product_ids', []),
                 'order': int(s.get('order', 0) or 0),
-                'is_active': bool(s.get('isActive', True)),
-                'tag': s.get('tag', '') or '',
-                'tag_ru': s.get('tag_ru', '') or '',
+                'is_active': bool(s.get('isActive', s.get('is_active', True))),
             }
         )
     print(f" -> [OK] {len(sections)} ta bo'lim tiklandi.")
