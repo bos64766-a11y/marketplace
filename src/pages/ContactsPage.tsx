@@ -5,24 +5,29 @@ import { CONTACT_INFO } from '../data/content';
 import { Phone, Send, Clock, MapPin, Mail, MessageSquare, Check, ArrowRight, Loader2 } from 'lucide-react';
 
 export const ContactsPage: React.FC = () => {
-  const { showToast, siteSettings, submitRequest } = useApp();
+  const { showToast, siteSettings, submitRequest, t, language } = useApp();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('+998 ');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
+  useSEO({
+    title: language === 'ru' ? 'Контакты • B2B Снабжение SNABTASH' : 'Aloqa • SNABTASH B2B Ta’minot',
+    description: t.contactsPage.subtitle,
+  });
+
   const phone1 = siteSettings?.phone1 || CONTACT_INFO.phones[0] || '+998 87 034 97 79';
   const phone2 = siteSettings?.phone2 || CONTACT_INFO.phones[1] || '+998 90 123 45 67';
   const telegramBot = siteSettings?.telegramBot || CONTACT_INFO.telegram || '@snabtash_bot';
-  const workHours = siteSettings?.workHours || CONTACT_INFO.workHours || 'Dush - Shan: 08:30 - 18:30';
-  const address = siteSettings?.address || CONTACT_INFO.address || 'Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy';
+  const workHours = siteSettings?.workHours || CONTACT_INFO.workHours || (language === 'ru' ? 'Пн - Сб: 08:30 - 18:30' : 'Dush - Shan: 08:30 - 18:30');
+  const address = siteSettings?.address || CONTACT_INFO.address || (language === 'ru' ? 'г. Ташкент, Сергелийский район, Tashkent Index, блок А3' : 'Toshkent sh., Sergeli tumani, Tashkent Index, A3-blok');
   const email = siteSettings?.email || CONTACT_INFO.email || 'info@snabtash.uz';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || phone.replace(/\D/g, '').length < 9) {
-      showToast('Ism va telefon raqamni to‘liq kiriting', 'error');
+      showToast(t.contactsPage.fillError, 'error');
       return;
     }
 
@@ -34,14 +39,14 @@ export const ContactsPage: React.FC = () => {
         contact: {
           name: name.trim(),
           phone: phone.trim(),
-          comment: `[Aloqa / Murojaat so‘rovi]: ${message.trim() || 'Mijoz aloqa va maslahat so‘radi.'}`,
+          comment: `[${language === 'ru' ? 'Запрос консультации' : 'Aloqa / Murojaat so‘rovi'}]: ${message.trim() || (language === 'ru' ? 'Клиент запросил связь и консультацию.' : 'Mijoz aloqa va maslahat so‘radi.')}`,
         },
       });
 
       setSent(true);
-      showToast('Xabaringiz qabul qilindi! Menejerimiz tez orada bog‘lanadi.', 'success');
+      showToast(t.contactsPage.successToast, 'success');
     } catch (err) {
-      showToast('Xabar yuborishda xatolik yuz berdi. Iltimos qaytadan urinib ko‘ring.', 'error');
+      showToast(t.contactsPage.errorToast, 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -51,13 +56,13 @@ export const ContactsPage: React.FC = () => {
     <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       <div className="text-center max-w-2xl mx-auto space-y-2">
         <span className="text-xs font-bold uppercase tracking-widest text-[#FF5A00] bg-[#FFF1E8] px-3 py-1 rounded-full border border-[#FF5A00]/20">
-          Aloqa va manzil
+          {t.contactsPage.badge}
         </span>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0B2E73] tracking-tight">
-          Biz bilan bog‘laning
+          {t.contactsPage.title}
         </h1>
         <p className="text-xs sm:text-sm text-[#667085]">
-          B2B ta’minot, mahsulotlar mavjudligi va maxsus shartnomalar bo‘yicha savollaringiz bormi?
+          {t.contactsPage.subtitle}
         </p>
       </div>
 
@@ -70,7 +75,7 @@ export const ContactsPage: React.FC = () => {
               <Phone className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Telefonlar</h3>
+              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">{t.contactsPage.phones}</h3>
               <div className="mt-1.5 space-y-1">
                 <a
                   href={`tel:${phone1.replace(/\s+/g, '')}`}
@@ -96,7 +101,7 @@ export const ContactsPage: React.FC = () => {
               <Send className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Telegram Menejer</h3>
+              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">{t.contactsPage.telegram}</h3>
               <a
                 href={`https://t.me/${telegramBot.replace('@', '')}`}
                 target="_blank"
@@ -105,7 +110,7 @@ export const ContactsPage: React.FC = () => {
               >
                 {telegramBot}
               </a>
-              <span className="text-xs text-[#667085]">Tezkor savol-javob va narxlar</span>
+              <span className="text-xs text-[#667085]">{t.contactsPage.telegramDesc}</span>
             </div>
           </div>
 
@@ -115,9 +120,9 @@ export const ContactsPage: React.FC = () => {
               <Clock className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Ish vaqti</h3>
+              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">{t.contactsPage.workHours}</h3>
               <p className="text-sm font-bold text-[#14213D] mt-1.5">{workHours}</p>
-              <p className="text-xs text-[#667085]">Buyurtmalar 24/7 qabul qilinadi</p>
+              <p className="text-xs text-[#667085]">{t.contactsPage.orders247}</p>
             </div>
           </div>
 
@@ -127,7 +132,7 @@ export const ContactsPage: React.FC = () => {
               <MapPin className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Bosh ofis & Ombor</h3>
+              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">{t.contactsPage.officeWarehouse}</h3>
               <p className="text-xs sm:text-sm text-[#14213D] font-semibold mt-1.5 leading-relaxed">
                 {address}
               </p>
@@ -141,7 +146,7 @@ export const ContactsPage: React.FC = () => {
                 <Mail className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">Elektron pochta</h3>
+                <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">{t.contactsPage.email}</h3>
                 <a
                   href={`mailto:${email}`}
                   className="text-sm font-bold text-[#14213D] hover:text-[#FF5A00] block mt-1.5"
@@ -157,10 +162,10 @@ export const ContactsPage: React.FC = () => {
         <div className="lg:col-span-7 bg-white rounded-3xl border border-[#E5EAF2] p-6 sm:p-8 shadow-xs">
           <h2 className="text-xl font-bold text-[#0B2E73] mb-2 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-[#FF5A00]" />
-            <span>Murojaat yoki savol qoldirish</span>
+            <span>{t.contactsPage.formTitle}</span>
           </h2>
           <p className="text-xs sm:text-sm text-[#667085] mb-6">
-            Bizga xabar qoldiring, korporativ mutaxassisimiz siz bilan qisqa vaqt ichida bog‘lanadi.
+            {t.contactsPage.formSubtitle}
           </p>
 
           {sent ? (
@@ -168,9 +173,9 @@ export const ContactsPage: React.FC = () => {
               <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto">
                 <Check className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-emerald-900">Rahmat! Xabaringiz yuborildi</h3>
+              <h3 className="text-base font-bold text-emerald-900">{t.contactsPage.successTitle}</h3>
               <p className="text-xs text-emerald-700">
-                Mutaxassisimiz ko‘rsatilgan raqamga qo‘ng‘iroq qiladi yoki Telegram orqali javob beradi.
+                {t.contactsPage.successDesc}
               </p>
               <button
                 onClick={() => {
@@ -178,30 +183,30 @@ export const ContactsPage: React.FC = () => {
                   setName('');
                   setMessage('');
                 }}
-                className="mt-4 px-4 py-2 rounded-xl bg-white border border-emerald-300 text-xs font-semibold text-emerald-800"
+                className="mt-4 px-4 py-2 rounded-xl bg-white border border-emerald-300 text-xs font-semibold text-emerald-800 cursor-pointer hover:bg-emerald-50 transition-colors"
               >
-                Yana xabar yuborish
+                {t.contactsPage.sendAnother}
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-[#14213D] mb-1.5">
-                  Ismingiz <span className="text-red-500">*</span>
+                  {t.contactsPage.nameLabel} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Ismingizni kiriting"
+                  placeholder={t.contactsPage.namePlaceholder}
                   className="w-full h-11 px-4 rounded-xl bg-[#F7F9FC] text-sm text-[#14213D] border border-[#E5EAF2] focus:outline-none focus:border-[#0B2E73] focus:bg-white"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-[#14213D] mb-1.5">
-                  Telefon raqamingiz <span className="text-red-500">*</span>
+                  {t.contactsPage.phoneLabel} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -215,13 +220,13 @@ export const ContactsPage: React.FC = () => {
 
               <div>
                 <label className="block text-xs font-bold text-[#14213D] mb-1.5">
-                  Xabaringiz yoki savolingiz
+                  {t.contactsPage.messageLabel}
                 </label>
                 <textarea
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Qanday mahsulotlar yoki shartnomalar haqida ma’lumot olmoqchisiz?..."
+                  placeholder={t.contactsPage.messagePlaceholder}
                   className="w-full p-4 rounded-xl bg-[#F7F9FC] text-sm text-[#14213D] border border-[#E5EAF2] focus:outline-none focus:border-[#0B2E73] focus:bg-white resize-none"
                 />
               </div>
@@ -234,11 +239,11 @@ export const ContactsPage: React.FC = () => {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    <span>Yuborilmoqda...</span>
+                    <span>{t.contactsPage.sending}</span>
                   </>
                 ) : (
                   <>
-                    <span>Xabarni yuborish</span>
+                    <span>{t.contactsPage.sendBtn}</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -253,7 +258,7 @@ export const ContactsPage: React.FC = () => {
                 <MapPin className="w-5 h-5 text-[#FF5A00]" />
                 <div>
                   <h4 className="text-xs font-bold text-[#0B2E73]">Tashkent Index A3-blok</h4>
-                  <p className="text-[11px] text-[#667085]">Sergeli tumani, Yangi Sergeli ko‘chasi</p>
+                  <p className="text-[11px] text-[#667085]">{language === 'ru' ? 'г. Ташкент, Сергелийский район' : 'Sergeli tumani, Yangi Sergeli ko‘chasi'}</p>
                 </div>
               </div>
               <a
@@ -262,7 +267,7 @@ export const ContactsPage: React.FC = () => {
                 rel="noopener noreferrer"
                 className="px-3 py-1.5 rounded-lg bg-white border border-[#E5EAF2] text-xs font-semibold text-[#0B2E73] hover:bg-[#FFF1E8] hover:text-[#FF5A00] transition-colors"
               >
-                Xaritada ochish ↗
+                {t.contactsPage.openMap}
               </a>
             </div>
           </div>

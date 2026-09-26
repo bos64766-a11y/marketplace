@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useSEO } from '../hooks/useSEO';
 import {
   FileText,
   ChevronDown,
   ChevronUp,
-  Clock,
-  CheckCircle2,
   ArrowRight,
   Building2,
   Phone,
@@ -25,8 +24,14 @@ export const RequestsPage: React.FC = () => {
     navigate,
     getProductName,
     formatUnit,
-    showToast
+    t,
+    language
   } = useApp();
+
+  useSEO({
+    title: t.requestsHistoryPage.title,
+    description: t.requestsHistoryPage.subtitle
+  });
 
   const [expandedId, setExpandedId] = useState<string | null>(customerOrders[0]?.id || null);
   const [phoneInput, setPhoneInput] = useState('+998 ');
@@ -52,7 +57,7 @@ export const RequestsPage: React.FC = () => {
     e.preventDefault();
     const digitsOnly = phoneInput.replace(/\D/g, '');
     if (digitsOnly.length < 9) {
-      setPhoneError('Telefon raqamingizni to‘liq kiriting (+998 __ ___ __ __)');
+      setPhoneError(t.requestsHistoryPage.phoneError);
       return;
     }
 
@@ -63,6 +68,22 @@ export const RequestsPage: React.FC = () => {
       console.error('Lookup error:', err);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const formatStatus = (status: string) => {
+    if (language !== 'ru') return status;
+    switch (status) {
+      case 'Tasdiqlangan':
+        return t.requestsHistoryPage.statusApproved;
+      case 'Yetkazilmoqda':
+        return t.requestsHistoryPage.statusDelivering;
+      case 'Bajarildi':
+        return t.requestsHistoryPage.statusCompleted;
+      case 'Bekor qilindi':
+        return t.requestsHistoryPage.statusCancelled;
+      default:
+        return t.requestsHistoryPage.statusProcessing;
     }
   };
 
@@ -87,15 +108,15 @@ export const RequestsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#E5EAF2]">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B2E73] tracking-tight flex items-center gap-3">
-            <span>Mening zayavkalarim</span>
+            <span>{t.requestsHistoryPage.title}</span>
             {isIdentified && (
               <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#EBF3FF] text-[#0B2E73] border border-[#BFDBFE]">
-                B2B Hisob
+                {t.requestsHistoryPage.b2bAccount}
               </span>
             )}
           </h1>
           <p className="text-xs sm:text-sm text-[#667085] mt-1">
-            Yuborilgan barcha B2B ta’minot zayavkalari va ularning holati
+            {t.requestsHistoryPage.subtitle}
           </p>
         </div>
 
@@ -104,7 +125,7 @@ export const RequestsPage: React.FC = () => {
             onClick={() => navigate('/request')}
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#FF5A00] text-white text-xs sm:text-sm font-bold hover:bg-[#e04f00] transition-colors cursor-pointer shadow-xs"
           >
-            <span>Yangi zayavka</span>
+            <span>{t.requestsHistoryPage.newRequest}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -122,10 +143,10 @@ export const RequestsPage: React.FC = () => {
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="font-bold text-base sm:text-lg text-[#14213D]">
-                    {profile.company || profile.name || 'B2B Mijoz'}
+                    {profile.company || profile.name || (language === 'ru' ? 'B2B Клиент' : 'B2B Mijoz')}
                   </h2>
                   <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    Faol
+                    {t.requestsHistoryPage.active}
                   </span>
                 </div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#667085] mt-1">
@@ -142,7 +163,7 @@ export const RequestsPage: React.FC = () => {
                   {profile.inn && (
                     <span className="flex items-center gap-1">
                       <Hash className="w-3.5 h-3.5 text-[#667085]" />
-                      <span>STIR: {profile.inn}</span>
+                      <span>{language === 'ru' ? 'ИНН' : 'STIR'}: {profile.inn}</span>
                     </span>
                   )}
                 </div>
@@ -152,10 +173,10 @@ export const RequestsPage: React.FC = () => {
             <button
               onClick={logoutCustomer}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#667085] hover:text-rose-600 hover:bg-rose-50 border border-[#E5EAF2] hover:border-rose-200 transition-colors cursor-pointer self-end md:self-auto"
-              title="Hisobdan chiqish"
+              title={t.requestsHistoryPage.logout}
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span>Chiqish</span>
+              <span>{t.requestsHistoryPage.logout}</span>
             </button>
           </div>
 
@@ -183,28 +204,28 @@ export const RequestsPage: React.FC = () => {
                         <div>
                           <div className="flex items-center gap-2.5">
                             <h3 className="font-bold text-base text-[#0B2E73]">
-                              Zayavka #{order.id}
+                              {t.requestsHistoryPage.requestNum} #{order.id}
                             </h3>
                             <span className="text-xs text-[#667085]">
                               {order.date}
                             </span>
                           </div>
                           <p className="text-xs text-[#667085] mt-0.5">
-                            {order.items.reduce((s, i) => s + i.quantity, 0)} ta mahsulot birligi
+                            {order.items.reduce((s, i) => s + i.quantity, 0)} {t.requestsHistoryPage.itemsCount}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-[#E5EAF2]">
                         <div className="text-left sm:text-right">
-                          <span className="text-xs text-[#667085] block">Summa:</span>
+                          <span className="text-xs text-[#667085] block">{t.requestsHistoryPage.amount}</span>
                           <strong className="text-base font-extrabold text-[#14213D]">
-                            {order.totalAmount.toLocaleString('uz-UZ')} so‘m
+                            {order.totalAmount.toLocaleString(language === 'ru' ? 'ru-RU' : 'uz-UZ')} {t.requestsHistoryPage.sum}
                           </strong>
                         </div>
 
                         <span className={`px-3 py-1 rounded-full border text-xs font-bold ${getStatusBadge(order.status)}`}>
-                          {order.status}
+                          {formatStatus(order.status)}
                         </span>
 
                         <button
@@ -224,7 +245,7 @@ export const RequestsPage: React.FC = () => {
                     {isExpanded && (
                       <div className="p-5 sm:p-6 bg-[#F7F9FC]/60 border-t border-[#E5EAF2] space-y-4 animate-in fade-in duration-200">
                         <h4 className="text-xs font-bold text-[#0B2E73] uppercase tracking-wider">
-                          Zayavka tarkibi:
+                          {t.requestsHistoryPage.itemsList}
                         </h4>
 
                         <div className="divide-y divide-[#E5EAF2] bg-white rounded-2xl border border-[#E5EAF2] overflow-hidden">
@@ -245,12 +266,12 @@ export const RequestsPage: React.FC = () => {
                                 <div>
                                   <strong className="text-[#14213D] block">{getProductName(product)}</strong>
                                   <span className="text-[#667085]">
-                                    {quantity} {formatUnit(product.unit)} x {product.price.toLocaleString('uz-UZ')} so‘m
+                                    {quantity} {formatUnit(product.unit)} x {product.price.toLocaleString(language === 'ru' ? 'ru-RU' : 'uz-UZ')} {t.requestsHistoryPage.sum}
                                   </span>
                                 </div>
                               </div>
                               <span className="font-bold text-[#0B2E73]">
-                                {(product.price * quantity).toLocaleString('uz-UZ')} so‘m
+                                {(product.price * quantity).toLocaleString(language === 'ru' ? 'ru-RU' : 'uz-UZ')} {t.requestsHistoryPage.sum}
                               </span>
                             </div>
                           ))}
@@ -259,18 +280,18 @@ export const RequestsPage: React.FC = () => {
                         {order.contact && (
                           <div className="p-3.5 rounded-xl bg-white border border-[#E5EAF2] text-xs text-[#667085] space-y-1">
                             <div className="flex justify-between">
-                              <span>Aloqa qiluvchi shaxs:</span>
+                              <span>{t.requestsHistoryPage.contactPerson}</span>
                               <strong className="text-[#14213D]">{order.contact.name} ({order.contact.phone})</strong>
                             </div>
                             {order.contact.company && (
                               <div className="flex justify-between">
-                                <span>Kompaniya:</span>
+                                <span>{t.requestsHistoryPage.company}</span>
                                 <strong className="text-[#14213D]">{order.contact.company}</strong>
                               </div>
                             )}
                             {order.contact.comment && (
                               <div className="pt-1 border-t border-[#E5EAF2]">
-                                <span className="block font-medium">Izoh:</span>
+                                <span className="block font-medium">{t.requestsHistoryPage.comment}</span>
                                 <p className="text-[#14213D] italic mt-0.5">{order.contact.comment}</p>
                               </div>
                             )}
@@ -287,15 +308,15 @@ export const RequestsPage: React.FC = () => {
               <div className="w-16 h-16 rounded-full bg-[#FFF1E8] text-[#FF5A00] flex items-center justify-center mx-auto mb-4">
                 <FileText className="w-8 h-8" />
               </div>
-              <h2 className="text-xl font-bold text-[#0B2E73] mb-2">Hozircha zayavkalar yo‘q</h2>
+              <h2 className="text-xl font-bold text-[#0B2E73] mb-2">{t.requestsHistoryPage.emptyTitle}</h2>
               <p className="text-xs sm:text-sm text-[#667085] mb-6 max-w-md mx-auto">
-                Ushbu telefon raqamiga biriktirilgan zayavkalar hali mavjud emas. Katalogdan tovarlarni tanlab, birinchi zayavkani yuboring.
+                {t.requestsHistoryPage.emptyDesc}
               </p>
               <button
                 onClick={() => navigate('/catalog')}
                 className="py-3 px-6 rounded-xl bg-[#0B2E73] text-white font-bold text-xs hover:bg-[#082255] transition-colors cursor-pointer"
               >
-                Katalogga o‘tish
+                {t.requestsHistoryPage.toCatalog}
               </button>
             </div>
           )}
@@ -309,16 +330,16 @@ export const RequestsPage: React.FC = () => {
             </div>
 
             <h2 className="text-xl sm:text-2xl font-extrabold text-[#0B2E73] tracking-tight mb-2">
-              Zayavkalaringizni ko‘rish
+              {t.requestsHistoryPage.lookupTitle}
             </h2>
             <p className="text-xs sm:text-sm text-[#667085] max-w-md mx-auto mb-6 leading-relaxed">
-              Kompaniyangiz yuborgan zayavkalar va buyurtma holatini ko‘rish uchun telefon raqamingizni kiriting. Murakkab parol kerak emas.
+              {t.requestsHistoryPage.lookupDesc}
             </p>
 
             <form onSubmit={handleLookupSubmit} className="space-y-4 max-w-sm mx-auto text-left">
               <div>
                 <label className="block text-xs font-bold text-[#14213D] mb-1.5">
-                  Telefon raqamingiz <span className="text-rose-500">*</span>
+                  {t.requestsHistoryPage.phoneLabel} <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
                   <Phone className="w-4 h-4 text-[#94A3B8] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -345,11 +366,11 @@ export const RequestsPage: React.FC = () => {
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Qidirilmoqda...</span>
+                    <span>{t.requestsHistoryPage.searching}</span>
                   </>
                 ) : (
                   <>
-                    <span>Zayavkalarni ko‘rish</span>
+                    <span>{t.requestsHistoryPage.lookupBtn}</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -359,10 +380,10 @@ export const RequestsPage: React.FC = () => {
             <div className="mt-8 pt-6 border-t border-[#F1F5F9] text-xs text-[#667085] space-y-2">
               <div className="flex items-center justify-center gap-1.5 text-emerald-700 font-medium">
                 <ShieldCheck className="w-4 h-4" />
-                <span>Ma’lumotlar xavfsizligi kafolatlangan</span>
+                <span>{t.requestsHistoryPage.securityGuaranteed}</span>
               </div>
               <p className="text-[11px] text-[#94A3B8]">
-                Birinchi marta zayavka berayotgan bo‘lsangiz, buyurtma yuborishingiz bilan hisobingiz avtomatik saqlanadi.
+                {t.requestsHistoryPage.autoSaveNote}
               </p>
             </div>
           </div>

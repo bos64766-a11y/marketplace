@@ -138,7 +138,7 @@ export interface Translations {
     emptyDesc: string;
     viewCatalog: string;
   };
-  common: {
+    common: {
     loading: string;
     error: string;
     save: string;
@@ -147,6 +147,137 @@ export interface Translations {
     edit: string;
     yes: string;
     no: string;
+  };
+  b2bInfoCards: {
+    guarantee: string;
+    b2bStandard: string;
+    items: Array<{
+      id: string;
+      badge: string;
+      title: string;
+      description: string;
+      icon: string;
+    }>;
+  };
+  aboutPage: {
+    badge: string;
+    title: string;
+    description: string;
+    pillar1Title: string;
+    pillar1Desc: string;
+    pillar2Title: string;
+    pillar2Desc: string;
+    pillar3Title: string;
+    pillar3Desc: string;
+    pillar4Title: string;
+    pillar4Desc: string;
+    partnersTitle: string;
+    partnersSubtitle: string;
+    ctaTitle: string;
+    ctaDesc: string;
+    ctaBtn: string;
+  };
+  deliveryPaymentPage: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    deliveryTitle: string;
+    deliverySubtitle: string;
+    deliveryTimeTitle: string;
+    deliveryTimeDesc: string;
+    deliveryTashkentTitle: string;
+    deliveryTashkentDescPre: string;
+    deliveryTashkentDescPost: string;
+    deliveryRegionsTitle: string;
+    deliveryRegionsDesc: string;
+    paymentTitle: string;
+    paymentSubtitle: string;
+    paymentTransferTitle: string;
+    paymentTransferDesc: string;
+    paymentCardTitle: string;
+    paymentCardDesc: string;
+    paymentCashTitle: string;
+    paymentCashDesc: string;
+    minOrderTitle: string;
+    minOrderDesc: string;
+    toCatalog: string;
+  };
+  contactsPage: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    phones: string;
+    telegram: string;
+    telegramDesc: string;
+    workHours: string;
+    orders247: string;
+    officeWarehouse: string;
+    email: string;
+    formTitle: string;
+    formSubtitle: string;
+    successTitle: string;
+    successDesc: string;
+    sendAnother: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    phoneLabel: string;
+    messageLabel: string;
+    messagePlaceholder: string;
+    sendBtn: string;
+    sending: string;
+    openMap: string;
+    fillError: string;
+    successToast: string;
+    errorToast: string;
+  };
+  profilePage: {
+    title: string;
+    subtitle: string;
+    b2bClient: string;
+    requests: string;
+    favorites: string;
+    inCart: string;
+    adminPanel: string;
+    personalInfo: string;
+    fullName: string;
+    phone: string;
+    company: string;
+    inn: string;
+    email: string;
+    saveChanges: string;
+    savedSuccess: string;
+  };
+  requestsHistoryPage: {
+    title: string;
+    b2bAccount: string;
+    subtitle: string;
+    newRequest: string;
+    active: string;
+    logout: string;
+    requestNum: string;
+    itemsCount: string;
+    amount: string;
+    sum: string;
+    itemsList: string;
+    contactPerson: string;
+    company: string;
+    comment: string;
+    emptyTitle: string;
+    emptyDesc: string;
+    toCatalog: string;
+    lookupTitle: string;
+    lookupDesc: string;
+    phoneLabel: string;
+    lookupBtn: string;
+    searching: string;
+    securityGuaranteed: string;
+    autoSaveNote: string;
+    phoneError: string;
+    statusApproved: string;
+    statusDelivering: string;
+    statusCompleted: string;
+    statusCancelled: string;
+    statusProcessing: string;
   };
 }
 
@@ -299,6 +430,160 @@ export const translations: Record<Language, Translations> = {
       yes: "Ha",
       no: "Yo‘q",
     },
+    b2bInfoCards: {
+      guarantee: "100% Kafolat",
+      b2bStandard: "B2B Standart",
+      items: [
+        {
+          id: "delivery",
+          badge: "Toshkent bo‘ylab",
+          title: "Bepul yetkazib berish",
+          description: "500 000 so‘mdan yuqori har qanday zayavka to‘g‘ridan-to‘g‘ri ofisingizgacha bepul va tez yetkazib beriladi.",
+          icon: "Truck",
+        },
+        {
+          id: "supply",
+          badge: "Barcha mahsulotlar bir joyda",
+          title: "Kompleks ta’minot",
+          description: "Ofisdan tortib ishlab chiqarishgacha kerak bo‘ladigan 1000 dan ortiq mahsulotlarni yagona shartnoma bilan ta’minlaymiz.",
+          icon: "Boxes",
+        },
+        {
+          id: "payment",
+          badge: "Yuridik va jismoniy shaxslar uchun",
+          title: "Har qanday to‘lov usuli",
+          description: "Pul o‘tkazish (Перечисление), naqd hisob, korporativ karta, Click va Payme tizimlari orqali qulay to‘lov.",
+          icon: "CreditCard",
+        },
+        {
+          id: "detergents",
+          badge: "Keng professional assortiment",
+          title: "Yuvish vositalari",
+          description: "Sertifikatlangan, SanPiN talablariga to‘liq javob beruvchi professional va maishiy kimyo mahsulotlari ombori.",
+          icon: "Sparkles",
+        },
+      ],
+    },
+    aboutPage: {
+      badge: "SNABTASH B2B Ta’minot",
+      title: "Korxonalar va tashkilotlar uchun ishonchli ta’minot hamkori",
+      description: "Biz O‘zbekistondagi yuzlab kompaniyalar, ofislar, restoranlar, fabrikalar va klinikalarga sifatli tozalash, gigiyena, kanselyariya va xo‘jalik mahsulotlarini uzluksiz yetkazib beramiz.",
+      pillar1Title: "Yagona ta’minotchi",
+      pillar1Desc: "Barcha xo‘jalik va kimyoviy ehtiyojlarni 10 xil do‘kondan emas, aynan bitta joydan, yagona hisob-faktura bilan xarid qiling.",
+      pillar2Title: "Tezkor logistika",
+      pillar2Desc: "O‘zimizning avtoparkimiz va tajribali haydovchilarimiz orqali Toshkent bo‘ylab buyurtmalarni ertasi kuniyoq yetkazib beramiz.",
+      pillar3Title: "100% Sertifikatlangan",
+      pillar3Desc: "Barcha professional kimyo va gigiyena vositalari gigiyenik va sifat sertifikatlariga ega.",
+      pillar4Title: "Qulay B2B narxlar",
+      pillar4Desc: "To‘g‘ridan-to‘g‘ri ishlab chiqaruvchilardan olib kelinganligi sababli bozor narxlaridan arzon va ulgurji tariflar.",
+      partnersTitle: "Bizga ishonch bildirgan brendlar",
+      partnersSubtitle: "Yirik ishlab chiqaruvchilar, korporatsiyalar va xalqaro brendlar bilan uzoq muddatli shartnomalar asosida ishlaymiz.",
+      ctaTitle: "Hamkorlik qilishga tayyormisiz?",
+      ctaDesc: "Kompaniyangiz ehtiyojlari uchun eng maqbul narxlar va qulay yetkazib berish jadvalini tuzib beramiz.",
+      ctaBtn: "Korporativ zayavka qoldirish",
+    },
+    deliveryPaymentPage: {
+      badge: "Shartlar va qoidalar",
+      title: "To‘lov va Yetkazib berish",
+      subtitle: "Yuridik va jismoniy shaxslar uchun eng qulay hisob-kitob hamda logistika shartlari",
+      deliveryTitle: "Yetkazib berish shartlari",
+      deliverySubtitle: "Tezkor va aniq rejalashtirilgan logistika",
+      deliveryTimeTitle: "Yetkazib berish vaqti:",
+      deliveryTimeDesc: "Soat 16:00 ga qadar tasdiqlangan zayavkalar ertasi kuniyoq (24 soat ichida) to‘g‘ridan-to‘g‘ri ofisingiz yoki omboringiz eshigigacha yetkaziladi.",
+      deliveryTashkentTitle: "Toshkent shahri bo‘ylab:",
+      deliveryTashkentDescPre: "Minimal",
+      deliveryTashkentDescPost: "miqdoridagi B2B buyurtmalarda yetkazib berish mutlaqo bepul.",
+      deliveryRegionsTitle: "Viloyatlarga yetkazish:",
+      deliveryRegionsDesc: "Toshkent viloyati va O‘zbekistonning barcha viloyatlariga kuryerlik yoki transport kompaniyalari (BTS, Fargo) orqali yetkazib beriladi.",
+      paymentTitle: "B2B To‘lov usullari",
+      paymentSubtitle: "To‘liq qonuniy va shaffof hisob-kitob",
+      paymentTransferTitle: "Pul o‘tkazish (Bank hisob-raqami / Перечисление):",
+      paymentTransferDesc: "Yuridik shaxslar uchun shartnoma, hisob-kitob varaqasi (schet-faktura) va elektron hujjat aylanishi (Didox, Soliq) orqali E-Faktura.",
+      paymentCardTitle: "Korporativ karta va terminal:",
+      paymentCardDesc: "Korxona korporativ kartasi (Uzcard / Humo) orqali to‘lov qilish imkoniyati.",
+      paymentCashTitle: "Naqd pul / Elektron to‘lovlar:",
+      paymentCashDesc: "Kassa cheki bilan naqd pul yoki Click, Payme ilovalari orqali to‘lov.",
+      minOrderTitle: "Minimal zayavka miqdori: 500 000 so‘m",
+      minOrderDesc: "Saytda zayavka shakllantirilgandan so‘ng, yakuniy narx va yetkazib berish korporativ menejer bilan kelishiladi.",
+      toCatalog: "Katalogga o‘tish",
+    },
+    contactsPage: {
+      badge: "Aloqa va manzil",
+      title: "Biz bilan bog‘laning",
+      subtitle: "B2B ta’minot, mahsulotlar mavjudligi va maxsus shartnomalar bo‘yicha savollaringiz bormi?",
+      phones: "Telefonlar",
+      telegram: "Telegram Menejer",
+      telegramDesc: "Tezkor savol-javob va narxlar",
+      workHours: "Ish vaqti",
+      orders247: "Buyurtmalar 24/7 qabul qilinadi",
+      officeWarehouse: "Bosh ofis & Ombor",
+      email: "Elektron pochta",
+      formTitle: "Murojaat yoki savol qoldirish",
+      formSubtitle: "Bizga xabar qoldiring, korporativ mutaxassisimiz siz bilan qisqa vaqt ichida bog‘lanadi.",
+      successTitle: "Rahmat! Xabaringiz yuborildi",
+      successDesc: "Mutaxassisimiz ko‘rsatilgan raqamga qo‘ng‘iroq qiladi yoki Telegram orqali javob beradi.",
+      sendAnother: "Yana xabar yuborish",
+      nameLabel: "Ismingiz",
+      namePlaceholder: "Ismingizni kiriting",
+      phoneLabel: "Telefon raqamingiz",
+      messageLabel: "Xabaringiz yoki savolingiz",
+      messagePlaceholder: "Qanday mahsulotlar yoki shartnomalar haqida ma’lumot olmoqchisiz?...",
+      sendBtn: "Xabarni yuborish",
+      sending: "Yuborilmoqda...",
+      openMap: "Xaritada ochish ↗",
+      fillError: "Ism va telefon raqamni to‘liq kiriting",
+      successToast: "Xabaringiz qabul qilindi! Menejerimiz tez orada bog‘lanadi.",
+      errorToast: "Xabar yuborishda xatolik yuz berdi. Iltimos qaytadan urinib ko‘ring.",
+    },
+    profilePage: {
+      title: "Profil va B2B ma’lumotlar",
+      subtitle: "Kompaniyangiz rekvizitlari va zayavkalar tarixi",
+      b2bClient: "B2B Mijoz",
+      requests: "Zayavka",
+      favorites: "Sevimli",
+      inCart: "Savatda",
+      adminPanel: "Admin Boshqaruv Paneli",
+      personalInfo: "Shaxsiy va korporativ ma’lumotlar",
+      fullName: "Ism va Familiya",
+      phone: "Telefon raqam",
+      company: "Kompaniya nomi",
+      inn: "STIR / INN",
+      email: "Elektron pochta (Email)",
+      saveChanges: "O‘zgarishlarni saqlash",
+      savedSuccess: "Profil ma’lumotlari muvaffaqiyatli saqlandi!",
+    },
+    requestsHistoryPage: {
+      title: "Mening zayavkalarim",
+      b2bAccount: "B2B Hisob",
+      subtitle: "Yuborilgan barcha B2B ta’minot zayavkalari va ularning holati",
+      newRequest: "Yangi zayavka",
+      active: "Faol",
+      logout: "Chiqish",
+      requestNum: "Zayavka",
+      itemsCount: "ta mahsulot birligi",
+      amount: "Summa:",
+      sum: "so‘m",
+      itemsList: "Zayavka tarkibi:",
+      contactPerson: "Aloqa qiluvchi shaxs:",
+      company: "Kompaniya:",
+      comment: "Izoh:",
+      emptyTitle: "Hozircha zayavkalar yo‘q",
+      emptyDesc: "Ushbu telefon raqamiga biriktirilgan zayavkalar hali mavjud emas. Katalogdan tovarlarni tanlab, birinchi zayavkani yuboring.",
+      toCatalog: "Katalogga o‘tish",
+      lookupTitle: "Zayavkalaringizni ko‘rish",
+      lookupDesc: "Kompaniyangiz yuborgan zayavkalar va buyurtma holatini ko‘rish uchun telefon raqamingizni kiriting. Murakkab parol kerak emas.",
+      phoneLabel: "Telefon raqamingiz",
+      lookupBtn: "Zayavkalarni ko‘rish",
+      searching: "Qidirilmoqda...",
+      securityGuaranteed: "Ma’lumotlar xavfsizligi kafolatlangan",
+      autoSaveNote: "Birinchi marta zayavka berayotgan bo‘lsangiz, buyurtma yuborishingiz bilan hisobingiz avtomatik saqlanadi.",
+      phoneError: "Telefon raqamingizni to‘liq kiriting (+998 __ ___ __ __)",
+      statusApproved: "Tasdiqlangan",
+      statusDelivering: "Yetkazilmoqda",
+      statusCompleted: "Bajarildi",
+      statusCancelled: "Bekor qilindi",
+      statusProcessing: "Kutilmoqda",
+    },
   },
   ru: {
     header: {
@@ -447,6 +732,160 @@ export const translations: Record<Language, Translations> = {
       edit: "Редактировать",
       yes: "Да",
       no: "Нет",
+    },
+    b2bInfoCards: {
+      guarantee: "100% Гарантия",
+      b2bStandard: "B2B Стандарт",
+      items: [
+        {
+          id: "delivery",
+          badge: "По Ташкенту",
+          title: "Бесплатная доставка",
+          description: "Любая B2B заявка от 500 000 сум доставляется оперативно и бесплатно прямо до вашего офиса или склада.",
+          icon: "Truck",
+        },
+        {
+          id: "supply",
+          badge: "Все товары в одном месте",
+          title: "Комплексное снабжение",
+          description: "Обеспечиваем более 1 000 наименований товаров от офиса до производства по единому договору.",
+          icon: "Boxes",
+        },
+        {
+          id: "payment",
+          badge: "Для юридических и физлиц",
+          title: "Любые способы оплаты",
+          description: "Оплата перечислением (с НДС и ЭСФ), корпоративной картой, наличными, а также через Click и Payme.",
+          icon: "CreditCard",
+        },
+        {
+          id: "detergents",
+          badge: "Широкий ассортимент",
+          title: "Моющие средства",
+          description: "Склад сертифицированной профессиональной и бытовой химии, полностью отвечающей нормам СанПиН.",
+          icon: "Sparkles",
+        },
+      ],
+    },
+    aboutPage: {
+      badge: "SNABTASH B2B Снабжение",
+      title: "Надежный партнер по комплексному снабжению для предприятий",
+      description: "Мы обеспечиваем бесперебойные поставки качественных моющих средств, гигиены, канцелярии и хозяйственных товаров для сотен компаний, офисов, ресторанов, заводов и клиник Узбекистана.",
+      pillar1Title: "Единый поставщик",
+      pillar1Desc: "Приобретайте все хозяйственные и химические товары в одном месте по единому счет-фактуре, не распыляясь на десятки разных продавцов.",
+      pillar2Title: "Оперативная логистика",
+      pillar2Desc: "Собственный автопарк и опытные экспедиторы позволяют доставлять заказы по Ташкенту уже на следующий рабочий день.",
+      pillar3Title: "100% Сертифицировано",
+      pillar3Desc: "Вся профессиональная химия и средства личной гигиены имеют сертификаты качества и санитарно-эпидемиологические заключения.",
+      pillar4Title: "Выгодные B2B цены",
+      pillar4Desc: "Прямые оптовые поставки от заводов-производителей гарантируют цены существенно ниже розничного рынка.",
+      partnersTitle: "Бренды, которые нам доверяют",
+      partnersSubtitle: "Мы работаем на основе долгосрочных контрактов с ведущими производителями, корпорациями и международными брендами.",
+      ctaTitle: "Готовы к долгосрочному партнерству?",
+      ctaDesc: "Мы сформируем выгодное коммерческое предложение и настроим регулярный график снабжения для вашей компании.",
+      ctaBtn: "Оставить корпоративную заявку",
+    },
+    deliveryPaymentPage: {
+      badge: "Условия и правила",
+      title: "Доставка и Оплата",
+      subtitle: "Удобные условия взаиморасчетов и прозрачной логистики для юридических и физических лиц",
+      deliveryTitle: "Условия доставки",
+      deliverySubtitle: "Быстрая и надежная корпоративная логистика",
+      deliveryTimeTitle: "Сроки доставки:",
+      deliveryTimeDesc: "Заявки, утвержденные до 16:00, доставляются на следующий день (в течение 24 часов) прямо до дверей офиса или склада.",
+      deliveryTashkentTitle: "По городу Ташкент:",
+      deliveryTashkentDescPre: "При заказе на сумму от",
+      deliveryTashkentDescPost: "доставка B2B заказов осуществляется абсолютно бесплатно.",
+      deliveryRegionsTitle: "Доставка в регионы:",
+      deliveryRegionsDesc: "В Ташкентскую область и все регионы Республики Узбекистан доставка осуществляется курьерскими и транспортными службами (BTS, Fargo и др.).",
+      paymentTitle: "Способы B2B оплаты",
+      paymentSubtitle: "Официальный и прозрачный документооборот",
+      paymentTransferTitle: "Безналичный расчет (Перечисление / расчетный счет):",
+      paymentTransferDesc: "Для юридических лиц: официальный договор, счет на оплату, работа через системы электронных счетов-фактур (Didox, Soliq).",
+      paymentCardTitle: "Корпоративная карта и терминал:",
+      paymentCardDesc: "Возможность оперативной оплаты корпоративными картами предприятий (Uzcard / Humo).",
+      paymentCashTitle: "Наличный расчет / Электронные платежи:",
+      paymentCashDesc: "Оплата наличными с выдачей кассового чека либо через платежные системы Click и Payme.",
+      minOrderTitle: "Минимальная сумма заявки: 500 000 сум",
+      minOrderDesc: "После оформления заявки на сайте персональный корпоративный менеджер свяжется для уточнения цен и деталей доставки.",
+      toCatalog: "Перейти в каталог",
+    },
+    contactsPage: {
+      badge: "Контакты и адрес",
+      title: "Свяжитесь с нами",
+      subtitle: "Есть вопросы по B2B поставкам, наличию товаров или заключению договоров?",
+      phones: "Телефоны",
+      telegram: "Telegram Менеджер",
+      telegramDesc: "Быстрые ответы и консультации по ценам",
+      workHours: "Режим работы",
+      orders247: "Заявки на сайте принимаются 24/7",
+      officeWarehouse: "Главный офис и Склад",
+      email: "Электронная почта",
+      formTitle: "Оставить обращение или вопрос",
+      formSubtitle: "Оставьте сообщение, наш корпоративный специалист свяжется с вами в течение короткого времени.",
+      successTitle: "Спасибо! Ваше сообщение принято",
+      successDesc: "Наш менеджер перезвонит по указанному номеру или свяжется в Telegram.",
+      sendAnother: "Отправить еще сообщение",
+      nameLabel: "Ваше имя",
+      namePlaceholder: "Введите ваше имя",
+      phoneLabel: "Номер телефона",
+      messageLabel: "Ваше сообщение или вопрос",
+      messagePlaceholder: "О каких товарах или условиях сотрудничества вы хотите узнать?...",
+      sendBtn: "Отправить сообщение",
+      sending: "Отправка...",
+      openMap: "Открыть на карте ↗",
+      fillError: "Пожалуйста, заполните имя и номер телефона",
+      successToast: "Ваше обращение принято! Менеджер свяжется с вами в ближайшее время.",
+      errorToast: "Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.",
+    },
+    profilePage: {
+      title: "Профиль и данные B2B",
+      subtitle: "Реквизиты вашей компании и история заявок",
+      b2bClient: "B2B Клиент",
+      requests: "Заявки",
+      favorites: "Избранное",
+      inCart: "В корзине",
+      adminPanel: "Панель администратора",
+      personalInfo: "Личные и корпоративные данные",
+      fullName: "Имя и Фамилия",
+      phone: "Номер телефона",
+      company: "Название компании",
+      inn: "ИНН организации",
+      email: "Электронная почта (Email)",
+      saveChanges: "Сохранить изменения",
+      savedSuccess: "Данные профиля успешно сохранены!",
+    },
+    requestsHistoryPage: {
+      title: "Мои заявки",
+      b2bAccount: "B2B Аккаунт",
+      subtitle: "Все отправленные B2B заявки на снабжение и их актуальный статус",
+      newRequest: "Новая заявка",
+      active: "Активен",
+      logout: "Выйти",
+      requestNum: "Заявка",
+      itemsCount: "ед. товаров",
+      amount: "Сумма:",
+      sum: "сум",
+      itemsList: "Состав заявки:",
+      contactPerson: "Контактное лицо:",
+      company: "Компания:",
+      comment: "Комментарий:",
+      emptyTitle: "Заявок пока нет",
+      emptyDesc: "К этому номеру телефона пока не привязано ни одной заявки. Выберите товары в каталоге и отправьте первую заявку.",
+      toCatalog: "Перейти в каталог",
+      lookupTitle: "Просмотр ваших заявок",
+      lookupDesc: "Введите номер телефона, чтобы увидеть историю и статус заявок вашей организации. Пароль не требуется.",
+      phoneLabel: "Номер телефона",
+      lookupBtn: "Показать заявки",
+      searching: "Поиск заявок...",
+      securityGuaranteed: "Безопасность данных гарантирована",
+      autoSaveNote: "При первом оформлении заявки аккаунт сохраняется автоматически.",
+      phoneError: "Введите номер телефона полностью (+998 __ ___ __ __)",
+      statusApproved: "Подтвержден",
+      statusDelivering: "В пути",
+      statusCompleted: "Выполнен",
+      statusCancelled: "Отменен",
+      statusProcessing: "В обработке",
     },
   },
 };

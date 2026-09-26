@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const PartnersSection: React.FC = () => {
-  const { partners } = useApp();
+  const { partners, t } = useApp();
   const displayPartners = partners && partners.length > 0 ? partners : [];
   const scrollRef = useRef<HTMLDivElement>(null);
   const firstCycleRef = useRef<HTMLDivElement>(null);
@@ -69,10 +69,10 @@ export const PartnersSection: React.FC = () => {
       <div className="flex items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-[20px] sm:text-[24px] md:text-[26px] font-extrabold text-[#1E293B] tracking-tight leading-[1.25]">
-            Bizning hamkorlarimiz
+            {t.home.ourPartners}
           </h2>
           <p className="text-[13px] sm:text-[14px] text-[#64748B] font-normal mt-0.5">
-            O‘zbekistonning yetakchi kompaniyalari va korxonalari biz bilan birga
+            {t.home.partnersSubtitle}
           </p>
         </div>
 

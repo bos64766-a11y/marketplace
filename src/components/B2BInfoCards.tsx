@@ -1,5 +1,5 @@
 import React from 'react';
-import { B2B_INFO_CARDS } from '../data/content';
+import { useApp } from '../context/AppContext';
 import { Truck, Boxes, CreditCard, Sparkles } from 'lucide-react';
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -10,10 +10,12 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export const B2BInfoCards: React.FC = () => {
+  const { t } = useApp();
+
   return (
     <section className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-        {B2B_INFO_CARDS.map((card) => (
+        {t.b2bInfoCards.items.map((card) => (
           <div
             key={card.id}
             id={`b2b-info-card-${card.id}`}
@@ -27,7 +29,7 @@ export const B2BInfoCards: React.FC = () => {
                 {iconMap[card.icon]}
               </div>
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF5A00]">
-                {card.subtitle}
+                {card.badge}
               </span>
               <h3 className="text-[16px] sm:text-[17px] font-extrabold text-[#1E293B] mt-1 group-hover:text-[#FF5A00] transition-colors leading-[1.3]">
                 {card.title}
@@ -38,8 +40,10 @@ export const B2BInfoCards: React.FC = () => {
             </div>
 
             <div className="mt-4 pt-3.5 border-t border-[#F8FAFC] flex items-center justify-between text-[11px] font-bold text-[#1E293B]">
-              <span>100% Kafolat</span>
-              <span className="text-[#16A34A] bg-[#DCFCE7] px-2.5 py-0.5 rounded-full text-xs font-bold">B2B Standart</span>
+              <span>{t.b2bInfoCards.guarantee}</span>
+              <span className="text-[#16A34A] bg-[#DCFCE7] px-2.5 py-0.5 rounded-full text-xs font-bold">
+                {t.b2bInfoCards.b2bStandard}
+              </span>
             </div>
           </div>
         ))}

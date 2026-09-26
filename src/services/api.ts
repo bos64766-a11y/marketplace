@@ -86,8 +86,8 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
  */
 export const compressImageFile = async (
   file: File,
-  maxWidth = 1000,
-  quality = 0.82
+  maxWidth = 1600,
+  quality = 0.90
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     // If SVG, read directly as data URL without rasterization
@@ -101,10 +101,21 @@ export const compressImageFile = async (
 
     const reader = new FileReader();
     reader.onload = (e) => {
+      const rawResult = e.target?.result as string;
       const img = new Image();
       img.onload = () => {
-        let width = img.width;
-        let height = img.height;
+        const originalWidth = img.width;
+        const originalHeight = img.height;
+
+        // If image already fits within maxWidth and file size is <= 3MB,
+        // preserve the exact original file bytes to prevent any loss of sharpness or text blur
+        if (originalWidth <= maxWidth && originalHeight <= maxWidth && file.size <= 3 * 1024 * 1024 && rawResult) {
+          resolve(rawResult);
+          return;
+        }
+
+        let width = originalWidth;
+        let height = originalHeight;
 
         if (width > maxWidth || height > maxWidth) {
           if (width > height) {
@@ -121,7 +132,7 @@ export const compressImageFile = async (
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         if (!ctx) {
-          resolve(e.target?.result as string);
+          resolve(rawResult);
           return;
         }
 
@@ -137,9 +148,9 @@ export const compressImageFile = async (
         resolve(dataUrl);
       };
       img.onerror = () => {
-        resolve(e.target?.result as string);
+        resolve(rawResult);
       };
-      img.src = e.target?.result as string;
+      img.src = rawResult;
     };
     reader.onerror = reject;
     reader.readAsDataURL(file);
@@ -365,9 +376,11 @@ export const api = {
     file: File,
     type: 'products' | 'banners' | 'categories' | 'uploads' = 'uploads'
   ): Promise<{ url: string; filename: string; original_name?: string; size?: number }> => {
-    const maxWidth = type === 'banners' ? 1400 : 1000;
+    // Banners need high resolution (up to 2560px for 2K/Retina displays) and 0.95 quality to prevent text blur
+    const maxWidth = type === 'banners' ? 2560 : 1400;
+    const quality = type === 'banners' ? 0.95 : 0.88;
     try {
-      const compressedDataUrl = await compressImageFile(file, maxWidth, 0.82);
+      const compressedDataUrl = await compressImageFile(file, maxWidth, quality);
       return {
         url: compressedDataUrl,
         filename: file.name,

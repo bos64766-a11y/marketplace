@@ -575,7 +575,7 @@ export const AdminBanners: React.FC = () => {
                     <label className="block text-xs font-bold text-[#1E293B]">
                       {bannerLangTab === 'uz' ? '🇺🇿 O‘zbekcha Rasm (Asosiy) *' : '🇷🇺 Ruscha Rasm (Ixtiyoriy)'}
                       <span className="text-[#64748B] font-normal ml-1">
-                        (Tavsiya: 1200x500 yoki 1280x550)
+                        (Tavsiya: 1920x600 yoki 1920x550, Ultra HD)
                       </span>
                     </label>
 

@@ -1505,7 +1505,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const loginAdmin = async (login: string, pass: string): Promise<boolean> => {
     const cleanLogin = login.trim().toLowerCase();
-    if ((cleanLogin === 'admin' && pass === 'admin123') || (cleanLogin === 'admin' && pass === 'admin')) {
+    if (
+      (cleanLogin === 'admin' && pass === 'admin123!@') ||
+      (cleanLogin === 'admin' && pass === 'admin123') ||
+      (cleanLogin === 'admin' && pass === 'admin')
+    ) {
       setIsAdminAuthenticated(true);
       try {
         localStorage.setItem('snabtash_admin_auth', 'true');

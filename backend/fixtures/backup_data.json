@@ -3,7 +3,7 @@
   "model": "auth.user",
   "pk": 1,
   "fields": {
-    "password": "pbkdf2_sha256$870000$BQipq7jkVAvNbN56PazMrc$NnIoe6SQ1SJru/oyCxCoUMi6BNLC7cC1WxIdcO+WruY=",
+    "password": "pbkdf2_sha256$870000$c0Hz5hq6w5UbPX6AmFE7J4$H70GFuryRrut5LWMzonb8+Kzp/4rJUGdvzP+IXbprzY=",
     "last_login": "2026-09-04T10:40:14.360Z",
     "is_superuser": true,
     "username": "admin",
