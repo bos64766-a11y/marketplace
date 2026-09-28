@@ -12,17 +12,54 @@ export const ContactsPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
-  useSEO({
-    title: language === 'ru' ? 'Контакты • B2B Снабжение SNABTASH' : 'Aloqa • SNABTASH B2B Ta’minot',
-    description: t.contactsPage.subtitle,
-  });
-
   const phone1 = siteSettings?.phone1 || CONTACT_INFO.phones[0] || '+998 87 034 97 79';
   const phone2 = siteSettings?.phone2 || CONTACT_INFO.phones[1] || '+998 90 123 45 67';
   const telegramBot = siteSettings?.telegramBot || CONTACT_INFO.telegram || '@snabtash_bot';
   const workHours = siteSettings?.workHours || CONTACT_INFO.workHours || (language === 'ru' ? 'Пн - Сб: 08:30 - 18:30' : 'Dush - Shan: 08:30 - 18:30');
   const address = siteSettings?.address || CONTACT_INFO.address || (language === 'ru' ? 'г. Ташкент, Сергелийский район, Tashkent Index, блок А3' : 'Toshkent sh., Sergeli tumani, Tashkent Index, A3-blok');
   const email = siteSettings?.email || CONTACT_INFO.email || 'info@snabtash.uz';
+
+  const contactSchema = {
+    '@type': 'LocalBusiness',
+    '@id': 'https://snabtash.uz/contacts#localbusiness',
+    name: 'SNABTASH B2B Ta\'minot va Ulgurji Savdo',
+    image: 'https://snabtash.uz/logo-horizontal.png',
+    telephone: phone1,
+    email: email,
+    url: 'https://snabtash.uz/contacts',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: address,
+      addressLocality: 'Toshkent',
+      addressRegion: 'Toshkent',
+      addressCountry: 'UZ',
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        opens: '08:30',
+        closes: '18:30',
+      },
+    ],
+  };
+
+  useSEO({
+    title:
+      language === 'ru'
+        ? 'Контакты и Склад SNABTASH в Ташкенте • Телефон, Адрес, Реквизиты'
+        : 'Aloqa va Omborxona SNABTASH Toshkent • Telefon, Manzil, Rekvizitlar',
+    description: `${t.contactsPage.subtitle}. Telefon: ${phone1}, Manzil: ${address}. Toshkent bo'ylab ulgurji B2B ta'minot bo'yicha buyurtmalar va shartnomalar tuzish.`,
+    keywords:
+      'snabtash telefon, snabtash manzil, b2b ta\'minot aloqa, ulgurji sklad toshkent, контакты снабжение ташкент, телефон оптовый склад',
+    url: '/contacts',
+    lang: language,
+    schema: contactSchema,
+    breadcrumbs: [
+      { name: language === 'ru' ? 'Главная' : 'Bosh sahifa', item: '/' },
+      { name: language === 'ru' ? 'Контакты' : 'Aloqa', item: '/contacts' },
+    ],
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

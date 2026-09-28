@@ -8,8 +8,23 @@ export const AboutPage: React.FC = () => {
   const displayPartners = partners && partners.length > 0 ? partners : [];
 
   useSEO({
-    title: language === 'ru' ? 'О компании • B2B Снабжение SNABTASH' : 'Biz haqimizda • SNABTASH B2B Ta’minot',
-    description: t.aboutPage.description,
+    title:
+      language === 'ru'
+        ? 'О компании SNABTASH • Комплексное B2B Снабжение в Ташкенте'
+        : 'Biz Haqimizda • SNABTASH B2B Ta’minot va Ulgurji Savdo',
+    description: `${t.aboutPage.description}. ${
+      language === 'ru'
+        ? 'Надежный B2B партнер для сотен компаний Узбекистана. Официальный дистрибьютор, склад в Ташкенте.'
+        : 'O\'zbekistondagi yuzlab korxonalarning ishonchli B2B ta\'minotchisi. Rasmiy shartnoma va to\'g\'ridan-to\'g\'ri ombor narxlari.'
+    }`,
+    keywords:
+      'snabtash kompaniyasi, b2b kompaniya toshkent, ulgurji ta\'minotchi, о компании snabtash, b2b поставщик ташкент',
+    url: '/about',
+    lang: language,
+    breadcrumbs: [
+      { name: language === 'ru' ? 'Главная' : 'Bosh sahifa', item: '/' },
+      { name: language === 'ru' ? 'О компании' : 'Biz haqimizda', item: '/about' },
+    ],
   });
 
   return (

@@ -7,9 +7,58 @@ export const DeliveryPaymentPage: React.FC = () => {
   const { navigate, siteSettings, t, language } = useApp();
   const freeThreshold = (siteSettings?.freeDeliveryThreshold || 500000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
+  const deliveryFaqs = [
+    {
+      question:
+        language === 'ru'
+          ? 'Каковы условия бесплатной доставки по Ташкенту?'
+          : 'Toshkent bo‘ylab bepul yetkazib berish shartlari qanday?',
+      answer:
+        language === 'ru'
+          ? `При заказе на сумму от ${freeThreshold} сум доставка по всему Ташкенту осуществляется бесплатно собственной курьерской службой SNABTASH.`
+          : `Buyurtma summasi ${freeThreshold} so‘m va undan yuqori bo‘lganda, Toshkent shahri bo‘ylab yetkazib berish SNABTASH kuryerlik xizmati tomonidan butunlay bepul amalga oshiriladi.`,
+    },
+    {
+      question:
+        language === 'ru'
+          ? 'Как осуществляется оплата для юридических лиц?'
+          : 'Yuridik shaxslar uchun to‘lov qanday amalga oshiriladi?',
+      answer:
+        language === 'ru'
+          ? 'Оплата производится безналичным расчетом по официальному договору. Все электронные счета-фактуры и акты отправляются через систему Didox с выделением НДС 12%.'
+          : 'To‘lov rasmiy shartnoma asosida bank orqali pul o‘tkazish (perechislenie) yo‘li bilan qabul qilinadi. Barcha hisob-fakturalar Didox tizimi orqali 12% QQS bilan taqdim etiladi.',
+    },
+    {
+      question:
+        language === 'ru'
+          ? 'Каковы сроки доставки оптового заказа?'
+          : 'Ulgurji buyurtmalarni yetkazib berish muddati qancha?',
+      answer:
+        language === 'ru'
+          ? 'Товары со склада доставляются в течение 24 часов с момента согласования и подтверждения счета.'
+          : 'Ombordagi tovarlar buyurtma va hisob-faktura tasdiqlangan vaqtdan boshlab 24 soat ichida yetkazib beriladi.',
+    },
+  ];
+
   useSEO({
-    title: language === 'ru' ? 'Доставка и Оплата • B2B Снабжение SNABTASH' : 'To‘lov va Yetkazib berish • SNABTASH B2B Ta’minot',
-    description: t.deliveryPaymentPage.subtitle,
+    title:
+      language === 'ru'
+        ? 'Доставка и Оплата • B2B Снабжение SNABTASH в Ташкенте'
+        : 'To‘lov va Yetkazib berish • SNABTASH B2B Ta’minot Toshkent',
+    description: `${t.deliveryPaymentPage.subtitle}. ${
+      language === 'ru'
+        ? `Бесплатная доставка от ${freeThreshold} сум. Безналичный расчет с НДС через Didox.`
+        : `${freeThreshold} so'mdan ortiq xaridlarda bepul yetkazish. QQS bilan Didox to'lov tizimi.`
+    }`,
+    keywords:
+      'yetkazib berish toshkent, to\'lov shartlari didox, b2b dostavka toshkent, доставка ташкент оптом, оплата по перечислению ндс ташкент',
+    url: '/delivery-payment',
+    lang: language,
+    faqs: deliveryFaqs,
+    breadcrumbs: [
+      { name: language === 'ru' ? 'Главная' : 'Bosh sahifa', item: '/' },
+      { name: language === 'ru' ? 'Доставка и Оплата' : 'To‘lov va Yetkazib berish', item: '/delivery-payment' },
+    ],
   });
 
   return (

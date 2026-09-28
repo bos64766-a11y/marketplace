@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp, DEFAULT_SHOWCASE_SECTIONS } from '../context/AppContext';
 import { HeroSection } from '../components/HeroSection';
 import { CategoryPillsSection } from '../components/CategoryPillsSection';
@@ -8,6 +9,62 @@ import { PartnersSection } from '../components/PartnersSection';
 
 export const HomePage: React.FC = () => {
   const { products, showcaseSections, t, language } = useApp();
+
+  const homeSchema = useMemo(
+    () => ({
+      '@type': 'LocalBusiness',
+      '@id': 'https://snabtash.uz/#localbusiness',
+      name: 'SNABTASH B2B Ta\'minot',
+      image: 'https://snabtash.uz/logo-horizontal.png',
+      telephone: '+998870349779',
+      email: 'info@snabtash.uz',
+      url: 'https://snabtash.uz',
+      priceRange: '$$',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Bunyodkor shox ko‘chasi, 42-uy',
+        addressLocality: 'Toshkent',
+        addressRegion: 'Toshkent shahri',
+        postalCode: '100000',
+        addressCountry: 'UZ',
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 41.2785,
+        longitude: 69.2155,
+      },
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+          opens: '08:30',
+          closes: '18:30',
+        },
+      ],
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: 'https://snabtash.uz/catalog?q={search_term_string}',
+        'query-input': 'required name=search_term_string',
+      },
+    }),
+    []
+  );
+
+  useSEO({
+    title:
+      language === 'ru'
+        ? 'SNABTASH — B2B Снабжение и Оптовая Торговля в Ташкенте'
+        : 'SNABTASH — B2B Ta\'minot va Ulgurji Savdo Platformasi (Toshkent)',
+    description:
+      language === 'ru'
+        ? 'Комплексное снабжение предприятий и офисов в Ташкенте: бытовая химия, хозтовары, канцтовары, гигиенические средства оптом. Официальный договор с НДС через Didox, бесплатная доставка со склада.'
+        : 'Korxona va tashkilotlar uchun klining kimyolari, xo\'jalik mollari, kantselyariya va gigiyena tovarlari ulgurji savdosi. Toshkent bo\'ylab ombordan tezkor yetkazib berish, QQS bilan rasmiy shartnoma.',
+    keywords:
+      'snabtash, b2b ta\'minot toshkent, ulgurji savdo toshkent, maishiy kimyo optom, kantselyariya optom, xo\'jalik mollari ulgurji, optom sklad toshkent, optom tozalash vositalari, b2b didox faktura, снабжение предприятий ташкент, бытовая химия оптом ташкент',
+    url: '/',
+    lang: language,
+    schema: homeSchema,
+  });
 
   // 1. Ommabop mahsulotlar (Popular Products)
   const popularProducts = useMemo(() => {

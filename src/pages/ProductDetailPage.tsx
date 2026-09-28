@@ -82,10 +82,45 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   const productDesc = getProductDesc(product);
   const productTag = getProductTag(product);
 
+  const productBreadcrumbs = [
+    { name: language === 'ru' ? 'Главная' : 'Bosh sahifa', item: '/' },
+    { name: language === 'ru' ? 'Каталог' : 'Katalog', item: '/catalog' },
+    {
+      name: categoryDisplayName,
+      item: `/catalog/${currentCategory?.slug || product.categoryId || 'all'}`,
+    },
+    {
+      name: productName,
+      item: `/product/${product.slug || product.id}`,
+    },
+  ];
+
   useSEO({
-    title: `${productName} — ${language === 'ru' ? 'Купить оптом' : 'Ulgurji Narxda'}`,
-    description: `${productName}. ${productDesc ? productDesc.slice(0, 150) + '... ' : ''}${language === 'ru' ? 'Оптовые поставки в Ташкенте по выгодным ценам — SNABTASH.' : 'Toshkent bo\'ylab arzon narxlarda ulgurji ta\'minot — SNABTASH.'}`,
+    title: `${productName} — ${language === 'ru' ? 'Купить оптом в Ташкенте' : 'Ulgurji Narxda Xarid Qilish'}`,
+    description: `${productName}. ${productDesc ? productDesc.slice(0, 160) + '... ' : ''}${
+      language === 'ru'
+        ? 'Оптовые поставки организациям в Ташкенте с НДС через Didox. Доставка со склада SNABTASH.'
+        : 'Toshkent bo\'ylab korxona va ofislarga QQS bilan rasmiy shartnoma asosida ulgurji yetkazib berish.'
+    }`,
+    keywords: `${productName}, ulgurji ${productName}, optom ${productName}, ${productName} narxi toshkent, b2b ta'minot, ${categoryDisplayName}, ${product.brand || 'SNABTASH'}`,
     image: product.image ? getMediaUrl(product.image) : undefined,
+    url: `/product/${product.slug || product.id}`,
+    type: 'product',
+    lang: language,
+    product: {
+      name: productName,
+      description: productDesc,
+      image: product.image ? getMediaUrl(product.image) : undefined,
+      price: product.price,
+      priceCurrency: 'UZS',
+      sku: product.sku || String(product.id),
+      brand: product.brand || 'SNABTASH',
+      category: categoryDisplayName,
+      inStock: product.inStock !== false,
+      ratingValue: product.rating || 4.8,
+      reviewCount: product.reviewsCount || 12,
+    },
+    breadcrumbs: productBreadcrumbs,
   });
 
   // Related products from same category

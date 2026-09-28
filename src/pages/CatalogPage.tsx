@@ -66,13 +66,40 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
         ? (language === 'ru' ? 'Все товары' : 'Barcha mahsulotlar')
         : selectedCategory);
 
+  const catalogBreadcrumbs = useMemo(() => {
+    const list = [
+      { name: language === 'ru' ? 'Главная' : 'Bosh sahifa', item: '/' },
+      { name: language === 'ru' ? 'Каталог' : 'Katalog', item: '/catalog' },
+    ];
+    if (selectedCategory !== 'all' && activeCatObj) {
+      list.push({
+        name: activeCatName,
+        item: `/catalog/${activeCatObj.slug || activeCatObj.id}`,
+      });
+    }
+    return list;
+  }, [language, selectedCategory, activeCatObj, activeCatName]);
+
+  const catalogUrl =
+    selectedCategory !== 'all' && activeCatObj
+      ? `/catalog/${activeCatObj.slug || activeCatObj.id}`
+      : '/catalog';
+
   useSEO({
-    title: selectedCategory !== 'all'
-      ? `${activeCatName} — ${language === 'ru' ? 'Каталог оптом' : 'Ulgurji Savdo'}`
-      : (language === 'ru' ? 'Каталог товаров — Оптовые поставки' : 'Mahsulotlar Katalogi — B2B Ulgurji Savdo'),
-    description: language === 'ru'
-      ? `Каталог товаров категории ${activeCatName}. Бытовая химия, хозтовары, канцтовары оптом для организаций в Ташкенте — SNABTASH.`
-      : `B2B korxonalar uchun ${activeCatName} mahsulotlari katalogi. Maishiy kimyo, xo'jalik mollari va kantselyariya ulgurji savdosi — SNABTASH.`,
+    title:
+      selectedCategory !== 'all'
+        ? `${activeCatName} — ${language === 'ru' ? 'Купить оптом в Ташкенте' : 'Toshkentda ulgurji narxda xarid qilish'}`
+        : language === 'ru'
+        ? 'Каталог товаров оптом — SNABTASH B2B Ташкент'
+        : 'Barcha Mahsulotlar Katalogi — SNABTASH B2B Toshkent',
+    description:
+      language === 'ru'
+        ? `Оптовый каталог: ${activeCatName}. Качественные товары для офисов, гостиниц, ресторанов и клининговых компаний. Доставка по Ташкенту, оплата по перечислению с НДС через Didox.`
+        : `B2B korxonalar uchun ${activeCatName} mahsulotlari ulgurji katalogi. Klining kimyolari, ofis mollari, xo'jalik anjomlari. Toshkent bo'ylab yetkazib berish, QQS bilan Didox shartnoma.`,
+    keywords: `${activeCatName}, ulgurji ${activeCatName}, optom toshkent, b2b katalog, оптом ташкент, купить оптом, ${activeCatName} оптом`,
+    url: catalogUrl,
+    lang: language,
+    breadcrumbs: catalogBreadcrumbs,
   });
 
   const [currentPage, setCurrentPage] = useState(1);
