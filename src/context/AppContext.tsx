@@ -529,10 +529,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
 
       if (banRes.status === 'fulfilled' && Array.isArray(banRes.value) && banRes.value.length > 0) {
-        setBanners(banRes.value);
-        try {
-          localStorage.setItem('snabtash_admin_banners', JSON.stringify(banRes.value));
-        } catch {}
+        const serverBanners = banRes.value;
+        setBanners((prev) => {
+          const merged = serverBanners.map((srv) => {
+            const local = prev.find((p) => String(p.id) === String(srv.id));
+            return {
+              ...srv,
+              image_ru:
+                (srv.image_ru && srv.image_ru.trim()) ||
+                (local?.image_ru && local.image_ru.trim()) ||
+                '',
+              title_ru:
+                (srv.title_ru && srv.title_ru.trim()) ||
+                (local?.title_ru && local.title_ru.trim()) ||
+                '',
+            };
+          });
+          try {
+            localStorage.setItem('snabtash_admin_banners', JSON.stringify(merged));
+          } catch {}
+          return merged;
+        });
       }
 
       if (sectRes.status === 'fulfilled' && Array.isArray(sectRes.value) && sectRes.value.length > 0) {
@@ -894,7 +911,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const created = await api.createBanner(bannerData);
       setBanners((prev) => {
-        const next = [...prev, created];
+        const next = [
+          ...prev,
+          {
+            ...created,
+            image_ru: (created.image_ru && created.image_ru.trim()) || bannerData.image_ru || '',
+            title_ru: (created.title_ru && created.title_ru.trim()) || bannerData.title_ru || '',
+          },
+        ];
         try {
           localStorage.setItem('snabtash_admin_banners', JSON.stringify(next));
         } catch {}
@@ -930,7 +954,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const saved = await api.updateBanner(id, updated);
       setBanners((prev) => {
-        const next = prev.map((b) => (String(b.id) === idStr ? { ...b, ...saved } : b));
+        const next = prev.map((b) =>
+          String(b.id) === idStr
+            ? {
+                ...b,
+                ...saved,
+                image_ru:
+                  (saved.image_ru && saved.image_ru.trim()) ||
+                  (updated.image_ru !== undefined ? updated.image_ru : b.image_ru) ||
+                  '',
+                title_ru:
+                  (saved.title_ru && saved.title_ru.trim()) ||
+                  (updated.title_ru !== undefined ? updated.title_ru : b.title_ru) ||
+                  '',
+              }
+            : b
+        );
         try {
           localStorage.setItem('snabtash_admin_banners', JSON.stringify(next));
         } catch {}

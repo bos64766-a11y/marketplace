@@ -168,8 +168,8 @@ export const AdminBanners: React.FC = () => {
     const payload = {
       ...formData,
       title: (formData.title || '').trim() || 'Grafik Banner',
-      title_ru: (formData.title_ru || '').trim() || undefined,
-      image_ru: (formData.image_ru || '').trim() || undefined,
+      title_ru: (formData.title_ru || '').trim() || '',
+      image_ru: (formData.image_ru || '').trim() || '',
     };
 
     if (editingBanner) {

@@ -36,12 +36,18 @@ class SiteSettings(models.Model):
 
 class Banner(models.Model):
     badge = models.CharField(max_length=100, blank=True, default='', verbose_name='Badge')
+    badge_ru = models.CharField(max_length=100, blank=True, default='', verbose_name='Badge (RU)')
     title = models.CharField(max_length=255, blank=True, default='Banner', verbose_name='Sarlavha')
+    title_ru = models.CharField(max_length=255, blank=True, default='', verbose_name='Sarlavha (RU)')
     description = models.TextField(blank=True, default='', verbose_name='Tavsif')
+    description_ru = models.TextField(blank=True, default='', verbose_name='Tavsif (RU)')
     btn_text = models.CharField(max_length=100, blank=True, default='', verbose_name='Tugma matni')
+    btn_text_ru = models.CharField(max_length=100, blank=True, default='', verbose_name='Tugma matni (RU)')
     btn_link = models.CharField(max_length=255, blank=True, default='/catalog', verbose_name='Tugma havolasi')
     image = models.TextField(default='/banners/banner-clean-promo.png', verbose_name='Rasm URL')
+    image_ru = models.TextField(blank=True, default='', verbose_name='Rasm URL (RU)')
     image_alt = models.CharField(max_length=255, blank=True, default='', verbose_name='Rasm tavsifi')
+    image_alt_ru = models.CharField(max_length=255, blank=True, default='', verbose_name='Rasm tavsifi (RU)')
     order = models.IntegerField(default=0, verbose_name='Tartib')
     is_active = models.BooleanField(default=True, verbose_name='Faol')
     created_at = models.DateTimeField(auto_now_add=True)

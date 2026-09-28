@@ -371,14 +371,54 @@ export const api = {
     });
   },
 
-  // --- FILE UPLOAD (Persistent WebP in PostgreSQL) ---
+  // --- FILE UPLOAD (Server Storage with Crystal-Clear Lossless Fallback) ---
   uploadImage: async (
     file: File,
     type: 'products' | 'banners' | 'categories' | 'uploads' = 'uploads'
   ): Promise<{ url: string; filename: string; original_name?: string; size?: number }> => {
-    // Banners need high resolution (up to 2560px for 2K/Retina displays) and 0.95 quality to prevent text blur
-    const maxWidth = type === 'banners' ? 2560 : 1400;
-    const quality = type === 'banners' ? 0.95 : 0.88;
+    // 1. First attempt direct multipart upload to backend so server stores original file without compression
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await fetch(`${API_BASE}/upload/?type=${type}`, {
+        method: 'POST',
+        body: formData,
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.url) {
+          return {
+            url: data.url,
+            filename: data.filename || file.name,
+            original_name: file.name,
+            size: data.size || file.size,
+          };
+        }
+      }
+    } catch (serverErr) {
+      console.warn('Direct server upload error, using local fallback:', serverErr);
+    }
+
+    // 2. For banners: HERO visuals must have 100% crystal-clear resolution without lossy blur or raster artifacts
+    if (type === 'banners') {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve({
+            url: reader.result as string,
+            filename: file.name,
+            original_name: file.name,
+            size: file.size,
+          });
+        };
+        reader.onerror = () => reject(new Error('Faylni yuklashda xatolik yuz berdi'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // 3. For product catalog items, compress appropriately
+    const maxWidth = 1600;
+    const quality = 0.90;
     try {
       const compressedDataUrl = await compressImageFile(file, maxWidth, quality);
       return {

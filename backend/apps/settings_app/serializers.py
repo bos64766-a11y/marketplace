@@ -42,12 +42,18 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
 
 class BannerSerializer(serializers.ModelSerializer):
     badge = serializers.CharField(required=False, allow_blank=True, default='')
+    badge_ru = serializers.CharField(required=False, allow_blank=True, default='')
     title = serializers.CharField(required=False, allow_blank=True, default='Banner')
+    title_ru = serializers.CharField(required=False, allow_blank=True, default='')
     description = serializers.CharField(required=False, allow_blank=True, default='')
+    description_ru = serializers.CharField(required=False, allow_blank=True, default='')
     btnText = serializers.CharField(source='btn_text', required=False, allow_blank=True, default='')
+    btnText_ru = serializers.CharField(source='btn_text_ru', required=False, allow_blank=True, default='')
     btnLink = serializers.CharField(source='btn_link', required=False, allow_blank=True, default='/catalog')
     image = serializers.CharField(required=True)
+    image_ru = serializers.CharField(required=False, allow_blank=True, default='')
     imageAlt = serializers.CharField(source='image_alt', required=False, allow_blank=True, default='')
+    imageAlt_ru = serializers.CharField(source='image_alt_ru', required=False, allow_blank=True, default='')
     isActive = serializers.BooleanField(source='is_active', required=False, default=True)
 
     class Meta:
@@ -55,12 +61,18 @@ class BannerSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'badge',
+            'badge_ru',
             'title',
+            'title_ru',
             'description',
+            'description_ru',
             'btnText',
+            'btnText_ru',
             'btnLink',
             'image',
+            'image_ru',
             'imageAlt',
+            'imageAlt_ru',
             'order',
             'isActive',
             'created_at',
