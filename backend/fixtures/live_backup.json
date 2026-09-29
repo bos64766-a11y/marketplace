@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "exported_at": "2026-09-29T03:52:59.808051",
+  "exported_at": "2026-09-29T12:00:15.765080",
   "source": "https://marketplace-production-6690.up.railway.app/api",
   "summary": {
     "categories": 7,
@@ -3317,7 +3317,7 @@
         "order": 2,
         "isActive": true,
         "created_at": "2026-09-24T21:51:50.699952+05:00",
-        "updated_at": "2026-09-28T23:47:49.045257+05:00"
+        "updated_at": "2026-09-29T14:34:35.807191+05:00"
       },
       {
         "id": 1,
@@ -3331,7 +3331,7 @@
         "order": 3,
         "isActive": true,
         "created_at": "2026-09-24T21:36:37.716984+05:00",
-        "updated_at": "2026-09-28T23:48:05.803398+05:00"
+        "updated_at": "2026-09-29T14:46:38.009452+05:00"
       },
       {
         "id": 3,
