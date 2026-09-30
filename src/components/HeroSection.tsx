@@ -77,12 +77,23 @@ export const HeroSection: React.FC = () => {
           style={{ transform: `translateX(-${currentIdx * 100}%)` }}
         >
           {activeBanners.map((slide, index) => {
-            const bannerImg = (language === 'ru' && slide?.image_ru) ? slide.image_ru : slide?.image;
-            const bannerTitle = (language === 'ru' && slide?.title_ru) ? slide.title_ru : slide?.title;
+            const isRu = language === 'ru';
+            const hasRuImg = Boolean(slide?.image_ru && slide.image_ru.trim());
+            const hasRuTitle = Boolean(slide?.title_ru && slide.title_ru.trim());
+
+            const bannerImg = (isRu && hasRuImg)
+              ? slide.image_ru!.trim()
+              : (slide?.image?.trim() || '/banners/banner-clean-promo.webp');
+
+            const bannerTitle = (isRu && hasRuTitle)
+              ? slide.title_ru!.trim()
+              : (slide?.title || 'SNABTASH B2B Banner');
+
+            const slideKey = `hero-slide-${slide.id || index}-${language}`;
 
             return (
               <div
-                key={slide.id || index}
+                key={slideKey}
                 onClick={() => navigate(slide.btnLink || slide.ctaLink || '/catalog')}
                 className="w-full min-w-full flex-shrink-0 cursor-pointer select-none relative"
                 role="button"
@@ -90,13 +101,18 @@ export const HeroSection: React.FC = () => {
               >
                 <img
                   src={getMediaUrl(bannerImg) || '/banners/banner-clean-promo.webp'}
-                  alt={bannerTitle || 'SNABTASH B2B Banner'}
+                  alt={bannerTitle}
                   className="w-full h-auto block select-none object-cover transition-transform duration-500 group-hover:scale-[1.004]"
                   loading={index === 0 ? 'eager' : 'lazy'}
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   decoding="async"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/banners/banner-clean-promo.webp';
+                    const target = e.target as HTMLImageElement;
+                    if (isRu && slide?.image && target.src !== slide.image) {
+                      target.src = getMediaUrl(slide.image) || '/banners/banner-clean-promo.webp';
+                    } else {
+                      target.src = '/banners/banner-clean-promo.webp';
+                    }
                   }}
                 />
               </div>

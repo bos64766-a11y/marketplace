@@ -531,23 +531,73 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (banRes.status === 'fulfilled' && Array.isArray(banRes.value) && banRes.value.length > 0) {
         const serverBanners = banRes.value;
         setBanners((prev) => {
+          let localSaved: BannerSlide[] = [];
+          try {
+            const raw = localStorage.getItem('snabtash_admin_banners');
+            if (raw) localSaved = JSON.parse(raw);
+          } catch {}
+
           const merged = serverBanners.map((srv) => {
-            const local = prev.find((p) => String(p.id) === String(srv.id));
+            const local =
+              prev.find((p) => String(p.id) === String(srv.id)) ||
+              localSaved.find((p) => String(p.id) === String(srv.id));
+
+            // Extract Russian banner metadata from description if server hasn't migrated image_ru yet
+            let descMeta: { image_ru?: string; title_ru?: string } = {};
+            if (srv.description && srv.description.includes('__META_RU__:')) {
+              try {
+                const jsonStr = srv.description.split('__META_RU__:')[1];
+                descMeta = JSON.parse(jsonStr);
+              } catch {}
+            }
+
+            const cleanDescription = srv.description?.includes('__META_RU__:')
+              ? srv.description.split('__META_RU__:')[0].trim()
+              : (srv.description || '');
+
+            const resolvedImageRu =
+              (srv.image_ru && srv.image_ru.trim()) ||
+              (descMeta.image_ru && descMeta.image_ru.trim()) ||
+              (local?.image_ru && local.image_ru.trim()) ||
+              '';
+
+            const resolvedTitleRu =
+              (srv.title_ru && srv.title_ru.trim()) ||
+              (descMeta.title_ru && descMeta.title_ru.trim()) ||
+              (local?.title_ru && local.title_ru.trim()) ||
+              '';
+
             return {
               ...srv,
-              image_ru:
-                (srv.image_ru && srv.image_ru.trim()) ||
-                (local?.image_ru && local.image_ru.trim()) ||
-                '',
-              title_ru:
-                (srv.title_ru && srv.title_ru.trim()) ||
-                (local?.title_ru && local.title_ru.trim()) ||
-                '',
+              description: cleanDescription,
+              image_ru: resolvedImageRu,
+              title_ru: resolvedTitleRu,
             };
           });
+
           try {
             localStorage.setItem('snabtash_admin_banners', JSON.stringify(merged));
           } catch {}
+
+          // Automatically sync any local Russian banners to server if server description lacks __META_RU__
+          merged.forEach((item) => {
+            const serverRaw = serverBanners.find((s) => String(s.id) === String(item.id));
+            if (
+              item.image_ru &&
+              item.image_ru.trim() &&
+              serverRaw &&
+              (!serverRaw.description || !serverRaw.description.includes('__META_RU__:'))
+            ) {
+              const cleanDesc = (serverRaw.description || '').trim();
+              const metaDesc = `${cleanDesc}${cleanDesc ? ' ' : ''}__META_RU__:${JSON.stringify({ image_ru: item.image_ru.trim(), title_ru: (item.title_ru || '').trim() })}`;
+              api.updateBanner(item.id, {
+                description: metaDesc,
+                image_ru: item.image_ru.trim(),
+                title_ru: (item.title_ru || '').trim(),
+              }).catch(() => {});
+            }
+          });
+
           return merged;
         });
       }
@@ -908,15 +958,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [banners]);
 
   const addBanner = async (bannerData: Omit<BannerSlide, 'id'>) => {
+    const finalImageRu = (bannerData.image_ru || '').trim();
+    const finalTitleRu = (bannerData.title_ru || '').trim();
+
+    let cleanDesc = (bannerData.description || '').trim();
+    if (cleanDesc.includes('__META_RU__:')) {
+      cleanDesc = cleanDesc.split('__META_RU__:')[0].trim();
+    }
+    const descWithMeta = finalImageRu
+      ? `${cleanDesc}${cleanDesc ? ' ' : ''}__META_RU__:${JSON.stringify({ image_ru: finalImageRu, title_ru: finalTitleRu })}`
+      : cleanDesc;
+
+    const serverPayload = {
+      ...bannerData,
+      description: descWithMeta,
+      image_ru: finalImageRu,
+      title_ru: finalTitleRu,
+    };
+
     try {
-      const created = await api.createBanner(bannerData);
+      const created = await api.createBanner(serverPayload);
       setBanners((prev) => {
         const next = [
           ...prev,
           {
             ...created,
-            image_ru: (created.image_ru && created.image_ru.trim()) || bannerData.image_ru || '',
-            title_ru: (created.title_ru && created.title_ru.trim()) || bannerData.title_ru || '',
+            description: cleanDesc,
+            image_ru: (created.image_ru && created.image_ru.trim()) || finalImageRu,
+            title_ru: (created.title_ru && created.title_ru.trim()) || finalTitleRu,
           },
         ];
         try {
@@ -928,7 +997,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       showToast('✓ Yangi banner muvaffaqiyatli qo‘shildi', 'success');
     } catch (err) {
       console.log('API banner create error, using local fallback:', err);
-      const newBanner: BannerSlide = { ...bannerData, id: Date.now() };
+      const newBanner: BannerSlide = {
+        ...bannerData,
+        description: cleanDesc,
+        image_ru: finalImageRu,
+        title_ru: finalTitleRu,
+        id: Date.now(),
+      };
       setBanners((prev) => {
         const next = [...prev, newBanner];
         try {
@@ -943,33 +1018,71 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateBanner = async (id: string | number, updated: Partial<BannerSlide>) => {
     const idStr = String(id);
+
+    // 1. Immediately update local state and localStorage
+    let nextBanners: BannerSlide[] = [];
     setBanners((prev) => {
-      const next = prev.map((b) => (String(b.id) === idStr ? { ...b, ...updated } : b));
+      nextBanners = prev.map((b) => (String(b.id) === idStr ? { ...b, ...updated } : b));
       try {
-        localStorage.setItem('snabtash_admin_banners', JSON.stringify(next));
+        localStorage.setItem('snabtash_admin_banners', JSON.stringify(nextBanners));
       } catch {}
-      return next;
+      return nextBanners;
     });
 
+    const target = nextBanners.find((b) => String(b.id) === idStr);
+    const finalImageRu = ((updated.image_ru !== undefined ? updated.image_ru : target?.image_ru) || '').trim();
+    const finalTitleRu = ((updated.title_ru !== undefined ? updated.title_ru : target?.title_ru) || '').trim();
+
+    let cleanDesc = ((updated.description !== undefined ? updated.description : target?.description) || '').trim();
+    if (cleanDesc.includes('__META_RU__:')) {
+      cleanDesc = cleanDesc.split('__META_RU__:')[0].trim();
+    }
+    const descWithMeta = finalImageRu
+      ? `${cleanDesc}${cleanDesc ? ' ' : ''}__META_RU__:${JSON.stringify({ image_ru: finalImageRu, title_ru: finalTitleRu })}`
+      : cleanDesc;
+
+    const serverPayload = {
+      ...updated,
+      description: descWithMeta,
+      image_ru: finalImageRu,
+      title_ru: finalTitleRu,
+    };
+
     try {
-      const saved = await api.updateBanner(id, updated);
+      const saved = await api.updateBanner(id, serverPayload);
       setBanners((prev) => {
-        const next = prev.map((b) =>
-          String(b.id) === idStr
-            ? {
-                ...b,
-                ...saved,
-                image_ru:
-                  (saved.image_ru && saved.image_ru.trim()) ||
-                  (updated.image_ru !== undefined ? updated.image_ru : b.image_ru) ||
-                  '',
-                title_ru:
-                  (saved.title_ru && saved.title_ru.trim()) ||
-                  (updated.title_ru !== undefined ? updated.title_ru : b.title_ru) ||
-                  '',
-              }
-            : b
-        );
+        const next = prev.map((b) => {
+          if (String(b.id) !== idStr) return b;
+
+          let descMeta: { image_ru?: string; title_ru?: string } = {};
+          if (saved.description && saved.description.includes('__META_RU__:')) {
+            try {
+              descMeta = JSON.parse(saved.description.split('__META_RU__:')[1]);
+            } catch {}
+          }
+
+          const savedImageRu =
+            (saved.image_ru && saved.image_ru.trim()) ||
+            (descMeta.image_ru && descMeta.image_ru.trim()) ||
+            finalImageRu ||
+            b.image_ru ||
+            '';
+
+          const savedTitleRu =
+            (saved.title_ru && saved.title_ru.trim()) ||
+            (descMeta.title_ru && descMeta.title_ru.trim()) ||
+            finalTitleRu ||
+            b.title_ru ||
+            '';
+
+          return {
+            ...b,
+            ...saved,
+            description: cleanDesc,
+            image_ru: savedImageRu,
+            title_ru: savedTitleRu,
+          };
+        });
         try {
           localStorage.setItem('snabtash_admin_banners', JSON.stringify(next));
         } catch {}

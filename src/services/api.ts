@@ -15,8 +15,19 @@ const API_BASE =
  */
 export function getMediaUrl(path?: string | null): string {
   if (!path) return '';
-  const trimmed = path.trim();
+  let trimmed = path.trim();
   if (!trimmed) return '';
+
+  // Fix mixed-content: Railway media must always be served over HTTPS
+  if (trimmed.startsWith('http://marketplace-production-6690.up.railway.app')) {
+    trimmed = trimmed.replace(/^http:\/\//i, 'https://');
+  } else if (
+    typeof window !== 'undefined' &&
+    window.location.protocol === 'https:' &&
+    trimmed.startsWith('http://')
+  ) {
+    trimmed = trimmed.replace(/^http:\/\//i, 'https://');
+  }
 
   // Already absolute or data or blob URL
   if (/^(https?:|data:|blob:)/i.test(trimmed)) {
@@ -30,7 +41,7 @@ export function getMediaUrl(path?: string | null): string {
     if (rawApiUrl) {
       const backendHost = rawApiUrl.replace(/\/+$/, '').replace(/\/api\/?$/, '');
       if (backendHost) {
-        return `${backendHost}${normalized}`;
+        return `${backendHost.replace(/^http:\/\//i, 'https://')}${normalized}`;
       }
     }
     // Production fallback: when deployed (not on localhost), use Railway backend host

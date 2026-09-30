@@ -180,14 +180,19 @@ def import_from_live_backup(bundle_path, backend_dir):
             defaults={
                 'title': b.get('title', ''),
                 'title_ru': b.get('title_ru', '') or '',
-                'subtitle': b.get('subtitle', '') or '',
-                'subtitle_ru': b.get('subtitle_ru', '') or '',
+                'badge': b.get('badge', '') or '',
+                'badge_ru': b.get('badge_ru', '') or '',
+                'description': b.get('description', '') or '',
+                'description_ru': b.get('description_ru', '') or '',
+                'btn_text': b.get('btnText') or b.get('btn_text', '') or '',
+                'btn_text_ru': b.get('btnText_ru') or b.get('btn_text_ru', '') or '',
+                'btn_link': b.get('btnLink') or b.get('btn_link', '/catalog') or '/catalog',
                 'image': b.get('image', '') or '',
-                'link': b.get('link', '') or '',
-                'button_text': b.get('buttonText') or b.get('button_text', '') or '',
-                'button_text_ru': b.get('buttonText_ru') or b.get('button_text_ru', '') or '',
+                'image_ru': b.get('image_ru', '') or '',
+                'image_alt': b.get('imageAlt') or b.get('image_alt', '') or '',
+                'image_alt_ru': b.get('imageAlt_ru') or b.get('image_alt_ru', '') or '',
                 'order': int(b.get('order', 0) or 0),
-                'is_active': bool(b.get('isActive', True)),
+                'is_active': bool(b.get('isActive', b.get('is_active', True))),
             }
         )
     print(f" -> [OK] {len(banners)} ta banner tiklandi.")
