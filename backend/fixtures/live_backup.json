@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "exported_at": "2026-10-02T17:19:20.068043",
+  "exported_at": "2026-10-02T21:44:32.135902",
   "source": "https://marketplace-production-6690.up.railway.app/api",
   "summary": {
     "categories": 7,
@@ -1368,7 +1368,7 @@
         "name_ru": "Бумага офисная A4",
         "categoryId": "kanselyariya",
         "categoryName": "Kanselyariya",
-        "price": "46000.00",
+        "price": "49280.00",
         "oldPrice": null,
         "inStock": true,
         "brand": "SVETOCOPY",
