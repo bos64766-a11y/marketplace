@@ -521,7 +521,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
 
       if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value)) {
-        setRequests(ordsRes.value);
+        const DEMO_ORDER_IDS = new Set(['1048', '1047', '1046', '1045', '1044', '1042', '1041', '1040', '1039', '1038']);
+        const realOrders = ordsRes.value.filter((o) => !DEMO_ORDER_IDS.has(String(o.id)));
+        setRequests(realOrders);
+        try {
+          localStorage.setItem('snabtash_requests', JSON.stringify(realOrders));
+        } catch {}
       }
 
       if (settRes.status === 'fulfilled' && settRes.value && settRes.value.companyName) {
@@ -1463,8 +1468,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
-          // Filter out legacy hardcoded mock demo orders (1042, 1041, 1040, 1039, 1038)
-          return parsed.filter((o) => !['1042', '1041', '1040', '1039', '1038'].includes(String(o.id)));
+          // Filter out legacy hardcoded mock demo orders (1048..1038)
+          const DEMO_ORDER_IDS = new Set(['1048', '1047', '1046', '1045', '1044', '1042', '1041', '1040', '1039', '1038']);
+          return parsed.filter((o) => !DEMO_ORDER_IDS.has(String(o.id)));
         }
       }
     } catch {

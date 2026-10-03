@@ -16,6 +16,7 @@ import {
   MessageSquare,
   Package,
   Download,
+  Trash2,
 } from 'lucide-react';
 import type { RequestOrder } from '../../types';
 
@@ -40,7 +41,7 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> =
 type FilterTab = 'all' | RequestOrder['status'];
 
 export const AdminOrders: React.FC = () => {
-  const { requests, updateRequestStatus, exportBackupJSON } = useApp();
+  const { requests, updateRequestStatus, deleteRequest, exportBackupJSON } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<FilterTab>('all');
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
@@ -297,6 +298,24 @@ export const AdminOrders: React.FC = () => {
                               );
                             })}
                           </div>
+                        </div>
+
+                        {/* Order Delete Action */}
+                        <div className="pt-3 border-t border-[#E2E8F0]/70 flex items-center justify-between">
+                          <span className="text-[11px] font-medium text-[#94A3B8]">Zayavkani butunlay o‘chirish:</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (window.confirm(`Haqiqatan ham #${order.id} raqamli buyurtmani o‘chirmoqchimisiz?`)) {
+                                deleteRequest(order.id);
+                              }
+                            }}
+                            className="px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>O‘chirish</span>
+                          </button>
                         </div>
                       </div>
                     </div>

@@ -37,50 +37,53 @@ class DashboardAnalyticsView(APIView):
             w_name = weekday_map.get(ord.created_at.weekday(), 'payshanba')
             weekly_counts[w_name] += 1
 
-        # Provide representative demo volumes matching the mockup if low counts
+        # Real weekly counts (no artificial max(..., 18))
         weekly_chart = [
-            {'day': 'dush', 'fullName': 'dushanba', 'value': max(weekly_counts['dushanba'], 18), 'active': False},
-            {'day': 'sesh', 'fullName': 'seshanba', 'value': max(weekly_counts['seshanba'], 25), 'active': False},
-            {'day': 'chor', 'fullName': 'chorshanba', 'value': max(weekly_counts['chorshanba'], 12), 'active': False},
-            {'day': 'pay', 'fullName': 'payshanba', 'value': max(weekly_counts['payshanba'], 38), 'active': True},
-            {'day': 'juma', 'fullName': 'juma', 'value': max(weekly_counts['juma'], 29), 'active': False},
-            {'day': 'shan', 'fullName': 'shanba', 'value': max(weekly_counts['shanba'], 44), 'active': False},
-            {'day': 'yak', 'fullName': 'yakshanba', 'value': max(weekly_counts['yakshanba'], 15), 'active': False},
+            {'day': 'dush', 'fullName': 'dushanba', 'value': weekly_counts['dushanba'], 'active': False},
+            {'day': 'sesh', 'fullName': 'seshanba', 'value': weekly_counts['seshanba'], 'active': False},
+            {'day': 'chor', 'fullName': 'chorshanba', 'value': weekly_counts['chorshanba'], 'active': False},
+            {'day': 'pay', 'fullName': 'payshanba', 'value': weekly_counts['payshanba'], 'active': False},
+            {'day': 'juma', 'fullName': 'juma', 'value': weekly_counts['juma'], 'active': False},
+            {'day': 'shan', 'fullName': 'shanba', 'value': weekly_counts['shanba'], 'active': False},
+            {'day': 'yak', 'fullName': 'yakshanba', 'value': weekly_counts['yakshanba'], 'active': False},
         ]
 
-        # Category share for Donut Chart
-        categories = Category.objects.annotate(prod_count=Count('products')).order_by('-prod_count')[:4]
-        colors = ['#FF5A00', '#FF7A29', '#FFA800', '#FFC72C']
+        # Category share for Donut Chart based on real products
+        categories = Category.objects.annotate(prod_count=Count('products')).order_by('-prod_count')[:5]
+        colors = ['#FF5A00', '#FF7A29', '#FFA800', '#FFC72C', '#3B82F6']
         donut_segments = []
         cat_sum = sum(c.prod_count for c in categories) or 1
         for idx, cat in enumerate(categories):
-            pct = round((cat.prod_count / cat_sum) * 100)
+            pct = round((cat.prod_count / cat_sum) * 100) if cat_sum > 0 else 0
             donut_segments.append({
                 'label': cat.name,
                 'pct': pct,
                 'color': colors[idx % len(colors)],
             })
 
-        # Monthly Revenue Dynamic Curve
+        # Calculate real daily revenue over past 7 days
+        daily_revenue = {d: 0.0 for d in days}
+        for ord in recent_orders:
+            w_name = weekday_map.get(ord.created_at.weekday(), 'dushanba')
+            daily_revenue[w_name] += float(ord.total_amount or 0)
+
         monthly_revenue_curve = [
-            {'label': 'Dush', 'val': 2.4},
-            {'label': 'Sesh', 'val': 3.1},
-            {'label': 'Chor', 'val': 2.8},
-            {'label': 'Pay', 'val': 5.2, 'highlight': True},
-            {'label': 'Juma', 'val': 4.6},
-            {'label': 'Shan', 'val': 6.1},
-            {'label': 'Yak', 'val': 3.9},
+            {'label': 'Dush', 'val': round(daily_revenue['dushanba'] / 1_000_000, 2)},
+            {'label': 'Sesh', 'val': round(daily_revenue['seshanba'] / 1_000_000, 2)},
+            {'label': 'Chor', 'val': round(daily_revenue['chorshanba'] / 1_000_000, 2)},
+            {'label': 'Pay', 'val': round(daily_revenue['payshanba'] / 1_000_000, 2)},
+            {'label': 'Jum', 'val': round(daily_revenue['juma'] / 1_000_000, 2)},
+            {'label': 'Shan', 'val': round(daily_revenue['shanba'] / 1_000_000, 2)},
+            {'label': 'Yak', 'val': round(daily_revenue['yakshanba'] / 1_000_000, 2)},
         ]
 
-        # Dual Bar Chart (Daromad va Xarajat)
-        dual_bar_chart = [
-            {'month': 'Yan', 'income': 28, 'expense': 6},
-            {'month': 'Fev', 'income': 35, 'expense': 8},
-            {'month': 'Mar', 'income': 44, 'expense': 7, 'highlight': True},
-            {'month': 'Apr', 'income': 39, 'expense': 9},
-            {'month': 'May', 'income': 52, 'expense': 11},
-            {'month': 'Iyun', 'income': 48, 'expense': 10},
-        ]
+        # Real order status breakdown
+        status_counts = {
+            'pending': RequestOrder.objects.filter(status='Ko‘rib chiqilmoqda').count(),
+            'confirmed': RequestOrder.objects.filter(status='Tasdiqlangan').count(),
+            'delivering': RequestOrder.objects.filter(status='Yetkazilmoqda').count(),
+            'completed': RequestOrder.objects.filter(status='Bajarildi').count(),
+        }
 
         # Top 5 products by order items
         top_order_items = (
@@ -105,6 +108,6 @@ class DashboardAnalyticsView(APIView):
             'weeklyChart': weekly_chart,
             'donutChart': donut_segments,
             'revenueCurve': monthly_revenue_curve,
-            'dualBarChart': dual_bar_chart,
+            'statusCounts': status_counts,
             'topProducts': list(top_order_items),
         })
