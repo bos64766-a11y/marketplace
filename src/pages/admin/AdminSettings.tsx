@@ -72,6 +72,12 @@ export const AdminSettings: React.FC = () => {
         formData.telegramChatId || ''
       );
       setTelegramTestResult(res);
+      if (res.success) {
+        // Automatically save site settings so user never forgets to click Save!
+        updateSiteSettings(formData);
+        setIsSaved(true);
+        setTimeout(() => setIsSaved(false), 3000);
+      }
     } catch (err: any) {
       setTelegramTestResult({
         success: false,
@@ -299,7 +305,7 @@ export const AdminSettings: React.FC = () => {
 
           {/* Test Button & Result */}
           <div className="mt-4 pt-4 border-t border-[#F1F5F9] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
                 disabled={isTestingTelegram || !formData.telegramBotToken || !formData.telegramChatId}
@@ -317,6 +323,18 @@ export const AdminSettings: React.FC = () => {
                     <span>Sinov xabarini yuborish (Test)</span>
                   </>
                 )}
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer ${
+                  isSaved
+                    ? 'bg-[#10B981] text-white shadow-[#10B981]/25'
+                    : 'bg-[#FF5A00] hover:bg-[#e04f00] text-white shadow-[#FF5A00]/25'
+                }`}
+              >
+                <Save className="w-3.5 h-3.5" />
+                <span>{isSaved ? 'Saqlandi ✓' : 'Saqlash'}</span>
               </button>
               <button
                 type="button"

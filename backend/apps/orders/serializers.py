@@ -161,4 +161,12 @@ class RequestOrderSerializer(serializers.ModelSerializer):
             order.total_amount = calc_total
             order.save(update_fields=['total_amount'])
 
+        # Send Telegram notification from backend
+        try:
+            from .telegram import send_order_telegram_notification
+            send_order_telegram_notification(order)
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).warning("Telegram notification failed in create: %s", e)
+
         return order

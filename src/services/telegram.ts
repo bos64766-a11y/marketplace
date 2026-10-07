@@ -105,11 +105,36 @@ export async function sendTelegramOrderNotification(
   order: RequestOrder,
   settings: SiteSettings
 ): Promise<boolean> {
-  const token = cleanTelegramToken(settings.telegramBotToken);
-  const chatIds = cleanChatIds(settings.telegramChatId);
+  let token = cleanTelegramToken(settings.telegramBotToken);
+  let chatIds = cleanChatIds(settings.telegramChatId);
+
+  // 1. Fallback to localStorage if state was not yet reloaded
+  if (!token || chatIds.length === 0) {
+    try {
+      const raw = localStorage.getItem('snabtash_site_settings');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (!token && parsed.telegramBotToken) token = cleanTelegramToken(parsed.telegramBotToken);
+        if (chatIds.length === 0 && parsed.telegramChatId) chatIds = cleanChatIds(parsed.telegramChatId);
+      }
+    } catch {}
+  }
+
+  // 2. Fallback to backend settings API if customer browser does not have local settings
+  if (!token || chatIds.length === 0) {
+    try {
+      const backendSettings = await fetch('/api/settings/')
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null);
+      if (backendSettings) {
+        if (!token && backendSettings.telegramBotToken) token = cleanTelegramToken(backendSettings.telegramBotToken);
+        if (chatIds.length === 0 && backendSettings.telegramChatId) chatIds = cleanChatIds(backendSettings.telegramChatId);
+      }
+    } catch {}
+  }
 
   if (!token || chatIds.length === 0) {
-    console.log('Telegram bot token or chat ID not configured, skipping notification');
+    console.warn('Telegram bot token or chat ID not configured, skipping notification');
     return false;
   }
 
