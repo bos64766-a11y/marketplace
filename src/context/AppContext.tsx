@@ -5,6 +5,7 @@ import { PRODUCTS as INITIAL_PRODUCTS } from '../data/products';
 import { CATEGORIES as INITIAL_CATEGORIES } from '../data/categories';
 import { PARTNERS as DEFAULT_PARTNERS } from '../data/content';
 import { api } from '../services/api';
+import { sendTelegramOrderNotification } from '../services/telegram';
 
 interface AppContextType {
   // Navigation
@@ -117,6 +118,8 @@ const DEFAULT_SETTINGS: SiteSettings = {
   email: 'info@snabtash.uz',
   telegramBot: '@snabtash_bot',
   telegramChannel: 'https://t.me/snabtash',
+  telegramBotToken: '',
+  telegramChatId: '',
   address: 'Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy',
   workHours: 'Dush - Shan: 08:30 - 18:30',
   inn: '309871234',
@@ -1731,6 +1734,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setRequests((prev) => [newOrder, ...prev]);
     clearCart();
+
+    // Send Telegram bot notification to admin
+    sendTelegramOrderNotification(newOrder, siteSettings).catch((err) => {
+      console.warn('Telegram notification warning:', err);
+    });
 
     // Automatically remember contact details and activate customer session
     if (orderData.contact && orderData.contact.phone) {

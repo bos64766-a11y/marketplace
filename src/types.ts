@@ -142,6 +142,8 @@ export interface SiteSettings {
   email: string;
   telegramBot: string;
   telegramChannel?: string;
+  telegramBotToken?: string;
+  telegramChatId?: string;
   address: string;
   workHours: string;
   inn: string;

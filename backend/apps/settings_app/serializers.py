@@ -8,6 +8,8 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
     phone2 = serializers.CharField(source='phone_2', required=False)
     telegramBot = serializers.CharField(source='telegram_bot', required=False)
     telegramChannel = serializers.CharField(source='telegram_channel', required=False)
+    telegramBotToken = serializers.CharField(source='telegram_bot_token', required=False, allow_blank=True, default='')
+    telegramChatId = serializers.CharField(source='telegram_chat_id', required=False, allow_blank=True, default='')
     workHours = serializers.CharField(source='work_hours', required=False)
     bankAccount = serializers.CharField(source='bank_account', required=False)
     bankName = serializers.CharField(source='bank_name', required=False)
@@ -26,6 +28,8 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
             'email',
             'telegramBot',
             'telegramChannel',
+            'telegramBotToken',
+            'telegramChatId',
             'address',
             'workHours',
             'inn',

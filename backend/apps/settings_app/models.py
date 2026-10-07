@@ -8,6 +8,8 @@ class SiteSettings(models.Model):
     email = models.EmailField(default='info@snabtash.uz')
     telegram_bot = models.CharField(max_length=100, default='@snabtash_bot')
     telegram_channel = models.CharField(max_length=255, default='https://t.me/snabtash')
+    telegram_bot_token = models.CharField(max_length=255, blank=True, default='', verbose_name='Telegram Bot Token')
+    telegram_chat_id = models.CharField(max_length=100, blank=True, default='', verbose_name='Telegram Chat ID')
     address = models.TextField(default='Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy')
     work_hours = models.CharField(max_length=100, default='Dush - Shan: 08:30 - 18:30')
     inn = models.CharField(max_length=50, default='309871234')
