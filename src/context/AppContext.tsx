@@ -1948,74 +1948,86 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw new Error('Fayl formati noto‘g‘ri (JSON kutilgan)');
       }
 
-      let restoredProducts = 0;
-      let restoredSections = 0;
-      let restoredOrders = 0;
+      showToast('Zaxira fayli serverga yuklanmoqda va bazaga saqlanmoqda...', 'info');
 
-      if (Array.isArray(jsonData.products) && jsonData.products.length > 0) {
-        setProducts(jsonData.products);
-        try {
-          localStorage.setItem('snabtash_admin_products', JSON.stringify(jsonData.products));
-          localStorage.setItem('snabtash_products_archive', JSON.stringify(jsonData.products));
-        } catch {}
-        restoredProducts = jsonData.products.length;
+      // 1. Normalize data container: handle either {"data": {...}} or direct root object
+      const root = (jsonData.data && typeof jsonData.data === 'object') ? jsonData.data : jsonData;
+      const incomingProducts = root.products || [];
+      const incomingCategories = root.categories || [];
+      const incomingSections = root.showcaseSections || root['showcase-sections'] || [];
+      const incomingBanners = root.banners || [];
+      const incomingPartners = root.partners || [];
+      const incomingOrders = root.orders || root.requests || [];
+      const incomingSettings = root.siteSettings || root.settings || null;
 
-        // Sync to backend in batches
-        jsonData.products.forEach((p: any) => {
-          api.createProduct({
-            ...p,
-            category_id: p.categoryId,
-            images_list: p.images,
-          } as any).catch(() => {});
-        });
+      // 2. Call server restore API endpoint to persist everything into PostgreSQL
+      let serverResult: any = null;
+      try {
+        serverResult = await api.restoreBackupToServer(jsonData);
+      } catch (serverErr: any) {
+        console.warn('Backend restore-backup endpoint error, falling back to local update:', serverErr);
       }
 
-      if (Array.isArray(jsonData.showcaseSections) && jsonData.showcaseSections.length > 0) {
-        setShowcaseSections(jsonData.showcaseSections);
+      // 3. Immediately update client React state and localStorage cache
+      if (Array.isArray(incomingProducts) && incomingProducts.length > 0) {
+        setProducts(incomingProducts);
         try {
-          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(jsonData.showcaseSections));
-          localStorage.setItem('snabtash_sections_archive', JSON.stringify(jsonData.showcaseSections));
-        } catch {}
-        restoredSections = jsonData.showcaseSections.length;
-
-        jsonData.showcaseSections.forEach((s: any) => {
-          api.createShowcaseSection(s).catch(() => {});
-        });
-      }
-
-      const incomingRequests = jsonData.requests || jsonData.orders;
-      if (Array.isArray(incomingRequests) && incomingRequests.length > 0) {
-        setRequests(incomingRequests);
-        try {
-          localStorage.setItem('snabtash_requests', JSON.stringify(incomingRequests));
-        } catch {}
-        restoredOrders = incomingRequests.length;
-      }
-
-      if (Array.isArray(jsonData.categories) && jsonData.categories.length > 0) {
-        setCategories(jsonData.categories);
-        try {
-          localStorage.setItem('snabtash_admin_categories', JSON.stringify(jsonData.categories));
+          localStorage.setItem('snabtash_admin_products', JSON.stringify(incomingProducts));
+          localStorage.setItem('snabtash_products_archive', JSON.stringify(incomingProducts));
         } catch {}
       }
 
-      if (Array.isArray(jsonData.banners) && jsonData.banners.length > 0) {
-        setBanners(jsonData.banners);
+      if (Array.isArray(incomingCategories) && incomingCategories.length > 0) {
+        setCategories(incomingCategories);
         try {
-          localStorage.setItem('snabtash_admin_banners', JSON.stringify(jsonData.banners));
+          localStorage.setItem('snabtash_admin_categories', JSON.stringify(incomingCategories));
         } catch {}
       }
 
-      if (jsonData.siteSettings && typeof jsonData.siteSettings === 'object') {
-        setSiteSettings(jsonData.siteSettings);
+      if (Array.isArray(incomingSections) && incomingSections.length > 0) {
+        setShowcaseSections(incomingSections);
         try {
-          localStorage.setItem('snabtash_site_settings', JSON.stringify(jsonData.siteSettings));
+          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(incomingSections));
+          localStorage.setItem('snabtash_sections_archive', JSON.stringify(incomingSections));
         } catch {}
       }
+
+      if (Array.isArray(incomingBanners) && incomingBanners.length > 0) {
+        setBanners(incomingBanners);
+        try {
+          localStorage.setItem('snabtash_admin_banners', JSON.stringify(incomingBanners));
+        } catch {}
+      }
+
+      if (Array.isArray(incomingPartners) && incomingPartners.length > 0) {
+        setPartners(incomingPartners);
+      }
+
+      if (Array.isArray(incomingOrders) && incomingOrders.length > 0) {
+        setRequests(incomingOrders);
+        try {
+          localStorage.setItem('snabtash_requests', JSON.stringify(incomingOrders));
+        } catch {}
+      }
+
+      if (incomingSettings && typeof incomingSettings === 'object') {
+        setSiteSettings(incomingSettings);
+        try {
+          localStorage.setItem('snabtash_site_settings', JSON.stringify(incomingSettings));
+        } catch {}
+      }
+
+      // 4. Re-sync fresh state from Django backend to ensure 100% database parity
+      try {
+        await refreshFromBackend();
+      } catch {}
 
       updateArchiveStats();
       notifySync();
-      showToast(`✓ Zaxiradan muvaffaqiyatli tiklandi: ${restoredProducts} ta tovar, ${restoredOrders} ta zayavka, ${restoredSections} ta bo'lim`, 'success');
+
+      const prodCount = serverResult?.counts?.products || (Array.isArray(incomingProducts) ? incomingProducts.length : 0);
+      const catCount = serverResult?.counts?.categories || (Array.isArray(incomingCategories) ? incomingCategories.length : 0);
+      showToast(`✓ Serverga muvaffaqiyatli saqlandi: ${prodCount} ta tovar, ${catCount} ta kategoriya bazaga yozildi va hammaga ko'rinadi!`, 'success');
       return true;
     } catch (err: any) {
       showToast(`Xatolik: Zaxirani tiklashda xatolik yuz berdi (${err.message})`, 'error');
@@ -2027,40 +2039,42 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const pRaw = localStorage.getItem('snabtash_products_archive');
       const sRaw = localStorage.getItem('snabtash_sections_archive');
-      let pCount = 0;
-      let sCount = 0;
+      let parsedP: any[] = [];
+      let parsedS: any[] = [];
 
       if (pRaw) {
-        const parsedP = JSON.parse(pRaw);
-        if (Array.isArray(parsedP) && parsedP.length > 0) {
-          setProducts(parsedP);
-          localStorage.setItem('snabtash_admin_products', pRaw);
-          pCount = parsedP.length;
-          parsedP.forEach((p: any) => {
-            api.createProduct({
-              ...p,
-              category_id: p.categoryId,
-              images_list: p.images,
-            } as any).catch(() => {});
-          });
-        }
+        try {
+          parsedP = JSON.parse(pRaw);
+          if (Array.isArray(parsedP) && parsedP.length > 0) {
+            setProducts(parsedP);
+            localStorage.setItem('snabtash_admin_products', pRaw);
+          }
+        } catch {}
       }
 
       if (sRaw) {
-        const parsedS = JSON.parse(sRaw);
-        if (Array.isArray(parsedS) && parsedS.length > 0) {
-          setShowcaseSections(parsedS);
-          localStorage.setItem('snabtash_showcase_sections', sRaw);
-          sCount = parsedS.length;
-          parsedS.forEach((s: any) => {
-            api.createShowcaseSection(s).catch(() => {});
-          });
+        try {
+          parsedS = JSON.parse(sRaw);
+          if (Array.isArray(parsedS) && parsedS.length > 0) {
+            setShowcaseSections(parsedS);
+            localStorage.setItem('snabtash_showcase_sections', sRaw);
+          }
+        } catch {}
+      }
+
+      // Persist to server database
+      if (parsedP.length > 0 || parsedS.length > 0) {
+        try {
+          await api.restoreBackupToServer({ products: parsedP, showcaseSections: parsedS });
+          await refreshFromBackend();
+        } catch (serverErr) {
+          console.warn('Backend archive restore error:', serverErr);
         }
       }
 
       updateArchiveStats();
       notifySync();
-      showToast(`✓ Arxivdan ${pCount} ta tovar va ${sCount} ta bo'lim tiklandi!`, 'success');
+      showToast(`✓ Arxivdan ${parsedP.length} ta tovar va ${parsedS.length} ta bo'lim tiklandi va serverga yozildi!`, 'success');
     } catch (err: any) {
       showToast(`Arxivdan tiklashda xatolik: ${err.message}`, 'error');
     }

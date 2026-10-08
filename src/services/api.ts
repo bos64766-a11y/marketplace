@@ -464,4 +464,27 @@ export const api = {
   getAnalyticsDashboard: async (): Promise<any> => {
     return request<any>('/analytics/dashboard/');
   },
+
+  // --- DATABASE BACKUP RESTORE (Saves entire backup to PostgreSQL database on server) ---
+  restoreBackupToServer: async (
+    jsonData: any
+  ): Promise<{
+    success: boolean;
+    message: string;
+    counts?: {
+      products?: number;
+      categories?: number;
+      sections?: number;
+      banners?: number;
+      partners?: number;
+      orders?: number;
+      settings?: boolean;
+    };
+  }> => {
+    return request<any>('/settings/restore-backup/', {
+      method: 'POST',
+      body: JSON.stringify(jsonData),
+    });
+  },
 };
+

@@ -10,12 +10,15 @@ from .views import (
     PartnerDetailView,
     HealthCheckView,
     AdminInitView,
+    RestoreBackupView,
 )
 
 urlpatterns = [
     path('health/', HealthCheckView.as_view(), name='health-check'),
     path('admin-init/', AdminInitView.as_view(), name='admin-init'),
     path('settings/', SiteSettingsView.as_view(), name='site-settings'),
+    path('settings/restore-backup/', RestoreBackupView.as_view(), name='restore-backup'),
+    path('restore/', RestoreBackupView.as_view(), name='restore-backup-direct'),
     path('banners/', BannerListCreateView.as_view(), name='banner-list-create'),
     path('banners/<int:pk>/', BannerDetailView.as_view(), name='banner-detail'),
     path('showcase-sections/', ShowcaseSectionListCreateView.as_view(), name='showcase-section-list-create'),
@@ -24,3 +27,4 @@ urlpatterns = [
     path('partners/<int:pk>/', PartnerDetailView.as_view(), name='partner-detail'),
     path('upload/', FileUploadView.as_view(), name='file-upload'),
 ]
+

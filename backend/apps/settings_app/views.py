@@ -443,3 +443,317 @@ class AdminInitView(APIView):
                 'detail': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+class RestoreBackupView(APIView):
+    """
+    Accepts full backup JSON payload (from frontend export or live_backup.json)
+    and saves/updates all Categories, Products, Images, ShowcaseSections,
+    Banners, SiteSettings, and Partners directly in PostgreSQL database.
+    """
+    def post(self, request):
+        return self._process_restore(request)
+
+    def get(self, request):
+        if request.query_params.get('seed') == '1':
+            return self._process_restore(request, use_disk_fixtures=True)
+        return Response({
+            'status': 'ready',
+            'message': 'Zaxirani server bazasiga tiklash uchun JSON bilan POST so‘rov yuboring.'
+        })
+
+    def _process_restore(self, request, use_disk_fixtures=False):
+        import json
+        from django.db import models
+        from apps.products.models import Category, Product, ProductImage
+        from apps.orders.models import RequestOrder, OrderItem
+        from apps.settings_app.models import ShowcaseSection, Banner, SiteSettings, Partner
+
+        payload = {}
+        if use_disk_fixtures or request.query_params.get('seed') == '1':
+            fixtures_path = os.path.join(settings.BASE_DIR, 'fixtures', 'live_backup.json')
+            if os.path.exists(fixtures_path):
+                with open(fixtures_path, 'r', encoding='utf-8') as f:
+                    payload = json.load(f)
+            else:
+                return Response({'error': 'fixtures/live_backup.json fayli topilmadi'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            payload = request.data
+
+        if not payload or not isinstance(payload, dict):
+            return Response({'error': 'Noto‘g‘ri ma‘lumot formati (JSON ob‘ekt kutilgan)'}, status=status.HTTP_400_BAD_REQUEST)
+
+        root = payload.get('data', payload) if isinstance(payload.get('data'), dict) else payload
+
+        restored_categories = 0
+        restored_products = 0
+        restored_sections = 0
+        restored_banners = 0
+        restored_partners = 0
+        restored_orders = 0
+        restored_settings = False
+
+        # 1. Categories
+        categories_data = root.get('categories', [])
+        for c in categories_data:
+            cat_id = str(c.get('id') or c.get('slug') or '').strip()
+            if not cat_id:
+                continue
+            Category.objects.update_or_create(
+                id=cat_id,
+                defaults={
+                    'slug': str(c.get('slug') or cat_id),
+                    'name': c.get('name', ''),
+                    'name_ru': c.get('name_ru', '') or '',
+                    'icon': c.get('icon', 'Package') or 'Package',
+                    'image': c.get('image', '') or '',
+                    'description': c.get('description', '') or '',
+                    'description_ru': c.get('description_ru', '') or '',
+                    'order': int(c.get('order', 0) or 0),
+                }
+            )
+            restored_categories += 1
+
+        # 2. Products
+        products_data = root.get('products', [])
+        default_cat = Category.objects.first()
+
+        for p in products_data:
+            prod_id = str(p.get('id') or '').strip()
+            if not prod_id:
+                continue
+
+            cat_id = str(p.get('categoryId') or p.get('category_id') or p.get('category') or '').strip()
+            cat_obj = None
+            if cat_id:
+                cat_obj = Category.objects.filter(models.Q(id=cat_id) | models.Q(slug=cat_id)).first()
+            if not cat_obj:
+                cat_obj = default_cat
+
+            prod_slug = str(p.get('slug') or prod_id)
+            prod_sku = str(p.get('sku') or f"SNB-{prod_id[-6:].upper()}")
+
+            Product.objects.filter(slug=prod_slug).exclude(id=prod_id).update(slug=models.F('slug') + '-old-' + models.F('id'))
+            Product.objects.filter(sku=prod_sku).exclude(id=prod_id).update(sku=models.F('sku') + '-old-' + models.F('id'))
+
+            try:
+                price_val = float(p.get('price', 0) or 0)
+            except (ValueError, TypeError):
+                price_val = 0.0
+
+            old_price_val = None
+            if p.get('oldPrice') or p.get('old_price'):
+                try:
+                    old_price_val = float(p.get('oldPrice') or p.get('old_price'))
+                except (ValueError, TypeError):
+                    old_price_val = None
+
+            try:
+                rating_val = float(p.get('rating', 5.0) or 5.0)
+            except (ValueError, TypeError):
+                rating_val = 5.0
+
+            try:
+                reviews_cnt = int(p.get('reviewsCount', p.get('reviews_count', 0)) or 0)
+            except (ValueError, TypeError):
+                reviews_cnt = 0
+
+            try:
+                min_ord = int(p.get('minOrder', p.get('min_order', 1)) or 1)
+            except (ValueError, TypeError):
+                min_ord = 1
+
+            in_stock_val = p.get('inStock', p.get('in_stock', True))
+            if isinstance(in_stock_val, str):
+                in_stock_val = in_stock_val.lower() in ['true', '1', 'ha', 'bor']
+            else:
+                in_stock_val = bool(in_stock_val)
+
+            prod_obj, _ = Product.objects.update_or_create(
+                id=prod_id,
+                defaults={
+                    'slug': prod_slug,
+                    'name': p.get('name', ''),
+                    'name_ru': p.get('name_ru', '') or '',
+                    'category': cat_obj,
+                    'price': price_val,
+                    'old_price': old_price_val,
+                    'in_stock': in_stock_val,
+                    'brand': p.get('brand', 'SNABTASH') or 'SNABTASH',
+                    'sku': prod_sku,
+                    'unit': p.get('unit', 'dona') or 'dona',
+                    'min_order': min_ord,
+                    'tag': p.get('tag', '') or '',
+                    'tag_ru': p.get('tag_ru', '') or '',
+                    'rating': rating_val,
+                    'reviews_count': reviews_cnt,
+                    'description': p.get('description', '') or '',
+                    'description_ru': p.get('description_ru', '') or '',
+                    'is_popular': bool(p.get('isPopular', p.get('is_popular', False))),
+                    'is_new': bool(p.get('isNew', p.get('is_new', False))),
+                }
+            )
+
+            # Images
+            images = p.get('images', []) or p.get('images_list', [])
+            if images and isinstance(images, list):
+                prod_obj.product_images.all().delete()
+                for idx, img_item in enumerate(images):
+                    img_url = ''
+                    if isinstance(img_item, dict):
+                        img_url = img_item.get('image_url') or img_item.get('url') or ''
+                    elif isinstance(img_item, str):
+                        img_url = img_item.strip()
+                    if img_url:
+                        ProductImage.objects.create(
+                            product=prod_obj,
+                            image_url=img_url,
+                            is_main=(idx == 0),
+                            order=idx
+                        )
+
+            restored_products += 1
+
+        # 3. Showcase Sections
+        sections_data = root.get('showcase-sections') or root.get('showcaseSections', [])
+        for s in sections_data:
+            sec_id = s.get('id')
+            if not sec_id:
+                continue
+            ShowcaseSection.objects.update_or_create(
+                id=sec_id,
+                defaults={
+                    'title': s.get('title', ''),
+                    'title_ru': s.get('title_ru', '') or '',
+                    'subtitle': s.get('subtitle', '') or '',
+                    'subtitle_ru': s.get('subtitle_ru', '') or '',
+                    'badge': s.get('badge', '') or '',
+                    'icon': s.get('icon', 'Building2') or 'Building2',
+                    'link': s.get('link', '/catalog') or '/catalog',
+                    'product_ids': s.get('productIds', []) or s.get('product_ids', []),
+                    'order': int(s.get('order', 0) or 0),
+                    'is_active': bool(s.get('isActive', s.get('is_active', True))),
+                }
+            )
+            restored_sections += 1
+
+        # 4. Banners
+        banners_data = root.get('banners', [])
+        for b in banners_data:
+            ban_id = b.get('id')
+            if not ban_id:
+                continue
+            Banner.objects.update_or_create(
+                id=ban_id,
+                defaults={
+                    'title': b.get('title', ''),
+                    'title_ru': b.get('title_ru', '') or '',
+                    'badge': b.get('badge', '') or '',
+                    'badge_ru': b.get('badge_ru', '') or '',
+                    'description': b.get('description', '') or '',
+                    'description_ru': b.get('description_ru', '') or '',
+                    'btn_text': b.get('btnText') or b.get('btn_text', '') or '',
+                    'btn_text_ru': b.get('btnText_ru') or b.get('btn_text_ru', '') or '',
+                    'btn_link': b.get('btnLink') or b.get('btn_link', '/catalog') or '/catalog',
+                    'image': b.get('image', '') or '',
+                    'image_ru': b.get('image_ru', '') or '',
+                    'image_alt': b.get('imageAlt') or b.get('image_alt', '') or '',
+                    'image_alt_ru': b.get('imageAlt_ru') or b.get('image_alt_ru', '') or '',
+                    'order': int(b.get('order', 0) or 0),
+                    'is_active': bool(b.get('isActive', b.get('is_active', True))),
+                }
+            )
+            restored_banners += 1
+
+        # 5. Site Settings
+        sett = root.get('settings') or root.get('siteSettings', {})
+        if sett and isinstance(sett, dict) and (sett.get('companyName') or sett.get('company_name')):
+            SiteSettings.objects.update_or_create(
+                id=1,
+                defaults={
+                    'company_name': sett.get('companyName') or sett.get('company_name', 'SNABTASH'),
+                    'phone': sett.get('phone', '') or '',
+                    'email': sett.get('email', '') or '',
+                    'address': sett.get('address', '') or '',
+                    'address_ru': sett.get('address_ru', '') or '',
+                    'telegram': sett.get('telegram', '') or '',
+                    'working_hours': sett.get('workingHours') or sett.get('working_hours', '') or '',
+                    'working_hours_ru': sett.get('workingHours_ru') or sett.get('working_hours_ru', '') or '',
+                }
+            )
+            restored_settings = True
+
+        # 6. Partners
+        partners_data = root.get('partners', [])
+        for part in partners_data:
+            part_id = part.get('id')
+            if not part_id:
+                continue
+            Partner.objects.update_or_create(
+                id=part_id,
+                defaults={
+                    'name': part.get('name', ''),
+                    'logo': part.get('logo', '') or '',
+                    'order': int(part.get('order', 0) or 0),
+                    'is_active': bool(part.get('isActive', True)),
+                }
+            )
+            restored_partners += 1
+
+        # 7. Orders / Requests (if provided)
+        orders_data = root.get('orders') or root.get('requests', [])
+        for o in orders_data:
+            order_id = str(o.get('id') or '').strip()
+            if not order_id:
+                continue
+            contact = o.get('contact', {})
+            total_amt = float(o.get('totalAmount') or o.get('total_amount', 0) or 0)
+            req_order, _ = RequestOrder.objects.update_or_create(
+                id=order_id,
+                defaults={
+                    'customer_name': contact.get('name', 'B2B Mijoz') or 'B2B Mijoz',
+                    'customer_phone': contact.get('phone', '') or '',
+                    'customer_company': contact.get('company', '') or '',
+                    'customer_inn': contact.get('inn', '') or '',
+                    'comment': contact.get('comment', '') or '',
+                    'total_amount': total_amt,
+                    'status': o.get('status', 'Ko‘rib chiqilmoqda') or 'Ko‘rib chiqilmoqda',
+                }
+            )
+            items = o.get('items', [])
+            if items:
+                req_order.items.all().delete()
+                for it in items:
+                    prod_info = it.get('product', {})
+                    p_id = prod_info.get('id')
+                    p_obj = Product.objects.filter(id=p_id).first() if p_id else None
+                    p_price = float(prod_info.get('price', 0) or 0)
+                    qty = int(it.get('quantity', 1) or 1)
+                    imgs = prod_info.get('images', [])
+                    p_img = imgs[0] if imgs else ''
+                    OrderItem.objects.create(
+                        order=req_order,
+                        product=p_obj,
+                        product_name=prod_info.get('name', 'B2B Tovar'),
+                        product_sku=prod_info.get('sku', '') or '',
+                        product_image=p_img or '',
+                        price=p_price,
+                        quantity=qty,
+                        total_price=p_price * qty
+                    )
+            restored_orders += 1
+
+        return Response({
+            'success': True,
+            'message': f"Serverga muvaffaqiyatli saqlandi: {restored_products} ta mahsulot, {restored_categories} ta kategoriya, {restored_sections} ta bo‘lim.",
+            'counts': {
+                'products': restored_products,
+                'categories': restored_categories,
+                'sections': restored_sections,
+                'banners': restored_banners,
+                'partners': restored_partners,
+                'orders': restored_orders,
+                'settings': restored_settings,
+            }
+        })
+
+

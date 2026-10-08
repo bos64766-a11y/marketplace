@@ -517,10 +517,10 @@ export const AdminSettings: React.FC = () => {
                   type="button"
                   disabled={isRestoring}
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full mt-4 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3B82F6] hover:bg-[#2563EB] text-white text-xs font-bold transition-all shadow-sm cursor-pointer disabled:opacity-50"
+                  className="w-full mt-4 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3B82F6] hover:bg-[#2563EB] text-white text-xs font-bold transition-all shadow-sm cursor-pointer disabled:opacity-75 disabled:cursor-wait"
                 >
-                  <Upload className="w-3.5 h-3.5" />
-                  <span>{isRestoring ? "Tiklanmoqda..." : "Zaxira Faylini Yuklash (.json)"}</span>
+                  <Upload className={`w-3.5 h-3.5 ${isRestoring ? 'animate-spin' : ''}`} />
+                  <span>{isRestoring ? "Server bazasiga yuklanmoqda..." : "Zaxira Faylini Yuklash (.json)"}</span>
                 </button>
               </div>
             </div>
