@@ -41,6 +41,14 @@ def backup_and_push():
 
     backup_file = os.path.join(fixtures_dir, 'backup_data.json')
 
+    # 0. Fetch live cloud database from Railway (live_backup.json)
+    try:
+        export_script = os.path.join(backend_dir, "export_live_backup.py")
+        subprocess.run([sys.executable, export_script], cwd=backend_dir, check=True)
+        log("[OK] Jonli serverdan (Railway) yangi zaxira olindi (live_backup.json)", log_file)
+    except Exception as e:
+        log(f"[OGOHLANTIRISH] Jonli serverdan zaxira olishda ogohlantirish: {e}", log_file)
+
     # 1. Dump database to fixture
     dump_cmd = [
         sys.executable,
@@ -61,10 +69,15 @@ def backup_and_push():
         log(f"[XATO] Bazani eksport qilishda xatolik: {e}", log_file)
         return False
 
-    # 2. Stage backup file and media
+    # 2. Stage backup files and media
     try:
         subprocess.run(
-            ["git", "add", "backend/fixtures/backup_data.json", "backend/media/"],
+            [
+                "git", "add",
+                "backend/fixtures/backup_data.json",
+                "backend/fixtures/live_backup.json",
+                "backend/media/"
+            ],
             cwd=repo_root,
             check=True
         )
@@ -85,7 +98,7 @@ def backup_and_push():
 
     # 4. Commit changes
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
-    commit_msg = f"chore(backup): auto-backup database and media [{now_str}]"
+    commit_msg = f"chore(backup): auto-backup live database and media [{now_str}]"
     try:
         subprocess.run(
             ["git", "commit", "-m", commit_msg],
@@ -97,9 +110,8 @@ def backup_and_push():
         log(f"[XATO] Git commit bajarilmadi: {e}", log_file)
         return False
 
-    # 5. Push to remote
+    # 5. Push to remote(s)
     try:
-        # Get current branch
         branch_res = subprocess.run(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
             cwd=repo_root,
@@ -109,19 +121,25 @@ def backup_and_push():
         )
         branch = branch_res.stdout.strip() or "main"
 
-        push_res = subprocess.run(
-            ["git", "push", "origin", branch],
-            cwd=repo_root,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        log(f"[OK] GitHub repozitoriyga muvaffaqiyatli push qilindi (branch: {branch})", log_file)
+        pushed_any = False
+        for remote in ["origin", "upstream"]:
+            try:
+                subprocess.run(
+                    ["git", "push", remote, branch],
+                    cwd=repo_root,
+                    capture_output=True,
+                    text=True,
+                    check=True
+                )
+                log(f"[OK] {remote} repozitoriyga muvaffaqiyatli push qilindi (branch: {branch})", log_file)
+                pushed_any = True
+            except Exception as push_err:
+                log(f"[OGOHLANTIRISH] {remote} ga push xatoligi (balki mavjud emas): {push_err}", log_file)
+
         log("=" * 60, log_file)
-        return True
-    except subprocess.CalledProcessError as e:
-        err_msg = e.stderr.strip() if e.stderr else str(e)
-        log(f"[XATO] Git push bajarilmadi: {err_msg}", log_file)
+        return pushed_any
+    except Exception as e:
+        log(f"[XATO] Git push bajarilmadi: {e}", log_file)
         log("=" * 60, log_file)
         return False
 
