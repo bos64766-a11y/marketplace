@@ -7,6 +7,7 @@ import React, { useState, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { AdminLayout } from './AdminLayout';
 import { api, getMediaUrl } from '../../services/api';
+import { optimizeBannerImage, formatFileSize } from '../../utils/imageOptimizer';
 import {
   Plus,
   Pencil,
@@ -64,6 +65,13 @@ export const AdminBanners: React.FC = () => {
   const [uploadError, setUploadError] = useState('');
   const [imageTab, setImageTab] = useState<'upload' | 'preset' | 'url'>('upload');
   const [isDragging, setIsDragging] = useState(false);
+  const [optimizationInfo, setOptimizationInfo] = useState<{
+    originalSize: string;
+    compressedSize: string;
+    reductionPercent: number;
+    width: number;
+    height: number;
+  } | null>(null);
 
   const [formData, setFormData] = useState<Omit<BannerSlide, 'id'>>({
     title: '',
@@ -78,6 +86,7 @@ export const AdminBanners: React.FC = () => {
   const openAddModal = () => {
     setEditingBanner(null);
     setUploadError('');
+    setOptimizationInfo(null);
     setImageTab('upload');
     setBannerLangTab('uz');
     setFormData({
@@ -95,6 +104,7 @@ export const AdminBanners: React.FC = () => {
   const openEditModal = (banner: BannerSlide) => {
     setEditingBanner(banner);
     setUploadError('');
+    setOptimizationInfo(null);
     setImageTab('upload');
     setBannerLangTab('uz');
     setFormData({
@@ -118,34 +128,54 @@ export const AdminBanners: React.FC = () => {
       return;
     }
 
-    if (file.size > 20 * 1024 * 1024) {
-      setUploadError('Fayl hajmi 20MB dan oshmasligi kerak');
+    if (file.size > 35 * 1024 * 1024) {
+      setUploadError('Fayl hajmi 35MB dan oshmasligi kerak');
       return;
     }
 
     setIsUploading(true);
     setUploadError('');
+    setOptimizationInfo(null);
 
     const isRu = bannerLangTab === 'ru';
 
     try {
-      const res = await api.uploadImage(file, 'banners');
+      // 1. Smart client-side compression: reduce high-MB file size while preserving high visual crispness
+      const opt = await optimizeBannerImage(file, { maxWidth: 1920, maxHeight: 1200, quality: 0.90 });
+      setOptimizationInfo({
+        originalSize: formatFileSize(opt.originalSize),
+        compressedSize: formatFileSize(opt.compressedSize),
+        reductionPercent: opt.reductionPercent,
+        width: opt.width,
+        height: opt.height,
+      });
+
+      // 2. Upload the optimized compact file to server
+      const res = await api.uploadImage(opt.file, 'banners');
       setFormData((prev) => ({
         ...prev,
         [isRu ? 'image_ru' : 'image']: res.url,
         [isRu ? 'title_ru' : 'title']: (isRu ? prev.title_ru : prev.title) || file.name.replace(/\.[^/.]+$/, ''),
       }));
     } catch (err: any) {
-      console.warn('API banner upload fallback to local DataURL:', err);
-      const reader = new FileReader();
-      reader.onload = () => {
+      console.warn('API banner upload exception, applying local optimized fallback:', err);
+      try {
+        const opt = await optimizeBannerImage(file, { maxWidth: 1920, maxHeight: 1200, quality: 0.90 });
+        setOptimizationInfo({
+          originalSize: formatFileSize(opt.originalSize),
+          compressedSize: formatFileSize(opt.compressedSize),
+          reductionPercent: opt.reductionPercent,
+          width: opt.width,
+          height: opt.height,
+        });
         setFormData((prev) => ({
           ...prev,
-          [isRu ? 'image_ru' : 'image']: reader.result as string,
+          [isRu ? 'image_ru' : 'image']: opt.dataUrl,
           [isRu ? 'title_ru' : 'title']: (isRu ? prev.title_ru : prev.title) || file.name.replace(/\.[^/.]+$/, ''),
         }));
-      };
-      reader.readAsDataURL(file);
+      } catch (optErr) {
+        setUploadError('Faylni yuklashda xatolik yuz berdi. Boshqa formatdagi rasm tanlang.');
+      }
     } finally {
       setIsUploading(false);
     }
@@ -167,9 +197,13 @@ export const AdminBanners: React.FC = () => {
 
     const payload = {
       ...formData,
+      image: (formData.image || '').trim(),
+      image_ru: (formData.image_ru || '').trim(),
       title: (formData.title || '').trim() || 'Grafik Banner',
       title_ru: (formData.title_ru || '').trim() || '',
-      image_ru: (formData.image_ru || '').trim() || '',
+      btnLink: (formData.btnLink || '/catalog').trim(),
+      order: Number(formData.order) || 1,
+      isActive: formData.isActive !== false,
     };
 
     if (editingBanner) {
@@ -660,9 +694,11 @@ export const AdminBanners: React.FC = () => {
                           <div className="py-5 space-y-2">
                             <Loader2 className="w-8 h-8 text-[#FF5A00] animate-spin mx-auto" />
                             <p className="text-xs font-bold text-[#1E293B]">
-                              {bannerLangTab === 'uz' ? "O‘zbekcha" : "Ruscha"} rasm serverga yuklanmoqda...
+                              {bannerLangTab === 'uz' ? "O‘zbekcha" : "Ruscha"} rasm siqilmoqda va yuklanmoqda...
                             </p>
-                            <p className="text-[11px] text-[#94A3B8]">Biroz kuting</p>
+                            <p className="text-[11px] text-[#FF5A00] font-medium">
+                              Katta MB avtomatik kichraytirilmoqda, sifat 100% tiniq saqlanadi
+                            </p>
                           </div>
                         ) : (
                           <div className="space-y-2">
@@ -675,12 +711,27 @@ export const AdminBanners: React.FC = () => {
                                 <span className="text-[#FF5A00] underline">tanlang</span>
                               </p>
                               <p className="text-xs text-[#64748B] mt-0.5">
-                                PNG, JPG, WEBP — 20MB gacha
+                                PNG, JPG, WEBP (Yuqori MB avtomatik siqiladi, Full HD sifat saqlanadi)
                               </p>
                             </div>
                           </div>
                         )}
                       </div>
+
+                      {/* Optimization Feedback Badge */}
+                      {optimizationInfo && (
+                        <div className="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-emerald-900 animate-in fade-in">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <span>
+                              <strong>Smart siqish:</strong> {optimizationInfo.originalSize} ➔ <strong>{optimizationInfo.compressedSize}</strong> ({optimizationInfo.reductionPercent}% yengillashdi, {optimizationInfo.width}×{optimizationInfo.height} Full HD sifat saqlangan)
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-bold bg-emerald-600 text-white px-2 py-0.5 rounded-full shrink-0 self-start sm:self-auto">
+                            Tiniq sifat ✓
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
 

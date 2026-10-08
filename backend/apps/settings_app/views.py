@@ -117,7 +117,16 @@ class BannerDetailView(APIView):
         return Response(BannerSerializer(banner).data)
 
     def put(self, request, pk):
-        banner = get_object_or_404(Banner, pk=pk)
+        try:
+            banner = Banner.objects.get(pk=pk)
+        except (Banner.DoesNotExist, ValueError):
+            # Gracefully handle local/new banner ID by creating new record
+            serializer = BannerSerializer(data=request.data)
+            if serializer.is_valid():
+                banner = serializer.save()
+                return Response(BannerSerializer(banner).data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = BannerSerializer(banner, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -174,6 +183,10 @@ class FileUploadView(APIView):
 
             rel_url = f"{settings.MEDIA_URL}{subfolder}/{filename}"
             file_url = request.build_absolute_uri(rel_url)
+            # Ensure HTTPS if requested over HTTPS or behind TLS termination proxy
+            if request.is_secure() or request.headers.get('x-forwarded-proto') == 'https':
+                file_url = file_url.replace('http://', 'https://')
+
             return Response({
                 'url': file_url,
                 'relative_url': rel_url,

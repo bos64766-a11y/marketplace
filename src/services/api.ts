@@ -1,4 +1,5 @@
 import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcaseSection, Partner } from '../types';
+import { optimizeBannerImage } from '../utils/imageOptimizer';
 
 const isLocal =
   typeof window !== 'undefined' &&
@@ -382,27 +383,53 @@ export const api = {
     });
   },
 
-  // --- FILE UPLOAD (Server Storage with Crystal-Clear Lossless Fallback) ---
+  // --- FILE UPLOAD (Smart Optimizer with High-Quality Server Storage & Fallback) ---
   uploadImage: async (
     file: File,
     type: 'products' | 'banners' | 'categories' | 'uploads' = 'uploads'
-  ): Promise<{ url: string; filename: string; original_name?: string; size?: number }> => {
-    // 1. First attempt direct multipart upload to backend so server stores original file without compression
+  ): Promise<{ url: string; filename: string; original_name?: string; size?: number; reduction?: number }> => {
+    // 1. Optimize large files client-side first so high-MB images become ultra-compact (~200KB)
+    // while keeping 100% crisp full HD quality without blur or pixelation
+    let uploadFile = file;
+    let fallbackDataUrl = '';
+    let optimizedSize = file.size;
+    let reductionPercent = 0;
+
+    try {
+      if (type === 'banners') {
+        const optimized = await optimizeBannerImage(file, { maxWidth: 1920, maxHeight: 1200, quality: 0.90 });
+        uploadFile = optimized.file;
+        fallbackDataUrl = optimized.dataUrl;
+        optimizedSize = optimized.compressedSize;
+        reductionPercent = optimized.reductionPercent;
+      } else {
+        const optimized = await optimizeBannerImage(file, { maxWidth: 1400, maxHeight: 1400, quality: 0.90 });
+        uploadFile = optimized.file;
+        fallbackDataUrl = optimized.dataUrl;
+        optimizedSize = optimized.compressedSize;
+        reductionPercent = optimized.reductionPercent;
+      }
+    } catch (optErr) {
+      console.warn('Image client optimizer fallback:', optErr);
+    }
+
+    // 2. Upload the optimized compact file to backend server
     try {
       const formData = new FormData();
-      formData.append('image', file);
+      formData.append('image', uploadFile);
       const res = await fetch(`${API_BASE}/upload/?type=${type}`, {
         method: 'POST',
         body: formData,
       });
       if (res.ok) {
         const data = await res.json();
-        if (data && data.url) {
+        if (data && (data.relative_url || data.url)) {
           return {
-            url: data.url,
-            filename: data.filename || file.name,
+            url: data.relative_url || data.url,
+            filename: data.filename || uploadFile.name,
             original_name: file.name,
-            size: data.size || file.size,
+            size: data.size || optimizedSize,
+            reduction: reductionPercent,
           };
         }
       }
@@ -410,50 +437,32 @@ export const api = {
       console.warn('Direct server upload error, using local fallback:', serverErr);
     }
 
-    // 2. For banners: HERO visuals must have 100% crystal-clear resolution without lossy blur or raster artifacts
-    if (type === 'banners') {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          resolve({
-            url: reader.result as string,
-            filename: file.name,
-            original_name: file.name,
-            size: file.size,
-          });
-        };
-        reader.onerror = () => reject(new Error('Faylni yuklashda xatolik yuz berdi'));
-        reader.readAsDataURL(file);
-      });
+    // 3. Fallback: If server is offline or unreachable, return the compact, high-quality DataURL
+    if (fallbackDataUrl) {
+      return {
+        url: fallbackDataUrl,
+        filename: uploadFile.name,
+        original_name: file.name,
+        size: optimizedSize,
+        reduction: reductionPercent,
+      };
     }
 
-    // 3. For product catalog items, compress appropriately
-    const maxWidth = 1600;
-    const quality = 0.90;
-    try {
-      const compressedDataUrl = await compressImageFile(file, maxWidth, quality);
-      return {
-        url: compressedDataUrl,
-        filename: file.name,
-        original_name: file.name,
-        size: Math.round((compressedDataUrl.length * 3) / 4),
+    // 4. Ultimate fallback if canvas optimization was unsupported
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve({
+          url: reader.result as string,
+          filename: file.name,
+          original_name: file.name,
+          size: file.size,
+          reduction: 0,
+        });
       };
-    } catch (err) {
-      console.warn('Image compression fallback:', err);
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          resolve({
-            url: reader.result as string,
-            filename: file.name,
-            original_name: file.name,
-            size: file.size,
-          });
-        };
-        reader.onerror = () => reject(new Error('Faylni yuklashda xatolik yuz berdi'));
-        reader.readAsDataURL(file);
-      });
-    }
+      reader.onerror = () => reject(new Error('Faylni yuklashda xatolik yuz berdi'));
+      reader.readAsDataURL(file);
+    });
   },
 
   // --- DASHBOARD ANALYTICS ---

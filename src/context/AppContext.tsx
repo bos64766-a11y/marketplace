@@ -632,7 +632,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               prev.find((p) => String(p.id) === String(srv.id)) ||
               localSaved.find((p) => String(p.id) === String(srv.id));
 
-            // Extract Russian banner metadata from description if server hasn't migrated image_ru yet
+            // Extract Russian banner metadata from description if present
             let descMeta: { image_ru?: string; title_ru?: string } = {};
             if (srv.description && srv.description.includes('__META_RU__:')) {
               try {
@@ -665,30 +665,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             };
           });
 
+          // Keep any local-only banners that don't exist on server yet
+          const localOnly = localSaved.filter(
+            (loc) => !serverBanners.some((srv) => String(srv.id) === String(loc.id))
+          );
+          const allBanners = [...merged, ...localOnly];
+
           try {
-            localStorage.setItem('snabtash_admin_banners', JSON.stringify(merged));
+            localStorage.setItem('snabtash_admin_banners', JSON.stringify(allBanners));
           } catch {}
 
-          // Automatically sync any local Russian banners to server if server description lacks __META_RU__
-          merged.forEach((item) => {
+          // Sync any local Russian banners to server if server hasn't saved image_ru yet
+          allBanners.forEach((item) => {
             const serverRaw = serverBanners.find((s) => String(s.id) === String(item.id));
             if (
               item.image_ru &&
               item.image_ru.trim() &&
               serverRaw &&
-              (!serverRaw.description || !serverRaw.description.includes('__META_RU__:'))
+              (!serverRaw.image_ru || !serverRaw.image_ru.trim())
             ) {
-              const cleanDesc = (serverRaw.description || '').trim();
-              const metaDesc = `${cleanDesc}${cleanDesc ? ' ' : ''}__META_RU__:${JSON.stringify({ image_ru: item.image_ru.trim(), title_ru: (item.title_ru || '').trim() })}`;
               api.updateBanner(item.id, {
-                description: metaDesc,
                 image_ru: item.image_ru.trim(),
                 title_ru: (item.title_ru || '').trim(),
               }).catch(() => {});
             }
           });
 
-          return merged;
+          return allBanners;
         });
       }
 
@@ -1050,18 +1053,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const addBanner = async (bannerData: Omit<BannerSlide, 'id'>) => {
     const finalImageRu = (bannerData.image_ru || '').trim();
     const finalTitleRu = (bannerData.title_ru || '').trim();
-
     let cleanDesc = (bannerData.description || '').trim();
     if (cleanDesc.includes('__META_RU__:')) {
       cleanDesc = cleanDesc.split('__META_RU__:')[0].trim();
     }
-    const descWithMeta = finalImageRu
-      ? `${cleanDesc}${cleanDesc ? ' ' : ''}__META_RU__:${JSON.stringify({ image_ru: finalImageRu, title_ru: finalTitleRu })}`
-      : cleanDesc;
 
     const serverPayload = {
       ...bannerData,
-      description: descWithMeta,
+      description: cleanDesc,
       image_ru: finalImageRu,
       title_ru: finalTitleRu,
     };
@@ -1080,7 +1079,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         ];
         try {
           localStorage.setItem('snabtash_admin_banners', JSON.stringify(next));
-        } catch {}
+        } catch (e) {
+          console.warn('localStorage save warning:', e);
+        }
         return next;
       });
       notifySync();
@@ -1098,7 +1099,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const next = [...prev, newBanner];
         try {
           localStorage.setItem('snabtash_admin_banners', JSON.stringify(next));
-        } catch {}
+        } catch (e) {
+          console.warn('localStorage save warning:', e);
+        }
         return next;
       });
       notifySync();
@@ -1115,25 +1118,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       nextBanners = prev.map((b) => (String(b.id) === idStr ? { ...b, ...updated } : b));
       try {
         localStorage.setItem('snabtash_admin_banners', JSON.stringify(nextBanners));
-      } catch {}
+      } catch (e) {
+        console.warn('localStorage save warning:', e);
+      }
       return nextBanners;
     });
 
     const target = nextBanners.find((b) => String(b.id) === idStr);
     const finalImageRu = ((updated.image_ru !== undefined ? updated.image_ru : target?.image_ru) || '').trim();
     const finalTitleRu = ((updated.title_ru !== undefined ? updated.title_ru : target?.title_ru) || '').trim();
-
     let cleanDesc = ((updated.description !== undefined ? updated.description : target?.description) || '').trim();
     if (cleanDesc.includes('__META_RU__:')) {
       cleanDesc = cleanDesc.split('__META_RU__:')[0].trim();
     }
-    const descWithMeta = finalImageRu
-      ? `${cleanDesc}${cleanDesc ? ' ' : ''}__META_RU__:${JSON.stringify({ image_ru: finalImageRu, title_ru: finalTitleRu })}`
-      : cleanDesc;
 
     const serverPayload = {
       ...updated,
-      description: descWithMeta,
+      description: cleanDesc,
       image_ru: finalImageRu,
       title_ru: finalTitleRu,
     };
@@ -1144,23 +1145,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const next = prev.map((b) => {
           if (String(b.id) !== idStr) return b;
 
-          let descMeta: { image_ru?: string; title_ru?: string } = {};
-          if (saved.description && saved.description.includes('__META_RU__:')) {
-            try {
-              descMeta = JSON.parse(saved.description.split('__META_RU__:')[1]);
-            } catch {}
-          }
-
           const savedImageRu =
             (saved.image_ru && saved.image_ru.trim()) ||
-            (descMeta.image_ru && descMeta.image_ru.trim()) ||
             finalImageRu ||
             b.image_ru ||
             '';
 
           const savedTitleRu =
             (saved.title_ru && saved.title_ru.trim()) ||
-            (descMeta.title_ru && descMeta.title_ru.trim()) ||
             finalTitleRu ||
             b.title_ru ||
             '';
@@ -1175,7 +1167,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
         try {
           localStorage.setItem('snabtash_admin_banners', JSON.stringify(next));
-        } catch {}
+        } catch (e) {
+          console.warn('localStorage save warning:', e);
+        }
         return next;
       });
       notifySync();
