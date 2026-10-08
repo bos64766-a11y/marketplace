@@ -33,9 +33,11 @@ export interface Product {
   inStock: boolean;
   stockCount?: number;
   images: string[];
+  image?: string;
+  features?: string[];
   description: string;
   description_ru?: string;
-  specifications: Record<string, string>;
+  specifications?: Record<string, string>;
   unit: string;
   minOrder: number;
 }
@@ -48,6 +50,7 @@ export interface CartItem {
 export interface RequestOrder {
   id: string;
   date: string;
+  created_at?: string;
   items: CartItem[];
   totalAmount: number;
   status: 'Ko‘rib chiqilmoqda' | 'Tasdiqlangan' | 'Yetkazilmoqda' | 'Bajarildi';

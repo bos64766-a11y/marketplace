@@ -106,7 +106,7 @@ interface AppContextType {
   getProductName: (product: Product) => string;
   getCategoryName: (categoryOrId?: Category | string | null) => string;
   getProductDesc: (product: Product) => string;
-  getProductTag: (product: Product) => string;
+  getProductTag: (product: Product) => string | undefined;
   formatUnit: (unit?: string | null, customLang?: Language) => string;
 
   // Backup & Permanent Recovery
@@ -399,6 +399,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCurrentPath(targetPath);
     setIsCatalogOpen(false);
   }, [language]);
+
+  // Toast state
+  const [toast, setToast] = useState<ToastNotification | null>(null);
+
+  const showToast = useCallback((message: string, type: 'success' | 'info' | 'error' = 'success') => {
+    const id = Math.random().toString(36).substring(2, 9);
+    setToast({ id, message, type });
+    setTimeout(() => {
+      setToast((current) => (current?.id === id ? null : current));
+    }, 3000);
+  }, []);
 
   // Change language and dynamically update browser URL without full reload
   const setLanguage = useCallback((lang: Language) => {

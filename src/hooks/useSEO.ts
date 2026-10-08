@@ -92,6 +92,7 @@ export function useSEO({
   schema,
 }: SEOProps) {
   useEffect(() => {
+    const prevTitle = typeof document !== 'undefined' ? document.title : '';
     const isRu = lang === 'ru';
     const fallbackTitle = isRu ? DEFAULT_TITLE_RU : DEFAULT_TITLE_UZ;
     const fallbackDesc = isRu ? DEFAULT_DESC_RU : DEFAULT_DESC_UZ;
