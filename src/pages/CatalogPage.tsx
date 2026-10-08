@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSEO } from '../hooks/useSEO';
-import { useApp } from '../context/AppContext';
+import { useApp, stripLangPrefix } from '../context/AppContext';
 import { ProductCard } from '../components/ProductCard';
 import { getMediaUrl } from '../services/api';
 import {
@@ -41,6 +41,7 @@ interface CatalogPageProps {
 export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => {
   const {
     currentPath,
+    cleanPath,
     navigate,
     searchQuery,
     setSearchQuery,
@@ -54,8 +55,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
   // Extract selected category from props or pathname
   const [selectedCategory, setSelectedCategory] = useState<string>(() => {
     if (initialCategory) return initialCategory;
-    const pathOnly = currentPath.split(/[?#]/)[0];
-    const match = pathOnly.match(/^\/catalog\/([^/]+)/);
+    const cleanRoute = (cleanPath || stripLangPrefix(currentPath)).split(/[?#]/)[0];
+    const match = cleanRoute.match(/^\/catalog\/([^/]+)/);
     return match ? match[1] : 'all';
   });
 
@@ -67,14 +68,15 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
         : selectedCategory);
 
   const catalogBreadcrumbs = useMemo(() => {
+    const isRu = language === 'ru';
     const list = [
-      { name: language === 'ru' ? 'Главная' : 'Bosh sahifa', item: '/' },
-      { name: language === 'ru' ? 'Каталог' : 'Katalog', item: '/catalog' },
+      { name: isRu ? 'Главная' : 'Bosh sahifa', item: isRu ? '/ru' : '/' },
+      { name: isRu ? 'Каталог' : 'Katalog', item: isRu ? '/ru/catalog' : '/catalog' },
     ];
     if (selectedCategory !== 'all' && activeCatObj) {
       list.push({
         name: activeCatName,
-        item: `/catalog/${activeCatObj.slug || activeCatObj.id}`,
+        item: `${isRu ? '/ru' : ''}/catalog/${activeCatObj.slug || activeCatObj.id}`,
       });
     }
     return list;
@@ -82,8 +84,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
 
   const catalogUrl =
     selectedCategory !== 'all' && activeCatObj
-      ? `/catalog/${activeCatObj.slug || activeCatObj.id}`
-      : '/catalog';
+      ? `${language === 'ru' ? '/ru' : ''}/catalog/${activeCatObj.slug || activeCatObj.id}`
+      : (language === 'ru' ? '/ru/catalog' : '/catalog');
 
   useSEO({
     title:
@@ -105,11 +107,11 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const pathOnly = currentPath.split(/[?#]/)[0];
-    const match = pathOnly.match(/^\/catalog\/([^/]+)/);
+    const cleanRoute = (cleanPath || stripLangPrefix(currentPath)).split(/[?#]/)[0];
+    const match = cleanRoute.match(/^\/catalog\/([^/]+)/);
     if (match) {
       setSelectedCategory(match[1]);
-    } else if (pathOnly === '/catalog') {
+    } else if (cleanRoute === '/catalog') {
       setSelectedCategory('all');
     }
 

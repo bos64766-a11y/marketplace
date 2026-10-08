@@ -22,6 +22,7 @@ import {
 export const Header: React.FC = () => {
   const {
     currentPath,
+    cleanPath,
     navigate,
     cartCount,
     favorites,
@@ -195,7 +196,7 @@ export const Header: React.FC = () => {
               <button
                 onClick={() => navigate('/')}
                 className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${
-                  currentPath === '/' ? 'text-[#FF5A00] font-bold' : ''
+                  cleanPath === '/' ? 'text-[#FF5A00] font-bold' : ''
                 }`}
               >
                 {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
@@ -204,7 +205,7 @@ export const Header: React.FC = () => {
               <button
                 onClick={() => navigate('/delivery-payment')}
                 className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${
-                  currentPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold' : ''
+                  cleanPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold' : ''
                 }`}
               >
                 {t.footer.deliveryPayment}
@@ -213,7 +214,7 @@ export const Header: React.FC = () => {
               <button
                 onClick={() => navigate('/about')}
                 className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${
-                  currentPath === '/about' ? 'text-[#FF5A00] font-bold' : ''
+                  cleanPath === '/about' ? 'text-[#FF5A00] font-bold' : ''
                 }`}
               >
                 {t.footer.aboutUs}
@@ -222,7 +223,7 @@ export const Header: React.FC = () => {
               <button
                 onClick={() => navigate('/contacts')}
                 className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${
-                  currentPath === '/contacts' ? 'text-[#FF5A00] font-bold' : ''
+                  cleanPath === '/contacts' ? 'text-[#FF5A00] font-bold' : ''
                 }`}
               >
                 {t.footer.contacts}
@@ -483,7 +484,7 @@ export const Header: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
                 className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${
-                  currentPath === '/' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
+                  cleanPath === '/' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
                 }`}
               >
                 {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
@@ -495,7 +496,7 @@ export const Header: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
                 className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${
-                  currentPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
+                  cleanPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
                 }`}
               >
                 {t.footer.deliveryPayment}
@@ -507,7 +508,7 @@ export const Header: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
                 className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${
-                  currentPath === '/about' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
+                  cleanPath === '/about' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
                 }`}
               >
                 {t.footer.aboutUs}
@@ -519,7 +520,7 @@ export const Header: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
                 className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${
-                  currentPath === '/contacts' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
+                  cleanPath === '/contacts' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
                 }`}
               >
                 {t.footer.contacts}

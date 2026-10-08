@@ -10,7 +10,9 @@ import { sendTelegramOrderNotification } from '../services/telegram';
 interface AppContextType {
   // Navigation
   currentPath: string;
+  cleanPath: string;
   navigate: (path: string) => void;
+  localizePath: (path: string, lang?: Language) => string;
 
   // Products (Dynamic Store & Admin)
   products: Product[];
@@ -102,6 +104,9 @@ interface AppContextType {
   setLanguage: (lang: Language) => void;
   t: Translations;
   getProductName: (product: Product) => string;
+  getCategoryName: (categoryOrId?: Category | string | null) => string;
+  getProductDesc: (product: Product) => string;
+  getProductTag: (product: Product) => string;
   formatUnit: (unit?: string | null, customLang?: Language) => string;
 
   // Backup & Permanent Recovery
@@ -276,18 +281,103 @@ export const enrichShowcaseSectionWithDefaults = (sec: HomeShowcaseSection): Hom
   };
 };
 
+// ── URL-Based Multi-Language Helpers (UZ / RU) ──────────────────────────
+export const isRussianPath = (path: string): boolean => {
+  const clean = (path || '').split(/[?#]/)[0] || '';
+  return clean === '/ru' || clean === '/ru/' || clean.startsWith('/ru/');
+};
+
+export const stripLangPrefix = (path: string): string => {
+  if (!path) return '/';
+  const [pathname, ...rest] = path.split(/([?#].*)/);
+  const searchOrHash = rest.join('');
+  let clean = pathname || '/';
+  if (clean === '/ru' || clean === '/ru/') {
+    clean = '/';
+  } else if (clean.startsWith('/ru/')) {
+    clean = clean.substring(3);
+  }
+  if (clean.length > 1 && clean.endsWith('/')) {
+    clean = clean.slice(0, -1);
+  }
+  return clean + searchOrHash;
+};
+
+export const localizePath = (path: string, lang: Language = 'uz'): string => {
+  if (!path) return lang === 'ru' ? '/ru' : '/';
+  // Do not localize admin routes or external URLs
+  if (
+    path.startsWith('/admin') ||
+    path.startsWith('http://') ||
+    path.startsWith('https://') ||
+    path.startsWith('//') ||
+    path.startsWith('mailto:') ||
+    path.startsWith('tel:')
+  ) {
+    return path;
+  }
+
+  const [pathname, ...rest] = path.split(/([?#].*)/);
+  const searchOrHash = rest.join('');
+  let clean = pathname || '/';
+  if (clean === '/ru' || clean === '/ru/') {
+    clean = '/';
+  } else if (clean.startsWith('/ru/')) {
+    clean = clean.substring(3);
+  }
+  if (clean.length > 1 && clean.endsWith('/')) {
+    clean = clean.slice(0, -1);
+  }
+
+  if (lang === 'ru') {
+    return (clean === '/' ? '/ru' : `/ru${clean}`) + searchOrHash;
+  }
+  return clean + searchOrHash;
+};
+
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Navigation state (SPA with browser history sync)
   const [currentPath, setCurrentPath] = useState<string>(() => {
-    return (window.location.pathname + window.location.search) || '/';
+    return (typeof window !== 'undefined' ? (window.location.pathname + window.location.search) : '/') || '/';
   });
+
+  // Language & i18n state: URL is the primary source of truth for SEO & Google Ads!
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname || '';
+      if (pathname === '/ru' || pathname === '/ru/' || pathname.startsWith('/ru/')) {
+        return 'ru';
+      }
+    }
+    try {
+      const saved = localStorage.getItem('snabtash_lang');
+      if (saved === 'ru' || saved === 'uz') return saved;
+    } catch {}
+    return 'uz';
+  });
+
+  // Clean path without /ru prefix for simple internal route matching
+  const cleanPath = useMemo(() => stripLangPrefix(currentPath), [currentPath]);
+
+  // Synchronize document <html lang="..."> attribute on mount and language change
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = language;
+    }
+  }, [language]);
 
   useEffect(() => {
     const handlePopState = () => {
       const full = (window.location.pathname + window.location.search) || '/';
       setCurrentPath(full);
+      const isRu = isRussianPath(full);
+      const nextLang: Language = isRu ? 'ru' : 'uz';
+      setLanguageState(nextLang);
+      if (typeof document !== 'undefined') {
+        document.documentElement.lang = nextLang;
+      }
       try {
         const params = new URLSearchParams(window.location.search);
         setSearchQuery(params.get('q') || '');
@@ -299,42 +389,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigate = (path: string) => {
+  const navigate = useCallback((path: string) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    const currentFull = window.location.pathname + window.location.search;
-    if (currentFull !== path) {
-      window.history.pushState({}, '', path);
+    const targetPath = language === 'ru' ? localizePath(path, 'ru') : localizePath(path, 'uz');
+    const currentFull = (window.location.pathname + window.location.search) || '/';
+    if (currentFull !== targetPath) {
+      window.history.pushState({}, '', targetPath);
     }
-    setCurrentPath(path);
+    setCurrentPath(targetPath);
     setIsCatalogOpen(false);
-  };
+  }, [language]);
 
-  // Toast state
-  const [toast, setToast] = useState<ToastNotification | null>(null);
-
-  const showToast = (message: string, type: 'success' | 'info' | 'error' = 'success') => {
-    const id = Math.random().toString(36).substring(2, 9);
-    setToast({ id, message, type });
-    setTimeout(() => {
-      setToast((current) => (current?.id === id ? null : current));
-    }, 3000);
-  };
-
-  // Language & i18n state
-  const [language, setLanguageState] = useState<Language>(() => {
-    try {
-      const saved = localStorage.getItem('snabtash_lang');
-      if (saved === 'ru' || saved === 'uz') return saved;
-    } catch {}
-    return 'uz';
-  });
-
-  const setLanguage = (lang: Language) => {
+  // Change language and dynamically update browser URL without full reload
+  const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
     try {
       localStorage.setItem('snabtash_lang', lang);
     } catch {}
-  };
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+    }
+    // Update browser URL to localized version (e.g. /catalog/himoya -> /ru/catalog/himoya)
+    const currentFull = (window.location.pathname + window.location.search) || '/';
+    const newPath = localizePath(currentFull, lang);
+    if (newPath !== currentFull) {
+      window.history.pushState({}, '', newPath);
+      setCurrentPath(newPath);
+    }
+  }, []);
 
   const t = useMemo(() => translations[language], [language]);
 
@@ -1983,7 +2065,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     <AppContext.Provider
       value={{
         currentPath,
+        cleanPath,
         navigate,
+        localizePath,
         products,
         addProduct,
         updateProduct,

@@ -82,29 +82,30 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   const productDesc = getProductDesc(product);
   const productTag = getProductTag(product);
 
+  const isRu = language === 'ru';
   const productBreadcrumbs = [
-    { name: language === 'ru' ? 'Главная' : 'Bosh sahifa', item: '/' },
-    { name: language === 'ru' ? 'Каталог' : 'Katalog', item: '/catalog' },
+    { name: isRu ? 'Главная' : 'Bosh sahifa', item: isRu ? '/ru' : '/' },
+    { name: isRu ? 'Каталог' : 'Katalog', item: isRu ? '/ru/catalog' : '/catalog' },
     {
       name: categoryDisplayName,
-      item: `/catalog/${currentCategory?.slug || product.categoryId || 'all'}`,
+      item: `${isRu ? '/ru' : ''}/catalog/${currentCategory?.slug || product.categoryId || 'all'}`,
     },
     {
       name: productName,
-      item: `/product/${product.slug || product.id}`,
+      item: `${isRu ? '/ru' : ''}/product/${product.slug || product.id}`,
     },
   ];
 
   useSEO({
-    title: `${productName} — ${language === 'ru' ? 'Купить оптом в Ташкенте' : 'Ulgurji Narxda Xarid Qilish'}`,
+    title: `${productName} — ${isRu ? 'Купить оптом в Ташкенте' : 'Ulgurji Narxda Xarid Qilish'}`,
     description: `${productName}. ${productDesc ? productDesc.slice(0, 160) + '... ' : ''}${
-      language === 'ru'
+      isRu
         ? 'Оптовые поставки организациям в Ташкенте с НДС через Didox. Доставка со склада SNABTASH.'
         : 'Toshkent bo\'ylab korxona va ofislarga QQS bilan rasmiy shartnoma asosida ulgurji yetkazib berish.'
     }`,
     keywords: `${productName}, ulgurji ${productName}, optom ${productName}, ${productName} narxi toshkent, b2b ta'minot, ${categoryDisplayName}, ${product.brand || 'SNABTASH'}`,
     image: product.image ? getMediaUrl(product.image) : undefined,
-    url: `/product/${product.slug || product.id}`,
+    url: `${isRu ? '/ru' : ''}/product/${product.slug || product.id}`,
     type: 'product',
     lang: language,
     product: {

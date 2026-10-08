@@ -3,812 +3,1622 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://snabtash.uz/</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/" />
   </url>
   <url>
     <loc>https://snabtash.uz/catalog</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/catalog?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/catalog</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog" />
   </url>
   <url>
     <loc>https://snabtash.uz/delivery-payment</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/delivery-payment" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/delivery-payment?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/delivery-payment" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/delivery-payment" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/delivery-payment</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/delivery-payment" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/delivery-payment" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/delivery-payment" />
   </url>
   <url>
     <loc>https://snabtash.uz/about</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/about" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/about?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/about" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/about</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/about" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/about" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/about" />
   </url>
   <url>
     <loc>https://snabtash.uz/contacts</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/contacts" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/contacts?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/contacts" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/contacts" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/contacts</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/contacts" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/contacts" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/contacts" />
   </url>
   <url>
     <loc>https://snabtash.uz/request</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/request" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/request?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/request" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/request" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/request</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/request" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/request" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/request" />
   </url>
   <url>
     <loc>https://snabtash.uz/catalog/maishiy-kimyo</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/maishiy-kimyo" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/catalog/maishiy-kimyo?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/maishiy-kimyo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/maishiy-kimyo" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/catalog/maishiy-kimyo</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/maishiy-kimyo" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/maishiy-kimyo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/maishiy-kimyo" />
   </url>
   <url>
     <loc>https://snabtash.uz/catalog/xojalikmollari</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/xojalikmollari" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/catalog/xojalikmollari?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/xojalikmollari" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/xojalikmollari" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/catalog/xojalikmollari</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/xojalikmollari" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/xojalikmollari" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/xojalikmollari" />
   </url>
   <url>
     <loc>https://snabtash.uz/catalog/kanselyariya</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/kanselyariya" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/catalog/kanselyariya?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/kanselyariya" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/kanselyariya" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/catalog/kanselyariya</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/kanselyariya" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/kanselyariya" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/kanselyariya" />
   </url>
   <url>
     <loc>https://snabtash.uz/catalog/gigiyena</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/gigiyena" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/catalog/gigiyena?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/gigiyena" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/gigiyena" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/catalog/gigiyena</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/gigiyena" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/gigiyena" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/gigiyena" />
   </url>
   <url>
     <loc>https://snabtash.uz/catalog/himoya-vositalari</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/himoya-vositalari" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/catalog/himoya-vositalari?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/himoya-vositalari" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/himoya-vositalari" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/catalog/himoya-vositalari</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/himoya-vositalari" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/himoya-vositalari" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/himoya-vositalari" />
   </url>
   <url>
     <loc>https://snabtash.uz/catalog/avtokimyo</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/avtokimyo" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/catalog/avtokimyo?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/avtokimyo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/avtokimyo" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/catalog/avtokimyo</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/catalog/avtokimyo" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/catalog/avtokimyo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/catalog/avtokimyo" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/motor-clean-dvigatel-tozalagichi-750-ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/motor-clean-dvigatel-tozalagichi-750-ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/motor-clean-dvigatel-tozalagichi-750-ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/motor-clean-dvigatel-tozalagichi-750-ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/motor-clean-dvigatel-tozalagichi-750-ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/motor-clean-dvigatel-tozalagichi-750-ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/motor-clean-dvigatel-tozalagichi-750-ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/motor-clean-dvigatel-tozalagichi-750-ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/motor-clean-dvigatel-tozalagichi-750-ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/ironoff-disk-tozalagichi-750-ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/ironoff-disk-tozalagichi-750-ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/ironoff-disk-tozalagichi-750-ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/ironoff-disk-tozalagichi-750-ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/ironoff-disk-tozalagichi-750-ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/ironoff-disk-tozalagichi-750-ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/ironoff-disk-tozalagichi-750-ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/ironoff-disk-tozalagichi-750-ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/ironoff-disk-tozalagichi-750-ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/cy-2002-ikki-tomonlama-marker</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/cy-2002-ikki-tomonlama-marker" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/cy-2002-ikki-tomonlama-marker?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/cy-2002-ikki-tomonlama-marker" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/cy-2002-ikki-tomonlama-marker" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/cy-2002-ikki-tomonlama-marker</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/cy-2002-ikki-tomonlama-marker" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/cy-2002-ikki-tomonlama-marker" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/cy-2002-ikki-tomonlama-marker" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/deli-h213-shtix-lentasi-30-m</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/deli-h213-shtix-lentasi-30-m" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/deli-h213-shtix-lentasi-30-m?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/deli-h213-shtix-lentasi-30-m" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/deli-h213-shtix-lentasi-30-m" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/deli-h213-shtix-lentasi-30-m</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/deli-h213-shtix-lentasi-30-m" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/deli-h213-shtix-lentasi-30-m" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/deli-h213-shtix-lentasi-30-m" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/9-mm-kanselyariya-pichogi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/9-mm-kanselyariya-pichogi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/9-mm-kanselyariya-pichogi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/9-mm-kanselyariya-pichogi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/9-mm-kanselyariya-pichogi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/9-mm-kanselyariya-pichogi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/9-mm-kanselyariya-pichogi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/9-mm-kanselyariya-pichogi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/9-mm-kanselyariya-pichogi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/qattiq-muqovali-plastik-skorosshivatel-papka</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qattiq-muqovali-plastik-skorosshivatel-papka" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/qattiq-muqovali-plastik-skorosshivatel-papka?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qattiq-muqovali-plastik-skorosshivatel-papka" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qattiq-muqovali-plastik-skorosshivatel-papka" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/qattiq-muqovali-plastik-skorosshivatel-papka</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qattiq-muqovali-plastik-skorosshivatel-papka" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qattiq-muqovali-plastik-skorosshivatel-papka" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qattiq-muqovali-plastik-skorosshivatel-papka" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/deli-0051-qogoz-qisqichlari-29-mm</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/deli-0051-qogoz-qisqichlari-29-mm" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/deli-0051-qogoz-qisqichlari-29-mm?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/deli-0051-qogoz-qisqichlari-29-mm" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/deli-0051-qogoz-qisqichlari-29-mm" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/deli-0051-qogoz-qisqichlari-29-mm</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/deli-0051-qogoz-qisqichlari-29-mm" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/deli-0051-qogoz-qisqichlari-29-mm" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/deli-0051-qogoz-qisqichlari-29-mm" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/qora-korpusli-ochirgichli-qalam</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qora-korpusli-ochirgichli-qalam" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/qora-korpusli-ochirgichli-qalam?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qora-korpusli-ochirgichli-qalam" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qora-korpusli-ochirgichli-qalam" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/qora-korpusli-ochirgichli-qalam</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qora-korpusli-ochirgichli-qalam" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qora-korpusli-ochirgichli-qalam" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qora-korpusli-ochirgichli-qalam" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/pva-yelimi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/pva-yelimi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/pva-yelimi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/pva-yelimi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/pva-yelimi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/pva-yelimi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/pva-yelimi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/pva-yelimi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/pva-yelimi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/katta-qaychi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/katta-qaychi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/katta-qaychi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/katta-qaychi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/katta-qaychi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/katta-qaychi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/katta-qaychi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/katta-qaychi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/katta-qaychi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/matnni-belgilash-uchun-marker-4-dona-deli</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/matnni-belgilash-uchun-marker-4-dona-deli" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/matnni-belgilash-uchun-marker-4-dona-deli?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/matnni-belgilash-uchun-marker-4-dona-deli" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/matnni-belgilash-uchun-marker-4-dona-deli" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/matnni-belgilash-uchun-marker-4-dona-deli</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/matnni-belgilash-uchun-marker-4-dona-deli" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/matnni-belgilash-uchun-marker-4-dona-deli" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/matnni-belgilash-uchun-marker-4-dona-deli" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/oz-ozidan-yopishadigan-qogoz-7676-mm</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/oz-ozidan-yopishadigan-qogoz-7676-mm" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/oz-ozidan-yopishadigan-qogoz-7676-mm?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/oz-ozidan-yopishadigan-qogoz-7676-mm" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/oz-ozidan-yopishadigan-qogoz-7676-mm" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/oz-ozidan-yopishadigan-qogoz-7676-mm</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/oz-ozidan-yopishadigan-qogoz-7676-mm" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/oz-ozidan-yopishadigan-qogoz-7676-mm" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/oz-ozidan-yopishadigan-qogoz-7676-mm" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/deli-0231-stepler-yechgich</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/deli-0231-stepler-yechgich" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/deli-0231-stepler-yechgich?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/deli-0231-stepler-yechgich" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/deli-0231-stepler-yechgich" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/deli-0231-stepler-yechgich</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/deli-0231-stepler-yechgich" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/deli-0231-stepler-yechgich" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/deli-0231-stepler-yechgich" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/ortacha-olchamdagi-teshgich</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/ortacha-olchamdagi-teshgich" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/ortacha-olchamdagi-teshgich?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/ortacha-olchamdagi-teshgich" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/ortacha-olchamdagi-teshgich" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/ortacha-olchamdagi-teshgich</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/ortacha-olchamdagi-teshgich" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/ortacha-olchamdagi-teshgich" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/ortacha-olchamdagi-teshgich" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/organayzer-17-ta-buyum</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/organayzer-17-ta-buyum" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/organayzer-17-ta-buyum?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/organayzer-17-ta-buyum" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/organayzer-17-ta-buyum" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/organayzer-17-ta-buyum</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/organayzer-17-ta-buyum" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/organayzer-17-ta-buyum" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/organayzer-17-ta-buyum" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/qora-gel-ruchka-05-mm</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qora-gel-ruchka-05-mm" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/qora-gel-ruchka-05-mm?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qora-gel-ruchka-05-mm" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qora-gel-ruchka-05-mm" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/qora-gel-ruchka-05-mm</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qora-gel-ruchka-05-mm" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qora-gel-ruchka-05-mm" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qora-gel-ruchka-05-mm" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/registr-papka-kok-rangli</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/registr-papka-kok-rangli" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/registr-papka-kok-rangli?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/registr-papka-kok-rangli" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/registr-papka-kok-rangli" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/registr-papka-kok-rangli</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/registr-papka-kok-rangli" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/registr-papka-kok-rangli" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/registr-papka-kok-rangli" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/luxor-focus-icy-kok-sharikli-ruchka</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/luxor-focus-icy-kok-sharikli-ruchka" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/luxor-focus-icy-kok-sharikli-ruchka?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/luxor-focus-icy-kok-sharikli-ruchka" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/luxor-focus-icy-kok-sharikli-ruchka" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/luxor-focus-icy-kok-sharikli-ruchka</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/luxor-focus-icy-kok-sharikli-ruchka" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/luxor-focus-icy-kok-sharikli-ruchka" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/luxor-focus-icy-kok-sharikli-ruchka" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/shtix-zamaska-20-ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/shtix-zamaska-20-ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/shtix-zamaska-20-ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/shtix-zamaska-20-ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/shtix-zamaska-20-ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/shtix-zamaska-20-ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/shtix-zamaska-20-ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/shtix-zamaska-20-ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/shtix-zamaska-20-ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/perfofayllar-100-dona</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/perfofayllar-100-dona" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/perfofayllar-100-dona?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/perfofayllar-100-dona" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/perfofayllar-100-dona" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/perfofayllar-100-dona</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/perfofayllar-100-dona" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/perfofayllar-100-dona" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/perfofayllar-100-dona" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/qogozlar-uchun-qisqich-41-mm</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qogozlar-uchun-qisqich-41-mm" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/qogozlar-uchun-qisqich-41-mm?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qogozlar-uchun-qisqich-41-mm" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qogozlar-uchun-qisqich-41-mm" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/qogozlar-uchun-qisqich-41-mm</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qogozlar-uchun-qisqich-41-mm" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qogozlar-uchun-qisqich-41-mm" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qogozlar-uchun-qisqich-41-mm" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/---246</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/---246" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/---246?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/---246" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/---246" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/---246</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/---246" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/---246" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/---246" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/a4-qogozlar-uchun-qisqichli-planshet</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/a4-qogozlar-uchun-qisqichli-planshet" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/a4-qogozlar-uchun-qisqichli-planshet?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/a4-qogozlar-uchun-qisqichli-planshet" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/a4-qogozlar-uchun-qisqichli-planshet" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/a4-qogozlar-uchun-qisqichli-planshet</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/a4-qogozlar-uchun-qisqichli-planshet" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/a4-qogozlar-uchun-qisqichli-planshet" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/a4-qogozlar-uchun-qisqichli-planshet" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/vertikal-hujjat-lotogi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/vertikal-hujjat-lotogi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/vertikal-hujjat-lotogi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/vertikal-hujjat-lotogi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/vertikal-hujjat-lotogi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/vertikal-hujjat-lotogi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/vertikal-hujjat-lotogi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/vertikal-hujjat-lotogi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/vertikal-hujjat-lotogi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/katta-olchamdagi-stepler</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/katta-olchamdagi-stepler" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/katta-olchamdagi-stepler?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/katta-olchamdagi-stepler" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/katta-olchamdagi-stepler" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/katta-olchamdagi-stepler</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/katta-olchamdagi-stepler" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/katta-olchamdagi-stepler" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/katta-olchamdagi-stepler" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/a4-ofis-qogozi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/a4-ofis-qogozi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/a4-ofis-qogozi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/a4-ofis-qogozi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/a4-ofis-qogozi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/a4-ofis-qogozi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/a4-ofis-qogozi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/a4-ofis-qogozi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/a4-ofis-qogozi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/ortacha-olchamdagi-stepler</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/ortacha-olchamdagi-stepler" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/ortacha-olchamdagi-stepler?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/ortacha-olchamdagi-stepler" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/ortacha-olchamdagi-stepler" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/ortacha-olchamdagi-stepler</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/ortacha-olchamdagi-stepler" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/ortacha-olchamdagi-stepler" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/ortacha-olchamdagi-stepler" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/delfin-latta</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/delfin-latta" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/delfin-latta?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/delfin-latta" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/delfin-latta" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/delfin-latta</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/delfin-latta" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/delfin-latta" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/delfin-latta" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/magnus-qolqoplari</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/magnus-qolqoplari" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/magnus-qolqoplari?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/magnus-qolqoplari" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/magnus-qolqoplari" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/magnus-qolqoplari</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/magnus-qolqoplari" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/magnus-qolqoplari" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/magnus-qolqoplari" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/vafelli-sochiq</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/vafelli-sochiq" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/vafelli-sochiq?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/vafelli-sochiq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/vafelli-sochiq" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/vafelli-sochiq</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/vafelli-sochiq" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/vafelli-sochiq" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/vafelli-sochiq" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/glade-osvejitel-300-ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/glade-osvejitel-300-ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/glade-osvejitel-300-ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/glade-osvejitel-300-ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/glade-osvejitel-300-ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/glade-osvejitel-300-ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/glade-osvejitel-300-ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/glade-osvejitel-300-ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/glade-osvejitel-300-ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/airwick-osvejitel-250-ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/airwick-osvejitel-250-ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/airwick-osvejitel-250-ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/airwick-osvejitel-250-ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/airwick-osvejitel-250-ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/airwick-osvejitel-250-ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/airwick-osvejitel-250-ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/airwick-osvejitel-250-ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/airwick-osvejitel-250-ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/pvx-ishchi-rezina-etiklar</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/pvx-ishchi-rezina-etiklar" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/pvx-ishchi-rezina-etiklar?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/pvx-ishchi-rezina-etiklar" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/pvx-ishchi-rezina-etiklar" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/pvx-ishchi-rezina-etiklar</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/pvx-ishchi-rezina-etiklar" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/pvx-ishchi-rezina-etiklar" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/pvx-ishchi-rezina-etiklar" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/erkaklar-eriklari-eva</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/erkaklar-eriklari-eva" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/erkaklar-eriklari-eva?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/erkaklar-eriklari-eva" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/erkaklar-eriklari-eva" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/erkaklar-eriklari-eva</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/erkaklar-eriklari-eva" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/erkaklar-eriklari-eva" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/erkaklar-eriklari-eva" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/marlya-doka</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/marlya-doka" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/marlya-doka?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/marlya-doka" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/marlya-doka" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/marlya-doka</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/marlya-doka" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/marlya-doka" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/marlya-doka" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/rulon-pollatta</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/rulon-pollatta" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/rulon-pollatta?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/rulon-pollatta" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/rulon-pollatta" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/rulon-pollatta</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/rulon-pollatta" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/rulon-pollatta" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/rulon-pollatta" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/brezent-ishchi-qolqoplari</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/brezent-ishchi-qolqoplari" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/brezent-ishchi-qolqoplari?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/brezent-ishchi-qolqoplari" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/brezent-ishchi-qolqoplari" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/brezent-ishchi-qolqoplari</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/brezent-ishchi-qolqoplari" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/brezent-ishchi-qolqoplari" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/brezent-ishchi-qolqoplari" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/-ishchi-qolqoplari</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/-ishchi-qolqoplari" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/-ishchi-qolqoplari?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/-ishchi-qolqoplari" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/-ishchi-qolqoplari" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/-ishchi-qolqoplari</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/-ishchi-qolqoplari" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/-ishchi-qolqoplari" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/-ishchi-qolqoplari" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/qizil-ishchi-qolqoplar-rezinali</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qizil-ishchi-qolqoplar-rezinali" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/qizil-ishchi-qolqoplar-rezinali?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qizil-ishchi-qolqoplar-rezinali" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qizil-ishchi-qolqoplar-rezinali" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/qizil-ishchi-qolqoplar-rezinali</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qizil-ishchi-qolqoplar-rezinali" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qizil-ishchi-qolqoplar-rezinali" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qizil-ishchi-qolqoplar-rezinali" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/qurilish-perchatkalari</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qurilish-perchatkalari" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/qurilish-perchatkalari?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qurilish-perchatkalari" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qurilish-perchatkalari" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/qurilish-perchatkalari</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qurilish-perchatkalari" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qurilish-perchatkalari" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qurilish-perchatkalari" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/salatoviy-ishchi-perchatkalar</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/salatoviy-ishchi-perchatkalar" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/salatoviy-ishchi-perchatkalar?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/salatoviy-ishchi-perchatkalar" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/salatoviy-ishchi-perchatkalar" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/salatoviy-ishchi-perchatkalar</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/salatoviy-ishchi-perchatkalar" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/salatoviy-ishchi-perchatkalar" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/salatoviy-ishchi-perchatkalar" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/----</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/----" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/----?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/----" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/----" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/----</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/----" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/----" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/----" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/qaychi-ortacha</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qaychi-ortacha" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/qaychi-ortacha?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qaychi-ortacha" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qaychi-ortacha" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/qaychi-ortacha</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qaychi-ortacha" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qaychi-ortacha" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qaychi-ortacha" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/chelak-5l-qopqogi-bilan</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/chelak-5l-qopqogi-bilan" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/chelak-5l-qopqogi-bilan?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/chelak-5l-qopqogi-bilan" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/chelak-5l-qopqogi-bilan" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/chelak-5l-qopqogi-bilan</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/chelak-5l-qopqogi-bilan" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/chelak-5l-qopqogi-bilan" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/chelak-5l-qopqogi-bilan" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/qora-rangli-z-salfetkalar-uchun-dispenser</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qora-rangli-z-salfetkalar-uchun-dispenser" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/qora-rangli-z-salfetkalar-uchun-dispenser?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qora-rangli-z-salfetkalar-uchun-dispenser" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qora-rangli-z-salfetkalar-uchun-dispenser" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/qora-rangli-z-salfetkalar-uchun-dispenser</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/qora-rangli-z-salfetkalar-uchun-dispenser" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/qora-rangli-z-salfetkalar-uchun-dispenser" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/qora-rangli-z-salfetkalar-uchun-dispenser" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/xojatxona-qogozi-uchun-dospanser</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/xojatxona-qogozi-uchun-dospanser" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/xojatxona-qogozi-uchun-dospanser?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/xojatxona-qogozi-uchun-dospanser" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/xojatxona-qogozi-uchun-dospanser" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/xojatxona-qogozi-uchun-dospanser</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/xojatxona-qogozi-uchun-dospanser" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/xojatxona-qogozi-uchun-dospanser" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/xojatxona-qogozi-uchun-dospanser" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/chiqindi-paketlari-4550-sm-20-dona</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/chiqindi-paketlari-4550-sm-20-dona" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/chiqindi-paketlari-4550-sm-20-dona?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/chiqindi-paketlari-4550-sm-20-dona" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/chiqindi-paketlari-4550-sm-20-dona" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/chiqindi-paketlari-4550-sm-20-dona</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/chiqindi-paketlari-4550-sm-20-dona" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/chiqindi-paketlari-4550-sm-20-dona" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/chiqindi-paketlari-4550-sm-20-dona" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/metall-kurakcha-hokandoz</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/metall-kurakcha-hokandoz" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/metall-kurakcha-hokandoz?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/metall-kurakcha-hokandoz" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/metall-kurakcha-hokandoz" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/metall-kurakcha-hokandoz</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/metall-kurakcha-hokandoz" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/metall-kurakcha-hokandoz" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/metall-kurakcha-hokandoz" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/chelak-12l-temir</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/chelak-12l-temir" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/chelak-12l-temir?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/chelak-12l-temir" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/chelak-12l-temir" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/chelak-12l-temir</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/chelak-12l-temir" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/chelak-12l-temir" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/chelak-12l-temir" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/shvabra</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/shvabra" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/shvabra?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/shvabra" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/shvabra" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/shvabra</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/shvabra" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/shvabra" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/shvabra" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/pol-shvabrasi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/pol-shvabrasi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/pol-shvabrasi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/pol-shvabrasi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/pol-shvabrasi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/pol-shvabrasi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/pol-shvabrasi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/pol-shvabrasi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/pol-shvabrasi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/kocha-supurgisi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/kocha-supurgisi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/kocha-supurgisi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/kocha-supurgisi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/kocha-supurgisi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/kocha-supurgisi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/kocha-supurgisi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/kocha-supurgisi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/kocha-supurgisi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/supurgi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/supurgi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/supurgi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/supurgi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/supurgi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/supurgi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/supurgi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/supurgi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/supurgi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/osvejitel-melodiya-aromatov</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/osvejitel-melodiya-aromatov" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/osvejitel-melodiya-aromatov?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/osvejitel-melodiya-aromatov" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/osvejitel-melodiya-aromatov" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/osvejitel-melodiya-aromatov</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/osvejitel-melodiya-aromatov" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/osvejitel-melodiya-aromatov" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/osvejitel-melodiya-aromatov" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/azelit-anti--tozalash-vositasi-600-m</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/azelit-anti--tozalash-vositasi-600-m" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/azelit-anti--tozalash-vositasi-600-m?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/azelit-anti--tozalash-vositasi-600-m" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/azelit-anti--tozalash-vositasi-600-m" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/azelit-anti--tozalash-vositasi-600-m</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/azelit-anti--tozalash-vositasi-600-m" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/azelit-anti--tozalash-vositasi-600-m" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/azelit-anti--tozalash-vositasi-600-m" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/cif-cream-tozalash-vositasi-500-ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/cif-cream-tozalash-vositasi-500-ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/cif-cream-tozalash-vositasi-500-ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/cif-cream-tozalash-vositasi-500-ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/cif-cream-tozalash-vositasi-500-ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/cif-cream-tozalash-vositasi-500-ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/cif-cream-tozalash-vositasi-500-ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/cif-cream-tozalash-vositasi-500-ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/cif-cream-tozalash-vositasi-500-ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/domestos-1250ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/domestos-1250ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/domestos-1250ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/domestos-1250ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/domestos-1250ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/domestos-1250ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/domestos-1250ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/domestos-1250ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/domestos-1250ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/xojalik-sovuni</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/xojalik-sovuni" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/xojalik-sovuni?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/xojalik-sovuni" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/xojalik-sovuni" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/xojalik-sovuni</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/xojalik-sovuni" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/xojalik-sovuni" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/xojalik-sovuni" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/rusalochka-suyuq-sovuni-5-l</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/rusalochka-suyuq-sovuni-5-l" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/rusalochka-suyuq-sovuni-5-l?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/rusalochka-suyuq-sovuni-5-l" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/rusalochka-suyuq-sovuni-5-l" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/rusalochka-suyuq-sovuni-5-l</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/rusalochka-suyuq-sovuni-5-l" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/rusalochka-suyuq-sovuni-5-l" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/rusalochka-suyuq-sovuni-5-l" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/rusalochka-idish-yuvish-vositasi-5-l</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/rusalochka-idish-yuvish-vositasi-5-l" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/rusalochka-idish-yuvish-vositasi-5-l?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/rusalochka-idish-yuvish-vositasi-5-l" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/rusalochka-idish-yuvish-vositasi-5-l" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/rusalochka-idish-yuvish-vositasi-5-l</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/rusalochka-idish-yuvish-vositasi-5-l" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/rusalochka-idish-yuvish-vositasi-5-l" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/rusalochka-idish-yuvish-vositasi-5-l" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/crystal-pol-yuvish-vositasi-1-l</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-pol-yuvish-vositasi-1-l" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/crystal-pol-yuvish-vositasi-1-l?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-pol-yuvish-vositasi-1-l" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-pol-yuvish-vositasi-1-l" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/crystal-pol-yuvish-vositasi-1-l</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-pol-yuvish-vositasi-1-l" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-pol-yuvish-vositasi-1-l" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-pol-yuvish-vositasi-1-l" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/fiona-idish-yuvish-geli-400-g</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/fiona-idish-yuvish-geli-400-g" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/fiona-idish-yuvish-geli-400-g?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/fiona-idish-yuvish-geli-400-g" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/fiona-idish-yuvish-geli-400-g" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/fiona-idish-yuvish-geli-400-g</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/fiona-idish-yuvish-geli-400-g" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/fiona-idish-yuvish-geli-400-g" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/fiona-idish-yuvish-geli-400-g" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/crystal-tozalash-vositasi-400-g</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-tozalash-vositasi-400-g" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/crystal-tozalash-vositasi-400-g?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-tozalash-vositasi-400-g" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-tozalash-vositasi-400-g" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/crystal-tozalash-vositasi-400-g</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-tozalash-vositasi-400-g" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-tozalash-vositasi-400-g" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-tozalash-vositasi-400-g" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/crystal-oyna-tozalash-vositasi-500-ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-oyna-tozalash-vositasi-500-ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/crystal-oyna-tozalash-vositasi-500-ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-oyna-tozalash-vositasi-500-ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-oyna-tozalash-vositasi-500-ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/crystal-oyna-tozalash-vositasi-500-ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/crystal-oyna-tozalash-vositasi-500-ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/crystal-oyna-tozalash-vositasi-500-ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/crystal-oyna-tozalash-vositasi-500-ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/pemolux-tozalash-vositasi</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/pemolux-tozalash-vositasi" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/pemolux-tozalash-vositasi?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/pemolux-tozalash-vositasi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/pemolux-tozalash-vositasi" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/pemolux-tozalash-vositasi</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/pemolux-tozalash-vositasi" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/pemolux-tozalash-vositasi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/pemolux-tozalash-vositasi" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/fiona-idish-yuvish-vositasi-500-ml</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/fiona-idish-yuvish-vositasi-500-ml" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/fiona-idish-yuvish-vositasi-500-ml?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/fiona-idish-yuvish-vositasi-500-ml" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/fiona-idish-yuvish-vositasi-500-ml" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/fiona-idish-yuvish-vositasi-500-ml</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/fiona-idish-yuvish-vositasi-500-ml" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/fiona-idish-yuvish-vositasi-500-ml" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/fiona-idish-yuvish-vositasi-500-ml" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-panda-asian-pack-economy-tualet-qogozi-6-dona" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/elma-big-size-mikrofiberi-60100-sm</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-big-size-mikrofiberi-60100-sm" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/elma-big-size-mikrofiberi-60100-sm?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-big-size-mikrofiberi-60100-sm" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-big-size-mikrofiberi-60100-sm" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/elma-big-size-mikrofiberi-60100-sm</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-big-size-mikrofiberi-60100-sm" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-big-size-mikrofiberi-60100-sm" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-big-size-mikrofiberi-60100-sm" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/delfin-elma-lux-universal-salfetkalari</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/delfin-elma-lux-universal-salfetkalari" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/delfin-elma-lux-universal-salfetkalari?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/delfin-elma-lux-universal-salfetkalari" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/delfin-elma-lux-universal-salfetkalari" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/delfin-elma-lux-universal-salfetkalari</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/delfin-elma-lux-universal-salfetkalari" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/delfin-elma-lux-universal-salfetkalari" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/delfin-elma-lux-universal-salfetkalari" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/elma-pol-yuvish-uchun-latta</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-pol-yuvish-uchun-latta" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/elma-pol-yuvish-uchun-latta?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-pol-yuvish-uchun-latta" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-pol-yuvish-uchun-latta" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/elma-pol-yuvish-uchun-latta</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-pol-yuvish-uchun-latta" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-pol-yuvish-uchun-latta" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-pol-yuvish-uchun-latta" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/elma-antibacterial-effect-nam-salfetkalari-100-dona</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-antibacterial-effect-nam-salfetkalari-100-dona" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/elma-antibacterial-effect-nam-salfetkalari-100-dona?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-antibacterial-effect-nam-salfetkalari-100-dona" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-antibacterial-effect-nam-salfetkalari-100-dona" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/elma-antibacterial-effect-nam-salfetkalari-100-dona</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-antibacterial-effect-nam-salfetkalari-100-dona" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-antibacterial-effect-nam-salfetkalari-100-dona" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-antibacterial-effect-nam-salfetkalari-100-dona" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/elma-eco-big-size-3-qavatli-qogoz-sochiq</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-eco-big-size-3-qavatli-qogoz-sochiq" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/elma-eco-big-size-3-qavatli-qogoz-sochiq?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-eco-big-size-3-qavatli-qogoz-sochiq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-eco-big-size-3-qavatli-qogoz-sochiq" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/elma-eco-big-size-3-qavatli-qogoz-sochiq</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-eco-big-size-3-qavatli-qogoz-sochiq" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-eco-big-size-3-qavatli-qogoz-sochiq" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-eco-big-size-3-qavatli-qogoz-sochiq" />
   </url>
   <url>
     <loc>https://snabtash.uz/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona" />
+  </url>
+  <url>
+    <loc>https://snabtash.uz/ru/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://snabtash.uz/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://snabtash.uz/product/elma-v-economy-pack-qogoz-salfetkalari-100-dona" />
   </url>
 </urlset>

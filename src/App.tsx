@@ -43,7 +43,7 @@ const PageLoader: React.FC = () => (
 );
 
 const MainRouter: React.FC = () => {
-  const { currentPath, isAdminAuthenticated } = useApp();
+  const { currentPath, cleanPath, isAdminAuthenticated } = useApp();
 
   // Strip query string and hash from path for accurate route matching
   const pathOnly = currentPath.split(/[?#]/)[0] || '/';
@@ -75,20 +75,23 @@ const MainRouter: React.FC = () => {
     }
   }
 
+  // Strip query string and hash from cleanPath for route matching (works for both UZ and RU URLs)
+  const cleanRoute = cleanPath.split(/[?#]/)[0] || '/';
+
   // Match /product/:slug
-  const productMatch = pathOnly.match(/^\/product\/([^/]+)/);
+  const productMatch = cleanRoute.match(/^\/product\/([^/]+)/);
   if (productMatch) {
     return <ProductDetailPage slug={productMatch[1]} />;
   }
 
   // Match /catalog or /catalog/:category
-  const catalogMatch = pathOnly.match(/^\/catalog(?:\/([^/]+))?/);
-  if (catalogMatch && (pathOnly.startsWith('/catalog') || pathOnly === '/catalog')) {
+  const catalogMatch = cleanRoute.match(/^\/catalog(?:\/([^/]+))?/);
+  if (catalogMatch && (cleanRoute.startsWith('/catalog') || cleanRoute === '/catalog')) {
     return <CatalogPage initialCategory={catalogMatch[1]} />;
   }
 
   // Match exact routes
-  switch (pathOnly) {
+  switch (cleanRoute) {
     case '/cart':
       return <CartPage />;
     case '/request':
@@ -112,13 +115,15 @@ const MainRouter: React.FC = () => {
 };
 
 const AppContent: React.FC = () => {
-  const { currentPath } = useApp();
+  const { currentPath, cleanPath, language } = useApp();
   const pathOnly = currentPath.split(/[?#]/)[0] || '/';
-  const isHomePage = pathOnly === '/';
+  const cleanRoute = cleanPath.split(/[?#]/)[0] || '/';
+  const isHomePage = cleanRoute === '/';
   const isAdminPage = pathOnly.startsWith('/admin');
 
   useSEO({
     noindex: isAdminPage,
+    lang: language,
   });
 
   // Admin pages get their own layout — no Header, Footer, or MobileBottomNav

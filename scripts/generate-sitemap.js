@@ -52,52 +52,55 @@ let xml = `<?xml version="1.0" encoding="UTF-8"?>
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 `;
 
-// Add static pages
-for (const p of staticPages) {
-  const loc = `${DOMAIN}${p.path}`;
-  const ruLoc = p.path === '/' ? `${DOMAIN}/?lang=ru` : `${DOMAIN}${p.path}?lang=ru`;
+// Helper to add a URL entry with bidirectional hreflangs
+function addUrlPair(uzPath, ruPath, changefreq, priority) {
+  const locUz = `${DOMAIN}${uzPath}`;
+  const locRu = `${DOMAIN}${ruPath}`;
+
+  // 1. Uzbek Version
   xml += `  <url>
-    <loc>${loc}</loc>
+    <loc>${locUz}</loc>
     <lastmod>${TODAY}</lastmod>
-    <changefreq>${p.changefreq}</changefreq>
-    <priority>${p.priority}</priority>
-    <xhtml:link rel="alternate" hreflang="uz" href="${loc}" />
-    <xhtml:link rel="alternate" hreflang="ru" href="${ruLoc}" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${loc}" />
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="${locUz}" />
+    <xhtml:link rel="alternate" hreflang="ru" href="${locRu}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${locUz}" />
   </url>
 `;
+
+  // 2. Russian Version
+  xml += `  <url>
+    <loc>${locRu}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="${locUz}" />
+    <xhtml:link rel="alternate" hreflang="ru" href="${locRu}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${locUz}" />
+  </url>
+`;
+}
+
+// Add static pages
+for (const p of staticPages) {
+  const uzPath = p.path;
+  const ruPath = p.path === '/' ? '/ru' : `/ru${p.path}`;
+  addUrlPair(uzPath, ruPath, p.changefreq, p.priority);
 }
 
 // Add categories
 for (const cat of categories) {
-  const loc = `${DOMAIN}/catalog/${cat}`;
-  const ruLoc = `${loc}?lang=ru`;
-  xml += `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${TODAY}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="uz" href="${loc}" />
-    <xhtml:link rel="alternate" hreflang="ru" href="${ruLoc}" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${loc}" />
-  </url>
-`;
+  const uzPath = `/catalog/${cat}`;
+  const ruPath = `/ru/catalog/${cat}`;
+  addUrlPair(uzPath, ruPath, 'weekly', '0.85');
 }
 
 // Add products
 for (const slug of productSlugs) {
-  const loc = `${DOMAIN}/product/${slug}`;
-  const ruLoc = `${loc}?lang=ru`;
-  xml += `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${TODAY}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-    <xhtml:link rel="alternate" hreflang="uz" href="${loc}" />
-    <xhtml:link rel="alternate" hreflang="ru" href="${ruLoc}" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${loc}" />
-  </url>
-`;
+  const uzPath = `/product/${slug}`;
+  const ruPath = `/ru/product/${slug}`;
+  addUrlPair(uzPath, ruPath, 'weekly', '0.80');
 }
 
 xml += `</urlset>

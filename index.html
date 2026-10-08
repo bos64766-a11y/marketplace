@@ -13,10 +13,22 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" content="#FF5A00" />
 
+    <!-- Immediate Language Detection for Google Ads & Crawlers -->
+    <script>
+      (function() {
+        try {
+          var p = window.location.pathname || '';
+          if (p === '/ru' || p === '/ru/' || p.indexOf('/ru/') === 0) {
+            document.documentElement.lang = 'ru';
+          }
+        } catch(e) {}
+      })();
+    </script>
+
     <!-- Canonical and Multi-Language URLs -->
     <link rel="canonical" href="https://snabtash.uz/" />
     <link rel="alternate" hreflang="uz" href="https://snabtash.uz/" />
-    <link rel="alternate" hreflang="ru" href="https://snabtash.uz/?lang=ru" />
+    <link rel="alternate" hreflang="ru" href="https://snabtash.uz/ru" />
     <link rel="alternate" hreflang="x-default" href="https://snabtash.uz/" />
 
     <!-- Open Graph / Facebook / Telegram / WhatsApp -->

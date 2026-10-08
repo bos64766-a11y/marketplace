@@ -42,9 +42,13 @@ export interface SEOProps {
 
 const DEFAULT_ORIGIN = 'https://snabtash.uz';
 const DEFAULT_IMAGE = 'https://snabtash.uz/logo-horizontal.png';
-const DEFAULT_TITLE = "SNABTASH — B2B Ta'minot va Ulgurji Savdo Platformasi";
-const DEFAULT_DESC =
+const DEFAULT_TITLE_UZ = "SNABTASH — B2B Ta'minot va Ulgurji Savdo Platformasi";
+const DEFAULT_DESC_UZ =
   "SNABTASH — O'zbekiston korxona va ofislari uchun maishiy kimyo, tozalash vositalari, kantselyariya va xo'jalik mollarining ulgurji savdosi. Toshkent bo'ylab tezkor yetkazib berish va B2B zayavka tizimi.";
+
+const DEFAULT_TITLE_RU = "SNABTASH — B2B Снабжение и Оптовая Торговля в Ташкенте";
+const DEFAULT_DESC_RU =
+  "SNABTASH — Оптовые поставки бытовой химии, моющих средств, хозтоваров и канцтоваров для офисов, предприятий и клининговых компаний Ташкента. Быстрая доставка, оплата по перечислению с НДС через Didox.";
 
 function getOrCreateMeta(attrName: 'name' | 'property', attrValue: string): HTMLMetaElement {
   let el = document.querySelector(`meta[${attrName}="${attrValue}"]`) as HTMLMetaElement | null;
@@ -88,12 +92,35 @@ export function useSEO({
   schema,
 }: SEOProps) {
   useEffect(() => {
-    const prevTitle = document.title;
-    const resolvedTitle = title ? `${title} | SNABTASH` : DEFAULT_TITLE;
-    const resolvedDesc = description || DEFAULT_DESC;
+    const isRu = lang === 'ru';
+    const fallbackTitle = isRu ? DEFAULT_TITLE_RU : DEFAULT_TITLE_UZ;
+    const fallbackDesc = isRu ? DEFAULT_DESC_RU : DEFAULT_DESC_UZ;
+    const resolvedTitle = title ? `${title} | SNABTASH` : fallbackTitle;
+    const resolvedDesc = description || fallbackDesc;
     const resolvedImage = image ? (image.startsWith('http') ? image : `${DEFAULT_ORIGIN}${image.startsWith('/') ? '' : '/'}${image}`) : DEFAULT_IMAGE;
-    const currentPath = url || (typeof window !== 'undefined' ? window.location.pathname : '/');
-    const resolvedUrl = currentPath.startsWith('http') ? currentPath : `${DEFAULT_ORIGIN}${currentPath.startsWith('/') ? '' : '/'}${currentPath}`;
+
+    // 0. Update HTML tag language attribute immediately
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = isRu ? 'ru' : 'uz';
+    }
+
+    // Determine normalized root path without /ru prefix
+    const rawPath = url || (typeof window !== 'undefined' ? window.location.pathname : '/');
+    const pathOnly = rawPath.split(/[?#]/)[0] || '/';
+    
+    let cleanRootPath = pathOnly;
+    if (cleanRootPath === '/ru' || cleanRootPath === '/ru/') {
+      cleanRootPath = '/';
+    } else if (cleanRootPath.startsWith('/ru/')) {
+      cleanRootPath = cleanRootPath.substring(3);
+    }
+    if (cleanRootPath.length > 1 && cleanRootPath.endsWith('/')) {
+      cleanRootPath = cleanRootPath.slice(0, -1);
+    }
+
+    const uzCanonical = `${DEFAULT_ORIGIN}${cleanRootPath === '/' ? '' : cleanRootPath}`;
+    const ruCanonical = `${DEFAULT_ORIGIN}/ru${cleanRootPath === '/' ? '' : cleanRootPath}`;
+    const resolvedUrl = isRu ? ruCanonical : uzCanonical;
 
     // 1. Page Title
     document.title = resolvedTitle;
@@ -114,19 +141,18 @@ export function useSEO({
       metaRobots.setAttribute('content', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
     }
 
-    // 4. Canonical URL & Hreflang
+    // 4. Canonical URL & Hreflang (Clean /ru URLs for Google Ads and search engines)
     const canonicalLink = getOrCreateLink('canonical');
     canonicalLink.setAttribute('href', resolvedUrl);
 
     const hreflangUz = getOrCreateLink('alternate', { name: 'hreflang', value: 'uz' });
-    hreflangUz.setAttribute('href', resolvedUrl);
+    hreflangUz.setAttribute('href', uzCanonical);
 
     const hreflangRu = getOrCreateLink('alternate', { name: 'hreflang', value: 'ru' });
-    const ruUrl = resolvedUrl.includes('?') ? `${resolvedUrl}&lang=ru` : `${resolvedUrl}?lang=ru`;
-    hreflangRu.setAttribute('href', ruUrl);
+    hreflangRu.setAttribute('href', ruCanonical);
 
     const hreflangDefault = getOrCreateLink('alternate', { name: 'hreflang', value: 'x-default' });
-    hreflangDefault.setAttribute('href', resolvedUrl);
+    hreflangDefault.setAttribute('href', uzCanonical);
 
     // 5. Open Graph (Facebook, Telegram, WhatsApp, LinkedIn)
     getOrCreateMeta('property', 'og:type').setAttribute('content', type);
@@ -135,7 +161,8 @@ export function useSEO({
     getOrCreateMeta('property', 'og:image').setAttribute('content', resolvedImage);
     getOrCreateMeta('property', 'og:url').setAttribute('content', resolvedUrl);
     getOrCreateMeta('property', 'og:site_name').setAttribute('content', 'SNABTASH B2B');
-    getOrCreateMeta('property', 'og:locale').setAttribute('content', lang === 'ru' ? 'ru_RU' : 'uz_UZ');
+    getOrCreateMeta('property', 'og:locale').setAttribute('content', isRu ? 'ru_RU' : 'uz_UZ');
+    getOrCreateMeta('property', 'og:locale:alternate').setAttribute('content', isRu ? 'uz_UZ' : 'ru_RU');
 
     if (type === 'product' && product) {
       getOrCreateMeta('property', 'product:price:amount').setAttribute('content', String(product.price));

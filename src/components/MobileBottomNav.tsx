@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { Home, LayoutGrid, Heart, ShoppingBag, FileText } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
-  const { currentPath, navigate, cartCount, favorites, t } = useApp();
+  const { currentPath, cleanPath, navigate, cartCount, favorites, t } = useApp();
 
   const navItems = [
     {
@@ -47,8 +47,8 @@ export const MobileBottomNav: React.FC = () => {
         {navItems.map((item) => {
           const isActive =
             item.path === '/'
-              ? currentPath === '/'
-              : currentPath.startsWith(item.path);
+              ? cleanPath === '/'
+              : cleanPath.startsWith(item.path);
 
           const IconComponent = item.icon;
 
