@@ -1965,8 +1965,57 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         serverResult = await api.restoreBackupToServer(jsonData);
       } catch (serverErr: any) {
-        console.warn('Backend restore-backup endpoint error, falling back to local update:', serverErr);
+        console.warn('Backend restore-backup bulk endpoint unavailable, using REST sync fallback:', serverErr);
       }
+
+      // 2b. If bulk endpoint didn't execute, sync all entities via REST API in parallel chunks
+      if (!serverResult || !serverResult.success) {
+        // Categories
+        for (const cat of incomingCategories) {
+          try {
+            await api.createCategory(cat);
+          } catch {
+            try { await api.updateCategory(cat.id, cat); } catch {}
+          }
+        }
+        // Products in batches of 5
+        for (let i = 0; i < incomingProducts.length; i += 5) {
+          const chunk = incomingProducts.slice(i, i + 5);
+          await Promise.allSettled(
+            chunk.map(async (p: any) => {
+              const payload = {
+                ...p,
+                category_id: p.categoryId || p.category_id,
+                images_list: p.images || [],
+              };
+              try {
+                await api.createProduct(payload as any);
+              } catch {
+                try {
+                  await api.updateProduct(p.id, payload as any);
+                } catch {}
+              }
+            })
+          );
+        }
+        // Showcase sections
+        for (const sec of incomingSections) {
+          try {
+            await api.createShowcaseSection(sec);
+          } catch {
+            try { await api.updateShowcaseSection(sec.id, sec); } catch {}
+          }
+        }
+        // Banners
+        for (const ban of incomingBanners) {
+          try {
+            await api.createBanner(ban);
+          } catch {
+            try { await api.updateBanner(ban.id, ban); } catch {}
+          }
+        }
+      }
+
 
       // 3. Immediately update client React state and localStorage cache
       if (Array.isArray(incomingProducts) && incomingProducts.length > 0) {
