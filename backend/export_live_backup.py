@@ -18,7 +18,7 @@ if hasattr(sys.stdout, 'reconfigure'):
 if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8')
 
-BACKEND_API_BASE = os.environ.get("BACKEND_API_BASE", "https://marketplace-production-6690.up.railway.app/api")
+BACKEND_API_BASE = os.environ.get("BACKEND_API_BASE", "https://web-production-a04cd.up.railway.app/api")
 
 def wake_up_server():
     """Wakes up Render free tier container if sleeping."""
