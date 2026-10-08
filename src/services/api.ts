@@ -1,17 +1,12 @@
 import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcaseSection, Partner } from '../types';
 import { optimizeBannerImage } from '../utils/imageOptimizer';
 
-const isLocal =
-  typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-
 const API_BASE =
-  ((import.meta as any).env?.VITE_API_URL as string)?.replace(/\/$/, '') ||
-  (isLocal ? '/api' : 'https://marketplace-production-6690.up.railway.app/api');
+  ((import.meta as any).env?.VITE_API_URL as string)?.replace(/\/$/, '') || '/api';
 
 /**
  * Resolves an image/media URL so that relative paths (e.g. /media/...)
- * resolve correctly against the backend server in production (Render)
+ * resolve correctly against the backend server in production (Render/Railway)
  * or local dev environment.
  */
 export function getMediaUrl(path?: string | null): string {
@@ -45,14 +40,8 @@ export function getMediaUrl(path?: string | null): string {
         return `${backendHost.replace(/^http:\/\//i, 'https://')}${normalized}`;
       }
     }
-    // Production fallback: when deployed (not on localhost), use Railway backend host
-    if (
-      typeof window !== 'undefined' &&
-      !window.location.hostname.includes('localhost') &&
-      !window.location.hostname.includes('127.0.0.1')
-    ) {
-      return `https://marketplace-production-6690.up.railway.app${normalized}`;
-    }
+    // Relative path works on both localhost (Vite proxy) and Vercel (vercel.json rewrite) without CORS
+    return normalized;
   }
 
   return trimmed;
