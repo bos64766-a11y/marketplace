@@ -13,12 +13,13 @@ export const HomePage: React.FC = () => {
   const homeSchema = useMemo(
     () => ({
       '@type': 'LocalBusiness',
-      '@id': 'https://snabtash.uz/#localbusiness',
-      name: 'SNABTASH B2B Ta\'minot',
-      image: 'https://snabtash.uz/logo-horizontal.png',
+      '@id': 'https://www.snab.uz/#localbusiness',
+      name: 'SNAB.UZ — B2B Ta\'minot (SNABTASH)',
+      alternateName: ['SNAB', 'SNAB UZ', 'snab.uz', 'SNABTASH'],
+      image: 'https://www.snab.uz/logo-horizontal.png',
       telephone: '+998870349779',
-      email: 'info@snabtash.uz',
-      url: 'https://snabtash.uz',
+      email: 'info@snab.uz',
+      url: 'https://www.snab.uz',
       priceRange: '$$',
       address: {
         '@type': 'PostalAddress',
@@ -43,7 +44,7 @@ export const HomePage: React.FC = () => {
       ],
       potentialAction: {
         '@type': 'SearchAction',
-        target: 'https://snabtash.uz/catalog?q={search_term_string}',
+        target: 'https://www.snab.uz/catalog?q={search_term_string}',
         'query-input': 'required name=search_term_string',
       },
     }),
@@ -53,14 +54,14 @@ export const HomePage: React.FC = () => {
   useSEO({
     title:
       language === 'ru'
-        ? 'SNABTASH — B2B Снабжение и Оптовая Торговля в Ташкенте'
-        : 'SNABTASH — B2B Ta\'minot va Ulgurji Savdo Platformasi (Toshkent)',
+        ? 'SNAB.UZ — B2B Снабжение и Оптовая Торговля в Ташкенте | SNABTASH'
+        : 'SNAB.UZ — B2B Ta\'minot va Ulgurji Savdo Platformasi | SNABTASH Toshkent',
     description:
       language === 'ru'
-        ? 'Комплексное снабжение предприятий и офисов в Ташкенте: бытовая химия, хозтовары, канцтовары, гигиенические средства оптом. Официальный договор с НДС через Didox, бесплатная доставка со склада.'
-        : 'Korxona va tashkilotlar uchun klining kimyolari, xo\'jalik mollari, kantselyariya va gigiyena tovarlari ulgurji savdosi. Toshkent bo\'ylab ombordan tezkor yetkazib berish, QQS bilan rasmiy shartnoma.',
+        ? 'SNAB.UZ (SNABTASH) — Комплексное B2B снабжение предприятий и офисов в Ташкенте: бытовая химия, хозтовары, канцтовары, гигиенические средства оптом. Официальный договор с НДС через Didox, бесплатная доставка со склада.'
+        : 'SNAB.UZ (SNABTASH) — Korxona va tashkilotlar uchun klining kimyolari, xo\'jalik mollari, kantselyariya va gigiyena tovarlari ulgurji savdosi. Toshkent bo\'ylab ombordan tezkor yetkazib berish, QQS bilan rasmiy shartnoma.',
     keywords:
-      'snabtash, b2b ta\'minot toshkent, ulgurji savdo toshkent, maishiy kimyo optom, kantselyariya optom, xo\'jalik mollari ulgurji, optom sklad toshkent, optom tozalash vositalari, b2b didox faktura, снабжение предприятий ташкент, бытовая химия оптом ташкент',
+      'snab, snab uz, snab.uz, snabtash, snab toshkent, snab uzbekistan, b2b ta\'minot toshkent, ulgurji savdo toshkent, maishiy kimyo optom, kantselyariya optom, xo\'jalik mollari ulgurji, optom sklad toshkent, optom tozalash vositalari, b2b didox faktura, снаб, снаб уз, снабжение предприятий ташкент, бытовая химия оптом ташкент',
     url: '/',
     lang: language,
     schema: homeSchema,

@@ -180,7 +180,7 @@ export const AdminSettings: React.FC = () => {
             {renderInput('Kompaniya nomi', 'companyName', <Building2 className="w-3 h-3" />, 'SNABTASH B2B')}
             {renderInput('Telefon 1', 'phone1', <Phone className="w-3 h-3" />, '+998 90 123 45 67')}
             {renderInput('Telefon 2', 'phone2', <Phone className="w-3 h-3" />, '+998 91 765 43 21')}
-            {renderInput('Email', 'email', <Mail className="w-3 h-3" />, 'info@snabtash.uz')}
+            {renderInput('Email', 'email', <Mail className="w-3 h-3" />, 'info@snab.uz')}
             {renderInput('Telegram Bot', 'telegramBot', <Megaphone className="w-3 h-3" />, '@snabtash_bot')}
             {renderInput('Telegram Kanal', 'telegramChannel', <Megaphone className="w-3 h-3" />, 'https://t.me/snabtash')}
           </div>

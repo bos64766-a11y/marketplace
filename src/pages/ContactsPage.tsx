@@ -17,16 +17,16 @@ export const ContactsPage: React.FC = () => {
   const telegramBot = siteSettings?.telegramBot || CONTACT_INFO.telegram || '@snabtash_bot';
   const workHours = siteSettings?.workHours || CONTACT_INFO.workHours || (language === 'ru' ? 'Пн - Сб: 08:30 - 18:30' : 'Dush - Shan: 08:30 - 18:30');
   const address = siteSettings?.address || CONTACT_INFO.address || (language === 'ru' ? 'г. Ташкент, Сергелийский район, Tashkent Index, блок А3' : 'Toshkent sh., Sergeli tumani, Tashkent Index, A3-blok');
-  const email = siteSettings?.email || CONTACT_INFO.email || 'info@snabtash.uz';
+  const email = siteSettings?.email || CONTACT_INFO.email || 'info@snab.uz';
 
   const contactSchema = {
     '@type': 'LocalBusiness',
-    '@id': 'https://snabtash.uz/contacts#localbusiness',
-    name: 'SNABTASH B2B Ta\'minot va Ulgurji Savdo',
-    image: 'https://snabtash.uz/logo-horizontal.png',
+    '@id': 'https://www.snab.uz/contacts#localbusiness',
+    name: 'SNAB.UZ — B2B Ta\'minot (SNABTASH)',
+    image: 'https://www.snab.uz/logo-horizontal.png',
     telephone: phone1,
     email: email,
-    url: 'https://snabtash.uz/contacts',
+    url: 'https://www.snab.uz/contacts',
     address: {
       '@type': 'PostalAddress',
       streetAddress: address,

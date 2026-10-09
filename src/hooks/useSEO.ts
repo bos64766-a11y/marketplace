@@ -40,15 +40,15 @@ export interface SEOProps {
   schema?: Record<string, any>;
 }
 
-const DEFAULT_ORIGIN = 'https://snabtash.uz';
-const DEFAULT_IMAGE = 'https://snabtash.uz/logo-horizontal.png';
-const DEFAULT_TITLE_UZ = "SNABTASH — B2B Ta'minot va Ulgurji Savdo Platformasi";
+const DEFAULT_ORIGIN = 'https://www.snab.uz';
+const DEFAULT_IMAGE = 'https://www.snab.uz/logo-horizontal.png';
+const DEFAULT_TITLE_UZ = "SNAB.UZ — B2B Ta'minot va Ulgurji Savdo Platformasi | SNABTASH Toshkent";
 const DEFAULT_DESC_UZ =
-  "SNABTASH — O'zbekiston korxona va ofislari uchun maishiy kimyo, tozalash vositalari, kantselyariya va xo'jalik mollarining ulgurji savdosi. Toshkent bo'ylab tezkor yetkazib berish va B2B zayavka tizimi.";
+  "SNAB.UZ (SNABTASH) — O'zbekiston korxona va ofislari uchun maishiy kimyo, tozalash vositalari, kantselyariya va xo'jalik mollarining ulgurji savdosi. Toshkent bo'ylab tezkor yetkazib berish va B2B zayavka tizimi.";
 
-const DEFAULT_TITLE_RU = "SNABTASH — B2B Снабжение и Оптовая Торговля в Ташкенте";
+const DEFAULT_TITLE_RU = "SNAB.UZ — B2B Снабжение и Оптовая Торговля в Ташкенте | SNABTASH";
 const DEFAULT_DESC_RU =
-  "SNABTASH — Оптовые поставки бытовой химии, моющих средств, хозтоваров и канцтоваров для офисов, предприятий и клининговых компаний Ташкента. Быстрая доставка, оплата по перечислению с НДС через Didox.";
+  "SNAB.UZ (SNABTASH) — Оптовые поставки бытовой химии, моющих средств, хозтоваров и канцтоваров для офисов, предприятий и клининговых компаний Ташкента. Быстрая доставка, оплата по перечислению с НДС через Didox.";
 
 function getOrCreateMeta(attrName: 'name' | 'property', attrValue: string): HTMLMetaElement {
   let el = document.querySelector(`meta[${attrName}="${attrValue}"]`) as HTMLMetaElement | null;
@@ -96,7 +96,7 @@ export function useSEO({
     const isRu = lang === 'ru';
     const fallbackTitle = isRu ? DEFAULT_TITLE_RU : DEFAULT_TITLE_UZ;
     const fallbackDesc = isRu ? DEFAULT_DESC_RU : DEFAULT_DESC_UZ;
-    const resolvedTitle = title ? `${title} | SNABTASH` : fallbackTitle;
+    const resolvedTitle = title ? (title.includes('SNAB') ? title : `${title} | SNAB.UZ`) : fallbackTitle;
     const resolvedDesc = description || fallbackDesc;
     const resolvedImage = image ? (image.startsWith('http') ? image : `${DEFAULT_ORIGIN}${image.startsWith('/') ? '' : '/'}${image}`) : DEFAULT_IMAGE;
 
@@ -161,7 +161,7 @@ export function useSEO({
     getOrCreateMeta('property', 'og:description').setAttribute('content', resolvedDesc);
     getOrCreateMeta('property', 'og:image').setAttribute('content', resolvedImage);
     getOrCreateMeta('property', 'og:url').setAttribute('content', resolvedUrl);
-    getOrCreateMeta('property', 'og:site_name').setAttribute('content', 'SNABTASH B2B');
+    getOrCreateMeta('property', 'og:site_name').setAttribute('content', 'SNAB.UZ — B2B Ta\'minot');
     getOrCreateMeta('property', 'og:locale').setAttribute('content', isRu ? 'ru_RU' : 'uz_UZ');
     getOrCreateMeta('property', 'og:locale:alternate').setAttribute('content', isRu ? 'uz_UZ' : 'ru_RU');
 
@@ -191,7 +191,7 @@ export function useSEO({
         sku: product.sku || undefined,
         brand: {
           '@type': 'Brand',
-          name: product.brand || 'SNABTASH',
+          name: product.brand || 'SNAB.UZ',
         },
         offers: {
           '@type': 'Offer',
@@ -203,7 +203,7 @@ export function useSEO({
           itemCondition: 'https://schema.org/NewCondition',
           seller: {
             '@type': 'Organization',
-            name: 'SNABTASH B2B',
+            name: 'SNAB.UZ B2B Ta\'minot (SNABTASH)',
             url: DEFAULT_ORIGIN,
           },
           hasMerchantReturnPolicy: {

@@ -1,4 +1,4 @@
-# Robots.txt for SNABTASH (https://snabtash.uz)
+# Robots.txt for SNAB.UZ (https://www.snab.uz)
 User-agent: *
 Allow: /
 Allow: /catalog
@@ -9,15 +9,15 @@ Allow: /contacts
 Allow: /delivery-payment
 Allow: /request
 Allow: /requests
-Allow: /favorites
-Allow: /cart
+Allow: /ru
+Allow: /ru/*
 
-# Disallow internal admin and api endpoints
+# Disallow internal admin and private endpoints
 Disallow: /admin
 Disallow: /admin/*
 Disallow: /api/
 Disallow: /media/private/
 
-# Sitemap location
-Host: https://snabtash.uz
-Sitemap: https://snabtash.uz/sitemap.xml
+# Canonical Host and Sitemap location
+Host: https://www.snab.uz
+Sitemap: https://www.snab.uz/sitemap.xml

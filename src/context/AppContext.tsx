@@ -120,7 +120,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   companyName: 'SNABTASH B2B',
   phone1: '+998 87 034 97 79',
   phone2: '+998 90 123 45 67',
-  email: 'info@snabtash.uz',
+  email: 'info@snab.uz',
   telegramBot: '@snabtash_bot',
   telegramChannel: 'https://t.me/snabtash',
   telegramBotToken: '',

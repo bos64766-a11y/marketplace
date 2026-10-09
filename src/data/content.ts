@@ -198,7 +198,7 @@ export const CONTACT_INFO = {
   workHours: '09:00–17:00',
   workDays: 'Dushanba – Juma',
   address: 'Toshkent shahri, Sergeli tumani, Tashkent Index, A3-blok',
-  email: 'info@snabtash.uz',
+  email: 'info@snab.uz',
   inn: '309876543',
   bank: 'ATB "Kapitalbank" Toshkent sh.',
 };
