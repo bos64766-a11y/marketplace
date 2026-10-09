@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "exported_at": "2026-10-08T17:19:56.571285",
+  "exported_at": "2026-10-09T04:15:53.297712",
   "source": "https://web-production-a04cd.up.railway.app/api",
   "summary": {
     "categories": 7,
@@ -3490,8 +3490,8 @@
       "email": "info@snabtash.uz",
       "telegramBot": "@snabtash_bot",
       "telegramChannel": "https://t.me/snabtash",
-      "telegramBotToken": "",
-      "telegramChatId": "",
+      "telegramBotToken": "8611482207:AAEpAaNLANSWpyTUfTNkg9Nof7UcgbKIsEM",
+      "telegramChatId": "-5100708956",
       "address": "Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy",
       "workHours": "Dush - Shan: 08:30 - 18:30",
       "inn": "309871234",
