@@ -41,192 +41,213 @@ def import_from_live_backup(bundle_path, backend_dir):
     print(f"\n[RESTORE] 'live_backup.json' dan tiklash boshlandi ({bundle.get('exported_at', '')})...")
 
     # 1. Categories
-    cats = data.get('categories', [])
-    for c in cats:
-        cat_id = str(c.get('id') or c.get('slug'))
-        Category.objects.update_or_create(
-            id=cat_id,
-            defaults={
-                'slug': str(c.get('slug') or cat_id),
-                'name': c.get('name', ''),
-                'name_ru': c.get('name_ru', '') or '',
-                'icon': c.get('icon', 'Package') or 'Package',
-                'image': c.get('image', '') or '',
-                'description': c.get('description', '') or '',
-                'description_ru': c.get('description_ru', '') or '',
-            }
-        )
-    print(f" -> [OK] {len(cats)} ta kategoriya saqlandi.")
+    try:
+        cats = data.get('categories', [])
+        for c in cats:
+            cat_id = str(c.get('id') or c.get('slug'))
+            Category.objects.update_or_create(
+                id=cat_id,
+                defaults={
+                    'slug': str(c.get('slug') or cat_id),
+                    'name': c.get('name', ''),
+                    'name_ru': c.get('name_ru', '') or '',
+                    'icon': c.get('icon', 'Package') or 'Package',
+                    'image': c.get('image', '') or '',
+                    'description': c.get('description', '') or '',
+                    'description_ru': c.get('description_ru', '') or '',
+                }
+            )
+        print(f" -> [OK] {len(cats)} ta kategoriya saqlandi.")
+    except Exception as e:
+        print(f" -> [OGOHLANTIRISH] Kategoriyalarni tiklashda xatolik: {e}")
 
     # 2. Products
-    prods = data.get('products', [])
-    for p in prods:
-        cat_id = str(p.get('categoryId') or p.get('category_id') or p.get('category') or '')
-        cat_obj = None
-        if cat_id:
-            cat_obj = Category.objects.filter(models.Q(id=cat_id) | models.Q(slug=cat_id)).first()
-        if not cat_obj:
-            cat_obj = Category.objects.first()
+    try:
+        prods = data.get('products', [])
+        for p in prods:
+            cat_id = str(p.get('categoryId') or p.get('category_id') or p.get('category') or '')
+            cat_obj = None
+            if cat_id:
+                cat_obj = Category.objects.filter(models.Q(id=cat_id) | models.Q(slug=cat_id)).first()
+            if not cat_obj:
+                cat_obj = Category.objects.first()
 
-        prod_id = str(p.get('id'))
-        prod_obj, _ = Product.objects.update_or_create(
-            id=prod_id,
-            defaults={
-                'slug': str(p.get('slug') or prod_id),
-                'name': p.get('name', ''),
-                'name_ru': p.get('name_ru', '') or '',
-                'category': cat_obj,
-                'price': float(p.get('price', 0) or 0),
-                'old_price': float(p.get('oldPrice') or p.get('old_price')) if (p.get('oldPrice') or p.get('old_price')) else None,
-                'in_stock': bool(p.get('inStock', True)),
-                'brand': p.get('brand', 'SNABTASH') or 'SNABTASH',
-                'sku': p.get('sku', '') or f"SNB-{prod_id[-6:].upper()}",
-                'unit': p.get('unit', 'dona') or 'dona',
-                'min_order': int(p.get('minOrder', 1) or 1),
-                'tag': p.get('tag', '') or '',
-                'tag_ru': p.get('tag_ru', '') or '',
-                'rating': float(p.get('rating', 4.5) or 4.5),
-                'reviews_count': int(p.get('reviewsCount', 0) or 0),
-                'description': p.get('description', '') or '',
-                'description_ru': p.get('description_ru', '') or '',
-                'is_popular': bool(p.get('isPopular', False)),
-                'is_new': bool(p.get('isNew', False)),
-            }
-        )
-        images = p.get('images', []) or p.get('images_list', [])
-        if images:
-            prod_obj.product_images.all().delete()
-            for idx, img_url in enumerate(images):
-                if img_url and str(img_url).strip():
-                    ProductImage.objects.create(
-                        product=prod_obj,
-                        image_url=str(img_url).strip(),
-                        is_main=(idx == 0),
-                        order=idx
-                    )
-    print(f" -> [OK] {len(prods)} ta mahsulot saqlandi.")
+            prod_id = str(p.get('id'))
+            prod_obj, _ = Product.objects.update_or_create(
+                id=prod_id,
+                defaults={
+                    'slug': str(p.get('slug') or prod_id),
+                    'name': p.get('name', ''),
+                    'name_ru': p.get('name_ru', '') or '',
+                    'category': cat_obj,
+                    'price': float(p.get('price', 0) or 0),
+                    'old_price': float(p.get('oldPrice') or p.get('old_price')) if (p.get('oldPrice') or p.get('old_price')) else None,
+                    'in_stock': bool(p.get('inStock', True)),
+                    'brand': p.get('brand', 'SNABTASH') or 'SNABTASH',
+                    'sku': p.get('sku', '') or f"SNB-{prod_id[-6:].upper()}",
+                    'unit': p.get('unit', 'dona') or 'dona',
+                    'min_order': int(p.get('minOrder', 1) or 1),
+                    'tag': p.get('tag', '') or '',
+                    'tag_ru': p.get('tag_ru', '') or '',
+                    'rating': float(p.get('rating', 4.5) or 4.5),
+                    'reviews_count': int(p.get('reviewsCount', 0) or 0),
+                    'description': p.get('description', '') or '',
+                    'description_ru': p.get('description_ru', '') or '',
+                    'is_popular': bool(p.get('isPopular', False)),
+                    'is_new': bool(p.get('isNew', False)),
+                }
+            )
+            images = p.get('images', []) or p.get('images_list', [])
+            if images:
+                prod_obj.product_images.all().delete()
+                for idx, img_url in enumerate(images):
+                    if img_url and str(img_url).strip():
+                        ProductImage.objects.create(
+                            product=prod_obj,
+                            image_url=str(img_url).strip(),
+                            is_main=(idx == 0),
+                            order=idx
+                        )
+        print(f" -> [OK] {len(prods)} ta mahsulot saqlandi.")
+    except Exception as e:
+        print(f" -> [OGOHLANTIRISH] Mahsulotlarni tiklashda xatolik: {e}")
 
     # 3. Orders (Zayavkalar / Zakazlar)
-    orders = data.get('orders', [])
-    for o in orders:
-        order_id = str(o.get('id'))
-        contact = o.get('contact', {})
-        total_amt = float(o.get('totalAmount') or o.get('total_amount', 0) or 0)
-        
-        req_order, _ = RequestOrder.objects.update_or_create(
-            id=order_id,
-            defaults={
-                'customer_name': contact.get('name', 'B2B Mijoz') or 'B2B Mijoz',
-                'customer_phone': contact.get('phone', '') or '',
-                'customer_company': contact.get('company', '') or '',
-                'customer_inn': contact.get('inn', '') or '',
-                'comment': contact.get('comment', '') or '',
-                'total_amount': total_amt,
-                'status': o.get('status', 'Ko‘rib chiqilmoqda') or 'Ko‘rib chiqilmoqda',
-            }
-        )
-        items = o.get('items', [])
-        if items:
-            req_order.items.all().delete()
-            for it in items:
-                prod_info = it.get('product', {})
-                p_id = prod_info.get('id')
-                p_obj = Product.objects.filter(id=p_id).first() if p_id else None
-                p_price = float(prod_info.get('price', 0) or 0)
-                qty = int(it.get('quantity', 1) or 1)
-                
-                imgs = prod_info.get('images', [])
-                p_img = imgs[0] if imgs else ''
+    try:
+        orders = data.get('orders', [])
+        for o in orders:
+            order_id = str(o.get('id'))
+            contact = o.get('contact', {})
+            total_amt = float(o.get('totalAmount') or o.get('total_amount', 0) or 0)
+            
+            req_order, _ = RequestOrder.objects.update_or_create(
+                id=order_id,
+                defaults={
+                    'customer_name': contact.get('name', 'B2B Mijoz') or 'B2B Mijoz',
+                    'customer_phone': contact.get('phone', '') or '',
+                    'customer_company': contact.get('company', '') or '',
+                    'customer_inn': contact.get('inn', '') or '',
+                    'comment': contact.get('comment', '') or '',
+                    'total_amount': total_amt,
+                    'status': o.get('status', 'Ko‘rib chiqilmoqda') or 'Ko‘rib chiqilmoqda',
+                }
+            )
+            items = o.get('items', [])
+            if items:
+                req_order.items.all().delete()
+                for it in items:
+                    prod_info = it.get('product', {})
+                    p_id = prod_info.get('id')
+                    p_obj = Product.objects.filter(id=p_id).first() if p_id else None
+                    p_price = float(prod_info.get('price', 0) or 0)
+                    qty = int(it.get('quantity', 1) or 1)
+                    
+                    imgs = prod_info.get('images', [])
+                    p_img = imgs[0] if imgs else ''
 
-                OrderItem.objects.create(
-                    order=req_order,
-                    product=p_obj,
-                    product_name=prod_info.get('name', 'B2B Tovar'),
-                    product_sku=prod_info.get('sku', '') or '',
-                    product_image=p_img or '',
-                    price=p_price,
-                    quantity=qty,
-                    total_price=p_price * qty
-                )
-    print(f" -> [OK] {len(orders)} ta zakaz (buyurtma) barcha tovarlari va mijozlari bilan tiklandi.")
+                    OrderItem.objects.create(
+                        order=req_order,
+                        product=p_obj,
+                        product_name=prod_info.get('name', 'B2B Tovar'),
+                        product_sku=prod_info.get('sku', '') or '',
+                        product_image=p_img or '',
+                        price=p_price,
+                        quantity=qty,
+                        total_price=p_price * qty
+                    )
+        print(f" -> [OK] {len(orders)} ta zakaz (buyurtma) barcha tovarlari va mijozlari bilan tiklandi.")
+    except Exception as e:
+        print(f" -> [OGOHLANTIRISH] Zakazlarni tiklashda xatolik: {e}")
 
     # 4. Showcase Sections
-    sections = data.get('showcase-sections', [])
-    for s in sections:
-        sec_id = s.get('id')
-        ShowcaseSection.objects.update_or_create(
-            id=sec_id,
-            defaults={
-                'title': s.get('title', ''),
-                'title_ru': s.get('title_ru', '') or '',
-                'subtitle': s.get('subtitle', '') or '',
-                'subtitle_ru': s.get('subtitle_ru', '') or '',
-                'badge': s.get('badge', '') or '',
-                'icon': s.get('icon', 'Building2') or 'Building2',
-                'link': s.get('link', '/catalog') or '/catalog',
-                'product_ids': s.get('productIds', []) or s.get('product_ids', []),
-                'order': int(s.get('order', 0) or 0),
-                'is_active': bool(s.get('isActive', s.get('is_active', True))),
-            }
-        )
-    print(f" -> [OK] {len(sections)} ta bo'lim tiklandi.")
+    try:
+        sections = data.get('showcase-sections', [])
+        for s in sections:
+            sec_id = s.get('id')
+            ShowcaseSection.objects.update_or_create(
+                id=sec_id,
+                defaults={
+                    'title': s.get('title', ''),
+                    'title_ru': s.get('title_ru', '') or '',
+                    'subtitle': s.get('subtitle', '') or '',
+                    'subtitle_ru': s.get('subtitle_ru', '') or '',
+                    'badge': s.get('badge', '') or '',
+                    'icon': s.get('icon', 'Building2') or 'Building2',
+                    'link': s.get('link', '/catalog') or '/catalog',
+                    'product_ids': s.get('productIds', []) or s.get('product_ids', []),
+                    'order': int(s.get('order', 0) or 0),
+                    'is_active': bool(s.get('isActive', s.get('is_active', True))),
+                }
+            )
+        print(f" -> [OK] {len(sections)} ta bo'lim tiklandi.")
+    except Exception as e:
+        print(f" -> [OGOHLANTIRISH] Vitrina bo'limlarini tiklashda xatolik: {e}")
 
     # 5. Banners
-    banners = data.get('banners', [])
-    for b in banners:
-        ban_id = b.get('id')
-        Banner.objects.update_or_create(
-            id=ban_id,
-            defaults={
-                'title': b.get('title', ''),
-                'title_ru': b.get('title_ru', '') or '',
-                'badge': b.get('badge', '') or '',
-                'badge_ru': b.get('badge_ru', '') or '',
-                'description': b.get('description', '') or '',
-                'description_ru': b.get('description_ru', '') or '',
-                'btn_text': b.get('btnText') or b.get('btn_text', '') or '',
-                'btn_text_ru': b.get('btnText_ru') or b.get('btn_text_ru', '') or '',
-                'btn_link': b.get('btnLink') or b.get('btn_link', '/catalog') or '/catalog',
-                'image': b.get('image', '') or '',
-                'image_ru': b.get('image_ru', '') or '',
-                'image_alt': b.get('imageAlt') or b.get('image_alt', '') or '',
-                'image_alt_ru': b.get('imageAlt_ru') or b.get('image_alt_ru', '') or '',
-                'order': int(b.get('order', 0) or 0),
-                'is_active': bool(b.get('isActive', b.get('is_active', True))),
-            }
-        )
-    print(f" -> [OK] {len(banners)} ta banner tiklandi.")
+    try:
+        banners = data.get('banners', [])
+        for b in banners:
+            ban_id = b.get('id')
+            Banner.objects.update_or_create(
+                id=ban_id,
+                defaults={
+                    'title': b.get('title', ''),
+                    'title_ru': b.get('title_ru', '') or '',
+                    'badge': b.get('badge', '') or '',
+                    'badge_ru': b.get('badge_ru', '') or '',
+                    'description': b.get('description', '') or '',
+                    'description_ru': b.get('description_ru', '') or '',
+                    'btn_text': b.get('btnText') or b.get('btn_text', '') or '',
+                    'btn_text_ru': b.get('btnText_ru') or b.get('btn_text_ru', '') or '',
+                    'btn_link': b.get('btnLink') or b.get('btn_link', '/catalog') or '/catalog',
+                    'image': b.get('image', '') or '',
+                    'image_ru': b.get('image_ru', '') or '',
+                    'image_alt': b.get('imageAlt') or b.get('image_alt', '') or '',
+                    'image_alt_ru': b.get('imageAlt_ru') or b.get('image_alt_ru', '') or '',
+                    'order': int(b.get('order', 0) or 0),
+                    'is_active': bool(b.get('isActive', b.get('is_active', True))),
+                }
+            )
+        print(f" -> [OK] {len(banners)} ta banner tiklandi.")
+    except Exception as e:
+        print(f" -> [OGOHLANTIRISH] Bannerlarni tiklashda xatolik: {e}")
 
     # 6. Site Settings
-    sett = data.get('settings', {})
-    if sett and isinstance(sett, dict):
-        SiteSettings.objects.update_or_create(
-            id=1,
-            defaults={
-                'company_name': sett.get('companyName') or sett.get('company_name', 'SNABTASH'),
-                'phone_1': sett.get('phone') or sett.get('phone_1', '+998 87 034 97 79'),
-                'email': sett.get('email', 'info@snabtash.uz') or 'info@snabtash.uz',
-                'address': sett.get('address', '') or '',
-                'work_hours': sett.get('workingHours') or sett.get('work_hours', '') or '',
-                'telegram_channel': sett.get('telegram') or sett.get('telegram_channel', '') or '',
-            }
-        )
-        print(" -> [OK] Sayt sozlamalari tiklandi.")
+    try:
+        sett = data.get('settings', {})
+        if sett and isinstance(sett, dict):
+            SiteSettings.objects.update_or_create(
+                id=1,
+                defaults={
+                    'company_name': sett.get('companyName') or sett.get('company_name', 'SNABTASH'),
+                    'phone_1': sett.get('phone') or sett.get('phone_1', '+998 87 034 97 79'),
+                    'email': sett.get('email', 'info@snabtash.uz') or 'info@snabtash.uz',
+                    'address': sett.get('address', '') or '',
+                    'work_hours': sett.get('workingHours') or sett.get('work_hours', '') or '',
+                    'telegram_channel': sett.get('telegram') or sett.get('telegram_channel', '') or '',
+                }
+            )
+            print(" -> [OK] Sayt sozlamalari tiklandi.")
+    except Exception as e:
+        print(f" -> [OGOHLANTIRISH] Sozlamalarni tiklashda xatolik: {e}")
 
     # 7. Partners
-    partners = data.get('partners', [])
-    for part in partners:
-        part_id = part.get('id')
-        Partner.objects.update_or_create(
-            id=part_id,
-            defaults={
-                'name': part.get('name', ''),
-                'logo': part.get('logo', '') or '',
-                'category': part.get('category', '') or '',
-                'order': int(part.get('order', 0) or 0),
-            }
-        )
-    print(f" -> [OK] {len(partners)} ta hamkor brend tiklandi.")
+    try:
+        partners = data.get('partners', [])
+        for part in partners:
+            part_id = part.get('id')
+            Partner.objects.update_or_create(
+                id=part_id,
+                defaults={
+                    'name': part.get('name', ''),
+                    'logo': part.get('logo', '') or '',
+                    'category': part.get('category', '') or '',
+                    'order': int(part.get('order', 0) or 0),
+                }
+            )
+        print(f" -> [OK] {len(partners)} ta hamkor brend tiklandi.")
+    except Exception as e:
+        print(f" -> [OGOHLANTIRISH] Hamkorlarni tiklashda xatolik: {e}")
 
     # 8. Superuser admin
     try:
@@ -299,26 +320,12 @@ def run_restore():
             print("\n[MUVAFFAQIN] live_backup.json orqali barcha ma'lumotlar to'liq tiklandi!")
             return
         except Exception as e:
-            print(f"[XATO] live_backup.json orqali tiklashda xatolik: {e}")
+            print(f"[OGOHLANTIRISH] live_backup.json orqali tiklashda xatolik: {e}")
             import traceback
             traceback.print_exc()
-            sys.exit(1)
+            return
 
-    # 4. Fallback to loaddata with backup_data.json only if live_backup.json does not exist
-    if os.path.exists(legacy_backup_file):
-        print("\n2. Zaxira fayldan ma'lumotlarni yuklash (loaddata)...")
-        try:
-            subprocess.run(
-                [sys.executable, "-Xutf8", os.path.join(backend_dir, "manage.py"), "loaddata", legacy_backup_file],
-                cwd=backend_dir,
-                check=True
-            )
-            print("\n[MUVAFFAQIN] Dastlabki ma'lumotlar muvaffaqiyatli yuklandi!")
-        except subprocess.CalledProcessError as e:
-            print(f"[XATO] Ma'lumotlarni yuklashda xatolik: {e}")
-            sys.exit(1)
-    else:
-        print("[OGOHLANTIRISH] Hech qanday zaxira fayli topilmadi.")
+    print("[OGOHLANTIRISH] live_backup.json fayli topilmadi.")
 
 if __name__ == '__main__':
     run_restore()
