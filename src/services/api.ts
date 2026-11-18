@@ -1,11 +1,11 @@
 import { Product, Category, RequestOrder, SiteSettings, BannerSlide, HomeShowcaseSection, Partner } from '../types';
 import { optimizeBannerImage } from '../utils/imageOptimizer';
 
-export const RAILWAY_BACKEND_URL = 'https://web-production-a04cd.up.railway.app';
+export const RAILWAY_BACKEND_URL = 'https://marketplace-production-24565a08.up.railway.app';
 
 // Always discard old dead Railway domain if present in Vercel environment variables
 const rawEnvApi = ((import.meta as any).env?.VITE_API_URL as string)?.trim() || '';
-const cleanEnvApi = rawEnvApi.includes('marketplace-production-6690') ? '' : rawEnvApi;
+const cleanEnvApi = rawEnvApi.includes('marketplace-production-6690') || rawEnvApi.includes('web-production-a04cd') ? '' : rawEnvApi;
 
 const API_BASE =
   cleanEnvApi.replace(/\/$/, '') ||
@@ -24,10 +24,13 @@ export function getMediaUrl(path?: string | null): string {
   if (!trimmed) return '';
 
   // Fix dead Railway domain from old database records
-  if (trimmed.includes('marketplace-production-6690.up.railway.app')) {
+  if (
+    trimmed.includes('marketplace-production-6690.up.railway.app') ||
+    trimmed.includes('web-production-a04cd.up.railway.app')
+  ) {
     trimmed = trimmed
-      .replace('http://marketplace-production-6690.up.railway.app', RAILWAY_BACKEND_URL)
-      .replace('https://marketplace-production-6690.up.railway.app', RAILWAY_BACKEND_URL);
+      .replace(/https?:\/\/marketplace-production-6690\.up\.railway\.app/g, RAILWAY_BACKEND_URL)
+      .replace(/https?:\/\/web-production-a04cd\.up\.railway\.app/g, RAILWAY_BACKEND_URL);
   }
 
   // Fix mixed-content: Railway media must always be served over HTTPS

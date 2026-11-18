@@ -38,7 +38,7 @@ async function fetchProducts() {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
-    const res = await fetch('https://web-production-a04cd.up.railway.app/api/products/?page_size=250', {
+    const res = await fetch('https://marketplace-production-24565a08.up.railway.app/api/products/?page_size=250', {
       signal: controller.signal,
     });
     clearTimeout(timeout);
