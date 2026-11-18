@@ -230,6 +230,23 @@ def import_from_live_backup(bundle_path, backend_dir):
         )
     print(f" -> [OK] {len(partners)} ta hamkor brend tiklandi.")
 
+    # 8. Superuser admin
+    try:
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        admin_user, _ = User.objects.get_or_create(
+            username='admin',
+            defaults={'is_superuser': True, 'is_staff': True, 'email': 'admin@snabtash.uz'}
+        )
+        admin_user.set_password('admin123!@')
+        admin_user.is_superuser = True
+        admin_user.is_staff = True
+        admin_user.is_active = True
+        admin_user.save()
+        print(" -> [OK] Superuser 'admin' (admin123!@) tayyorlandi.")
+    except Exception as e:
+        print(f" -> [OGOHLANTIRISH] Admin yaratishda ogohlantirish: {e}")
+
     print("\n[MUVAFFAQIN] Yangi serverda barcha ma'lumotlar to'liq tiklandi!")
     return True
 
