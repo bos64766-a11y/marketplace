@@ -199,18 +199,16 @@ def import_from_live_backup(bundle_path, backend_dir):
 
     # 6. Site Settings
     sett = data.get('settings', {})
-    if sett and isinstance(sett, dict) and sett.get('companyName'):
+    if sett and isinstance(sett, dict):
         SiteSettings.objects.update_or_create(
             id=1,
             defaults={
-                'company_name': sett.get('companyName', 'SNABTASH'),
-                'phone': sett.get('phone', '') or '',
-                'email': sett.get('email', '') or '',
+                'company_name': sett.get('companyName') or sett.get('company_name', 'SNABTASH'),
+                'phone_1': sett.get('phone') or sett.get('phone_1', '+998 87 034 97 79'),
+                'email': sett.get('email', 'info@snabtash.uz') or 'info@snabtash.uz',
                 'address': sett.get('address', '') or '',
-                'address_ru': sett.get('address_ru', '') or '',
-                'telegram': sett.get('telegram', '') or '',
-                'working_hours': sett.get('workingHours') or sett.get('working_hours', '') or '',
-                'working_hours_ru': sett.get('workingHours_ru') or sett.get('working_hours_ru', '') or '',
+                'work_hours': sett.get('workingHours') or sett.get('work_hours', '') or '',
+                'telegram_channel': sett.get('telegram') or sett.get('telegram_channel', '') or '',
             }
         )
         print(" -> [OK] Sayt sozlamalari tiklandi.")
@@ -224,8 +222,8 @@ def import_from_live_backup(bundle_path, backend_dir):
             defaults={
                 'name': part.get('name', ''),
                 'logo': part.get('logo', '') or '',
+                'category': part.get('category', '') or '',
                 'order': int(part.get('order', 0) or 0),
-                'is_active': bool(part.get('isActive', True)),
             }
         )
     print(f" -> [OK] {len(partners)} ta hamkor brend tiklandi.")
@@ -298,12 +296,15 @@ def run_restore():
     if os.path.exists(live_backup_file):
         try:
             import_from_live_backup(live_backup_file, backend_dir)
+            print("\n[MUVAFFAQIN] live_backup.json orqali barcha ma'lumotlar to'liq tiklandi!")
             return
         except Exception as e:
-            print(f"[OGOHLANTIRISH] live_backup.json orqali tiklashda xatolik: {e}")
-            print("[INFO] Zaxira 'backup_data.json' orqali urinib ko'rilmoqda...")
+            print(f"[XATO] live_backup.json orqali tiklashda xatolik: {e}")
+            import traceback
+            traceback.print_exc()
+            sys.exit(1)
 
-    # 4. Fallback to loaddata with backup_data.json
+    # 4. Fallback to loaddata with backup_data.json only if live_backup.json does not exist
     if os.path.exists(legacy_backup_file):
         print("\n2. Zaxira fayldan ma'lumotlarni yuklash (loaddata)...")
         try:
