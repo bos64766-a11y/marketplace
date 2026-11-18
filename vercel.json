@@ -9,6 +9,114 @@
       "destination": "https://web-production-a04cd.up.railway.app/media/:path*"
     },
     {
+      "source": "/ru",
+      "destination": "/index-ru.html"
+    },
+    {
+      "source": "/ru/",
+      "destination": "/index-ru.html"
+    },
+    {
+      "source": "/ru/catalog",
+      "destination": "/ru-catalog.html"
+    },
+    {
+      "source": "/ru/catalog/",
+      "destination": "/ru-catalog.html"
+    },
+    {
+      "source": "/ru/catalog/maishiy-kimyo",
+      "destination": "/ru-cat-maishiy-kimyo.html"
+    },
+    {
+      "source": "/ru/catalog/maishiy-kimyo/",
+      "destination": "/ru-cat-maishiy-kimyo.html"
+    },
+    {
+      "source": "/ru/catalog/xojalikmollari",
+      "destination": "/ru-cat-xojalikmollari.html"
+    },
+    {
+      "source": "/ru/catalog/xojalikmollari/",
+      "destination": "/ru-cat-xojalikmollari.html"
+    },
+    {
+      "source": "/ru/catalog/kanselyariya",
+      "destination": "/ru-cat-kanselyariya.html"
+    },
+    {
+      "source": "/ru/catalog/kanselyariya/",
+      "destination": "/ru-cat-kanselyariya.html"
+    },
+    {
+      "source": "/ru/catalog/gigiyena",
+      "destination": "/ru-cat-gigiyena.html"
+    },
+    {
+      "source": "/ru/catalog/gigiyena/",
+      "destination": "/ru-cat-gigiyena.html"
+    },
+    {
+      "source": "/ru/catalog/himoya-vositalari",
+      "destination": "/ru-cat-himoya-vositalari.html"
+    },
+    {
+      "source": "/ru/catalog/himoya-vositalari/",
+      "destination": "/ru-cat-himoya-vositalari.html"
+    },
+    {
+      "source": "/ru/catalog/avtokimyo",
+      "destination": "/ru-cat-avtokimyo.html"
+    },
+    {
+      "source": "/ru/catalog/avtokimyo/",
+      "destination": "/ru-cat-avtokimyo.html"
+    },
+    {
+      "source": "/ru/catalog/tekstil-mahsulotlari",
+      "destination": "/ru-cat-tekstil-mahsulotlari.html"
+    },
+    {
+      "source": "/ru/catalog/tekstil-mahsulotlari/",
+      "destination": "/ru-cat-tekstil-mahsulotlari.html"
+    },
+    {
+      "source": "/ru/delivery-payment",
+      "destination": "/ru-delivery.html"
+    },
+    {
+      "source": "/ru/delivery-payment/",
+      "destination": "/ru-delivery.html"
+    },
+    {
+      "source": "/ru/about",
+      "destination": "/ru-about.html"
+    },
+    {
+      "source": "/ru/about/",
+      "destination": "/ru-about.html"
+    },
+    {
+      "source": "/ru/contacts",
+      "destination": "/ru-contacts.html"
+    },
+    {
+      "source": "/ru/contacts/",
+      "destination": "/ru-contacts.html"
+    },
+    {
+      "source": "/ru/request",
+      "destination": "/ru-request.html"
+    },
+    {
+      "source": "/ru/request/",
+      "destination": "/ru-request.html"
+    },
+    {
+      "source": "/ru/:path*",
+      "destination": "/index-ru.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
