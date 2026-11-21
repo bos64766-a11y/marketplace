@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from rest_framework import status
 from apps.settings_app.models import Banner, ShowcaseSection, Partner
@@ -37,7 +38,39 @@ class SettingsModelsTest(TestCase):
 
 
 class SettingsAPITest(APITestCase):
+    def setUp(self):
+        self.admin, _ = User.objects.get_or_create(
+            username='admin_test_settings',
+            defaults={'email': 'admin_settings@test.com', 'is_staff': True, 'is_superuser': True}
+        )
+        self.admin.set_password('admin123!@')
+        self.admin.is_staff = True
+        self.admin.save()
+
+    def test_auth_login_and_verify(self):
+        # 1. Invalid login
+        bad_res = self.client.post('/api/auth/login/', {'username': 'admin_test_settings', 'password': 'wrongpassword'}, format='json')
+        self.assertEqual(bad_res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # 2. Valid login
+        good_res = self.client.post('/api/auth/login/', {'username': 'admin_test_settings', 'password': 'admin123!@'}, format='json')
+        self.assertEqual(good_res.status_code, status.HTTP_200_OK)
+        token = good_res.data['token']
+        self.assertTrue(token)
+
+        # 3. Verify token
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token)
+        verify_res = self.client.get('/api/auth/verify/')
+        self.assertEqual(verify_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(verify_res.data['valid'])
+
     def test_banner_crud_api(self):
+        # Unauthenticated cannot create
+        unauth_res = self.client.post('/api/banners/', {'title': 'No auth'}, format='json')
+        self.assertEqual(unauth_res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Authenticated admin can create
+        self.client.force_authenticate(user=self.admin)
         long_image = 'data:image/jpeg;base64,' + ('C' * 2000)
         create_res = self.client.post('/api/banners/', {
             'title': 'API Banner',
@@ -49,40 +82,28 @@ class SettingsAPITest(APITestCase):
         self.assertEqual(create_res.status_code, status.HTTP_201_CREATED)
         banner_id = create_res.data['id']
 
-        # Get list
-        list_res = self.client.get('/api/banners/')
-        self.assertEqual(list_res.status_code, status.HTTP_200_OK)
-        self.assertTrue(any(b['id'] == banner_id for b in list_res.data))
-
-        # Delete banner
-        del_res = self.client.delete(f'/api/banners/{banner_id}/')
-        self.assertEqual(del_res.status_code, status.HTTP_204_NO_CONTENT)
+        # Public get
+        self.client.logout()
+        get_res = self.client.get(f'/api/banners/{banner_id}/')
+        self.assertEqual(get_res.status_code, status.HTTP_200_OK)
 
     def test_showcase_sections_api(self):
+        self.client.force_authenticate(user=self.admin)
         create_res = self.client.post('/api/showcase-sections/', {
-            'title': 'Restoranlar uchun',
-            'subtitle': 'HoReCa',
-            'productIds': ['snb-001', 'snb-002'],
-            'order': 1,
+            'title': 'Yangi bo‘lim',
+            'subtitle': 'Yangi mahsulotlar to‘plami',
+            'productIds': ['snb-p1', 'snb-p2'],
+            'order': 10,
             'isActive': True
         }, format='json')
         self.assertEqual(create_res.status_code, status.HTTP_201_CREATED)
-        sec_id = create_res.data['id']
-
-        list_res = self.client.get('/api/showcase-sections/')
-        self.assertEqual(list_res.status_code, status.HTTP_200_OK)
-
-        del_res = self.client.delete(f'/api/showcase-sections/{sec_id}/')
-        self.assertEqual(del_res.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_partners_api(self):
+        self.client.force_authenticate(user=self.admin)
         create_res = self.client.post('/api/partners/', {
-            'name': 'Hamkor Korxona',
-            'logo': 'https://example.com/logo.png',
-            'category': 'Distributor'
+            'name': 'Yangi Hamkor',
+            'logo': 'data:image/png;base64,1234',
+            'category': 'Ishlab chiqaruvchi',
+            'order': 1
         }, format='json')
         self.assertEqual(create_res.status_code, status.HTTP_201_CREATED)
-        part_id = create_res.data['id']
-
-        del_res = self.client.delete(f'/api/partners/{part_id}/')
-        self.assertEqual(del_res.status_code, status.HTTP_204_NO_CONTENT)

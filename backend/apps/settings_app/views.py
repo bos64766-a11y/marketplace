@@ -3,7 +3,7 @@ import uuid
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
 from .models import SiteSettings, Banner, ShowcaseSection, Partner
@@ -11,23 +11,12 @@ from .serializers import SiteSettingsSerializer, BannerSerializer, ShowcaseSecti
 
 
 class SiteSettingsView(APIView):
-    def get(self, request):
-        if request.query_params.get('sync_admin') == '1':
-            try:
-                from django.contrib.auth import get_user_model
-                User = get_user_model()
-                admin_user, _ = User.objects.get_or_create(
-                    username='admin',
-                    defaults={'is_superuser': True, 'is_staff': True, 'email': 'admin@snabtash.uz'}
-                )
-                admin_user.set_password('admin123!@')
-                admin_user.is_superuser = True
-                admin_user.is_staff = True
-                admin_user.is_active = True
-                admin_user.save()
-            except Exception:
-                pass
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
 
+    def get(self, request):
         settings = SiteSettings.get_settings()
         serializer = SiteSettingsSerializer(settings)
         return Response(serializer.data)
@@ -93,6 +82,11 @@ DEFAULT_BANNERS = [
 
 
 class BannerListCreateView(APIView):
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get(self, request):
         # Allow query param for active only: ?active=true
         active_only = request.query_params.get('active', '').lower() in ['true', '1']
@@ -112,6 +106,11 @@ class BannerListCreateView(APIView):
 
 
 class BannerDetailView(APIView):
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get(self, request, pk):
         banner = get_object_or_404(Banner, pk=pk)
         return Response(BannerSerializer(banner).data)
@@ -147,6 +146,7 @@ class BannerDetailView(APIView):
 
 class FileUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [permissions.IsAdminUser]
 
     def post(self, request, *args, **kwargs):
         try:
@@ -165,6 +165,17 @@ class FileUploadView(APIView):
                     {'error': f'Faqat rasm formatidagi fayllar qabul qilinadi (JPG, PNG, WEBP, SVG, JFIF, AVIF)'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
+
+            # Extra XSS guard for SVG files
+            if ext == '.svg':
+                raw_bytes = file_obj.read()
+                file_obj.seek(0)
+                forbidden_tags = [b'<script', b'javascript:', b'onload=', b'onerror=', b'<iframe', b'<embed']
+                if any(tag in raw_bytes.lower() for tag in forbidden_tags):
+                    return Response(
+                        {'error': 'Xavfsizlik sababli skript yoki zararli element o‘z ichiga olgan SVG fayllar qabul qilinmaydi'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
             # Determine upload subfolder
             upload_type = request.query_params.get('type') or 'uploads'
@@ -281,6 +292,11 @@ DEFAULT_SHOWCASE_SECTIONS = [
 
 
 class ShowcaseSectionListCreateView(APIView):
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get(self, request):
         sections = ShowcaseSection.objects.all().order_by('order', 'id')
         active_only = request.query_params.get('active')
@@ -303,6 +319,11 @@ class ShowcaseSectionListCreateView(APIView):
 
 
 class ShowcaseSectionDetailView(APIView):
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get(self, request, pk):
         section = get_object_or_404(ShowcaseSection, pk=pk)
         serializer = ShowcaseSectionSerializer(section)
@@ -346,6 +367,11 @@ DEFAULT_PARTNERS = [
 
 
 class PartnerListCreateView(APIView):
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get(self, request):
         partners = Partner.objects.all().order_by('order', 'id')
         serializer = PartnerSerializer(partners, many=True)
@@ -360,6 +386,11 @@ class PartnerListCreateView(APIView):
 
 
 class PartnerDetailView(APIView):
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get(self, request, pk):
         partner = get_object_or_404(Partner, pk=pk)
         serializer = PartnerSerializer(partner)
@@ -394,39 +425,14 @@ class HealthCheckView(APIView):
         })
 
 
-class AdminInitView(APIView):
-    def get(self, request):
-        try:
-            from django.contrib.auth import get_user_model
-            User = get_user_model()
-            admin_user, _ = User.objects.get_or_create(
-                username='admin',
-                defaults={'is_superuser': True, 'is_staff': True, 'email': 'admin@snabtash.uz'}
-            )
-            admin_user.set_password('admin123!@')
-            admin_user.is_superuser = True
-            admin_user.is_staff = True
-            admin_user.is_active = True
-            admin_user.save()
-            return Response({
-                'status': 'success',
-                'username': 'admin',
-                'updated': True,
-                'message': 'Superuser admin paroli muvaffaqiyatli admin123!@ ga o‘rnatildi'
-            })
-        except Exception as e:
-            return Response({
-                'status': 'error',
-                'detail': str(e)
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 class RestoreBackupView(APIView):
     """
     Accepts full backup JSON payload (from frontend export or live_backup.json)
     and saves/updates all Categories, Products, Images, ShowcaseSections,
     Banners, SiteSettings, and Partners directly in PostgreSQL database.
     """
+    permission_classes = [permissions.IsAdminUser]
+
     def post(self, request):
         return self._process_restore(request)
 

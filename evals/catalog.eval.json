@@ -1,0 +1,17 @@
+{
+  "name": "catalog-search-eval",
+  "description": "Deterministic evaluations for B2B product search, category filtering, and cart calculations",
+  "version": "1.0",
+  "cases": [
+    {
+      "query": "sovun",
+      "expectedCategory": "maishiy-kimyo",
+      "minResults": 1
+    },
+    {
+      "query": "qog'oz",
+      "expectedCategory": "kanselyariya",
+      "minResults": 1
+    }
+  ]
+}

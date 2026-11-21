@@ -1,6 +1,5 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { Heart, ArrowRight } from 'lucide-react';
 

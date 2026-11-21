@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import permissions
 from django.db.models import Sum, Count
 from django.utils import timezone
 from datetime import timedelta
@@ -11,6 +12,8 @@ PENDING_STATUS = "Ko\u2019rib chiqilmoqda"
 
 
 class DashboardAnalyticsView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
     def get(self, request):
         now = timezone.now()
         total_products = Product.objects.count()

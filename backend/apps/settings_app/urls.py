@@ -9,13 +9,18 @@ from .views import (
     PartnerListCreateView,
     PartnerDetailView,
     HealthCheckView,
-    AdminInitView,
     RestoreBackupView,
 )
+from .auth_views import AdminLoginView, AdminVerifyView, AdminLogoutView
 
 urlpatterns = [
+    # Auth endpoints
+    path('auth/login/', AdminLoginView.as_view(), name='admin-login'),
+    path('auth/verify/', AdminVerifyView.as_view(), name='admin-verify'),
+    path('auth/logout/', AdminLogoutView.as_view(), name='admin-logout'),
+
+    # Site and content
     path('health/', HealthCheckView.as_view(), name='health-check'),
-    path('admin-init/', AdminInitView.as_view(), name='admin-init'),
     path('settings/', SiteSettingsView.as_view(), name='site-settings'),
     path('settings/restore-backup/', RestoreBackupView.as_view(), name='restore-backup'),
     path('restore/', RestoreBackupView.as_view(), name='restore-backup-direct'),
@@ -27,4 +32,3 @@ urlpatterns = [
     path('partners/<int:pk>/', PartnerDetailView.as_view(), name='partner-detail'),
     path('upload/', FileUploadView.as_view(), name='file-upload'),
 ]
-

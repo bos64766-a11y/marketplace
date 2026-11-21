@@ -1,0 +1,6 @@
+{
+  "guardrails": {
+    "blockDirectSecrets": true,
+    "requireTestsBeforeDeploy": true
+  }
+}

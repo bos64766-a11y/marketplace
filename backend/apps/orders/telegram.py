@@ -3,6 +3,7 @@ import logging
 import urllib.request
 import urllib.error
 import re
+import threading
 from django.utils import timezone
 from apps.settings_app.models import SiteSettings
 
@@ -97,7 +98,7 @@ def format_order_telegram_message(order) -> str:
     return msg
 
 
-def send_order_telegram_notification(order) -> bool:
+def _send_order_telegram_sync(order) -> bool:
     try:
         settings = SiteSettings.get_settings()
         token = clean_telegram_token(settings.telegram_bot_token)
@@ -135,4 +136,23 @@ def send_order_telegram_notification(order) -> bool:
         return success
     except Exception as exc:
         logger.error(f"Failed to send Telegram notification for order {order.id}: {exc}")
+        return False
+
+
+def send_order_telegram_notification(order) -> bool:
+    """
+    Sends Telegram notification asynchronously in a background daemon thread
+    so the customer checkout response is never blocked.
+    In automated tests ('test' in sys.argv), runs synchronously to avoid SQLite locks.
+    """
+    import sys
+    if 'test' in sys.argv:
+        return _send_order_telegram_sync(order)
+
+    try:
+        t = threading.Thread(target=_send_order_telegram_sync, args=(order,), daemon=True)
+        t.start()
+        return True
+    except Exception as e:
+        logger.error(f"Failed to spawn Telegram background thread for order {order.id}: {e}")
         return False

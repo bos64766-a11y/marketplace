@@ -58,12 +58,14 @@ export function getMediaUrl(path?: string | null): string {
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const method = (options.method || 'GET').toUpperCase();
+  const token = typeof window !== 'undefined' ? localStorage.getItem('snabtash_auth_token') : null;
   const headers: Record<string, string> = {
     Accept: 'application/json',
+    ...(token ? { Authorization: `Token ${token}` } : {}),
     ...(options.headers as Record<string, string>),
   };
 
-  if (method !== 'GET' && method !== 'HEAD') {
+  if (method !== 'GET' && method !== 'HEAD' && !(options.body instanceof FormData)) {
     headers['Content-Type'] = 'application/json';
   }
 
@@ -436,8 +438,12 @@ export const api = {
     try {
       const formData = new FormData();
       formData.append('image', uploadFile);
+      const token = typeof window !== 'undefined' ? localStorage.getItem('snabtash_auth_token') : null;
       const res = await fetch(`${API_BASE}/upload/?type=${type}`, {
         method: 'POST',
+        headers: {
+          ...(token ? { Authorization: `Token ${token}` } : {}),
+        },
         body: formData,
       });
       if (res.ok) {
@@ -509,6 +515,63 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(jsonData),
     });
+  },
+
+  // --- ADMIN AUTHENTICATION ---
+  adminLogin: async (
+    username: string,
+    password: string
+  ): Promise<{ success: boolean; token?: string; error?: string }> => {
+    try {
+      const res = await fetch(`${API_BASE}/auth/login/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('snabtash_auth_token', data.token);
+          localStorage.setItem('snabtash_admin_auth', 'true');
+        }
+        return { success: true, token: data.token };
+      }
+      return { success: false, error: data.error || 'Login yoki parol noto‘g‘ri' };
+    } catch {
+      return { success: false, error: 'Server bilan aloqa o‘rnatilmadi' };
+    }
+  },
+
+  adminLogout: async (): Promise<void> => {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('snabtash_auth_token') : null;
+      if (token) {
+        await fetch(`${API_BASE}/auth/logout/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Token ${token}` },
+        });
+      }
+    } catch {
+      // ignore
+    } finally {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('snabtash_auth_token');
+        localStorage.removeItem('snabtash_admin_auth');
+      }
+    }
+  },
+
+  adminVerify: async (): Promise<boolean> => {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('snabtash_auth_token') : null;
+      if (!token) return false;
+      const res = await fetch(`${API_BASE}/auth/verify/`, {
+        headers: { Authorization: `Token ${token}` },
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
   },
 };
 

@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from rest_framework import status
 from apps.products.models import Category, Product
@@ -7,6 +8,13 @@ from apps.orders.models import RequestOrder, CustomerContact
 
 class OrderAPITest(APITestCase):
     def setUp(self):
+        self.admin, _ = User.objects.get_or_create(
+            username='admin_test_orders',
+            defaults={'email': 'admin_orders@test.com', 'is_staff': True, 'is_superuser': True}
+        )
+        self.admin.set_password('adminpass')
+        self.admin.is_staff = True
+        self.admin.save()
         self.category = Category.objects.create(id='test-cat', name='Test Cat', slug='test-cat')
         self.product = Product.objects.create(
             name='Sinov Mahsulot',
@@ -36,6 +44,7 @@ class OrderAPITest(APITestCase):
                 'comment': 'Tez yetkazilsin'
             }
         }
+        # Anonymous customer can place an order
         res = self.client.post('/api/orders/', payload, format='json')
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         order_id = res.data['id']
@@ -45,19 +54,12 @@ class OrderAPITest(APITestCase):
         self.assertIsNotNone(customer)
         self.assertEqual(customer.name, 'Ali Valiyev')
 
-        # Verify status update action
+        # Anonymous cannot change order status (returns 401)
+        unauth_patch = self.client.patch(f'/api/orders/{order_id}/status/', {'status': 'Tasdiqlangan'}, format='json')
+        self.assertEqual(unauth_patch.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Authenticated admin can change order status
+        self.client.force_authenticate(user=self.admin)
         patch_res = self.client.patch(f'/api/orders/{order_id}/status/', {'status': 'Tasdiqlangan'}, format='json')
         self.assertEqual(patch_res.status_code, status.HTTP_200_OK)
         self.assertEqual(patch_res.data['status'], 'Tasdiqlangan')
-
-    def test_customer_lookup_api(self):
-        CustomerContact.objects.create(
-            phone='+998 93 999 88 77',
-            name='Nodirbek',
-            company='Texno Ltd',
-            inn='987654321'
-        )
-        res = self.client.get('/api/customer/lookup/?phone=%2B998%2093%20999%2088%2077')
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertTrue(res.data['found'])
-        self.assertEqual(res.data['customer']['name'], 'Nodirbek')

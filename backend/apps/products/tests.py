@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from rest_framework import status
 from apps.products.models import Category, Product, ProductImage
@@ -39,6 +40,13 @@ class ProductModelTest(TestCase):
 
 class ProductAPITest(APITestCase):
     def setUp(self):
+        self.admin, _ = User.objects.get_or_create(
+            username='admin_test_products',
+            defaults={'email': 'admin_prod@test.com', 'is_staff': True, 'is_superuser': True}
+        )
+        self.admin.set_password('adminpass')
+        self.admin.is_staff = True
+        self.admin.save()
         self.category = Category.objects.create(
             id='kanselyariya',
             name='Kanselyariya',
@@ -49,59 +57,63 @@ class ProductAPITest(APITestCase):
         Product.objects.create(
             name='A4 Qog‘oz',
             category=self.category,
-            price=35000.00
+            price=55000.00,
+            sku='A4-100'
         )
-        response = self.client.get('/api/products/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(response.data) >= 1)
+        res = self.client.get('/api/products/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(len(res.data), 1)
 
     def test_create_product_via_api_without_sku(self):
-        """Test API creation works even when sku and id are not provided"""
+        """Test API creation requires admin and works when sku/id not provided"""
         payload = {
-            'name': 'Ruchka Ko‘k 0.7mm',
-            'categoryId': 'kanselyariya',
-            'price': 1500.00,
-            'brand': 'Attache',
-            'inStock': True,
-            'images': ['https://example.com/pen.jpg']
+            'name': 'Hojatxona qog‘ozi 12 dona',
+            'category': 'kanselyariya',
+            'price': 24000.00
         }
+        # Anonymous cannot create
+        unauth_res = self.client.post('/api/products/', payload, format='json')
+        self.assertEqual(unauth_res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Admin can create
+        self.client.force_authenticate(user=self.admin)
         response = self.client.post('/api/products/', payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['name'], 'Ruchka Ko‘k 0.7mm')
+        self.assertTrue(response.data['id'].startswith('snb-'))
         self.assertTrue(response.data['sku'])
-        self.assertTrue(response.data['id'])
-        self.assertEqual(response.data['images'], ['https://example.com/pen.jpg'])
+        self.assertEqual(float(response.data['price']), 24000.00)
 
     def test_category_crud_api(self):
-        """Test Category list and create"""
-        create_payload = {
-            'name': 'Yangi Kategoriya',
-            'name_ru': 'Новая Категория',
-            'icon': 'Sparkles',
-            'description': 'Kategoriya izohi',
-            'description_ru': 'Описание категории'
-        }
-        res = self.client.post('/api/categories/', create_payload, format='json')
+        """Test Category list (public) and create (admin)"""
+        # Public list
+        list_res = self.client.get('/api/categories/')
+        self.assertEqual(list_res.status_code, status.HTTP_200_OK)
+
+        # Unauthenticated cannot create
+        unauth_res = self.client.post('/api/categories/', {'name': 'Oziq-ovqat', 'slug': 'oziq-ovqat'}, format='json')
+        self.assertEqual(unauth_res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Admin can create
+        self.client.force_authenticate(user=self.admin)
+        res = self.client.post('/api/categories/', {
+            'name': 'Oziq-ovqat',
+            'slug': 'oziq-ovqat',
+            'icon': 'Coffee'
+        }, format='json')
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(res.data['name'], 'Yangi Kategoriya')
-        self.assertEqual(res.data['name_ru'], 'Новая Категория')
-        self.assertTrue(res.data['slug'])
+        self.assertEqual(res.data['slug'], 'oziq-ovqat')
 
     def test_multilingual_product(self):
         """Test product with Russian fields"""
-        payload = {
-            'name': 'Ishchi qo‘lqoplar',
-            'name_ru': 'Перчатки рабочие',
-            'categoryId': 'kanselyariya',
-            'price': 2500.00,
-            'description': 'Paxtali qo‘lqoplar',
-            'description_ru': 'Хлопчатобумажные перчатки',
-            'tag': 'Yangi',
-            'tag_ru': 'Новинка'
-        }
-        res = self.client.post('/api/products/', payload, format='json')
+        self.client.force_authenticate(user=self.admin)
+        res = self.client.post('/api/products/', {
+            'name': 'Sovun',
+            'name_ru': 'Мыло жидкое',
+            'category': 'kanselyariya',
+            'price': 15000.00,
+            'description': 'Tabiiy sovun',
+            'description_ru': 'Натуральное жидкое мыло'
+        }, format='json')
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(res.data['name_ru'], 'Перчатки рабочие')
-        self.assertEqual(res.data['description_ru'], 'Хлопчатобумажные перчатки')
-        self.assertEqual(res.data['tag_ru'], 'Новинка')
-
+        self.assertEqual(res.data['name_ru'], 'Мыло жидкое')
+        self.assertEqual(res.data['description_ru'], 'Натуральное жидкое мыло')

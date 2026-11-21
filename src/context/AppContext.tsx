@@ -1870,39 +1870,44 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Admin Auth state
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
     try {
-      return localStorage.getItem('snabtash_admin_auth') === 'true';
+      return localStorage.getItem('snabtash_admin_auth') === 'true' && !!localStorage.getItem('snabtash_auth_token');
     } catch {
       return false;
     }
   });
 
+  // Verify backend session/token on startup
+  useEffect(() => {
+    if (isAdminAuthenticated) {
+      api.adminVerify().then((valid) => {
+        if (!valid) {
+          setIsAdminAuthenticated(false);
+          try {
+            localStorage.removeItem('snabtash_auth_token');
+            localStorage.removeItem('snabtash_admin_auth');
+          } catch {
+            // ignore
+          }
+        }
+      });
+    }
+  }, []);
+
   const loginAdmin = async (login: string, pass: string): Promise<boolean> => {
-    const cleanLogin = login.trim().toLowerCase();
-    if (
-      (cleanLogin === 'admin' && pass === 'admin123!@') ||
-      (cleanLogin === 'admin' && pass === 'admin123') ||
-      (cleanLogin === 'admin' && pass === 'admin')
-    ) {
+    const cleanLogin = login.trim();
+    const res = await api.adminLogin(cleanLogin, pass);
+    if (res.success) {
       setIsAdminAuthenticated(true);
-      try {
-        localStorage.setItem('snabtash_admin_auth', 'true');
-      } catch {
-        // ignore
-      }
       showToast('Xush kelibsiz! Boshqaruv paneliga muvaffaqiyatli kirildi', 'success');
       return true;
     }
-    showToast('Login yoki parol noto‘g‘ri', 'error');
+    showToast(res.error || 'Login yoki parol noto‘g‘ri', 'error');
     return false;
   };
 
-  const logoutAdmin = () => {
+  const logoutAdmin = async () => {
+    await api.adminLogout();
     setIsAdminAuthenticated(false);
-    try {
-      localStorage.removeItem('snabtash_admin_auth');
-    } catch {
-      // ignore
-    }
     navigate('/admin/login');
     showToast('Tizimdan muvaffaqiyatli chiqildi', 'info');
   };

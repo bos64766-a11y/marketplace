@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
+from snabtash_core.permissions import IsAdminOrReadOnly
 from .models import Category, Product
 from .serializers import CategorySerializer, ProductSerializer
 
@@ -9,6 +10,7 @@ from .serializers import CategorySerializer, ProductSerializer
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAdminOrReadOnly]
     lookup_field = 'slug'
 
     def get_object(self):
@@ -34,6 +36,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().select_related('category').prefetch_related('product_images')
     serializer_class = ProductSerializer
+    permission_classes = [IsAdminOrReadOnly]
     lookup_field = 'id'
 
     def get_object(self):

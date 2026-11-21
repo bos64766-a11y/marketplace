@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -11,6 +11,13 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = RequestOrder.objects.all().prefetch_related('items__product')
     serializer_class = RequestOrderSerializer
     lookup_field = 'id'
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny()]
+        if self.action in ['list', 'retrieve'] and self.request.query_params.get('phone'):
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -68,6 +75,8 @@ class CustomerLookupView(APIView):
     """
     Looks up previous customer details by phone number to auto-fill repeat orders
     """
+    throttle_scope = 'burst'
+
     def get(self, request):
         phone = request.query_params.get('phone', '').strip()
         if not phone:
