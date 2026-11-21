@@ -66,10 +66,12 @@ interface AppContextType {
 
   // Requests history & Admin Zayavkalar
   requests: RequestOrder[];
-  submitRequest: (orderData: Omit<RequestOrder, 'id' | 'date' | 'status'>) => RequestOrder;
-  updateRequestStatus: (id: string, status: RequestOrder['status']) => void;
-  deleteRequest: (id: string) => void;
+  submitRequest: (orderData: Omit<RequestOrder, 'id' | 'date' | 'status'>) => Promise<RequestOrder>;
+  updateRequestStatus: (id: string, status: RequestOrder['status']) => Promise<void>;
+  deleteRequest: (id: string) => Promise<void>;
   addManualRequest: (order: RequestOrder) => void;
+  backendError: string | null;
+  refreshFromBackend: () => Promise<void>;
 
   // Site Settings & Content
   siteSettings: SiteSettings;
@@ -555,6 +557,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch {}
   };
 
+  const [backendError, setBackendError] = useState<string | null>(null);
+
   // Cross-tab and Cross-window broadcast sync
   const syncChannelRef = useRef<BroadcastChannel | null>(null);
 
@@ -577,22 +581,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         api.getPartners(),
       ]);
 
+      if (prodsRes.status === 'rejected' || ordsRes.status === 'rejected') {
+        setBackendError("Serverga ulanishda uzilish yuz berdi");
+      } else {
+        setBackendError(null);
+      }
+
       if (prodsRes.status === 'fulfilled' && Array.isArray(prodsRes.value) && prodsRes.value.length > 0) {
-        const serverProducts = prodsRes.value;
-        setProducts(serverProducts);
-        try {
-          localStorage.setItem('snabtash_admin_products', JSON.stringify(serverProducts));
-          localStorage.setItem('snabtash_products_archive', JSON.stringify(serverProducts));
-        } catch {}
+        setProducts(prodsRes.value);
         updateArchiveStats();
       } else {
-        // If backend is offline or sleeping or suspended (503), ensure fresh browsers never show 0 products!
         setProducts((current) => {
           if (!current || current.length === 0) {
-            try {
-              localStorage.setItem('snabtash_admin_products', JSON.stringify(INITIAL_PRODUCTS));
-              localStorage.setItem('snabtash_products_archive', JSON.stringify(INITIAL_PRODUCTS));
-            } catch {}
             return INITIAL_PRODUCTS;
           }
           return current;
@@ -601,15 +601,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       if (catsRes.status === 'fulfilled' && Array.isArray(catsRes.value) && catsRes.value.length > 0) {
         setCategories(catsRes.value);
-        try {
-          localStorage.setItem('snabtash_admin_categories', JSON.stringify(catsRes.value));
-        } catch {}
       } else {
         setCategories((current) => {
           if (!current || current.length === 0) {
-            try {
-              localStorage.setItem('snabtash_admin_categories', JSON.stringify(INITIAL_CATEGORIES));
-            } catch {}
             return INITIAL_CATEGORIES;
           }
           return current;
@@ -617,12 +611,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
 
       if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value)) {
-        const DEMO_ORDER_IDS = new Set(['1048', '1047', '1046', '1045', '1044', '1042', '1041', '1040', '1039', '1038']);
-        const realOrders = ordsRes.value.filter((o) => !DEMO_ORDER_IDS.has(String(o.id)));
-        setRequests(realOrders);
-        try {
-          localStorage.setItem('snabtash_requests', JSON.stringify(realOrders));
-        } catch {}
+        setRequests(ordsRes.value);
       }
 
       if (settRes.status === 'fulfilled' && settRes.value && settRes.value.companyName) {
@@ -676,33 +665,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             };
           });
 
-          // Keep any local-only banners that don't exist on server yet
-          const localOnly = localSaved.filter(
-            (loc) => !serverBanners.some((srv) => String(srv.id) === String(loc.id))
-          );
-          const allBanners = [...merged, ...localOnly];
-
-          try {
-            localStorage.setItem('snabtash_admin_banners', JSON.stringify(allBanners));
-          } catch {}
-
-          // Sync any local Russian banners to server if server hasn't saved image_ru yet
-          allBanners.forEach((item) => {
-            const serverRaw = serverBanners.find((s) => String(s.id) === String(item.id));
-            if (
-              item.image_ru &&
-              item.image_ru.trim() &&
-              serverRaw &&
-              (!serverRaw.image_ru || !serverRaw.image_ru.trim())
-            ) {
-              api.updateBanner(item.id, {
-                image_ru: item.image_ru.trim(),
-                title_ru: (item.title_ru || '').trim(),
-              }).catch(() => {});
-            }
-          });
-
-          return allBanners;
+          return merged;
         });
       }
 
@@ -821,27 +784,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Periodic polling (every 6 seconds) ensures 2 distinct browsers (e.g. Chrome & Edge)
-    // stay in sync automatically without requiring manual page reload!
-    const interval = setInterval(refreshFromBackend, 6000);
+    // Polling: only poll if in admin section every 30s, or on focus / tab visibility change
+    const isAdminRoute = typeof window !== 'undefined' && (window.location.pathname.startsWith('/admin') || localStorage.getItem('snabtash_is_admin') === 'true');
+    let interval: any = null;
+    if (isAdminRoute) {
+      interval = setInterval(refreshFromBackend, 30000);
+    }
 
     return () => {
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
       try {
         syncChannelRef.current?.close();
       } catch {}
     };
   }, [refreshFromBackend]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('snabtash_admin_products', JSON.stringify(products));
-    } catch {
-      // ignore
-    }
-  }, [products]);
 
   const addProduct = async (productData: Omit<Product, 'id'>): Promise<Product> => {
     const tempId = `snb-${Date.now()}`;
@@ -1621,43 +1579,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [favorites]);
 
   // Requests state (Zayavkalar - clean real orders only, no mock demo items)
-  const [requests, setRequests] = useState<RequestOrder[]>(() => {
-    try {
-      const saved = localStorage.getItem('snabtash_requests');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          // Filter out legacy hardcoded mock demo orders (1048..1038)
-          const DEMO_ORDER_IDS = new Set(['1048', '1047', '1046', '1045', '1044', '1042', '1041', '1040', '1039', '1038']);
-          return parsed.filter((o) => !DEMO_ORDER_IDS.has(String(o.id)));
-        }
-      }
-    } catch {
-      // ignore
-    }
-    return [];
-  });
+  const [requests, setRequests] = useState<RequestOrder[]>([]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('snabtash_requests', JSON.stringify(requests));
-    } catch {
-      // ignore
-    }
-  }, [requests]);
-
-  const updateRequestStatus = (id: string, status: RequestOrder['status']) => {
+  const updateRequestStatus = async (id: string, status: RequestOrder['status']) => {
+    const previousRequests = requests;
     setRequests((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status } : r))
     );
-    api.updateOrderStatus(id, status).catch((err) => console.log('API sync warning:', err));
-    showToast(`Zayavka #${id} holati "${status}" ga o‘zgartirildi`, 'success');
+    try {
+      await api.updateOrderStatus(id, status);
+      showToast(`Zayavka #${id} holati "${status}" ga o‘zgartirildi`, 'success');
+    } catch (err: any) {
+      setRequests(previousRequests);
+      showToast(`Zayavka holatini yangilab bo‘lmadi: ${err.message || 'Xatolik'}`, 'error');
+    }
   };
 
-  const deleteRequest = (id: string) => {
+  const deleteRequest = async (id: string) => {
+    const previousRequests = requests;
     setRequests((prev) => prev.filter((r) => r.id !== id));
-    api.deleteOrder(id).catch((err) => console.log('API sync warning:', err));
-    showToast(`Zayavka #${id} o‘chirildi`, 'info');
+    try {
+      await api.deleteOrder(id);
+      showToast(`Zayavka #${id} o‘chirildi`, 'info');
+    } catch (err: any) {
+      setRequests(previousRequests);
+      showToast(`Zayavkani o‘chirib bo‘lmadi: ${err.message || 'Xatolik'}`, 'error');
+    }
   };
 
   const addManualRequest = (order: RequestOrder) => {
@@ -1874,29 +1821,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const isFavorite = (productId: string) => favorites.includes(productId);
 
   // Submit request from checkout
-  const submitRequest = (orderData: Omit<RequestOrder, 'id' | 'date' | 'status'>) => {
-    const newId = (Math.floor(1000 + Math.random() * 9000)).toString();
-    const today = new Date();
-    const formattedDate = `${String(today.getDate()).padStart(2, '0')}.${String(
-      today.getMonth() + 1
-    ).padStart(2, '0')}.${today.getFullYear()}`;
-
-    const newOrder: RequestOrder = {
-      ...orderData,
-      id: newId,
-      date: formattedDate,
-      status: 'Ko‘rib chiqilmoqda',
-    };
-
-    setRequests((prev) => [newOrder, ...prev]);
-    clearCart();
-
-    // Send Telegram bot notification to admin
-    sendTelegramOrderNotification(newOrder, siteSettings).catch((err) => {
-      console.warn('Telegram notification warning:', err);
+  const submitRequest = async (orderData: Omit<RequestOrder, 'id' | 'date' | 'status'>): Promise<RequestOrder> => {
+    const createdServerOrder = await api.createOrder({
+      items: orderData.items,
+      totalAmount: orderData.totalAmount,
+      contact: orderData.contact,
     });
 
-    // Automatically remember contact details and activate customer session
+    if (!createdServerOrder || !createdServerOrder.id) {
+      throw new Error("Serverdan buyurtma ma'lumoti olinmadi");
+    }
+
+    setRequests((prev) => {
+      const exists = prev.some((o) => String(o.id) === String(createdServerOrder.id));
+      if (exists) {
+        return prev.map((o) => (String(o.id) === String(createdServerOrder.id) ? createdServerOrder : o));
+      }
+      return [createdServerOrder, ...prev];
+    });
+
+    clearCart();
+
     if (orderData.contact && orderData.contact.phone) {
       updateProfile({
         name: orderData.contact.name || '',
@@ -1907,18 +1852,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
     }
 
-    // Sync with Django REST API
-    api.createOrder({
-      items: orderData.items,
-      totalAmount: orderData.totalAmount,
-      contact: orderData.contact,
-    }).then((createdServerOrder) => {
-      if (createdServerOrder && createdServerOrder.id) {
-        setRequests((prev) => prev.map((ord) => (ord.id === newId ? createdServerOrder : ord)));
-      }
-    }).catch((err) => console.log('API create order warning:', err));
-
-    return newOrder;
+    return createdServerOrder;
   };
 
   // Search and Drawer States
@@ -2246,6 +2180,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateRequestStatus,
         deleteRequest,
         addManualRequest,
+        backendError,
+        refreshFromBackend,
         siteSettings,
         updateSiteSettings,
         profile,

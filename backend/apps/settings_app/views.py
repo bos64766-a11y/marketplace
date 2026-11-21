@@ -282,25 +282,6 @@ DEFAULT_SHOWCASE_SECTIONS = [
 
 class ShowcaseSectionListCreateView(APIView):
     def get(self, request):
-        if ShowcaseSection.objects.count() == 0:
-            for item in DEFAULT_SHOWCASE_SECTIONS:
-                ShowcaseSection.objects.create(**item)
-        else:
-            for item in DEFAULT_SHOWCASE_SECTIONS:
-                sec = ShowcaseSection.objects.filter(title__iexact=item['title']).first()
-                if sec:
-                    changed = False
-                    if not sec.title_ru and item.get('title_ru'):
-                        sec.title_ru = item['title_ru']
-                        changed = True
-                    if not sec.subtitle_ru and item.get('subtitle_ru'):
-                        sec.subtitle_ru = item['subtitle_ru']
-                        changed = True
-                    if changed:
-                        sec.save(update_fields=['title_ru', 'subtitle_ru'])
-                else:
-                    ShowcaseSection.objects.create(**item)
-
         sections = ShowcaseSection.objects.all().order_by('order', 'id')
         active_only = request.query_params.get('active')
         if active_only == 'true':
@@ -366,10 +347,6 @@ DEFAULT_PARTNERS = [
 
 class PartnerListCreateView(APIView):
     def get(self, request):
-        if Partner.objects.count() == 0:
-            for item in DEFAULT_PARTNERS:
-                Partner.objects.create(**item)
-
         partners = Partner.objects.all().order_by('order', 'id')
         serializer = PartnerSerializer(partners, many=True)
         return Response(serializer.data)
@@ -671,13 +648,13 @@ class RestoreBackupView(APIView):
                 id=1,
                 defaults={
                     'company_name': sett.get('companyName') or sett.get('company_name', 'SNABTASH'),
-                    'phone': sett.get('phone', '') or '',
-                    'email': sett.get('email', '') or '',
+                    'phone_1': sett.get('phone_1') or sett.get('phone1') or sett.get('phone', '+998 87 034 97 79'),
+                    'phone_2': sett.get('phone_2') or sett.get('phone2', '') or '',
+                    'email': sett.get('email', 'info@snabtash.uz') or 'info@snabtash.uz',
                     'address': sett.get('address', '') or '',
-                    'address_ru': sett.get('address_ru', '') or '',
-                    'telegram': sett.get('telegram', '') or '',
-                    'working_hours': sett.get('workingHours') or sett.get('working_hours', '') or '',
-                    'working_hours_ru': sett.get('workingHours_ru') or sett.get('working_hours_ru', '') or '',
+                    'work_hours': sett.get('work_hours') or sett.get('workingHours') or sett.get('working_hours', '') or '',
+                    'telegram_channel': sett.get('telegram_channel') or sett.get('telegram', '') or '',
+                    'telegram_bot': sett.get('telegram_bot', '') or '',
                 }
             )
             restored_settings = True

@@ -205,6 +205,13 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
     return list;
   }, [products, selectedCategory, searchQuery, inStockOnly, selectedBrand, priceRange, sortBy]);
 
+  const ITEMS_PER_PAGE = 24;
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE) || 1;
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredProducts, currentPage]);
+
   const activeCategoryObj = categories.find((c) => c.slug === selectedCategory || c.id === selectedCategory);
 
   const hasActiveFilters =
@@ -525,9 +532,9 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
           </div>
 
           {/* Product Grid: 4-5 compact columns on desktop, 2-3 on mobile/tablet */}
-          {filteredProducts.length > 0 ? (
+          {paginatedProducts.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-2.5 sm:gap-3.5">
-              {filteredProducts.map((product) => (
+              {paginatedProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
@@ -553,20 +560,27 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
           )}
 
           {/* Pagination */}
-          {filteredProducts.length > 0 && (
+          {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2 pt-6 pb-2">
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className="w-10 h-10 rounded-2xl border border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#FFF7ED] hover:text-[#FF5A00] flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
+                onClick={() => {
+                  setCurrentPage((p) => Math.max(1, p - 1));
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                disabled={currentPage === 1}
+                className="w-10 h-10 rounded-2xl border border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#FFF7ED] hover:text-[#FF5A00] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
                 aria-label="Oldingi sahifa"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
 
-              {[1, 2, 3].map((page) => (
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
-                  onClick={() => setCurrentPage(page)}
+                  onClick={() => {
+                    setCurrentPage(page);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
                   className={`w-10 h-10 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                     currentPage === page
                       ? 'bg-[#FF5A00] text-white shadow-md shadow-[#FF5A00]/25'
@@ -578,8 +592,12 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
               ))}
 
               <button
-                onClick={() => setCurrentPage((p) => p + 1)}
-                className="w-10 h-10 rounded-2xl border border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#FFF7ED] hover:text-[#FF5A00] flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
+                onClick={() => {
+                  setCurrentPage((p) => Math.min(totalPages, p + 1));
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                disabled={currentPage === totalPages}
+                className="w-10 h-10 rounded-2xl border border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#FFF7ED] hover:text-[#FF5A00] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
                 aria-label="Keyingi sahifa"
               >
                 <ChevronRight className="w-4 h-4" />

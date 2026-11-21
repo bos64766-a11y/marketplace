@@ -3,6 +3,7 @@ import logging
 import urllib.request
 import urllib.error
 import re
+from django.utils import timezone
 from apps.settings_app.models import SiteSettings
 
 logger = logging.getLogger(__name__)
@@ -82,7 +83,13 @@ def format_order_telegram_message(order) -> str:
 
     msg += f"\n━━━━━━━━━━━━━━━━━━━━\n"
     msg += f"💰 <b>JAMI SUMMA:</b> <b>{format_number(order.total_amount or 0)} so‘m</b>\n"
-    created_str = order.created_at.strftime('%d.%m.%Y %H:%M') if hasattr(order, 'created_at') and order.created_at else ''
+    if hasattr(order, 'created_at') and order.created_at:
+        try:
+            created_str = timezone.localtime(order.created_at).strftime('%d.%m.%Y %H:%M')
+        except Exception:
+            created_str = order.created_at.strftime('%d.%m.%Y %H:%M')
+    else:
+        created_str = ''
     if created_str:
         msg += f"📅 <b>Sana:</b> {escape_html(created_str)}\n"
     msg += f"🌐 <i>Manba: SNABTASH B2B Market</i>"

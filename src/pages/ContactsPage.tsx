@@ -70,7 +70,7 @@ export const ContactsPage: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      submitRequest({
+      await submitRequest({
         items: [],
         totalAmount: 0,
         contact: {

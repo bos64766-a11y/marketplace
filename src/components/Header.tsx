@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { Logo } from './Logo';
 import { CatalogMegaMenu } from './CatalogMegaMenu';
+import { getMediaUrl } from '../services/api';
 import {
   Menu,
   X,
@@ -312,7 +313,7 @@ export const Header: React.FC = () => {
                             className="w-full py-2.5 flex items-center gap-3 hover:bg-[#F8FAFC] text-left transition-colors cursor-pointer group rounded-xl px-2"
                           >
                             <img
-                              src={product.images[0]}
+                              src={getMediaUrl(product.images[0])}
                               alt={getProductName(product)}
                               className="w-10 h-10 object-contain bg-white rounded-xl border border-[#E2E8F0] p-0.5 shrink-0"
                             />

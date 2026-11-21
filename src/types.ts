@@ -53,7 +53,7 @@ export interface RequestOrder {
   created_at?: string;
   items: CartItem[];
   totalAmount: number;
-  status: 'Ko‘rib chiqilmoqda' | 'Tasdiqlangan' | 'Yetkazilmoqda' | 'Bajarildi';
+  status: 'Ko‘rib chiqilmoqda' | 'Tasdiqlangan' | 'Yetkazilmoqda' | 'Bajarildi' | 'Bekor qilingan';
   contact: {
     name: string;
     phone: string;

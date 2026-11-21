@@ -54,7 +54,7 @@ export const RequestPage: React.FC = () => {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       setIsEditingContact(true);
@@ -62,8 +62,8 @@ export const RequestPage: React.FC = () => {
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      const order = submitRequest({
+    try {
+      const order = await submitRequest({
         items: [...cart],
         totalAmount: cartTotal,
         contact: {
@@ -82,9 +82,16 @@ export const RequestPage: React.FC = () => {
         hasOrderedBefore: true,
       });
 
-      setIsSubmitting(false);
       setSubmittedOrderId(order.id);
-    }, 700);
+    } catch (err: any) {
+      console.error("Order submission error:", err);
+      const msg = language === 'ru'
+        ? 'Не удалось отправить заявку. Пожалуйста, проверьте интернет-соединение и попробуйте снова.'
+        : 'Buyurtmani yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.';
+      alert(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // SUCCESS SCREEN

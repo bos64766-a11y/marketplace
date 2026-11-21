@@ -32,7 +32,7 @@ const LINK_PRESETS = [
   { label: 'Maishiy kimyo (/catalog/maishiy-kimyo)', value: '/catalog/maishiy-kimyo' },
   { label: 'Himoya vositalari (/catalog/himoya-vositalari)', value: '/catalog/himoya-vositalari' },
   { label: 'Kantselyariya (/catalog/kanselyariya)', value: '/catalog/kanselyariya' },
-  { label: 'Xo‘jalik mollari (/catalog/xojalik-mollari)', value: '/catalog/xojalik-mollari' },
+  { label: 'Xo‘jalik mollari (/catalog/xojalikmollari)', value: '/catalog/xojalikmollari' },
   { label: 'Zayavka qoldirish (/request)', value: '/request' },
   { label: 'Aloqa markazi (/contacts)', value: '/contacts' },
 ];

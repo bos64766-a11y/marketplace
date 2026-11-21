@@ -14,7 +14,7 @@ sys.path.insert(0, str(BASE_DIR))
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-4fys2#nhdhv5jfvd7ry!7nch6mwi9))y)2tp)0=(hn-k=8im63')
 
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
 allowed_hosts_env = os.environ.get('DJANGO_ALLOWED_HOSTS')
 if allowed_hosts_env:
@@ -86,13 +86,8 @@ if database_url:
                 conn_health_checks=True,
             )
         }
-    except Exception:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
-        }
+    except Exception as e:
+        raise RuntimeError(f"DATABASE_URL berilgan ammo bazaga ulanishda xatolik: {e}")
 else:
     DATABASES = {
         'default': {
@@ -134,7 +129,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Settings
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
@@ -167,17 +162,20 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:3000',
 ]
 
+# Security headers
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Django REST Framework Settings
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ],
+    ] + (['rest_framework.renderers.BrowsableAPIRenderer'] if DEBUG else []),
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
     ],
+    'COERCE_DECIMAL_TO_STRING': False,
 }
 
 # Max request upload body size for image payloads (50 MB)

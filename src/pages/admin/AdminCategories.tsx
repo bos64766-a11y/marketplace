@@ -119,7 +119,7 @@ export const AdminCategories: React.FC = () => {
     const catData: Category = {
       ...formData,
       id: editingCategory ? editingCategory.id : id,
-      slug: editingCategory ? editingCategory.slug : slug,
+      slug: formData.slug || (editingCategory ? editingCategory.slug : slug),
     };
 
     if (editingCategory) {

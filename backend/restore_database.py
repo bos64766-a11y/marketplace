@@ -303,11 +303,11 @@ def run_restore():
                 os.path.join(backend_dir, "manage.py"),
                 "shell",
                 "-c",
-                "from apps.products.models import Product; import sys; sys.exit(42 if Product.objects.count() >= 100 else 0)"
+                "from apps.products.models import Product; import sys; sys.exit(42 if Product.objects.exists() else 0)"
             ]
             res = subprocess.run(check_cmd, cwd=backend_dir)
             if res.returncode == 42:
-                print("\n[HIMOYA] Baza allaqachon to'liq (100 ta mahsulot mavjud).")
+                print("\n[HIMOYA] Baza allaqachon to'ldirilgan (mahsulotlar mavjud).")
                 print("[HIMOYA] Joriy ma'lumotlar saqlab qolindi. Agar majburan tiklamoqchi bo'lsangiz: python restore_database.py --force")
                 return
         except Exception as e:

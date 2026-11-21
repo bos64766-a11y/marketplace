@@ -37,6 +37,6 @@ jobs:
             echo "Hech qanday o'zgarish yo'q. Commit qilinmadi."
           else
             TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M UTC')
-            git commit -m "chore(backup): auto-backup live database [$TIMESTAMP]"
+            git commit -m "chore(backup): auto-backup live database [$TIMESTAMP] [skip ci]"
             git push origin main
           fi

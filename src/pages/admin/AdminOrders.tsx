@@ -19,6 +19,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import type { RequestOrder } from '../../types';
+import { getMediaUrl } from '../../services/api';
 
 const formatPrice = (price: number): string => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -29,6 +30,7 @@ const STATUS_OPTIONS: RequestOrder['status'][] = [
   'Tasdiqlangan',
   'Yetkazilmoqda',
   'Bajarildi',
+  'Bekor qilingan',
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
@@ -36,6 +38,7 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> =
   'Tasdiqlangan': { bg: '#DBEAFE', text: '#2563EB', dot: '#3B82F6' },
   'Yetkazilmoqda': { bg: '#EDE9FE', text: '#7C3AED', dot: '#8B5CF6' },
   'Bajarildi': { bg: '#D1FAE5', text: '#059669', dot: '#10B981' },
+  'Bekor qilingan': { bg: '#FEE2E2', text: '#DC2626', dot: '#EF4444' },
 };
 
 type FilterTab = 'all' | RequestOrder['status'];
@@ -70,6 +73,7 @@ export const AdminOrders: React.FC = () => {
     { key: 'Tasdiqlangan', label: 'Tasdiqlangan', count: requests.filter((r) => r.status === 'Tasdiqlangan').length },
     { key: 'Yetkazilmoqda', label: 'Yetkazilmoqda', count: requests.filter((r) => r.status === 'Yetkazilmoqda').length },
     { key: 'Bajarildi', label: 'Bajarildi', count: requests.filter((r) => r.status === 'Bajarildi').length },
+    { key: 'Bekor qilingan', label: 'Bekor qilingan', count: requests.filter((r) => r.status === 'Bekor qilingan' || (r.status as string) === 'Bekor qilindi').length },
   ];
 
   const toggleExpand = (id: string) => {
@@ -207,7 +211,7 @@ export const AdminOrders: React.FC = () => {
                             <div key={idx} className="flex items-center gap-3 p-2.5 rounded-xl bg-white border border-[#E2E8F0]/60">
                               <div className="w-9 h-9 rounded-lg bg-[#F1F5F9] overflow-hidden shrink-0">
                                 {item.product.images?.[0] && (
-                                  <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                                  <img src={getMediaUrl(item.product.images[0])} alt={item.product.name} className="w-full h-full object-cover" />
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">

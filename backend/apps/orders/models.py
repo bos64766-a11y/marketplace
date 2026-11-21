@@ -57,24 +57,30 @@ class RequestOrder(models.Model):
         return f"Zayavka #{self.id} — {self.customer_name} ({self.total_amount} so‘m)"
 
     def save(self, *args, **kwargs):
+        is_new = self._state.adding or not self.pk or not RequestOrder.objects.filter(pk=self.pk).exists()
         if not self.id:
-            # Generate unique 4-5 digit B2B order ID
-            for _ in range(10):
-                new_id = str(random.randint(1000, 9999))
-                if not RequestOrder.objects.filter(id=new_id).exists():
-                    self.id = new_id
-                    break
-            else:
+            # Generate sequential 4-6 digit B2B order ID
+            try:
+                numeric_orders = RequestOrder.objects.filter(id__regex=r'^\d+$')
+                max_id = 1048
+                for o in numeric_orders.only('id'):
+                    if o.id.isdigit():
+                        num = int(o.id)
+                        if num > max_id:
+                            max_id = num
+                self.id = str(max_id + 1)
+            except Exception:
                 self.id = str(int(timezone.now().timestamp()))[-6:]
 
-        # Sync or create CustomerContact
-        if self.customer_phone:
+        # Sync or create CustomerContact ONLY when new order is created
+        if self.customer_phone and is_new:
             contact, created = CustomerContact.objects.get_or_create(
                 phone=self.customer_phone,
                 defaults={
                     'name': self.customer_name,
                     'company': self.customer_company,
                     'inn': self.customer_inn,
+                    'orders_count': 1,
                 },
             )
             if not created:
@@ -83,9 +89,13 @@ class RequestOrder(models.Model):
                     contact.company = self.customer_company
                 if self.customer_inn:
                     contact.inn = self.customer_inn
-                contact.orders_count += 1
+                contact.orders_count = (contact.orders_count or 0) + 1
                 contact.save()
             self.customer = contact
+        elif self.customer_phone and not self.customer:
+            contact = CustomerContact.objects.filter(phone=self.customer_phone).first()
+            if contact:
+                self.customer = contact
 
         super().save(*args, **kwargs)
 

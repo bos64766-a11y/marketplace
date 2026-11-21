@@ -49,6 +49,59 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   const [quantity, setQuantity] = useState(product?.minOrder || 1);
   const [isAdding, setIsAdding] = useState(false);
 
+  const isRu = language === 'ru';
+  const currentCategory = product ? categories.find((c) => c.id === product.categoryId || c.slug === product.categoryId) : undefined;
+  const categoryDisplayName = product
+    ? (currentCategory ? getCategoryName(currentCategory) : getCategoryName(product.categoryId || product.categoryName))
+    : '';
+  const productName = product ? getProductName(product) : '';
+  const productDesc = product ? getProductDesc(product) : '';
+
+  const productBreadcrumbs = product ? [
+    { name: isRu ? 'Главная' : 'Bosh sahifa', item: isRu ? '/ru' : '/' },
+    { name: isRu ? 'Каталог' : 'Katalog', item: isRu ? '/ru/catalog' : '/catalog' },
+    {
+      name: categoryDisplayName,
+      item: `${isRu ? '/ru' : ''}/catalog/${currentCategory?.slug || product.categoryId || 'all'}`,
+    },
+    {
+      name: productName,
+      item: `${isRu ? '/ru' : ''}/product/${product.slug || product.id}`,
+    },
+  ] : [];
+
+  useSEO({
+    title: product
+      ? `${productName} — ${isRu ? 'Купить оптом в Ташкенте' : 'Ulgurji Narxda Xarid Qilish'}`
+      : (isRu ? 'Товар не найден' : 'Mahsulot topilmadi'),
+    description: product
+      ? `${productName}. ${productDesc ? productDesc.slice(0, 160) + '... ' : ''}${
+          isRu
+            ? 'Оптовые поставки организациям в Ташкенте с НДС через Didox. Доставка со склада SNABTASH.'
+            : 'Toshkent bo\'ylab korxona va ofislarga QQS bilan rasmiy shartnoma asosida ulgurji yetkazib berish.'
+        }`
+      : 'SNABTASH B2B',
+    keywords: product ? `${productName}, ulgurji ${productName}, optom ${productName}, ${productName} narxi toshkent, b2b ta'minot, ${categoryDisplayName}, ${product.brand || 'SNABTASH'}` : '',
+    image: product?.image ? getMediaUrl(product.image) : undefined,
+    url: product ? `${isRu ? '/ru' : ''}/product/${product.slug || product.id}` : undefined,
+    type: 'product',
+    lang: language,
+    product: product ? {
+      name: productName,
+      description: productDesc,
+      image: product.image ? getMediaUrl(product.image) : undefined,
+      price: product.price,
+      priceCurrency: 'UZS',
+      sku: product.sku || String(product.id),
+      brand: product.brand || 'SNABTASH',
+      category: categoryDisplayName,
+      inStock: product.inStock !== false,
+      ratingValue: product.rating || 4.8,
+      reviewCount: product.reviewsCount || 12,
+    } : undefined,
+    breadcrumbs: productBreadcrumbs,
+  });
+
   if (!product) {
     return (
       <div className="max-w-[1536px] mx-auto px-4 py-20 text-center">
@@ -74,55 +127,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   }
 
   const favorite = isFavorite(product.id);
-  const currentCategory = categories.find((c) => c.id === product.categoryId || c.slug === product.categoryId);
-  const categoryDisplayName = currentCategory
-    ? getCategoryName(currentCategory)
-    : getCategoryName(product.categoryId || product.categoryName);
-  const productName = getProductName(product);
-  const productDesc = getProductDesc(product);
   const productTag = getProductTag(product);
-
-  const isRu = language === 'ru';
-  const productBreadcrumbs = [
-    { name: isRu ? 'Главная' : 'Bosh sahifa', item: isRu ? '/ru' : '/' },
-    { name: isRu ? 'Каталог' : 'Katalog', item: isRu ? '/ru/catalog' : '/catalog' },
-    {
-      name: categoryDisplayName,
-      item: `${isRu ? '/ru' : ''}/catalog/${currentCategory?.slug || product.categoryId || 'all'}`,
-    },
-    {
-      name: productName,
-      item: `${isRu ? '/ru' : ''}/product/${product.slug || product.id}`,
-    },
-  ];
-
-  useSEO({
-    title: `${productName} — ${isRu ? 'Купить оптом в Ташкенте' : 'Ulgurji Narxda Xarid Qilish'}`,
-    description: `${productName}. ${productDesc ? productDesc.slice(0, 160) + '... ' : ''}${
-      isRu
-        ? 'Оптовые поставки организациям в Ташкенте с НДС через Didox. Доставка со склада SNABTASH.'
-        : 'Toshkent bo\'ylab korxona va ofislarga QQS bilan rasmiy shartnoma asosida ulgurji yetkazib berish.'
-    }`,
-    keywords: `${productName}, ulgurji ${productName}, optom ${productName}, ${productName} narxi toshkent, b2b ta'minot, ${categoryDisplayName}, ${product.brand || 'SNABTASH'}`,
-    image: product.image ? getMediaUrl(product.image) : undefined,
-    url: `${isRu ? '/ru' : ''}/product/${product.slug || product.id}`,
-    type: 'product',
-    lang: language,
-    product: {
-      name: productName,
-      description: productDesc,
-      image: product.image ? getMediaUrl(product.image) : undefined,
-      price: product.price,
-      priceCurrency: 'UZS',
-      sku: product.sku || String(product.id),
-      brand: product.brand || 'SNABTASH',
-      category: categoryDisplayName,
-      inStock: product.inStock !== false,
-      ratingValue: product.rating || 4.8,
-      reviewCount: product.reviewsCount || 12,
-    },
-    breadcrumbs: productBreadcrumbs,
-  });
 
   // Related products from same category
   const relatedProducts = products.filter(
@@ -260,9 +265,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                 {productName}
               </h1>
               <div className="flex items-center gap-2 text-xs text-[#64748B] mt-2">
-                <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[11px] border border-emerald-200">
-                  {t.productCard.inStock}
-                </span>
+                {product.inStock ? (
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[11px] border border-emerald-200">
+                    {t.productCard.inStock}
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-bold text-[11px] border border-rose-200">
+                    {language === 'ru' ? 'Нет в наличии' : 'Mavjud emas'}
+                  </span>
+                )}
                 <span>•</span>
                 <span>{t.productDetail.sku}: <strong className="text-[#1E293B]">{product.sku}</strong></span>
               </div>
@@ -373,14 +384,18 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
                   <button
                     id="btn-product-detail-add-cart"
                     onClick={handleAddToCart}
-                    disabled={isAdding}
-                    className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs min-w-0 ${
-                      isAdding
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-[#0B2E73] hover:bg-[#071F4E] text-white'
+                    disabled={!product.inStock || isAdding}
+                    className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-xs min-w-0 ${
+                      !product.inStock
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : isAdding
+                        ? 'bg-emerald-600 text-white cursor-pointer'
+                        : 'bg-[#0B2E73] hover:bg-[#071F4E] text-white cursor-pointer'
                     }`}
                   >
-                    {isAdding ? (
+                    {!product.inStock ? (
+                      <span>{language === 'ru' ? 'Нет в наличии' : 'Mavjud emas'}</span>
+                    ) : isAdding ? (
                       <>
                         <Check className="w-4 h-4 shrink-0" />
                         <span className="truncate">{t.productCard.inCart}</span>

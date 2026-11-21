@@ -67,7 +67,7 @@ interface AdminLayoutProps {
 }
 
 export const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab }) => {
-  const { navigate, requests, products, logoutAdmin } = useApp();
+  const { navigate, requests, products, logoutAdmin, backendError, refreshFromBackend } = useApp();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -246,10 +246,21 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab })
             </div>
 
             {/* Live Status Badge */}
-            <div className="hidden xl:flex items-center gap-1.5 ml-4 px-3 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-[11px] font-medium text-[#059669]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-              <span>Tizim faol</span>
-            </div>
+            {backendError ? (
+              <button
+                onClick={() => refreshFromBackend()}
+                className="hidden xl:flex items-center gap-1.5 ml-4 px-3 py-1 rounded-full bg-[#FEF2F2] border border-[#FECACA] text-[11px] font-medium text-[#DC2626] hover:bg-[#FEE2E2] transition-colors cursor-pointer"
+                title="Bazada uzilish yuz berdi. Qayta urinish uchun bosing."
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444]" />
+                <span>Ulanishda xatolik (Qayta yuklash)</span>
+              </button>
+            ) : (
+              <div className="hidden xl:flex items-center gap-1.5 ml-4 px-3 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-[11px] font-medium text-[#059669]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                <span>Tizim faol</span>
+              </div>
+            )}
           </div>
 
           {/* Right Actions */}

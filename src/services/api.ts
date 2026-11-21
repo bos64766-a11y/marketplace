@@ -57,11 +57,15 @@ export function getMediaUrl(path?: string | null): string {
 }
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const headers = {
-    'Content-Type': 'application/json',
+  const method = (options.method || 'GET').toUpperCase();
+  const headers: Record<string, string> = {
     Accept: 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   };
+
+  if (method !== 'GET' && method !== 'HEAD') {
+    headers['Content-Type'] = 'application/json';
+  }
 
   const response = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
@@ -172,7 +176,12 @@ export const api = {
   getProducts: async (params?: Record<string, string>): Promise<Product[]> => {
     const searchParams = new URLSearchParams(params);
     const queryStr = searchParams.toString() ? `?${searchParams.toString()}` : '';
-    return request<Product[]>(`/products/${queryStr}`);
+    const prods = await request<Product[]>(`/products/${queryStr}`);
+    return prods.map((p) => ({
+      ...p,
+      price: Number(p.price) || 0,
+      oldPrice: p.oldPrice ? Number(p.oldPrice) : undefined,
+    }));
   },
 
   getProduct: async (id: string): Promise<Product> => {
@@ -234,7 +243,19 @@ export const api = {
   getOrders: async (params?: Record<string, string>): Promise<RequestOrder[]> => {
     const searchParams = new URLSearchParams(params);
     const queryStr = searchParams.toString() ? `?${searchParams.toString()}` : '';
-    return request<RequestOrder[]>(`/orders/${queryStr}`);
+    const ords = await request<RequestOrder[]>(`/orders/${queryStr}`);
+    return ords.map((o) => ({
+      ...o,
+      totalAmount: Number(o.totalAmount) || 0,
+      items: (o.items || []).map((it) => ({
+        ...it,
+        quantity: Number(it.quantity) || 1,
+        product: it.product ? {
+          ...it.product,
+          price: Number(it.product.price) || 0,
+        } : it.product,
+      })),
+    }));
   },
 
   createOrder: async (payload: {

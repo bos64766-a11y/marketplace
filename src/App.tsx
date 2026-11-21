@@ -85,8 +85,8 @@ const MainRouter: React.FC = () => {
   }
 
   // Match /catalog or /catalog/:category
-  const catalogMatch = cleanRoute.match(/^\/catalog(?:\/([^/]+))?/);
-  if (catalogMatch && (cleanRoute.startsWith('/catalog') || cleanRoute === '/catalog')) {
+  const catalogMatch = cleanRoute.match(/^\/catalog(?:\/([^/]+))?$/);
+  if (catalogMatch) {
     return <CatalogPage initialCategory={catalogMatch[1]} />;
   }
 

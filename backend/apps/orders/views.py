@@ -48,8 +48,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     def update_status(self, request, id=None):
         order = self.get_object()
         new_status = request.data.get('status')
-        if not new_status:
-            return Response({'error': "Yangi status ko‘rsatilmadi"}, status=status.HTTP_400_BAD_REQUEST)
+        valid_statuses = [choice[0] for choice in RequestOrder.STATUS_CHOICES]
+        if not new_status or new_status not in valid_statuses:
+            return Response(
+                {'error': f"Noto‘g‘ri status. Ruxsat etilgan statuslar: {', '.join(valid_statuses)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         order.status = new_status
         order.save(update_fields=['status', 'updated_at'])
@@ -69,10 +73,12 @@ class CustomerLookupView(APIView):
         if not phone:
             return Response({'found': False, 'message': 'Telefon raqam berilmadi'}, status=status.HTTP_400_BAD_REQUEST)
 
+        digits = ''.join(filter(str.isdigit, phone))
+        if len(digits) < 9:
+            return Response({'found': False, 'message': 'Telefon raqam kamida 9 ta raqamdan iborat bo‘lishi kerak'}, status=status.HTTP_400_BAD_REQUEST)
+
         contact = CustomerContact.objects.filter(phone=phone).first()
         if not contact:
-            # Try cleaning non-digits
-            digits = ''.join(filter(str.isdigit, phone))
             contact = CustomerContact.objects.filter(phone__icontains=digits[-9:]).first()
 
         if contact:

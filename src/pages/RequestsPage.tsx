@@ -80,6 +80,7 @@ export const RequestsPage: React.FC = () => {
         return t.requestsHistoryPage.statusDelivering;
       case 'Bajarildi':
         return t.requestsHistoryPage.statusCompleted;
+      case 'Bekor qilingan':
       case 'Bekor qilindi':
         return t.requestsHistoryPage.statusCancelled;
       default:
@@ -95,6 +96,7 @@ export const RequestsPage: React.FC = () => {
         return 'bg-blue-50 text-blue-700 border-blue-200';
       case 'Bajarildi':
         return 'bg-green-50 text-green-700 border-green-200';
+      case 'Bekor qilingan':
       case 'Bekor qilindi':
         return 'bg-rose-50 text-rose-700 border-rose-200';
       default:

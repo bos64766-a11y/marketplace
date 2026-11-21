@@ -20,6 +20,16 @@ class CategoryViewSet(viewsets.ModelViewSet):
         except Category.DoesNotExist:
             return super().get_object()
 
+    def destroy(self, request, *args, **kwargs):
+        category = self.get_object()
+        prod_count = category.products.count()
+        if prod_count > 0:
+            return Response(
+                {'error': f"Ushbu kategoriyada {prod_count} ta mahsulot mavjud. Avval mahsulotlarni boshqa kategoriyaga o‘tkazing yoki o‘chiring."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return super().destroy(request, *args, **kwargs)
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().select_related('category').prefetch_related('product_images')
