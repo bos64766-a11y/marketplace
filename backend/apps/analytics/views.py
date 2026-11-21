@@ -7,6 +7,9 @@ from apps.products.models import Product, Category
 from apps.orders.models import RequestOrder, CustomerContact, OrderItem
 
 
+PENDING_STATUS = "Ko\u2019rib chiqilmoqda"
+
+
 class DashboardAnalyticsView(APIView):
     def get(self, request):
         now = timezone.now()
@@ -15,7 +18,7 @@ class DashboardAnalyticsView(APIView):
         out_of_stock_products = total_products - in_stock_products
 
         total_orders = RequestOrder.objects.count()
-        pending_orders = RequestOrder.objects.filter(status='Ko‘rib chiqilmoqda').count()
+        pending_orders = RequestOrder.objects.filter(status=PENDING_STATUS).count()
         completed_orders = RequestOrder.objects.filter(status='Bajarildi').count()
 
         total_revenue = RequestOrder.objects.exclude(status='Bekor qilingan').aggregate(
@@ -28,7 +31,7 @@ class DashboardAnalyticsView(APIView):
         # 7-day weekly bar chart data
         days = ['dushanba', 'seshanba', 'chorshanba', 'payshanba', 'juma', 'shanba', 'yakshanba']
         weekday_map = {0: 'dushanba', 1: 'seshanba', 2: 'chorshanba', 3: 'payshanba', 4: 'juma', 5: 'shanba', 6: 'yakshanba'}
-        
+
         # Calculate recent days distribution
         weekly_counts = {d: 0 for d in days}
         one_week_ago = now - timedelta(days=7)
@@ -79,7 +82,7 @@ class DashboardAnalyticsView(APIView):
 
         # Real order status breakdown
         status_counts = {
-            'pending': RequestOrder.objects.filter(status='Ko‘rib chiqilmoqda').count(),
+            'pending': RequestOrder.objects.filter(status=PENDING_STATUS).count(),
             'confirmed': RequestOrder.objects.filter(status='Tasdiqlangan').count(),
             'delivering': RequestOrder.objects.filter(status='Yetkazilmoqda').count(),
             'completed': RequestOrder.objects.filter(status='Bajarildi').count(),
@@ -101,9 +104,9 @@ class DashboardAnalyticsView(APIView):
                 'pendingOrders': pending_orders,
                 'completedOrders': completed_orders,
                 'totalRevenue': float(total_revenue),
-                'totalRevenueFormatted': f"{int(total_revenue):,} so‘m".replace(',', ' '),
+                'totalRevenueFormatted': f"{int(total_revenue):,} so'm".replace(',', ' '),
                 'estimatedExpenses': int(estimated_expenses),
-                'estimatedExpensesFormatted': f"{int(estimated_expenses):,} so‘m".replace(',', ' '),
+                'estimatedExpensesFormatted': f"{int(estimated_expenses):,} so'm".replace(',', ' '),
             },
             'weeklyChart': weekly_chart,
             'donutChart': donut_segments,
