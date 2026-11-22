@@ -43,6 +43,16 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
             'bannerDiscountBadge',
         ]
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        is_staff = bool(request and request.user and request.user.is_authenticated and request.user.is_staff)
+        if not is_staff:
+            # Hide sensitive bot credentials from public API endpoints
+            data.pop('telegramBotToken', None)
+            data.pop('telegramChatId', None)
+        return data
+
 
 class BannerSerializer(serializers.ModelSerializer):
     badge = serializers.CharField(required=False, allow_blank=True, default='')

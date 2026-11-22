@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from rest_framework import status
-from apps.settings_app.models import Banner, ShowcaseSection, Partner
+from apps.settings_app.models import Banner, ShowcaseSection, Partner, SiteSettings
 
 
 class SettingsModelsTest(TestCase):
@@ -107,3 +107,34 @@ class SettingsAPITest(APITestCase):
             'order': 1
         }, format='json')
         self.assertEqual(create_res.status_code, status.HTTP_201_CREATED)
+
+    def test_telegram_credentials_hidden_from_public(self):
+        sett = SiteSettings.get_settings()
+        sett.telegram_bot_token = 'secret_bot_token_123'
+        sett.telegram_chat_id = '-100987654321'
+        sett.save()
+
+        # Public anonymous request must NOT see sensitive Telegram token/chat_id
+        res = self.client.get('/api/settings/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertNotIn('telegramBotToken', res.data)
+        self.assertNotIn('telegramChatId', res.data)
+
+        # Authenticated admin request CAN see configured values to edit them
+        self.client.force_authenticate(user=self.admin)
+        admin_res = self.client.get('/api/settings/')
+        self.assertEqual(admin_res.status_code, status.HTTP_200_OK)
+        self.assertIn('telegramBotToken', admin_res.data)
+        self.assertEqual(admin_res.data['telegramBotToken'], 'secret_bot_token_123')
+        self.assertEqual(admin_res.data['telegramChatId'], '-100987654321')
+
+    def test_telegram_test_endpoint_permissions(self):
+        # Anonymous cannot call test-telegram
+        unauth = self.client.post('/api/settings/test-telegram/', {'token': 'xyz', 'chatId': '123'}, format='json')
+        self.assertEqual(unauth.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Admin with empty token returns 400
+        self.client.force_authenticate(user=self.admin)
+        res = self.client.post('/api/settings/test-telegram/', {'token': '', 'chatId': ''}, format='json')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('message', res.data)

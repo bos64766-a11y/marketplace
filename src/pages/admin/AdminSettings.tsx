@@ -37,6 +37,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { sendTelegramTestMessage } from '../../services/telegram';
+import { api } from '../../services/api';
 
 export const AdminSettings: React.FC = () => {
   const {
@@ -67,7 +68,7 @@ export const AdminSettings: React.FC = () => {
     setIsTestingTelegram(true);
     setTelegramTestResult(null);
     try {
-      const res = await sendTelegramTestMessage(
+      const res = await api.testTelegramConnection(
         formData.telegramBotToken || '',
         formData.telegramChatId || ''
       );

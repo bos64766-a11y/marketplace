@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     SiteSettingsView,
+    TelegramTestView,
     BannerListCreateView,
     BannerDetailView,
     FileUploadView,
@@ -22,6 +23,7 @@ urlpatterns = [
     # Site and content
     path('health/', HealthCheckView.as_view(), name='health-check'),
     path('settings/', SiteSettingsView.as_view(), name='site-settings'),
+    path('settings/test-telegram/', TelegramTestView.as_view(), name='test-telegram'),
     path('settings/restore-backup/', RestoreBackupView.as_view(), name='restore-backup'),
     path('restore/', RestoreBackupView.as_view(), name='restore-backup-direct'),
     path('banners/', BannerListCreateView.as_view(), name='banner-list-create'),

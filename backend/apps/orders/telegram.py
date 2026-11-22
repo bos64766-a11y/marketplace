@@ -1,3 +1,4 @@
+import os
 import json
 import logging
 import urllib.request
@@ -101,8 +102,8 @@ def format_order_telegram_message(order) -> str:
 def _send_order_telegram_sync(order) -> bool:
     try:
         settings = SiteSettings.get_settings()
-        token = clean_telegram_token(settings.telegram_bot_token)
-        chat_ids = clean_chat_ids(settings.telegram_chat_id)
+        token = clean_telegram_token(settings.telegram_bot_token or os.environ.get('TELEGRAM_BOT_TOKEN', ''))
+        chat_ids = clean_chat_ids(settings.telegram_chat_id or os.environ.get('TELEGRAM_CHAT_ID', ''))
 
         if not token or not chat_ids:
             logger.info("Telegram bot token or chat ID not configured in SiteSettings; skipping.")

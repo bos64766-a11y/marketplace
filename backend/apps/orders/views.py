@@ -2,6 +2,8 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
+from django.db import IntegrityError
 from django.db.models import Q
 from .models import RequestOrder, CustomerContact
 from .serializers import RequestOrderSerializer, CustomerContactSerializer
@@ -11,6 +13,16 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = RequestOrder.objects.all().prefetch_related('items__product')
     serializer_class = RequestOrderSerializer
     lookup_field = 'id'
+
+    def create(self, request, *args, **kwargs):
+        # Retry up to 3 times in case of concurrent ID race condition
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                return super().create(request, *args, **kwargs)
+            except IntegrityError as e:
+                if attempt == max_retries - 1:
+                    raise e
 
     def get_permissions(self):
         if self.action == 'create':
@@ -75,6 +87,7 @@ class CustomerLookupView(APIView):
     """
     Looks up previous customer details by phone number to auto-fill repeat orders
     """
+    throttle_classes = [ScopedRateThrottle]
     throttle_scope = 'burst'
 
     def get(self, request):

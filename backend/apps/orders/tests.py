@@ -63,3 +63,38 @@ class OrderAPITest(APITestCase):
         patch_res = self.client.patch(f'/api/orders/{order_id}/status/', {'status': 'Tasdiqlangan'}, format='json')
         self.assertEqual(patch_res.status_code, status.HTTP_200_OK)
         self.assertEqual(patch_res.data['status'], 'Tasdiqlangan')
+
+    def test_order_sequential_id_generation(self):
+        # Create order 1
+        ord1 = RequestOrder.objects.create(
+            customer_name='Mijoz 1',
+            customer_phone='+998901111111',
+            total_amount=10000
+        )
+        # Create order 2
+        ord2 = RequestOrder.objects.create(
+            customer_name='Mijoz 2',
+            customer_phone='+998902222222',
+            total_amount=20000
+        )
+        self.assertTrue(ord1.id.isdigit())
+        self.assertTrue(ord2.id.isdigit())
+        self.assertEqual(int(ord2.id), int(ord1.id) + 1)
+
+    def test_customer_lookup(self):
+        # Pre-create contact
+        CustomerContact.objects.create(
+            phone='+998909998877',
+            name='Testbek',
+            company='Test MCHJ'
+        )
+
+        # 1. Less than 9 digits returns 400
+        res_short = self.client.get('/api/customer/lookup/?phone=12345')
+        self.assertEqual(res_short.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # 2. Valid phone returns customer
+        res_ok = self.client.get('/api/customer/lookup/?phone=+998909998877')
+        self.assertEqual(res_ok.status_code, status.HTTP_200_OK)
+        self.assertTrue(res_ok.data['found'])
+        self.assertEqual(res_ok.data['customer']['name'], 'Testbek')

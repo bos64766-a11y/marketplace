@@ -1,5 +1,8 @@
 import os
 import uuid
+import json
+import urllib.request
+import urllib.error
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -18,12 +21,12 @@ class SiteSettingsView(APIView):
 
     def get(self, request):
         settings = SiteSettings.get_settings()
-        serializer = SiteSettingsSerializer(settings)
+        serializer = SiteSettingsSerializer(settings, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request):
         settings = SiteSettings.get_settings()
-        serializer = SiteSettingsSerializer(settings, data=request.data, partial=True)
+        serializer = SiteSettingsSerializer(settings, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -31,6 +34,87 @@ class SiteSettingsView(APIView):
 
     def patch(self, request):
         return self.put(request)
+
+
+class TelegramTestView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request):
+        from apps.orders.telegram import clean_telegram_token, clean_chat_ids
+
+        token = request.data.get('token')
+        chat_id = request.data.get('chatId')
+
+        site_settings = SiteSettings.get_settings()
+        token = clean_telegram_token(token or site_settings.telegram_bot_token or os.environ.get('TELEGRAM_BOT_TOKEN', ''))
+        chat_ids = clean_chat_ids(chat_id or site_settings.telegram_chat_id or os.environ.get('TELEGRAM_CHAT_ID', ''))
+
+        if not token:
+            return Response({'success': False, 'message': 'Bot token berilmadi'}, status=status.HTTP_400_BAD_REQUEST)
+        if not chat_ids:
+            return Response({'success': False, 'message': 'Chat ID berilmadi'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 1. Verify token via getMe
+        bot_name = None
+        try:
+            get_me_url = f"https://api.telegram.org/bot{token}/getMe"
+            req = urllib.request.Request(get_me_url, headers={'Content-Type': 'application/json'})
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                if resp.status == 200:
+                    me_data = json.loads(resp.read().decode('utf-8'))
+                    if me_data.get('ok'):
+                        bot_name = me_data['result'].get('username') or me_data['result'].get('first_name')
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': f"Bot token xato yoki Telegramga ulanib bo‘lmadi: {str(e)}"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # 2. Send test message to each chat
+        test_msg = (
+            "🎉 <b>SNABTASH B2B — Telegram Bot Aloqasi O‘rnatildi!</b>\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            f"✅ <b>Bot:</b> @{bot_name or 'bot'}\n"
+            "✅ <b>Holati:</b> Server orqali muvaffaqiyatli ulandi!\n\n"
+            "Endi barcha yangi B2B zayavkalar ushbu chatga kelib tushadi."
+        )
+
+        sent_count = 0
+        errors = []
+        for c_id in chat_ids:
+            url = f"https://api.telegram.org/bot{token}/sendMessage"
+            payload = json.dumps({
+                'chat_id': c_id,
+                'text': test_msg,
+                'parse_mode': 'HTML',
+                'disable_web_page_preview': True,
+            }).encode('utf-8')
+            req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'}, method='POST')
+            try:
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    if resp.status == 200:
+                        sent_count += 1
+            except urllib.error.HTTPError as he:
+                try:
+                    err_json = json.loads(he.read().decode('utf-8'))
+                    desc = err_json.get('description', str(he))
+                except Exception:
+                    desc = str(he)
+                errors.append(f"Chat {c_id}: {desc}")
+            except Exception as e:
+                errors.append(f"Chat {c_id}: {str(e)}")
+
+        if sent_count > 0:
+            return Response({
+                'success': True,
+                'botName': f"@{bot_name}" if bot_name else None,
+                'message': f"Test xabari {sent_count} ta chatga muvaffaqiyatli yuborildi! (@{bot_name})"
+            })
+        else:
+            return Response({
+                'success': False,
+                'message': f"Xabar yuborilmadi: {'; '.join(errors)}"
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 DEFAULT_BANNERS = [

@@ -306,6 +306,16 @@ export const api = {
     });
   },
 
+  testTelegramConnection: async (
+    token?: string,
+    chatId?: string
+  ): Promise<{ success: boolean; message: string; botName?: string }> => {
+    return request<{ success: boolean; message: string; botName?: string }>('/settings/test-telegram/', {
+      method: 'POST',
+      body: JSON.stringify({ token, chatId }),
+    });
+  },
+
   // --- BANNERS ---
   getBanners: async (activeOnly = false): Promise<BannerSlide[]> => {
     const q = activeOnly ? '?active=true' : '';

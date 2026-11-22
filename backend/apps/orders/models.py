@@ -23,6 +23,18 @@ class CustomerContact(models.Model):
         return f"{self.name} ({self.phone})"
 
 
+class OrderSequence(models.Model):
+    name = models.CharField(max_length=50, unique=True, default='orders')
+    last_id = models.PositiveIntegerField(default=1048)
+
+    class Meta:
+        verbose_name = 'Buyurtma hisoblagichi'
+        verbose_name_plural = 'Buyurtma hisoblagichlari'
+
+    def __str__(self):
+        return f"{self.name}: {self.last_id}"
+
+
 class RequestOrder(models.Model):
     STATUS_CHOICES = [
         ('Ko‘rib chiqilmoqda', 'Ko‘rib chiqilmoqda'),
@@ -56,21 +68,47 @@ class RequestOrder(models.Model):
     def __str__(self):
         return f"Zayavka #{self.id} — {self.customer_name} ({self.total_amount} so‘m)"
 
+    @classmethod
+    def get_next_order_id(cls):
+        """
+        Atomically allocates the next sequential order ID using select_for_update.
+        Guarantees concurrency safety across multiple Gunicorn workers.
+        """
+        try:
+            seq, _ = OrderSequence.objects.select_for_update().get_or_create(
+                name='orders',
+                defaults={'last_id': 1048}
+            )
+            existing_ids = cls.objects.filter(id__regex=r'^\d+$').values_list('id', flat=True)
+            max_in_db = 1048
+            for raw_id in existing_ids:
+                if raw_id.isdigit():
+                    val = int(raw_id)
+                    if val > max_in_db:
+                        max_in_db = val
+
+            current_base = max(seq.last_id, max_in_db)
+            next_id = current_base + 1
+            seq.last_id = next_id
+            seq.save(update_fields=['last_id'])
+            return str(next_id)
+        except Exception:
+            try:
+                existing_ids = cls.objects.filter(id__regex=r'^\d+$').values_list('id', flat=True)
+                max_id = 1048
+                for raw_id in existing_ids:
+                    if raw_id.isdigit():
+                        val = int(raw_id)
+                        if val > max_id:
+                            max_id = val
+                return str(max_id + 1)
+            except Exception:
+                return str(int(timezone.now().timestamp()))[-6:]
+
     def save(self, *args, **kwargs):
         is_new = self._state.adding or not self.pk or not RequestOrder.objects.filter(pk=self.pk).exists()
         if not self.id:
-            # Generate sequential 4-6 digit B2B order ID
-            try:
-                numeric_orders = RequestOrder.objects.filter(id__regex=r'^\d+$')
-                max_id = 1048
-                for o in numeric_orders.only('id'):
-                    if o.id.isdigit():
-                        num = int(o.id)
-                        if num > max_id:
-                            max_id = num
-                self.id = str(max_id + 1)
-            except Exception:
-                self.id = str(int(timezone.now().timestamp()))[-6:]
+            self.id = RequestOrder.get_next_order_id()
 
         # Sync or create CustomerContact ONLY when new order is created
         if self.customer_phone and is_new:
