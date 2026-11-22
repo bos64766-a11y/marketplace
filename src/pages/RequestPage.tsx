@@ -269,11 +269,10 @@ export const RequestPage: React.FC = () => {
                     if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                   }}
                   placeholder={t.checkout.fullNamePlaceholder}
-                  className={`w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${
-                    errors.name
-                      ? 'border-red-500 ring-2 ring-red-200'
-                      : 'border-[#E2E8F0] focus:border-[#FF5A00]'
-                  }`}
+                  className={`w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${errors.name
+                    ? 'border-red-500 ring-2 ring-red-200'
+                    : 'border-[#E2E8F0] focus:border-[#FF5A00]'
+                    }`}
                 />
                 {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
               </div>
@@ -289,11 +288,10 @@ export const RequestPage: React.FC = () => {
                   value={phone}
                   onChange={(e) => handlePhoneChange(e.target.value)}
                   placeholder="+998 __ ___ __ __"
-                  className={`w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${
-                    errors.phone
-                      ? 'border-red-500 ring-2 ring-red-200'
-                      : 'border-[#E2E8F0] focus:border-[#FF5A00]'
-                  }`}
+                  className={`w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${errors.phone
+                    ? 'border-red-500 ring-2 ring-red-200'
+                    : 'border-[#E2E8F0] focus:border-[#FF5A00]'
+                    }`}
                 />
                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>

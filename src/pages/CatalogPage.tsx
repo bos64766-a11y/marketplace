@@ -64,8 +64,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
   const activeCatName = activeCatObj
     ? getCategoryName(activeCatObj)
     : (selectedCategory === 'all'
-        ? (language === 'ru' ? 'Все товары' : 'Barcha mahsulotlar')
-        : selectedCategory);
+      ? (language === 'ru' ? 'Все товары' : 'Barcha mahsulotlar')
+      : selectedCategory);
 
   const catalogBreadcrumbs = useMemo(() => {
     const isRu = language === 'ru';
@@ -92,8 +92,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
       selectedCategory !== 'all'
         ? `${activeCatName} — ${language === 'ru' ? 'Купить оптом в Ташкенте' : 'Toshkentda ulgurji narxda xarid qilish'}`
         : language === 'ru'
-        ? 'Каталог товаров оптом — SNABTASH B2B Ташкент'
-        : 'Barcha Mahsulotlar Katalogi — SNABTASH B2B Toshkent',
+          ? 'Каталог товаров оптом — SNABTASH B2B Ташкент'
+          : 'Barcha Mahsulotlar Katalogi — SNABTASH B2B Toshkent',
     description:
       language === 'ru'
         ? `Оптовый каталог: ${activeCatName}. Качественные товары для офисов, гостиниц, ресторанов и клининговых компаний. Доставка по Ташкенту, оплата по перечислению с НДС через Didox.`
@@ -252,9 +252,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
         <span>/</span>
         <button
           onClick={() => navigate('/catalog')}
-          className={`transition-colors cursor-pointer ${
-            selectedCategory === 'all' ? 'text-[#FF5A00] font-bold' : 'hover:text-[#FF5A00]'
-          }`}
+          className={`transition-colors cursor-pointer ${selectedCategory === 'all' ? 'text-[#FF5A00] font-bold' : 'hover:text-[#FF5A00]'
+            }`}
         >
           {t.header.catalog}
         </button>
@@ -302,22 +301,20 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                 <button
                   id="btn-catalog-cat-all"
                   onClick={() => handleCategorySelect('all')}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer text-left ${
-                    selectedCategory === 'all'
-                      ? 'bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/25 shadow-xs'
-                      : 'text-[#334155] hover:bg-[#F8FAFC] hover:text-[#FF5A00]'
-                  }`}
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer text-left ${selectedCategory === 'all'
+                    ? 'bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/25 shadow-xs'
+                    : 'text-[#334155] hover:bg-[#F8FAFC] hover:text-[#FF5A00]'
+                    }`}
                 >
                   <div className="flex items-center gap-2">
                     <Boxes className="w-4 h-4 text-[#FF5A00]" />
                     <span>{t.catalogPage.allProducts}</span>
                   </div>
                   <span
-                    className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${
-                      selectedCategory === 'all'
-                        ? 'bg-[#FF5A00] text-white'
-                        : 'bg-[#F1F5F9] text-[#64748B]'
-                    }`}
+                    className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${selectedCategory === 'all'
+                      ? 'bg-[#FF5A00] text-white'
+                      : 'bg-[#F1F5F9] text-[#64748B]'
+                      }`}
                   >
                     {products.length}
                   </span>
@@ -335,11 +332,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                       key={cat.id}
                       id={`btn-catalog-cat-${cat.slug}`}
                       onClick={() => handleCategorySelect(cat.slug)}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition-all cursor-pointer text-left ${
-                        isSelected
-                          ? 'bg-[#FFF7ED] text-[#FF5A00] font-bold border border-[#FF5A00]/25 shadow-xs'
-                          : 'text-[#334155] hover:bg-[#F8FAFC] hover:text-[#FF5A00]'
-                      }`}
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition-all cursor-pointer text-left ${isSelected
+                        ? 'bg-[#FFF7ED] text-[#FF5A00] font-bold border border-[#FF5A00]/25 shadow-xs'
+                        : 'text-[#334155] hover:bg-[#F8FAFC] hover:text-[#FF5A00]'
+                        }`}
                     >
                       <div className="flex items-center gap-2.5 truncate">
                         <span className={`w-4 h-4 rounded overflow-hidden flex items-center justify-center shrink-0 ${isSelected ? 'text-[#FF5A00]' : 'text-[#64748B]'}`}>
@@ -352,11 +348,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                         <span className="truncate">{getCategoryName(cat)}</span>
                       </div>
                       <span
-                        className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${
-                          isSelected
-                            ? 'bg-[#FF5A00] text-white'
-                            : 'bg-[#F1F5F9] text-[#64748B]'
-                        }`}
+                        className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${isSelected
+                          ? 'bg-[#FF5A00] text-white'
+                          : 'bg-[#F1F5F9] text-[#64748B]'
+                          }`}
                       >
                         {count}
                       </span>
@@ -581,11 +576,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                     setCurrentPage(page);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className={`w-10 h-10 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
-                    currentPage === page
-                      ? 'bg-[#FF5A00] text-white shadow-md shadow-[#FF5A00]/25'
-                      : 'border border-[#E2E8F0] bg-white text-[#1E293B] hover:bg-[#F8FAFC]'
-                  }`}
+                  className={`w-10 h-10 rounded-2xl text-xs font-bold transition-all cursor-pointer ${currentPage === page
+                    ? 'bg-[#FF5A00] text-white shadow-md shadow-[#FF5A00]/25'
+                    : 'border border-[#E2E8F0] bg-white text-[#1E293B] hover:bg-[#F8FAFC]'
+                    }`}
                 >
                   {page}
                 </button>
@@ -636,11 +630,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                 <div className="space-y-1.5">
                   <button
                     onClick={() => handleCategorySelect('all')}
-                    className={`w-full p-3 rounded-2xl text-xs font-bold text-left flex items-center justify-between transition-colors cursor-pointer ${
-                      selectedCategory === 'all'
-                        ? 'bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/25'
-                        : 'bg-[#F8FAFC] text-[#1E293B]'
-                    }`}
+                    className={`w-full p-3 rounded-2xl text-xs font-bold text-left flex items-center justify-between transition-colors cursor-pointer ${selectedCategory === 'all'
+                      ? 'bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/25'
+                      : 'bg-[#F8FAFC] text-[#1E293B]'
+                      }`}
                   >
                     <span>{t.catalogPage.allProducts}</span>
                     <span className="text-[11px] px-2 py-0.5 rounded-full font-bold bg-white text-[#64748B]">
@@ -651,11 +644,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ initialCategory }) => 
                     <button
                       key={cat.id}
                       onClick={() => handleCategorySelect(cat.slug)}
-                      className={`w-full p-3 rounded-2xl text-xs font-bold text-left flex items-center justify-between transition-colors cursor-pointer ${
-                        selectedCategory === cat.slug
-                          ? 'bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/25'
-                          : 'bg-[#F8FAFC] text-[#1E293B]'
-                      }`}
+                      className={`w-full p-3 rounded-2xl text-xs font-bold text-left flex items-center justify-between transition-colors cursor-pointer ${selectedCategory === cat.slug
+                        ? 'bg-[#FFF7ED] text-[#FF5A00] border border-[#FF5A00]/25'
+                        : 'bg-[#F8FAFC] text-[#1E293B]'
+                        }`}
                     >
                       <div className="flex items-center gap-2.5">
                         <span className="w-5 h-5 rounded overflow-hidden flex items-center justify-center shrink-0">
