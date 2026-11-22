@@ -134,11 +134,10 @@ export const Header: React.FC = () => {
                 type="button"
                 id="btn-lang-uz"
                 onClick={() => setLanguage('uz')}
-                className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
-                  language === 'uz'
-                    ? 'bg-[#FF5A00] text-white shadow-2xs font-black'
-                    : 'text-gray-300 hover:text-white'
-                }`}
+                className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${language === 'uz'
+                  ? 'bg-[#FF5A00] text-white shadow-2xs font-black'
+                  : 'text-gray-300 hover:text-white'
+                  }`}
                 title="O‘zbekcha"
               >
                 UZ
@@ -147,11 +146,10 @@ export const Header: React.FC = () => {
                 type="button"
                 id="btn-lang-ru"
                 onClick={() => setLanguage('ru')}
-                className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
-                  language === 'ru'
-                    ? 'bg-[#FF5A00] text-white shadow-2xs font-black'
-                    : 'text-gray-300 hover:text-white'
-                }`}
+                className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${language === 'ru'
+                  ? 'bg-[#FF5A00] text-white shadow-2xs font-black'
+                  : 'text-gray-300 hover:text-white'
+                  }`}
                 title="Русский язык"
               >
                 RU
@@ -177,55 +175,49 @@ export const Header: React.FC = () => {
               <button
                 id="btn-header-catalog-toggle"
                 onClick={() => setIsCatalogOpen(!isCatalogOpen)}
-                className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-sm font-bold transition-all cursor-pointer ${
-                  isCatalogOpen
-                    ? 'bg-[#081B4B] text-white shadow-xs'
-                    : 'text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]'
-                }`}
+                className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-sm font-bold transition-all cursor-pointer ${isCatalogOpen
+                  ? 'bg-[#081B4B] text-white shadow-xs'
+                  : 'text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]'
+                  }`}
                 aria-expanded={isCatalogOpen}
                 aria-label={t.header.catalog}
               >
                 <Menu className="w-4 h-4 text-[#FF5A00]" />
                 <span>{t.header.catalog}</span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                    isCatalogOpen ? 'rotate-180 text-white' : 'text-[#64748B]'
-                  }`}
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${isCatalogOpen ? 'rotate-180 text-white' : 'text-[#64748B]'
+                    }`}
                 />
               </button>
 
               <button
                 onClick={() => navigate('/')}
-                className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${
-                  cleanPath === '/' ? 'text-[#FF5A00] font-bold' : ''
-                }`}
+                className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${cleanPath === '/' ? 'text-[#FF5A00] font-bold' : ''
+                  }`}
               >
                 {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
               </button>
 
               <button
                 onClick={() => navigate('/delivery-payment')}
-                className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${
-                  cleanPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold' : ''
-                }`}
+                className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${cleanPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold' : ''
+                  }`}
               >
                 {t.footer.deliveryPayment}
               </button>
 
               <button
                 onClick={() => navigate('/about')}
-                className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${
-                  cleanPath === '/about' ? 'text-[#FF5A00] font-bold' : ''
-                }`}
+                className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${cleanPath === '/about' ? 'text-[#FF5A00] font-bold' : ''
+                  }`}
               >
                 {t.footer.aboutUs}
               </button>
 
               <button
                 onClick={() => navigate('/contacts')}
-                className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${
-                  cleanPath === '/contacts' ? 'text-[#FF5A00] font-bold' : ''
-                }`}
+                className={`hover:text-[#FF5A00] transition-colors cursor-pointer py-1 ${cleanPath === '/contacts' ? 'text-[#FF5A00] font-bold' : ''
+                  }`}
               >
                 {t.footer.contacts}
               </button>
@@ -240,11 +232,10 @@ export const Header: React.FC = () => {
                 id="btn-header-search-toggle"
                 type="button"
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                  isSearchOpen
-                    ? 'bg-[#FF5A00] text-white shadow-sm shadow-[#FF5A00]/30'
-                    : 'text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]'
-                }`}
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all cursor-pointer ${isSearchOpen
+                  ? 'bg-[#FF5A00] text-white shadow-sm shadow-[#FF5A00]/30'
+                  : 'text-[#1E293B] hover:text-[#FF5A00] hover:bg-[#FFF7ED]'
+                  }`}
                 aria-label={t.header.searchPlaceholder}
                 title={t.header.searchPlaceholder}
               >
@@ -350,9 +341,8 @@ export const Header: React.FC = () => {
               aria-label={t.header.favorites}
             >
               <Heart
-                className={`w-4.5 h-4.5 transition-transform ${
-                  favorites.length > 0 ? 'text-[#FF5A00] fill-[#FF5A00]' : ''
-                }`}
+                className={`w-4.5 h-4.5 transition-transform ${favorites.length > 0 ? 'text-[#FF5A00] fill-[#FF5A00]' : ''
+                  }`}
               />
               {favorites.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-[#FF5A00] text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-xs">
@@ -392,11 +382,10 @@ export const Header: React.FC = () => {
             <button
               id="btn-header-orders-history"
               onClick={() => navigate('/requests')}
-              className={`hidden xl:inline-flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer px-2.5 py-1.5 rounded-xl ${
-                profile?.phone
-                  ? 'bg-[#FFF1E8] text-[#FF5A00] hover:bg-[#FFE4D4] border border-[#FFD8BF]'
-                  : 'text-[#64748B] hover:text-[#FF5A00]'
-              }`}
+              className={`hidden xl:inline-flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer px-2.5 py-1.5 rounded-xl ${profile?.phone
+                ? 'bg-[#FFF1E8] text-[#FF5A00] hover:bg-[#FFE4D4] border border-[#FFD8BF]'
+                : 'text-[#64748B] hover:text-[#FF5A00]'
+                }`}
               title={profile?.phone ? `${profile.company || profile.name || profile.phone} - Zayavkalarim` : t.header.ordersHistory}
             >
               {profile?.phone ? (
@@ -440,22 +429,20 @@ export const Header: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setLanguage('uz')}
-                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                    language === 'uz'
-                      ? 'bg-[#FF5A00] text-white font-black shadow-2xs'
-                      : 'text-[#64748B] hover:text-[#1E293B]'
-                  }`}
+                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${language === 'uz'
+                    ? 'bg-[#FF5A00] text-white font-black shadow-2xs'
+                    : 'text-[#64748B] hover:text-[#1E293B]'
+                    }`}
                 >
                   O‘zbek
                 </button>
                 <button
                   type="button"
                   onClick={() => setLanguage('ru')}
-                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                    language === 'ru'
-                      ? 'bg-[#FF5A00] text-white font-black shadow-2xs'
-                      : 'text-[#64748B] hover:text-[#1E293B]'
-                  }`}
+                  className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${language === 'ru'
+                    ? 'bg-[#FF5A00] text-white font-black shadow-2xs'
+                    : 'text-[#64748B] hover:text-[#1E293B]'
+                    }`}
                 >
                   Русский
                 </button>
@@ -484,9 +471,8 @@ export const Header: React.FC = () => {
                   navigate('/');
                   setIsMobileMenuOpen(false);
                 }}
-                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${
-                  cleanPath === '/' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
-                }`}
+                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${cleanPath === '/' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
+                  }`}
               >
                 {language === 'ru' ? 'Главная' : 'Bosh sahifa'}
               </button>
@@ -496,9 +482,8 @@ export const Header: React.FC = () => {
                   navigate('/delivery-payment');
                   setIsMobileMenuOpen(false);
                 }}
-                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${
-                  cleanPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
-                }`}
+                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${cleanPath === '/delivery-payment' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
+                  }`}
               >
                 {t.footer.deliveryPayment}
               </button>
@@ -508,9 +493,8 @@ export const Header: React.FC = () => {
                   navigate('/about');
                   setIsMobileMenuOpen(false);
                 }}
-                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${
-                  cleanPath === '/about' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
-                }`}
+                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${cleanPath === '/about' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
+                  }`}
               >
                 {t.footer.aboutUs}
               </button>
@@ -520,9 +504,8 @@ export const Header: React.FC = () => {
                   navigate('/contacts');
                   setIsMobileMenuOpen(false);
                 }}
-                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${
-                  cleanPath === '/contacts' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
-                }`}
+                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors ${cleanPath === '/contacts' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : ''
+                  }`}
               >
                 {t.footer.contacts}
               </button>
@@ -532,9 +515,8 @@ export const Header: React.FC = () => {
                   navigate('/requests');
                   setIsMobileMenuOpen(false);
                 }}
-                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors flex items-center justify-between ${
-                  profile?.phone || currentPath === '/requests' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : 'text-[#475569]'
-                }`}
+                className={`py-2 px-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors flex items-center justify-between ${profile?.phone || currentPath === '/requests' ? 'text-[#FF5A00] font-bold bg-[#FFF7ED]' : 'text-[#475569]'
+                  }`}
               >
                 <div className="flex items-center gap-2">
                   <Building2 className="w-4 h-4" />

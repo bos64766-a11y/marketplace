@@ -138,9 +138,14 @@ async function run() {
 `;
 
   const outputPath = path.join(rootDir, 'public', 'sitemap.xml');
-  fs.writeFileSync(outputPath, xml, 'utf8');
-  const totalUrls = (staticPages.length + categories.length + productSlugs.length) * 2;
-  console.log(`✓ Sitemap successfully generated at: ${outputPath} (${totalUrls} indexed URLs across uz and ru)`);
+  const existing = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : '';
+  if (existing === xml) {
+    console.log(`✓ Sitemap up to date at: ${outputPath}`);
+  } else {
+    fs.writeFileSync(outputPath, xml, 'utf8');
+    const totalUrls = (staticPages.length + categories.length + productSlugs.length) * 2;
+    console.log(`✓ Sitemap successfully updated at: ${outputPath} (${totalUrls} indexed URLs across uz and ru)`);
+  }
 }
 
 run();

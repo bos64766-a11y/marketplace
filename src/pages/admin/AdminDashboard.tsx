@@ -178,6 +178,9 @@ export const AdminDashboard: React.FC = () => {
     const dayCounts: Record<number, number> = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
     const dayAmounts: Record<number, number> = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 
+    const now = new Date();
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
     requests.forEach((r) => {
       let d: Date | null = null;
       if (r.created_at) {
@@ -188,7 +191,7 @@ export const AdminDashboard: React.FC = () => {
           d = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
         }
       }
-      if (d && !isNaN(d.getTime())) {
+      if (d && !isNaN(d.getTime()) && d >= sevenDaysAgo) {
         const dayIdx = d.getDay();
         dayCounts[dayIdx] = (dayCounts[dayIdx] || 0) + 1;
         dayAmounts[dayIdx] = (dayAmounts[dayIdx] || 0) + (r.totalAmount || 0);
