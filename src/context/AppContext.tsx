@@ -518,44 +518,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch {}
   };
 
-  // Dynamic Products state (persisted to localStorage, server is source of truth)
-  const [products, setProducts] = useState<Product[]>(() => {
-    try {
-      const saved = localStorage.getItem('snabtash_admin_products');
-      if (saved !== null) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // fallback
-    }
-    return INITIAL_PRODUCTS;
-  });
+  // Dynamic Products state (Server is single source of truth; avoids 5MB localStorage quota limit)
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
 
-  // Archive Stats state for UI
-  const [archiveStats, setArchiveStats] = useState(() => {
+  // Clear legacy multi-megabyte localStorage product caches to free browser quota
+  useEffect(() => {
     try {
-      const pRaw = localStorage.getItem('snabtash_products_archive');
-      const sRaw = localStorage.getItem('snabtash_sections_archive');
-      return {
-        productsCount: pRaw ? JSON.parse(pRaw).length : INITIAL_PRODUCTS.length,
-        sectionsCount: sRaw ? JSON.parse(sRaw).length : 0,
-      };
-    } catch {
-      return { productsCount: INITIAL_PRODUCTS.length, sectionsCount: 0 };
-    }
-  });
-
-  const updateArchiveStats = () => {
-    try {
-      const pRaw = localStorage.getItem('snabtash_products_archive');
-      const sRaw = localStorage.getItem('snabtash_sections_archive');
-      setArchiveStats({
-        productsCount: pRaw ? JSON.parse(pRaw).length : INITIAL_PRODUCTS.length,
-        sectionsCount: sRaw ? JSON.parse(sRaw).length : 0,
-      });
+      localStorage.removeItem('snabtash_admin_products');
+      localStorage.removeItem('snabtash_products_archive');
+      localStorage.removeItem('snabtash_sections_archive');
     } catch {}
-  };
+  }, []);
+
+  // Safe in-memory archive stats
+  const archiveStats = useMemo(() => ({
+    productsCount: products.length,
+    sectionsCount: 0,
+  }), [products.length]);
+
+  const updateArchiveStats = useCallback(() => {
+    // No-op kept for backwards compatibility
+  }, []);
 
   const [backendError, setBackendError] = useState<string | null>(null);
 
@@ -580,8 +563,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch {}
   }, []);
 
+  // Request sequence counter to discard stale out-of-order network responses
+  const requestSeqRef = useRef<number>(0);
+
   // Helper to re-sync all live data from Django backend with smart merge protection
   const refreshFromBackend = useCallback(async () => {
+    const seq = ++requestSeqRef.current;
     try {
       const isAuthAdmin =
         isAdminAuthenticated ||
@@ -600,6 +587,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         api.getShowcaseSections(),
         api.getPartners(),
       ]);
+
+      // Guard: Discard stale response if a newer refresh was initiated
+      if (seq !== requestSeqRef.current) {
+        return;
+      }
 
       if (prodsRes.status === 'rejected' || (isAuthAdmin && ordsRes.status === 'rejected')) {
         setBackendError("Serverga ulanishda uzilish yuz berdi");
@@ -793,6 +785,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     let lastFocusSyncTime = 0;
     const handleFocus = () => {
+      // Public visitors load data once on mount; only active admins re-sync on tab focus
+      if (!isAdminAuthenticated) return;
       const now = Date.now();
       // Throttle focus re-syncs to at most once per 60 seconds
       if (now - lastFocusSyncTime > 60000) {
@@ -803,6 +797,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
+        if (!isAdminAuthenticated) return;
         const now = Date.now();
         if (now - lastFocusSyncTime > 60000) {
           lastFocusSyncTime = now;
@@ -876,15 +871,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (serverProduct && serverProduct.id) {
         unmarkIdDeleted('snabtash_deleted_product_ids', serverProduct.id);
         unmarkIdDeleted('snabtash_deleted_product_ids', tempId);
-        setProducts((prev) => {
-          const next = [serverProduct, ...prev.filter((p) => p.id !== serverProduct.id)];
-          try {
-            localStorage.setItem('snabtash_admin_products', JSON.stringify(next));
-            localStorage.setItem('snabtash_products_archive', JSON.stringify(next));
-          } catch {}
-          updateArchiveStats();
-          return next;
-        });
+        setProducts((prev) => [serverProduct, ...prev.filter((p) => p.id !== serverProduct.id)]);
         showToast(`✓ Yangi mahsulot "${serverProduct.name}" muvaffaqiyatli saqlandi`, 'success');
         notifySync();
         return serverProduct;
@@ -892,18 +879,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       throw new Error('Serverdan kutilmagan javob qaytdi');
     } catch (err: any) {
       console.error('API product create error:', err);
-      // Agar Vercel yoki statik hostda backend yo'q bo'lsa (405 Method Not Allowed / 404):
       if (err?.message?.includes('405') || err?.message?.includes('404') || err?.message?.includes('Failed to fetch')) {
         unmarkIdDeleted('snabtash_deleted_product_ids', tempId);
-        setProducts((prev) => {
-          const next = [localProduct, ...prev];
-          try {
-            localStorage.setItem('snabtash_admin_products', JSON.stringify(next));
-            localStorage.setItem('snabtash_products_archive', JSON.stringify(next));
-          } catch {}
-          updateArchiveStats();
-          return next;
-        });
+        setProducts((prev) => [localProduct, ...prev]);
         notifySync();
         showToast(`✓ Mahsulot saqlandi (Faqat ushbu brauzerda. Sababi: Serverda Django backend ulanmagan: ${err.message})`, 'info');
         return localProduct;
@@ -924,27 +902,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         payload.category_id = updated.categoryId.trim();
       }
       const serverProduct = await api.updateProduct(id, payload);
-      setProducts((prev) => {
-        const next = prev.map((item) => (item.id === id ? { ...item, ...serverProduct } : item));
-        try {
-          localStorage.setItem('snabtash_admin_products', JSON.stringify(next));
-          localStorage.setItem('snabtash_products_archive', JSON.stringify(next));
-        } catch {}
-        return next;
-      });
+      setProducts((prev) => prev.map((item) => (item.id === id ? { ...item, ...serverProduct } : item)));
       showToast('✓ Mahsulot ma’lumotlari muvaffaqiyatli yangilandi', 'success');
       notifySync();
     } catch (err: any) {
       console.error('API product update error:', err);
       if (err?.message?.includes('405') || err?.message?.includes('404') || err?.message?.includes('Failed to fetch')) {
-        setProducts((prev) => {
-          const next = prev.map((item) => (item.id === id ? { ...item, ...updated } : item));
-          try {
-            localStorage.setItem('snabtash_admin_products', JSON.stringify(next));
-            localStorage.setItem('snabtash_products_archive', JSON.stringify(next));
-          } catch {}
-          return next;
-        });
+        setProducts((prev) => prev.map((item) => (item.id === id ? { ...item, ...updated } : item)));
         notifySync();
         showToast('✓ Mahsulot yangilandi (mahalliy xotirada)', 'info');
         return;
@@ -958,15 +922,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const deleteProduct = async (id: string) => {
     const target = products.find((p) => p.id === id);
     markIdDeleted('snabtash_deleted_product_ids', id);
-    setProducts((prev) => {
-      const next = prev.filter((p) => p.id !== id);
-      try {
-        localStorage.setItem('snabtash_admin_products', JSON.stringify(next));
-        localStorage.setItem('snabtash_products_archive', JSON.stringify(next));
-      } catch {}
-      updateArchiveStats();
-      return next;
-    });
+    setProducts((prev) => prev.filter((p) => p.id !== id));
 
     try {
       await api.deleteProduct(id);
@@ -982,11 +938,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const clearAllProducts = async () => {
     const toDelete = [...products];
     setProducts([]);
-    try {
-      localStorage.setItem('snabtash_admin_products', '[]');
-      localStorage.removeItem('snabtash_products_archive');
-    } catch {}
-    updateArchiveStats();
     notifySync();
 
     try {
@@ -1016,11 +967,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const resetProductsToDefault = () => {
     setProducts(INITIAL_PRODUCTS);
-    try {
-      localStorage.setItem('snabtash_admin_products', JSON.stringify(INITIAL_PRODUCTS));
-      localStorage.setItem('snabtash_products_archive', JSON.stringify(INITIAL_PRODUCTS));
-    } catch {}
-    updateArchiveStats();
     notifySync();
     showToast(`✓ Mahsulotlar asl holatiga qaytarildi (${INITIAL_PRODUCTS.length} ta tovar)`, 'info');
   };
@@ -1303,9 +1249,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const next = [...prev, enrichedCreated];
         try {
           localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
-          localStorage.setItem('snabtash_sections_archive', JSON.stringify(next));
         } catch {}
-        updateArchiveStats();
         return next;
       });
       notifySync();
@@ -1318,9 +1262,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const next = [...prev, newSec];
         try {
           localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
-          localStorage.setItem('snabtash_sections_archive', JSON.stringify(next));
         } catch {}
-        updateArchiveStats();
         return next;
       });
       notifySync();
@@ -1344,7 +1286,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
       try {
         localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
-        localStorage.setItem('snabtash_sections_archive', JSON.stringify(next));
       } catch {}
       return next;
     });
@@ -1386,9 +1327,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const next = prev.filter((s) => String(s.id) !== idStr);
       try {
         localStorage.setItem('snabtash_showcase_sections', JSON.stringify(next));
-        localStorage.setItem('snabtash_sections_archive', JSON.stringify(next));
       } catch {}
-      updateArchiveStats();
       return next;
     });
 
@@ -2067,35 +2006,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
 
 
-      // 3. Immediately update client React state and localStorage cache
+      // 3. Immediately update client React state
       if (Array.isArray(incomingProducts) && incomingProducts.length > 0) {
         setProducts(incomingProducts);
-        try {
-          localStorage.setItem('snabtash_admin_products', JSON.stringify(incomingProducts));
-          localStorage.setItem('snabtash_products_archive', JSON.stringify(incomingProducts));
-        } catch {}
       }
 
       if (Array.isArray(incomingCategories) && incomingCategories.length > 0) {
         setCategories(incomingCategories);
-        try {
-          localStorage.setItem('snabtash_admin_categories', JSON.stringify(incomingCategories));
-        } catch {}
       }
 
       if (Array.isArray(incomingSections) && incomingSections.length > 0) {
         setShowcaseSections(incomingSections);
-        try {
-          localStorage.setItem('snabtash_showcase_sections', JSON.stringify(incomingSections));
-          localStorage.setItem('snabtash_sections_archive', JSON.stringify(incomingSections));
-        } catch {}
       }
 
       if (Array.isArray(incomingBanners) && incomingBanners.length > 0) {
         setBanners(incomingBanners);
-        try {
-          localStorage.setItem('snabtash_admin_banners', JSON.stringify(incomingBanners));
-        } catch {}
       }
 
       if (Array.isArray(incomingPartners) && incomingPartners.length > 0) {
@@ -2104,16 +2029,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       if (Array.isArray(incomingOrders) && incomingOrders.length > 0) {
         setRequests(incomingOrders);
-        try {
-          localStorage.setItem('snabtash_requests', JSON.stringify(incomingOrders));
-        } catch {}
       }
 
       if (incomingSettings && typeof incomingSettings === 'object') {
         setSiteSettings(incomingSettings);
-        try {
-          localStorage.setItem('snabtash_site_settings', JSON.stringify(incomingSettings));
-        } catch {}
       }
 
       // 4. Re-sync fresh state from Django backend to ensure 100% database parity
@@ -2121,7 +2040,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         await refreshFromBackend();
       } catch {}
 
-      updateArchiveStats();
       notifySync();
 
       const prodCount = serverResult?.counts?.products || (Array.isArray(incomingProducts) ? incomingProducts.length : 0);
@@ -2135,48 +2053,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const restoreFromArchive = async () => {
-    try {
-      const pRaw = localStorage.getItem('snabtash_products_archive');
-      const sRaw = localStorage.getItem('snabtash_sections_archive');
-      let parsedP: any[] = [];
-      let parsedS: any[] = [];
-
-      if (pRaw) {
-        try {
-          parsedP = JSON.parse(pRaw);
-          if (Array.isArray(parsedP) && parsedP.length > 0) {
-            setProducts(parsedP);
-            localStorage.setItem('snabtash_admin_products', pRaw);
-          }
-        } catch {}
-      }
-
-      if (sRaw) {
-        try {
-          parsedS = JSON.parse(sRaw);
-          if (Array.isArray(parsedS) && parsedS.length > 0) {
-            setShowcaseSections(parsedS);
-            localStorage.setItem('snabtash_showcase_sections', sRaw);
-          }
-        } catch {}
-      }
-
-      // Persist to server database
-      if (parsedP.length > 0 || parsedS.length > 0) {
-        try {
-          await api.restoreBackupToServer({ products: parsedP, showcaseSections: parsedS });
-          await refreshFromBackend();
-        } catch (serverErr) {
-          console.warn('Backend archive restore error:', serverErr);
-        }
-      }
-
-      updateArchiveStats();
-      notifySync();
-      showToast(`✓ Arxivdan ${parsedP.length} ta tovar va ${parsedS.length} ta bo'lim tiklandi va serverga yozildi!`, 'success');
-    } catch (err: any) {
-      showToast(`Arxivdan tiklashda xatolik: ${err.message}`, 'error');
-    }
+    showToast('Zaxiradan tiklash uchun yuqoridagi "Zaxira Faylini Yuklash (.json)" bo‘limidan foydalaning', 'info');
   };
 
   return (
