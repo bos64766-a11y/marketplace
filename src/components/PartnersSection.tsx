@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getMediaUrl } from '../services/api';
 
 export const PartnersSection: React.FC = () => {
-  const { partners, t } = useApp();
+  const { partners, t, language } = useApp();
   const displayPartners = partners && partners.length > 0 ? partners : [];
   const scrollRef = useRef<HTMLDivElement>(null);
   const firstCycleRef = useRef<HTMLDivElement>(null);
@@ -15,6 +15,32 @@ export const PartnersSection: React.FC = () => {
 
   const handleLogoError = (partnerId: string | number) => {
     setFailedLogos((prev) => ({ ...prev, [String(partnerId)]: true }));
+  };
+
+  const PARTNER_CATEGORY_FALLBACK_RU: Record<string, string> = {
+    'Ichimliklar & Oziq-ovqat': 'Напитки и продукты питания',
+    'Xalqaro brend': 'Международный бренд',
+    'Maishiy texnika': 'Бытовая техника',
+    'Beton & Qurilish': 'Бетон и строительство',
+    'Temir-beton majmuasi': 'Железобетонный комплекс',
+    'Agro holding': 'Агрохолдинг',
+    'Telekom & Aloqa': 'Телеком и связь',
+    'Ishlab chiqarish': 'Производство',
+  };
+
+  const getPartnerName = (p: { name: string; name_ru?: string }) => {
+    if (language === 'ru' && p.name_ru?.trim()) {
+      return p.name_ru.trim();
+    }
+    return p.name;
+  };
+
+  const getPartnerCategory = (p: { category: string; category_ru?: string }) => {
+    if (language === 'ru') {
+      if (p.category_ru?.trim()) return p.category_ru.trim();
+      if (PARTNER_CATEGORY_FALLBACK_RU[p.category]) return PARTNER_CATEGORY_FALLBACK_RU[p.category];
+    }
+    return p.category;
   };
 
   const checkScroll = useCallback(() => {
@@ -161,10 +187,10 @@ export const PartnersSection: React.FC = () => {
                   )}
 
                   <span className="font-bold text-[13px] sm:text-[14px] text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-1 leading-snug">
-                    {partner.name}
+                    {getPartnerName(partner)}
                   </span>
                   <span className="text-[11px] sm:text-xs text-[#64748B] font-medium mt-0.5 line-clamp-1">
-                    {partner.category}
+                    {getPartnerCategory(partner)}
                   </span>
                 </div>
               );
@@ -197,10 +223,10 @@ export const PartnersSection: React.FC = () => {
                   )}
 
                   <span className="font-bold text-[13px] sm:text-[14px] text-[#1E293B] group-hover:text-[#FF5A00] transition-colors line-clamp-1 leading-snug">
-                    {partner.name}
+                    {getPartnerName(partner)}
                   </span>
                   <span className="text-[11px] sm:text-xs text-[#64748B] font-medium mt-0.5 line-clamp-1">
-                    {partner.category}
+                    {getPartnerCategory(partner)}
                   </span>
                 </div>
               );

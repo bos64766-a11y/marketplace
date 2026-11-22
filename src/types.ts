@@ -109,8 +109,10 @@ export interface Industry {
 export interface Partner {
   id: string;
   name: string;
+  name_ru?: string;
   logo: string;
   category: string;
+  category_ru?: string;
   order?: number;
 }
 

@@ -3,6 +3,17 @@ import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { Building2, ShieldCheck, Truck, Users, Award, Target, CheckCircle2 } from 'lucide-react';
 
+const PARTNER_CATEGORY_FALLBACK_RU: Record<string, string> = {
+  'Ichimliklar & Oziq-ovqat': 'Напитки и продукты питания',
+  'Xalqaro brend': 'Международный бренд',
+  'Maishiy texnika': 'Бытовая техника',
+  'Beton & Qurilish': 'Бетон и строительство',
+  'Temir-beton majmuasi': 'Железобетонный комплекс',
+  'Agro holding': 'Агрохолдинг',
+  'Telekom & Aloqa': 'Телеком и связь',
+  'Ishlab chiqarish': 'Производство',
+};
+
 export const AboutPage: React.FC = () => {
   const { navigate, partners, t, language } = useApp();
   const displayPartners = partners && partners.length > 0 ? partners : [];
@@ -117,11 +128,11 @@ export const AboutPage: React.FC = () => {
                 </span>
               )}
               <span className="font-bold text-[11px] text-[#1E293B] block truncate max-w-full">
-                {p.name}
+                {language === 'ru' && p.name_ru?.trim() ? p.name_ru.trim() : p.name}
               </span>
               {p.category && (
                 <span className="text-[10px] text-[#667085] truncate block mt-0.5 max-w-full">
-                  {p.category}
+                  {language === 'ru' ? (p.category_ru?.trim() || PARTNER_CATEGORY_FALLBACK_RU[p.category] || p.category) : p.category}
                 </span>
               )}
             </div>

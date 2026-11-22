@@ -379,8 +379,10 @@ export const api = {
     return data.map((p) => ({
       id: String(p.id),
       name: p.name,
+      name_ru: p.name_ru || p.nameRu || '',
       logo: p.logo || '',
       category: p.category || '',
+      category_ru: p.category_ru || p.categoryRu || '',
       order: p.order ?? 0,
     }));
   },
@@ -393,8 +395,10 @@ export const api = {
     return {
       id: String(p.id),
       name: p.name,
+      name_ru: p.name_ru || p.nameRu || '',
       logo: p.logo || '',
       category: p.category || '',
+      category_ru: p.category_ru || p.categoryRu || '',
       order: p.order ?? 0,
     };
   },
@@ -407,8 +411,10 @@ export const api = {
     return {
       id: String(p.id),
       name: p.name,
+      name_ru: p.name_ru || p.nameRu || '',
       logo: p.logo || '',
       category: p.category || '',
+      category_ru: p.category_ru || p.categoryRu || '',
       order: p.order ?? 0,
     };
   },

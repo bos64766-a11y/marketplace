@@ -1447,8 +1447,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (String(id).startsWith('partner-')) {
         const created = await api.createPartner({
           name: updated.name,
+          name_ru: updated.name_ru,
           logo: updated.logo,
           category: updated.category,
+          category_ru: updated.category_ru,
         });
         if (created && created.id) {
           setPartners((prev) => {

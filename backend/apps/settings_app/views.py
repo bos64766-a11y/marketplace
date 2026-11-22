@@ -447,14 +447,14 @@ class ShowcaseSectionDetailView(APIView):
 
 
 DEFAULT_PARTNERS = [
-    {'name': 'Pepsi', 'logo': '/partners/pepsi.png', 'category': 'Ichimliklar & Oziq-ovqat', 'order': 1},
-    {'name': 'Coca-Cola', 'logo': '/partners/coca-cola.png', 'category': 'Xalqaro brend', 'order': 2},
-    {'name': 'Artel Electronics', 'logo': '/partners/artel.png', 'category': 'Maishiy texnika', 'order': 3},
-    {'name': 'BETOMAX', 'logo': '', 'category': 'Beton & Qurilish', 'order': 4},
-    {'name': 'BINOKOR', 'logo': '', 'category': 'Temir-beton majmuasi', 'order': 5},
-    {'name': 'AGROMIR', 'logo': '', 'category': 'Agro holding', 'order': 6},
-    {'name': 'UZTELECOM', 'logo': '', 'category': 'Telekom & Aloqa', 'order': 7},
-    {'name': 'Beta Plus', 'logo': '', 'category': 'Ishlab chiqarish', 'order': 8},
+    {'name': 'Pepsi', 'name_ru': 'Pepsi', 'logo': '/partners/pepsi.png', 'category': 'Ichimliklar & Oziq-ovqat', 'category_ru': 'Напитки и продукты питания', 'order': 1},
+    {'name': 'Coca-Cola', 'name_ru': 'Coca-Cola', 'logo': '/partners/coca-cola.png', 'category': 'Xalqaro brend', 'category_ru': 'Международный бренд', 'order': 2},
+    {'name': 'Artel Electronics', 'name_ru': 'Artel Electronics', 'logo': '/partners/artel.png', 'category': 'Maishiy texnika', 'category_ru': 'Бытовая техника', 'order': 3},
+    {'name': 'BETOMAX', 'name_ru': 'BETOMAX', 'logo': '', 'category': 'Beton & Qurilish', 'category_ru': 'Бетон и строительство', 'order': 4},
+    {'name': 'BINOKOR', 'name_ru': 'BINOKOR', 'logo': '', 'category': 'Temir-beton majmuasi', 'category_ru': 'Железобетонный комплекс', 'order': 5},
+    {'name': 'AGROMIR', 'name_ru': 'AGROMIR', 'logo': '', 'category': 'Agro holding', 'category_ru': 'Агрохолдинг', 'order': 6},
+    {'name': 'UZTELECOM', 'name_ru': 'UZTELECOM', 'logo': '', 'category': 'Telekom & Aloqa', 'category_ru': 'Телеком и связь', 'order': 7},
+    {'name': 'Beta Plus', 'name_ru': 'Beta Plus', 'logo': '', 'category': 'Ishlab chiqarish', 'category_ru': 'Производство', 'order': 8},
 ]
 
 
@@ -771,7 +771,10 @@ class RestoreBackupView(APIView):
                 id=part_id,
                 defaults={
                     'name': part.get('name', ''),
+                    'name_ru': part.get('name_ru', '') or part.get('nameRu', '') or '',
                     'logo': part.get('logo', '') or '',
+                    'category': part.get('category', '') or '',
+                    'category_ru': part.get('category_ru', '') or part.get('categoryRu', '') or '',
                     'order': int(part.get('order', 0) or 0),
                     'is_active': bool(part.get('isActive', True)),
                 }

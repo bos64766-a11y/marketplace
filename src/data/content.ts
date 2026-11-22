@@ -151,14 +151,14 @@ export const INDUSTRIES: Industry[] = [
 ];
 
 export const PARTNERS: Partner[] = [
-  { id: '1', name: 'Pepsi', logo: '/partners/pepsi.png', category: 'Ichimliklar & Oziq-ovqat' },
-  { id: '2', name: 'Coca-Cola', logo: '/partners/coca-cola.png', category: 'Xalqaro brend' },
-  { id: '3', name: 'Artel Electronics', logo: '/partners/artel.png', category: 'Maishiy texnika' },
-  { id: '4', name: 'BETOMAX', logo: '', category: 'Beton & Qurilish' },
-  { id: '5', name: 'BINOKOR', logo: '', category: 'Temir-beton majmuasi' },
-  { id: '6', name: 'AGROMIR', logo: '', category: 'Agro holding' },
-  { id: '7', name: 'UZTELECOM', logo: '', category: 'Telekom & Aloqa' },
-  { id: '8', name: 'Beta Plus', logo: '', category: 'Ishlab chiqarish' },
+  { id: '1', name: 'Pepsi', name_ru: 'Pepsi', logo: '/partners/pepsi.png', category: 'Ichimliklar & Oziq-ovqat', category_ru: 'Напитки и продукты питания' },
+  { id: '2', name: 'Coca-Cola', name_ru: 'Coca-Cola', logo: '/partners/coca-cola.png', category: 'Xalqaro brend', category_ru: 'Международный бренд' },
+  { id: '3', name: 'Artel Electronics', name_ru: 'Artel Electronics', logo: '/partners/artel.png', category: 'Maishiy texnika', category_ru: 'Бытовая техника' },
+  { id: '4', name: 'BETOMAX', name_ru: 'BETOMAX', logo: '', category: 'Beton & Qurilish', category_ru: 'Бетон и строительство' },
+  { id: '5', name: 'BINOKOR', name_ru: 'BINOKOR', logo: '', category: 'Temir-beton majmuasi', category_ru: 'Железобетонный комплекс' },
+  { id: '6', name: 'AGROMIR', name_ru: 'AGROMIR', logo: '', category: 'Agro holding', category_ru: 'Агрохолдинг' },
+  { id: '7', name: 'UZTELECOM', name_ru: 'UZTELECOM', logo: '', category: 'Telekom & Aloqa', category_ru: 'Телеком и связь' },
+  { id: '8', name: 'Beta Plus', name_ru: 'Beta Plus', logo: '', category: 'Ishlab chiqarish', category_ru: 'Производство' },
 ];
 
 export const B2B_INFO_CARDS = [

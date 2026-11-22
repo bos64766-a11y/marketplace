@@ -118,16 +118,20 @@ class ShowcaseSectionSerializer(serializers.ModelSerializer):
 
 
 class PartnerSerializer(serializers.ModelSerializer):
+    name_ru = serializers.CharField(required=False, allow_blank=True, default='')
     logo = serializers.CharField(required=False, allow_blank=True, default='')
     category = serializers.CharField(required=False, allow_blank=True, default='')
+    category_ru = serializers.CharField(required=False, allow_blank=True, default='')
 
     class Meta:
         model = Partner
         fields = [
             'id',
             'name',
+            'name_ru',
             'logo',
             'category',
+            'category_ru',
             'order',
             'created_at',
             'updated_at',

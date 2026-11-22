@@ -243,8 +243,10 @@ def import_from_live_backup(bundle_path, backend_dir):
                 id=part_id,
                 defaults={
                     'name': part.get('name', ''),
+                    'name_ru': part.get('name_ru', '') or part.get('nameRu', '') or '',
                     'logo': part.get('logo', '') or '',
                     'category': part.get('category', '') or '',
+                    'category_ru': part.get('category_ru', '') or part.get('categoryRu', '') or '',
                     'order': int(part.get('order', 0) or 0),
                 }
             )

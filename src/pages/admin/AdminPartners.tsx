@@ -43,14 +43,21 @@ export const AdminPartners: React.FC = () => {
   const [formData, setFormData] = useState<Partner>({
     id: '',
     name: '',
+    name_ru: '',
     logo: '',
     category: '',
+    category_ru: '',
   });
 
   const filteredPartners = partners.filter((p) => {
     const q = searchQuery.toLowerCase().trim();
     if (!q) return true;
-    return p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+    return (
+      p.name.toLowerCase().includes(q) ||
+      (p.name_ru && p.name_ru.toLowerCase().includes(q)) ||
+      p.category.toLowerCase().includes(q) ||
+      (p.category_ru && p.category_ru.toLowerCase().includes(q))
+    );
   });
 
   const handleFileUpload = async (file: File) => {
@@ -88,8 +95,10 @@ export const AdminPartners: React.FC = () => {
     setFormData({
       id: '',
       name: '',
+      name_ru: '',
       logo: '',
       category: '',
+      category_ru: '',
     });
     setIsModalOpen(true);
   };
@@ -98,7 +107,11 @@ export const AdminPartners: React.FC = () => {
     setEditingPartner(partner);
     setUploadError('');
     setShowUrlInput(false);
-    setFormData({ ...partner });
+    setFormData({
+      ...partner,
+      name_ru: partner.name_ru || '',
+      category_ru: partner.category_ru || '',
+    });
     setIsModalOpen(true);
   };
 
@@ -107,12 +120,21 @@ export const AdminPartners: React.FC = () => {
     if (!formData.name.trim() || isUploading) return;
 
     if (editingPartner) {
-      await updatePartner(editingPartner.id, formData);
+      await updatePartner(editingPartner.id, {
+        ...formData,
+        name: formData.name.trim(),
+        name_ru: (formData.name_ru || '').trim(),
+        category: formData.category.trim(),
+        category_ru: (formData.category_ru || '').trim(),
+        logo: formData.logo.trim(),
+      });
     } else {
       await addPartner({
         name: formData.name.trim(),
+        name_ru: (formData.name_ru || '').trim(),
         logo: formData.logo.trim(),
         category: formData.category.trim(),
+        category_ru: (formData.category_ru || '').trim(),
       });
     }
     setIsModalOpen(false);
@@ -272,9 +294,19 @@ export const AdminPartners: React.FC = () => {
               <h3 className="font-extrabold text-[#1E293B] text-[15px] line-clamp-1 leading-snug">
                 {partner.name}
               </h3>
+              {partner.name_ru && partner.name_ru !== partner.name && (
+                <span className="text-[11px] font-semibold text-[#64748B] block truncate">
+                  RU: {partner.name_ru}
+                </span>
+              )}
               <p className="text-xs text-[#64748B] font-medium mt-1 line-clamp-1">
                 {partner.category || 'Soha ko‘rsatilmagan'}
               </p>
+              {partner.category_ru && (
+                <p className="text-[11px] text-[#FF5A00] font-medium line-clamp-1">
+                  RU: {partner.category_ru}
+                </p>
+              )}
 
               {/* Edit Quick Link */}
               <button
@@ -337,32 +369,62 @@ export const AdminPartners: React.FC = () => {
               </div>
 
               <form onSubmit={handleSave} className="mt-5 space-y-4">
-                <div>
-                  <label className="block text-xs font-extrabold text-[#1E293B] mb-1.5">
-                    Kompaniya / Brend nomi <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Masalan: Pepsi, Coca-Cola, Artel Electronics"
-                    className="w-full px-3.5 py-2.5 text-xs font-medium text-[#1E293B] bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white focus:outline-none transition-all"
-                  />
+                {/* Kompaniya / Brend nomi (UZ va RU) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-extrabold text-[#1E293B] mb-1.5">
+                      Kompaniya / Brend nomi (O‘zbekcha) <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Masalan: Pepsi, Artel Electronics"
+                      className="w-full px-3.5 py-2.5 text-xs font-medium text-[#1E293B] bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white focus:outline-none transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-extrabold text-[#1E293B] mb-1.5">
+                      Kompaniya / Brend nomi (Ruscha)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name_ru || ''}
+                      onChange={(e) => setFormData({ ...formData, name_ru: e.target.value })}
+                      placeholder="Например: Pepsi, Artel Electronics"
+                      className="w-full px-3.5 py-2.5 text-xs font-medium text-[#1E293B] bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white focus:outline-none transition-all"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-extrabold text-[#1E293B] mb-1.5">
-                    Soha / Kategoriya <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    placeholder="Masalan: Ichimliklar & Oziq-ovqat, Xalqaro brend, Maishiy texnika"
-                    className="w-full px-3.5 py-2.5 text-xs font-medium text-[#1E293B] bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white focus:outline-none transition-all"
-                  />
+                {/* Soha / Kategoriya (UZ va RU) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-extrabold text-[#1E293B] mb-1.5">
+                      Soha / Kategoriya (O‘zbekcha) <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      placeholder="Masalan: Maishiy texnika"
+                      className="w-full px-3.5 py-2.5 text-xs font-medium text-[#1E293B] bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white focus:outline-none transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-extrabold text-[#1E293B] mb-1.5">
+                      Soha / Kategoriya (Ruscha)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.category_ru || ''}
+                      onChange={(e) => setFormData({ ...formData, category_ru: e.target.value })}
+                      placeholder="Например: Бытовая техника"
+                      className="w-full px-3.5 py-2.5 text-xs font-medium text-[#1E293B] bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] focus:border-[#FF5A00] focus:bg-white focus:outline-none transition-all"
+                    />
+                  </div>
                 </div>
 
                 {/* Logo Upload Section */}

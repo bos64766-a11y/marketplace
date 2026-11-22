@@ -89,8 +89,10 @@ class ShowcaseSection(models.Model):
 
 class Partner(models.Model):
     name = models.CharField(max_length=255, verbose_name='Nomi')
+    name_ru = models.CharField(max_length=255, blank=True, default='', verbose_name='Nomi (RU)')
     logo = models.TextField(blank=True, default='', verbose_name='Logo URL')
     category = models.CharField(max_length=255, blank=True, default='', verbose_name='Kategoriya')
+    category_ru = models.CharField(max_length=255, blank=True, default='', verbose_name='Kategoriya (RU)')
     order = models.IntegerField(default=0, verbose_name='Tartib')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
