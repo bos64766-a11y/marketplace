@@ -1,17 +1,23 @@
-name: SNABTASH Live Database Auto-Backup
+name: SNABTASH Live Catalog Auto-Backup
 
 on:
   schedule:
-    # Runs every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
-    - cron: '0 */6 * * *'
+    # Runs daily at 03:00 UTC (08:00 Tashkent time)
+    - cron: '0 3 * * *'
   workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
+    inputs:
+      commit_to_git:
+        description: 'Commit updated catalog seed to git repository (default false)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
 jobs:
   backup:
-    name: Backup Live Cloud Database
+    name: Backup Live Catalog
     runs-on: ubuntu-latest
 
     steps:
@@ -23,11 +29,19 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Fetch live database from Render API
+      - name: Fetch live catalog from backend API
         run: |
           python backend/export_live_backup.py
 
-      - name: Commit and push changes
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: snabtash-catalog-backup-${{ github.run_id }}
+          path: backend/fixtures/live_backup.json
+          retention-days: 30
+
+      - name: Commit and push changes (only if explicitly requested)
+        if: ${{ inputs.commit_to_git == true }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -37,6 +51,6 @@ jobs:
             echo "Hech qanday o'zgarish yo'q. Commit qilinmadi."
           else
             TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M UTC')
-            git commit -m "chore(backup): auto-backup live database [$TIMESTAMP] [skip ci]"
+            git commit -m "chore(backup): manual catalog snapshot update [$TIMESTAMP] [skip ci]"
             git push origin main
           fi

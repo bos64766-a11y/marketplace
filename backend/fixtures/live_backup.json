@@ -1,11 +1,10 @@
 {
   "version": "1.1",
-  "exported_at": "2026-11-22T05:04:27.951319",
+  "exported_at": "2026-11-22T10:59:45.256077",
   "source": "https://marketplace-production-24565a08.up.railway.app/api",
   "summary": {
     "categories": 7,
     "products": 100,
-    "orders": 0,
     "showcase-sections": 5,
     "banners": 3,
     "settings": 1,
@@ -3015,8 +3014,6 @@
       "email": "info@snabtash.uz",
       "telegramBot": "@snabtash_bot",
       "telegramChannel": "",
-      "telegramBotToken": "",
-      "telegramChatId": "",
       "address": "Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy",
       "workHours": "",
       "inn": "309871234",

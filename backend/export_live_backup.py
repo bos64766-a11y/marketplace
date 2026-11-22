@@ -73,10 +73,10 @@ def run_export():
 
     wake_up_server()
 
+    # Customer orders and auth are strictly excluded from public backup dumps for security/privacy
     endpoints = [
         ("categories", "Kategoriyalar"),
         ("products", "Mahsulotlar"),
-        ("orders", "Zayavkalar / Buyurtmalar (Zakazlar)"),
         ("showcase-sections", "Bo'limlar (Showcase)"),
         ("banners", "Bannerlar"),
         ("settings", "Sayt Sozlamalari"),

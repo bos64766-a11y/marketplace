@@ -7,11 +7,16 @@ export const RAILWAY_BACKEND_URL = 'https://marketplace-production-24565a08.up.r
 const rawEnvApi = ((import.meta as any).env?.VITE_API_URL as string)?.trim() || '';
 const cleanEnvApi = rawEnvApi.includes('marketplace-production-6690') || rawEnvApi.includes('web-production-a04cd') ? '' : rawEnvApi;
 
+const isLocalhost = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname.startsWith('192.168.') ||
+  window.location.hostname.startsWith('10.')
+);
+
 const API_BASE =
   cleanEnvApi.replace(/\/$/, '') ||
-  (typeof window !== 'undefined' && window.location.hostname.includes('snab')
-    ? `${RAILWAY_BACKEND_URL}/api`
-    : '/api');
+  (isLocalhost ? '/api' : `${RAILWAY_BACKEND_URL}/api`);
 
 /**
  * Resolves an image/media URL so that relative paths (e.g. /media/...)
