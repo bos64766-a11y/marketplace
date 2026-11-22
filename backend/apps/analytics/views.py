@@ -8,7 +8,7 @@ from apps.products.models import Product, Category
 from apps.orders.models import RequestOrder, CustomerContact, OrderItem
 
 
-PENDING_STATUS = "Ko\u2019rib chiqilmoqda"
+PENDING_STATUS = RequestOrder.STATUS_CHOICES[0][0]
 
 
 class DashboardAnalyticsView(APIView):

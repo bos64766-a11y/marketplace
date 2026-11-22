@@ -559,6 +559,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [backendError, setBackendError] = useState<string | null>(null);
 
+  // Admin Auth state
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    try {
+      return (
+        localStorage.getItem('snabtash_admin_auth') === 'true' &&
+        !!localStorage.getItem('snabtash_auth_token')
+      );
+    } catch {
+      return false;
+    }
+  });
+
   // Cross-tab and Cross-window broadcast sync
   const syncChannelRef = useRef<BroadcastChannel | null>(null);
 
@@ -571,17 +583,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Helper to re-sync all live data from Django backend with smart merge protection
   const refreshFromBackend = useCallback(async () => {
     try {
+      const isAuthAdmin =
+        isAdminAuthenticated ||
+        (typeof window !== 'undefined' &&
+          localStorage.getItem('snabtash_admin_auth') === 'true' &&
+          !!localStorage.getItem('snabtash_auth_token'));
+
+      const fetchOrdersPromise = isAuthAdmin ? api.getOrders() : Promise.resolve([]);
+
       const [prodsRes, catsRes, ordsRes, settRes, banRes, sectRes, partRes] = await Promise.allSettled([
         api.getProducts(),
         api.getCategories(),
-        api.getOrders(),
+        fetchOrdersPromise,
         api.getSettings(),
         api.getBanners(),
         api.getShowcaseSections(),
         api.getPartners(),
       ]);
 
-      if (prodsRes.status === 'rejected' || ordsRes.status === 'rejected') {
+      if (prodsRes.status === 'rejected' || (isAuthAdmin && ordsRes.status === 'rejected')) {
         setBackendError("Serverga ulanishda uzilish yuz berdi");
       } else {
         setBackendError(null);
@@ -610,7 +630,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
       }
 
-      if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value)) {
+      if (isAuthAdmin && ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value)) {
         setRequests(ordsRes.value);
       }
 
@@ -771,35 +791,56 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch {}
     }
 
+    let lastFocusSyncTime = 0;
     const handleFocus = () => {
-      refreshFromBackend();
+      const now = Date.now();
+      // Throttle focus re-syncs to at most once per 60 seconds
+      if (now - lastFocusSyncTime > 60000) {
+        lastFocusSyncTime = now;
+        refreshFromBackend();
+      }
     };
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        refreshFromBackend();
+        const now = Date.now();
+        if (now - lastFocusSyncTime > 60000) {
+          lastFocusSyncTime = now;
+          refreshFromBackend();
+        }
       }
     };
 
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Polling: only poll if in admin section every 30s, or on focus / tab visibility change
-    const isAdminRoute = typeof window !== 'undefined' && (window.location.pathname.startsWith('/admin') || localStorage.getItem('snabtash_is_admin') === 'true');
-    let interval: any = null;
-    if (isAdminRoute) {
-      interval = setInterval(refreshFromBackend, 30000);
-    }
-
     return () => {
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      if (interval) clearInterval(interval);
       try {
         syncChannelRef.current?.close();
       } catch {}
     };
   }, [refreshFromBackend]);
+
+  // Admin polling: polls every 30s whenever admin is authenticated and on an /admin route
+  useEffect(() => {
+    const isInsideAdmin =
+      isAdminAuthenticated &&
+      (cleanPath.startsWith('/admin') ||
+        currentPath.startsWith('/admin') ||
+        (typeof window !== 'undefined' &&
+          (window.location.pathname.startsWith('/admin') ||
+            localStorage.getItem('snabtash_is_admin') === 'true')));
+
+    if (!isInsideAdmin) return;
+
+    // Trigger an immediate refresh when navigating into admin section
+    refreshFromBackend();
+
+    const interval = setInterval(refreshFromBackend, 30000);
+    return () => clearInterval(interval);
+  }, [isAdminAuthenticated, cleanPath, currentPath, refreshFromBackend]);
 
   const addProduct = async (productData: Omit<Product, 'id'>): Promise<Product> => {
     const tempId = `snb-${Date.now()}`;
@@ -1867,15 +1908,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
-  // Admin Auth state
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('snabtash_admin_auth') === 'true' && !!localStorage.getItem('snabtash_auth_token');
-    } catch {
-      return false;
-    }
-  });
-
   // Verify backend session/token on startup
   useEffect(() => {
     if (isAdminAuthenticated) {
@@ -1885,19 +1917,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           try {
             localStorage.removeItem('snabtash_auth_token');
             localStorage.removeItem('snabtash_admin_auth');
+            localStorage.removeItem('snabtash_is_admin');
           } catch {
             // ignore
           }
         }
       });
     }
-  }, []);
+  }, [isAdminAuthenticated]);
 
   const loginAdmin = async (login: string, pass: string): Promise<boolean> => {
     const cleanLogin = login.trim();
     const res = await api.adminLogin(cleanLogin, pass);
     if (res.success) {
       setIsAdminAuthenticated(true);
+      try {
+        localStorage.setItem('snabtash_is_admin', 'true');
+        localStorage.setItem('snabtash_admin_auth', 'true');
+      } catch {}
       showToast('Xush kelibsiz! Boshqaruv paneliga muvaffaqiyatli kirildi', 'success');
       return true;
     }
@@ -1908,6 +1945,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const logoutAdmin = async () => {
     await api.adminLogout();
     setIsAdminAuthenticated(false);
+    try {
+      localStorage.removeItem('snabtash_is_admin');
+      localStorage.removeItem('snabtash_admin_auth');
+      localStorage.removeItem('snabtash_auth_token');
+    } catch {}
     navigate('/admin/login');
     showToast('Tizimdan muvaffaqiyatli chiqildi', 'info');
   };

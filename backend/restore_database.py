@@ -220,11 +220,11 @@ def import_from_live_backup(bundle_path, backend_dir):
                 id=1,
                 defaults={
                     'company_name': sett.get('companyName') or sett.get('company_name', 'SNABTASH'),
-                    'phone_1': sett.get('phone') or sett.get('phone_1', '+998 87 034 97 79'),
+                    'phone_1': sett.get('phone1') or sett.get('phone') or sett.get('phone_1', '+998 87 034 97 79'),
                     'email': sett.get('email', 'info@snabtash.uz') or 'info@snabtash.uz',
                     'address': sett.get('address', '') or '',
-                    'work_hours': sett.get('workingHours') or sett.get('work_hours', '') or '',
-                    'telegram_channel': sett.get('telegram') or sett.get('telegram_channel', '') or '',
+                    'work_hours': sett.get('workHours') or sett.get('workingHours') or sett.get('work_hours', '') or '',
+                    'telegram_channel': sett.get('telegramChannel') or sett.get('telegram') or sett.get('telegram_channel', '') or '',
                 }
             )
             print(" -> [OK] Sayt sozlamalari tiklandi.")
@@ -249,20 +249,24 @@ def import_from_live_backup(bundle_path, backend_dir):
     except Exception as e:
         print(f" -> [OGOHLANTIRISH] Hamkorlarni tiklashda xatolik: {e}")
 
-    # 8. Superuser admin
+    # 8. Superuser admin (only if DJANGO_SUPERUSER_PASSWORD is provided in environment)
     try:
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
-        admin_user, _ = User.objects.get_or_create(
-            username='admin',
-            defaults={'is_superuser': True, 'is_staff': True, 'email': 'admin@snabtash.uz'}
-        )
-        admin_user.set_password('admin123!@')
-        admin_user.is_superuser = True
-        admin_user.is_staff = True
-        admin_user.is_active = True
-        admin_user.save()
-        print(" -> [OK] Superuser 'admin' (admin123!@) tayyorlandi.")
+        superuser_pwd = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
+        if superuser_pwd:
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            admin_user, _ = User.objects.get_or_create(
+                username='admin',
+                defaults={'is_superuser': True, 'is_staff': True, 'email': 'admin@snabtash.uz'}
+            )
+            admin_user.set_password(superuser_pwd)
+            admin_user.is_superuser = True
+            admin_user.is_staff = True
+            admin_user.is_active = True
+            admin_user.save()
+            print(" -> [OK] Superuser 'admin' tayyorlandi.")
+        else:
+            print(" -> [OGOHLANTIRISH] DJANGO_SUPERUSER_PASSWORD o'rnatilmagan, admin paroli o'zgartirilmadi.")
     except Exception as e:
         print(f" -> [OGOHLANTIRISH] Admin yaratishda ogohlantirish: {e}")
 
