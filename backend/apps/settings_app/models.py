@@ -4,7 +4,7 @@ from django.db import models
 class SiteSettings(models.Model):
     company_name = models.CharField(max_length=255, default='SNABTASH B2B')
     phone_1 = models.CharField(max_length=50, default='+998 87 034 97 79')
-    phone_2 = models.CharField(max_length=50, default='+998 90 123 45 67')
+    phone_2 = models.CharField(max_length=50, blank=True, default='')
     email = models.EmailField(default='info@snabtash.uz')
     telegram_bot = models.CharField(max_length=100, default='@snabtash_bot')
     telegram_channel = models.CharField(max_length=255, default='https://t.me/snabtash')

@@ -121,7 +121,7 @@ export const Footer: React.FC = () => {
                   <a href={`tel:${(siteSettings?.phone1 || '+998870349779').replace(/\s+/g, '')}`} className="hover:text-white font-semibold block">
                     {siteSettings?.phone1 || '+998 87 034 97 79'}
                   </a>
-                  {siteSettings?.phone2 && (
+                  {siteSettings?.phone2 && siteSettings.phone2.replace(/\D/g, '') !== '998901234567' && (
                     <a href={`tel:${siteSettings.phone2.replace(/\s+/g, '')}`} className="hover:text-white font-semibold block">
                       {siteSettings.phone2}
                     </a>

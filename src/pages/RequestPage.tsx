@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { getMediaUrl } from '../services/api';
+import { analytics } from '../services/analytics';
 import {
   CheckCircle2,
   Check,
@@ -61,6 +62,13 @@ export const RequestPage: React.FC = () => {
       return;
     }
 
+    analytics.goal('order_start', {
+      items_count: cart.reduce((sum, item) => sum + item.quantity, 0),
+      order_price: Math.round(cartTotal),
+      currency: 'UZS',
+      lang: language,
+    });
+
     setIsSubmitting(true);
     try {
       const order = await submitRequest({
@@ -80,6 +88,14 @@ export const RequestPage: React.FC = () => {
         phone,
         company,
         hasOrderedBefore: true,
+      });
+
+      analytics.goal('order_success', {
+        order_id: order.id,
+        order_price: Math.round(order.totalAmount || cartTotal),
+        currency: 'UZS',
+        items_count: cart.reduce((sum, item) => sum + item.quantity, 0),
+        lang: language,
       });
 
       setSubmittedOrderId(order.id);
@@ -269,7 +285,7 @@ export const RequestPage: React.FC = () => {
                     if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                   }}
                   placeholder={t.checkout.fullNamePlaceholder}
-                  className={`w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${errors.name
+                  className={`w-full ym-disable-keys h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${errors.name
                     ? 'border-red-500 ring-2 ring-red-200'
                     : 'border-[#E2E8F0] focus:border-[#FF5A00]'
                     }`}
@@ -288,7 +304,7 @@ export const RequestPage: React.FC = () => {
                   value={phone}
                   onChange={(e) => handlePhoneChange(e.target.value)}
                   placeholder="+998 __ ___ __ __"
-                  className={`w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${errors.phone
+                  className={`w-full ym-disable-keys h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border transition-all focus:outline-none focus:bg-white ${errors.phone
                     ? 'border-red-500 ring-2 ring-red-200'
                     : 'border-[#E2E8F0] focus:border-[#FF5A00]'
                     }`}
@@ -307,7 +323,7 @@ export const RequestPage: React.FC = () => {
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   placeholder={t.checkout.companyPlaceholder}
-                  className="w-full h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border border-[#E2E8F0] focus:outline-none focus:border-[#FF5A00] focus:bg-white transition-all"
+                  className="w-full ym-disable-keys h-11 px-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-semibold text-[#1E293B] border border-[#E2E8F0] focus:outline-none focus:border-[#FF5A00] focus:bg-white transition-all"
                 />
               </div>
             </div>
@@ -324,7 +340,7 @@ export const RequestPage: React.FC = () => {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder={t.checkout.commentPlaceholder}
-              className="w-full p-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-medium text-[#1E293B] border border-[#E2E8F0] focus:outline-none focus:border-[#FF5A00] focus:bg-white transition-all resize-none"
+              className="w-full ym-disable-keys p-4 rounded-2xl bg-[#F8FAFC] text-xs sm:text-sm font-medium text-[#1E293B] border border-[#E2E8F0] focus:outline-none focus:border-[#FF5A00] focus:bg-white transition-all resize-none"
             />
           </div>
 

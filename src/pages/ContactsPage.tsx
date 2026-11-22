@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { CONTACT_INFO } from '../data/content';
+import { analytics } from '../services/analytics';
 import { Phone, Send, Clock, MapPin, Mail, MessageSquare, Check, ArrowRight, Loader2 } from 'lucide-react';
 
 export const ContactsPage: React.FC = () => {
@@ -13,7 +14,8 @@ export const ContactsPage: React.FC = () => {
   const [sent, setSent] = useState(false);
 
   const phone1 = siteSettings?.phone1 || CONTACT_INFO.phones[0] || '+998 87 034 97 79';
-  const phone2 = siteSettings?.phone2 || CONTACT_INFO.phones[1] || '+998 90 123 45 67';
+  const rawPhone2 = siteSettings?.phone2 || '';
+  const phone2 = (rawPhone2 && rawPhone2.replace(/\D/g, '') !== '998901234567') ? rawPhone2 : '';
   const telegramBot = siteSettings?.telegramBot || CONTACT_INFO.telegram || '@snabtash_bot';
   const workHours = siteSettings?.workHours || CONTACT_INFO.workHours || (language === 'ru' ? 'Пн - Сб: 08:30 - 18:30' : 'Dush - Shan: 08:30 - 18:30');
   const address = siteSettings?.address || CONTACT_INFO.address || (language === 'ru' ? 'г. Ташкент, Сергелийский район, Tashkent Index, блок А3' : 'Toshkent sh., Sergeli tumani, Tashkent Index, A3-blok');
@@ -81,6 +83,7 @@ export const ContactsPage: React.FC = () => {
       });
 
       setSent(true);
+      analytics.goal('contact_form_sent', { lang: language });
       showToast(t.contactsPage.successToast, 'success');
     } catch (err) {
       showToast(t.contactsPage.errorToast, 'error');
@@ -237,7 +240,7 @@ export const ContactsPage: React.FC = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={t.contactsPage.namePlaceholder}
-                  className="w-full h-11 px-4 rounded-xl bg-[#F7F9FC] text-sm text-[#14213D] border border-[#E5EAF2] focus:outline-none focus:border-[#0B2E73] focus:bg-white"
+                  className="w-full ym-disable-keys h-11 px-4 rounded-xl bg-[#F7F9FC] text-sm text-[#14213D] border border-[#E5EAF2] focus:outline-none focus:border-[#0B2E73] focus:bg-white"
                 />
               </div>
 
@@ -251,7 +254,7 @@ export const ContactsPage: React.FC = () => {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+998 __ ___ __ __"
-                  className="w-full h-11 px-4 rounded-xl bg-[#F7F9FC] text-sm text-[#14213D] border border-[#E5EAF2] focus:outline-none focus:border-[#0B2E73] focus:bg-white"
+                  className="w-full ym-disable-keys h-11 px-4 rounded-xl bg-[#F7F9FC] text-sm text-[#14213D] border border-[#E5EAF2] focus:outline-none focus:border-[#0B2E73] focus:bg-white"
                 />
               </div>
 
@@ -264,7 +267,7 @@ export const ContactsPage: React.FC = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder={t.contactsPage.messagePlaceholder}
-                  className="w-full p-4 rounded-xl bg-[#F7F9FC] text-sm text-[#14213D] border border-[#E5EAF2] focus:outline-none focus:border-[#0B2E73] focus:bg-white resize-none"
+                  className="w-full ym-disable-keys p-4 rounded-xl bg-[#F7F9FC] text-sm text-[#14213D] border border-[#E5EAF2] focus:outline-none focus:border-[#0B2E73] focus:bg-white resize-none"
                 />
               </div>
 

@@ -6,6 +6,7 @@ import { CATEGORIES as INITIAL_CATEGORIES } from '../data/categories';
 import { PARTNERS as DEFAULT_PARTNERS } from '../data/content';
 import { api } from '../services/api';
 import { sendTelegramOrderNotification } from '../services/telegram';
+import { analytics } from '../services/analytics';
 
 interface AppContextType {
   // Navigation
@@ -121,7 +122,7 @@ interface AppContextType {
 const DEFAULT_SETTINGS: SiteSettings = {
   companyName: 'SNABTASH B2B',
   phone1: '+998 87 034 97 79',
-  phone2: '+998 90 123 45 67',
+  phone2: '',
   email: 'info@snab.uz',
   telegramBot: '@snabtash_bot',
   telegramChannel: 'https://t.me/snabtash',
@@ -430,6 +431,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setCurrentPath(newPath);
     }
   }, []);
+
+  // Yandex Metrika SPA virtual page tracking
+  const isFirstPathRef = useRef(true);
+  const previousPathRef = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (isFirstPathRef.current) {
+      isFirstPathRef.current = false;
+      previousPathRef.current = typeof window !== 'undefined' ? window.location.href : undefined;
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      const currentUrl = (window.location.pathname || '/') + (window.location.search || '');
+      analytics.trackPageView(currentUrl, previousPathRef.current, document.title);
+      previousPathRef.current = window.location.href;
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [currentPath]);
 
   const t = useMemo(() => translations[language], [language]);
 
@@ -1748,6 +1769,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         );
       }
       return [...prev, { product, quantity }];
+    });
+    analytics.goal('add_to_cart', {
+      product_id: product.id,
+      price: Math.round(Number(product.price) || 0),
+      quantity,
+      currency: 'UZS',
     });
     showToast(`✓ ${product.name} savatga qo‘shildi`, 'success');
   };
