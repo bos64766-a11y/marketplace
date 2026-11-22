@@ -22,7 +22,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-motor-clean-dvigatel-tozalagichi-750-ml.webp"
     ]
   },
   {
@@ -46,7 +46,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-ironoff-disk-tozalagichi-750-ml.webp"
     ]
   },
   {
@@ -70,7 +70,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-cy-2002-ikki-tomonlama-marker.webp"
     ]
   },
   {
@@ -94,7 +94,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-deli-h213-shtix-lentasi-30-m.webp"
     ]
   },
   {
@@ -118,7 +118,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-9-mm-kanselyariya-pichogi.webp"
     ]
   },
   {
@@ -142,7 +142,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-qattiq-muqovali-plastik-skorosshivatel-papka.webp"
     ]
   },
   {
@@ -166,7 +166,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-deli-0051-qogoz-qisqichlari-29-mm.webp"
     ]
   },
   {
@@ -190,7 +190,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-qora-korpusli-ochirgichli-qalam.webp"
     ]
   },
   {
@@ -214,7 +214,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-pva-yelimi.webp"
     ]
   },
   {
@@ -238,7 +238,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-katta-qaychi.webp"
     ]
   },
   {
@@ -262,7 +262,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-matnni-belgilash-uchun-marker-4-dona-deli.webp"
     ]
   },
   {
@@ -286,7 +286,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-oz-ozidan-yopishadigan-qogoz-7676-mm.webp"
     ]
   },
   {
@@ -310,7 +310,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-deli-0231-stepler-yechgich.webp"
     ]
   },
   {
@@ -334,7 +334,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-ortacha-olchamdagi-teshgich.webp"
     ]
   },
   {
@@ -358,7 +358,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-organayzer-17-ta-buyum.webp"
     ]
   },
   {
@@ -382,7 +382,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-qora-gel-ruchka-05-mm.webp"
     ]
   },
   {
@@ -406,7 +406,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-registr-papka-kok-rangli.webp"
     ]
   },
   {
@@ -430,7 +430,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-luxor-focus-icy-kok-sharikli-ruchka.webp"
     ]
   },
   {
@@ -454,7 +454,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-shtix-zamaska-20-ml.webp"
     ]
   },
   {
@@ -478,7 +478,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-perfofayllar-100-dona.webp"
     ]
   },
   {
@@ -502,7 +502,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-qogozlar-uchun-qisqich-41-mm.webp"
     ]
   },
   {
@@ -526,7 +526,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb----246.webp"
     ]
   },
   {
@@ -550,7 +550,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-a4-qogozlar-uchun-qisqichli-planshet.webp"
     ]
   },
   {
@@ -574,7 +574,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-vertikal-hujjat-lotogi.webp"
     ]
   },
   {
@@ -598,7 +598,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-katta-olchamdagi-stepler.webp"
     ]
   },
   {
@@ -622,7 +622,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-a4-ofis-qogozi.webp"
     ]
   },
   {
@@ -646,7 +646,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-ortacha-olchamdagi-stepler.webp"
     ]
   },
   {
@@ -670,7 +670,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-delfin-latta.webp"
     ]
   },
   {
@@ -694,7 +694,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-magnus-qolqoplari.webp"
     ]
   },
   {
@@ -718,7 +718,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-vafelli-sochiq.webp"
     ]
   },
   {
@@ -742,7 +742,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-glade-osvejitel-300-ml.webp"
     ]
   },
   {
@@ -766,7 +766,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-airwick-osvejitel-250-ml.webp"
     ]
   },
   {
@@ -790,7 +790,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-oq-rangli-yuqori-sifatli-pvx-ishchi-etiklar.webp"
     ]
   },
   {
@@ -814,7 +814,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-pvx-ishchi-rezina-etiklar.webp"
     ]
   },
   {
@@ -838,7 +838,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-erkaklar-eriklari-eva.webp"
     ]
   },
   {
@@ -862,7 +862,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-marlya-doka.webp"
     ]
   },
   {
@@ -886,7 +886,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-rulon-pollatta.webp"
     ]
   },
   {
@@ -910,7 +910,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-brezent-ishchi-qolqoplari.webp"
     ]
   },
   {
@@ -934,7 +934,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb--ishchi-qolqoplari.webp"
     ]
   },
   {
@@ -958,7 +958,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-qizil-ishchi-qolqoplar-rezinali.webp"
     ]
   },
   {
@@ -982,7 +982,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-qurilish-perchatkalari.webp"
     ]
   },
   {
@@ -1006,7 +1006,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-salatoviy-ishchi-perchatkalar.webp"
     ]
   },
   {
@@ -1030,7 +1030,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-----.webp"
     ]
   },
   {
@@ -1054,7 +1054,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-qaychi-ortacha.webp"
     ]
   },
   {
@@ -1078,7 +1078,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": true,
     "isNew": true,
     "images": [
-      ""
+      "/media/products/snb-chelak-5l-qopqogi-bilan.webp"
     ]
   },
   {
@@ -1102,7 +1102,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-qora-rangli-z-salfetkalar-uchun-dispenser.webp"
     ]
   },
   {
@@ -1126,7 +1126,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-xojatxona-qogozi-uchun-dospanser.webp"
     ]
   },
   {
@@ -1150,7 +1150,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-chiqindi-paketlari-4550-sm-20-dona.webp"
     ]
   },
   {
@@ -1174,7 +1174,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-metall-kurakcha-hokandoz.webp"
     ]
   },
   {
@@ -1198,7 +1198,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": true,
     "isNew": true,
     "images": [
-      ""
+      "/media/products/snb-chelak-12l-temir.webp"
     ]
   },
   {
@@ -1222,7 +1222,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-shvabra.webp"
     ]
   },
   {
@@ -1246,7 +1246,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-pol-shvabrasi.webp"
     ]
   },
   {
@@ -1270,7 +1270,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-kocha-supurgisi.webp"
     ]
   },
   {
@@ -1294,7 +1294,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-supurgi.webp"
     ]
   },
   {
@@ -1318,7 +1318,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-osvejitel-melodiya-aromatov.webp"
     ]
   },
   {
@@ -1342,7 +1342,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-azelit-anti--tozalash-vositasi-600-m.webp"
     ]
   },
   {
@@ -1366,7 +1366,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-cif-cream-tozalash-vositasi-500-ml.webp"
     ]
   },
   {
@@ -1390,7 +1390,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-domestos-1250ml.webp"
     ]
   },
   {
@@ -1414,7 +1414,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-xojalik-sovuni.webp"
     ]
   },
   {
@@ -1438,7 +1438,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g.webp"
     ]
   },
   {
@@ -1462,7 +1462,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-aprel-qolda-yuvish-uchun-kir-yuvish-kukuni-900-g.webp"
     ]
   },
   {
@@ -1486,7 +1486,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-250-g.webp"
     ]
   },
   {
@@ -1510,7 +1510,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-crystal-qolda-yuvish-uchun-kir-yuvish-kukuni-2-kg.webp"
     ]
   },
   {
@@ -1534,7 +1534,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-rusalochka-suyuq-sovuni-5-l.webp"
     ]
   },
   {
@@ -1558,7 +1558,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-rusalochka-idish-yuvish-vositasi-5-l.webp"
     ]
   },
   {
@@ -1582,7 +1582,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-crystal-pol-yuvish-vositasi-1-l.webp"
     ]
   },
   {
@@ -1606,7 +1606,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-fiona-idish-yuvish-geli-400-g.webp"
     ]
   },
   {
@@ -1630,7 +1630,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-crystal-tozalash-vositasi-400-g.webp"
     ]
   },
   {
@@ -1654,7 +1654,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-crystal-oyna-tozalash-vositasi-500-ml.webp"
     ]
   },
   {
@@ -1678,7 +1678,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-pemolux-tozalash-vositasi.webp"
     ]
   },
   {
@@ -1702,7 +1702,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-fiona-idish-yuvish-vositasi-500-ml.webp"
     ]
   },
   {
@@ -1726,7 +1726,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-elma-panda-asian-pack-economy-tualet-qogozi-6-dona.webp"
     ]
   },
   {
@@ -1750,7 +1750,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-elma-big-size-mikrofiberi-60100-sm.webp"
     ]
   },
   {
@@ -1774,7 +1774,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-delfin-elma-lux-universal-salfetkalari.webp"
     ]
   },
   {
@@ -1798,7 +1798,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-elma-pol-yuvish-uchun-latta.webp"
     ]
   },
   {
@@ -1822,7 +1822,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-elma-antibacterial-effect-nam-salfetkalari-100-dona.webp"
     ]
   },
   {
@@ -1846,7 +1846,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-elma-eco-big-size-3-qavatli-qogoz-sochiq.webp"
     ]
   },
   {
@@ -1870,7 +1870,7 @@ export const PRODUCTS: Product[] = [
     "isPopular": false,
     "isNew": false,
     "images": [
-      ""
+      "/media/products/snb-elma-v-economy-pack-qogoz-salfetkalari-100-dona.webp"
     ]
   }
 ];

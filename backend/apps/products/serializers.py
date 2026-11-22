@@ -17,12 +17,25 @@ class CategorySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         from django.utils.text import slugify
+        from .utils import save_base64_to_storage
         if not validated_data.get('slug'):
             base = slugify(validated_data.get('name', 'category')) or 'category'
             validated_data['slug'] = base
         if not validated_data.get('id'):
             validated_data['id'] = validated_data['slug']
+        if validated_data.get('image'):
+            validated_data['image'] = save_base64_to_storage(
+                validated_data['image'], prefix='categories', name_hint=validated_data['slug']
+            )
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        from .utils import save_base64_to_storage
+        if 'image' in validated_data and validated_data['image']:
+            validated_data['image'] = save_base64_to_storage(
+                validated_data['image'], prefix='categories', name_hint=instance.slug or instance.id
+            )
+        return super().update(instance, validated_data)
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -157,9 +170,11 @@ class ProductSerializer(serializers.ModelSerializer):
         product = super().create(validated_data)
 
         if images_data:
+            from .utils import save_base64_to_storage
             for idx, url in enumerate(images_data):
+                clean_url = save_base64_to_storage(url, prefix='products', name_hint=product.slug or product.id)
                 ProductImage.objects.create(
-                    product=product, image_url=url, is_main=(idx == 0), order=idx
+                    product=product, image_url=clean_url, is_main=(idx == 0), order=idx
                 )
         return product
 
@@ -187,9 +202,11 @@ class ProductSerializer(serializers.ModelSerializer):
         product = super().update(instance, validated_data)
 
         if images_data is not None:
+            from .utils import save_base64_to_storage
             product.product_images.all().delete()
             for idx, url in enumerate(images_data):
+                clean_url = save_base64_to_storage(url, prefix='products', name_hint=product.slug or product.id)
                 ProductImage.objects.create(
-                    product=product, image_url=url, is_main=(idx == 0), order=idx
+                    product=product, image_url=clean_url, is_main=(idx == 0), order=idx
                 )
         return product

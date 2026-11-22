@@ -70,11 +70,7 @@ export const AdminCategories: React.FC = () => {
       const res = await api.uploadImage(file, 'categories');
       setFormData((prev) => ({ ...prev, image: res.url }));
     } catch (err: any) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setFormData((prev) => ({ ...prev, image: reader.result as string }));
-      };
-      reader.readAsDataURL(file);
+      setUploadError(err?.message || 'Rasm serverga yuklanmadi. Qayta urinib ko‘ring.');
     } finally {
       setIsUploading(false);
     }

@@ -117,3 +117,69 @@ class ProductAPITest(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res.data['name_ru'], 'Мыло жидкое')
         self.assertEqual(res.data['description_ru'], 'Натуральное жидкое мыло')
+
+    def test_base64_image_converted_on_product_create(self):
+        """Test that data:image/ base64 URLs in product images are converted to physical media files"""
+        self.client.force_authenticate(user=self.admin)
+        # 1x1 transparent WebP base64
+        tiny_webp_b64 = "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAgA0JaQAA3AA/vuUAAA="
+        res = self.client.post('/api/products/', {
+            'name': 'Test Base64 Mahsulot',
+            'category': 'kanselyariya',
+            'price': 10000.00,
+            'images': [tiny_webp_b64]
+        }, format='json')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        created_prod = Product.objects.get(id=res.data['id'])
+        img = created_prod.product_images.first()
+        self.assertIsNotNone(img)
+        self.assertFalse(img.image_url.startswith('data:'))
+        self.assertTrue(img.image_url.startswith('/media/products/') or 'products/' in img.image_url)
+
+    def test_base64_image_converted_on_category_create(self):
+        """Test that data:image/ base64 URLs in category image are converted to physical media files"""
+        self.client.force_authenticate(user=self.admin)
+        tiny_webp_b64 = "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAgA0JaQAA3AA/vuUAAA="
+        res = self.client.post('/api/categories/', {
+            'name': 'Test Base64 Kategoriya',
+            'slug': 'test-b64-cat',
+            'image': tiny_webp_b64
+        }, format='json')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        cat = Category.objects.get(slug='test-b64-cat')
+        self.assertFalse(cat.image.startswith('data:'))
+        self.assertTrue(cat.image.startswith('/media/categories/') or 'categories/' in cat.image)
+
+    def test_convert_base64_management_command(self):
+        """Test the convert_base64_images management command"""
+        from django.core.management import call_command
+        tiny_webp_b64 = "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAgA0JaQAA3AA/vuUAAA="
+        
+        prod = Product.objects.create(
+            id='snb-cmd-test-prod',
+            name='Command Test Product',
+            category=self.category,
+            price=5000.00
+        )
+        ProductImage.objects.create(
+            product=prod,
+            image_url=tiny_webp_b64,
+            is_main=True,
+            order=0
+        )
+        cat = Category.objects.create(
+            id='cmd-test-cat',
+            slug='cmd-test-cat',
+            name='Command Test Category',
+            image=tiny_webp_b64
+        )
+
+        call_command('convert_base64_images')
+
+        prod_img = ProductImage.objects.get(product=prod)
+        self.assertFalse(prod_img.image_url.startswith('data:'))
+        self.assertTrue(prod_img.image_url.startswith('/media/products/') or 'products/' in prod_img.image_url)
+
+        updated_cat = Category.objects.get(id='cmd-test-cat')
+        self.assertFalse(updated_cat.image.startswith('data:'))
+        self.assertTrue(updated_cat.image.startswith('/media/categories/') or 'categories/' in updated_cat.image)

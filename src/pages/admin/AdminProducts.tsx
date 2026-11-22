@@ -118,21 +118,16 @@ export const AdminProducts: React.FC = () => {
           const res = await api.uploadImage(f, 'products');
           uploadedUrls.push(res.url);
         } catch (apiErr: any) {
-          console.warn('API upload failed, using local FileReader fallback:', apiErr);
-          const dataUrl = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(f);
-          });
-          uploadedUrls.push(dataUrl);
+          setUploadError(apiErr?.message || 'Rasm serverga yuklanmadi');
         }
       }
-      setFormData((prev) => {
-        const nextImages = [...(prev.images || []), ...uploadedUrls];
-        setImageUrlInput(nextImages.join('\n'));
-        return { ...prev, images: nextImages };
-      });
+      if (uploadedUrls.length > 0) {
+        setFormData((prev) => {
+          const nextImages = [...(prev.images || []), ...uploadedUrls];
+          setImageUrlInput(nextImages.join('\n'));
+          return { ...prev, images: nextImages };
+        });
+      }
     } catch (err: any) {
       setUploadError(err.message || 'Rasm yuklashda xatolik yuz berdi');
     } finally {

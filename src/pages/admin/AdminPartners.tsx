@@ -74,20 +74,8 @@ export const AdminPartners: React.FC = () => {
       } else {
         throw new Error('URL olinmadi');
       }
-    } catch {
-      // High-quality WebP DataURL fallback ensures immediate permanent storage in PostgreSQL
-      try {
-        const compressed = await compressImageFile(file, 800, 0.90);
-        setFormData((prev) => ({ ...prev, logo: compressed }));
-      } catch {
-        const dataUrl = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-        setFormData((prev) => ({ ...prev, logo: dataUrl }));
-      }
+    } catch (apiErr: any) {
+      setUploadError(apiErr?.message || 'Logotip serverga yuklanmadi. Qayta urinib ko‘ring.');
     } finally {
       setIsUploading(false);
     }

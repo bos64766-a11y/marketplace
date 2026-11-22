@@ -123,9 +123,66 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Media files (Product uploads)
+# Media files (Product uploads & Object Storage: Local or Cloudflare R2 / AWS S3)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+USE_S3 = os.environ.get('USE_S3', 'False').lower() in ('true', '1') or bool(os.environ.get('AWS_STORAGE_BUCKET_NAME'))
+
+if USE_S3:
+    try:
+        import storages  # noqa: F401
+        if 'storages' not in INSTALLED_APPS:
+            INSTALLED_APPS.append('storages')
+        AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+        AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+        AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL')
+        AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'auto')
+        AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN')
+        AWS_S3_FILE_OVERWRITE = False
+        AWS_DEFAULT_ACL = None
+        AWS_QUERYSTRING_AUTH = False
+
+        STORAGES = {
+            "default": {
+                "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+                "OPTIONS": {
+                    "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                    "endpoint_url": AWS_S3_ENDPOINT_URL,
+                    "region_name": AWS_S3_REGION_NAME,
+                    "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+                    "file_overwrite": False,
+                    "default_acl": None,
+                    "querystring_auth": False,
+                },
+            },
+            "staticfiles": {
+                "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+            },
+        }
+        if AWS_S3_CUSTOM_DOMAIN:
+            MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+        elif AWS_S3_ENDPOINT_URL and AWS_STORAGE_BUCKET_NAME:
+            MEDIA_URL = f"{AWS_S3_ENDPOINT_URL.rstrip('/')}/{AWS_STORAGE_BUCKET_NAME}/"
+    except ImportError:
+        STORAGES = {
+            "default": {
+                "BACKEND": "django.core.files.storage.FileSystemStorage",
+            },
+            "staticfiles": {
+                "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+            },
+        }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

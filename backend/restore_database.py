@@ -42,9 +42,11 @@ def import_from_live_backup(bundle_path, backend_dir):
 
     # 1. Categories
     try:
+        from apps.products.utils import save_base64_to_storage
         cats = data.get('categories', [])
         for c in cats:
             cat_id = str(c.get('id') or c.get('slug'))
+            cat_img = save_base64_to_storage(c.get('image', '') or '', prefix='categories', name_hint=cat_id)
             Category.objects.update_or_create(
                 id=cat_id,
                 defaults={
@@ -52,7 +54,7 @@ def import_from_live_backup(bundle_path, backend_dir):
                     'name': c.get('name', ''),
                     'name_ru': c.get('name_ru', '') or '',
                     'icon': c.get('icon', 'Package') or 'Package',
-                    'image': c.get('image', '') or '',
+                    'image': cat_img,
                     'description': c.get('description', '') or '',
                     'description_ru': c.get('description_ru', '') or '',
                 }
@@ -102,9 +104,10 @@ def import_from_live_backup(bundle_path, backend_dir):
                 prod_obj.product_images.all().delete()
                 for idx, img_url in enumerate(images):
                     if img_url and str(img_url).strip():
+                        clean_url = save_base64_to_storage(str(img_url).strip(), prefix='products', name_hint=prod_id)
                         ProductImage.objects.create(
                             product=prod_obj,
-                            image_url=str(img_url).strip(),
+                            image_url=clean_url,
                             is_main=(idx == 0),
                             order=idx
                         )

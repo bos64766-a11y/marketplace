@@ -262,28 +262,36 @@ class FileUploadView(APIView):
                     )
 
             # Determine upload subfolder
-            upload_type = request.query_params.get('type') or 'uploads'
-            subfolder = 'products' if 'product' in upload_type else ('banners' if 'banner' in upload_type else 'uploads')
-            target_dir = os.path.join(settings.MEDIA_ROOT, subfolder)
-            os.makedirs(target_dir, exist_ok=True)
+            upload_type = (request.query_params.get('type') or 'uploads').lower()
+            if 'product' in upload_type:
+                subfolder = 'products'
+            elif 'banner' in upload_type:
+                subfolder = 'banners'
+            elif 'categor' in upload_type:
+                subfolder = 'categories'
+            else:
+                subfolder = 'uploads'
 
             # Map jfif/heic to jpg or keep safe ext
             safe_ext = '.jpg' if ext in ['.jfif', '.heic', '.heif'] else ext
             filename = f"img_{uuid.uuid4().hex[:12]}{safe_ext}"
-            filepath = os.path.join(target_dir, filename)
+            storage_path = f"{subfolder}/{filename}"
 
-            with open(filepath, 'wb+') as destination:
-                for chunk in file_obj.chunks():
-                    destination.write(chunk)
+            from django.core.files.storage import default_storage
+            saved_name = default_storage.save(storage_path, file_obj)
+            file_url = default_storage.url(saved_name)
 
-            rel_url = f"{settings.MEDIA_URL}{subfolder}/{filename}"
-            file_url = request.build_absolute_uri(rel_url)
-            # Ensure HTTPS if requested over HTTPS or behind TLS termination proxy
-            if request.is_secure() or request.headers.get('x-forwarded-proto') == 'https':
-                file_url = file_url.replace('http://', 'https://')
+            if file_url.startswith('http://') or file_url.startswith('https://'):
+                abs_url = file_url
+                rel_url = file_url
+            else:
+                rel_url = file_url if file_url.startswith('/') else f"/{file_url}"
+                abs_url = request.build_absolute_uri(rel_url)
+                if request.is_secure() or request.headers.get('x-forwarded-proto') == 'https':
+                    abs_url = abs_url.replace('http://', 'https://')
 
             return Response({
-                'url': file_url,
+                'url': abs_url,
                 'relative_url': rel_url,
                 'filename': filename,
                 'original_name': file_obj.name,
@@ -559,12 +567,15 @@ class RestoreBackupView(APIView):
         restored_orders = 0
         restored_settings = False
 
+        from apps.products.utils import save_base64_to_storage
+
         # 1. Categories
         categories_data = root.get('categories', [])
         for c in categories_data:
             cat_id = str(c.get('id') or c.get('slug') or '').strip()
             if not cat_id:
                 continue
+            cat_img = save_base64_to_storage(c.get('image', '') or '', prefix='categories', name_hint=cat_id)
             Category.objects.update_or_create(
                 id=cat_id,
                 defaults={
@@ -572,7 +583,7 @@ class RestoreBackupView(APIView):
                     'name': c.get('name', ''),
                     'name_ru': c.get('name_ru', '') or '',
                     'icon': c.get('icon', 'Package') or 'Package',
-                    'image': c.get('image', '') or '',
+                    'image': cat_img,
                     'description': c.get('description', '') or '',
                     'description_ru': c.get('description_ru', '') or '',
                     'order': int(c.get('order', 0) or 0),
@@ -671,9 +682,10 @@ class RestoreBackupView(APIView):
                     elif isinstance(img_item, str):
                         img_url = img_item.strip()
                     if img_url:
+                        clean_img_url = save_base64_to_storage(img_url, prefix='products', name_hint=prod_id)
                         ProductImage.objects.create(
                             product=prod_obj,
-                            image_url=img_url,
+                            image_url=clean_img_url,
                             is_main=(idx == 0),
                             order=idx
                         )

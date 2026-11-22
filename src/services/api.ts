@@ -422,7 +422,6 @@ export const api = {
     // 1. Optimize large files client-side first so high-MB images become ultra-compact (~200KB)
     // while keeping 100% crisp full HD quality without blur or pixelation
     let uploadFile = file;
-    let fallbackDataUrl = '';
     let optimizedSize = file.size;
     let reductionPercent = 0;
 
@@ -430,13 +429,11 @@ export const api = {
       if (type === 'banners') {
         const optimized = await optimizeBannerImage(file, { maxWidth: 1920, maxHeight: 1200, quality: 0.90 });
         uploadFile = optimized.file;
-        fallbackDataUrl = optimized.dataUrl;
         optimizedSize = optimized.compressedSize;
         reductionPercent = optimized.reductionPercent;
       } else {
         const optimized = await optimizeBannerImage(file, { maxWidth: 1400, maxHeight: 1400, quality: 0.90 });
         uploadFile = optimized.file;
-        fallbackDataUrl = optimized.dataUrl;
         optimizedSize = optimized.compressedSize;
         reductionPercent = optimized.reductionPercent;
       }
@@ -444,60 +441,41 @@ export const api = {
       console.warn('Image client optimizer fallback:', optErr);
     }
 
-    // 2. Upload the optimized compact file to backend server
-    try {
-      const formData = new FormData();
-      formData.append('image', uploadFile);
-      const token = typeof window !== 'undefined' ? localStorage.getItem('snabtash_auth_token') : null;
-      const res = await fetch(`${API_BASE}/upload/?type=${type}`, {
-        method: 'POST',
-        headers: {
-          ...(token ? { Authorization: `Token ${token}` } : {}),
-        },
-        body: formData,
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && (data.relative_url || data.url)) {
-          return {
-            url: data.relative_url || data.url,
-            filename: data.filename || uploadFile.name,
-            original_name: file.name,
-            size: data.size || optimizedSize,
-            reduction: reductionPercent,
-          };
-        }
+    // 2. Upload the optimized compact file to backend server (never fall back to data: URL)
+    const formData = new FormData();
+    formData.append('image', uploadFile);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('snabtash_auth_token') : null;
+    const res = await fetch(`${API_BASE}/upload/?type=${type}`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Token ${token}` } : {}),
+      },
+      body: formData,
+    });
+
+    if (!res.ok) {
+      let errMsg = 'Rasm serverga yuklanmadi';
+      try {
+        const errJson = await res.json();
+        errMsg = errJson.error || errJson.message || errMsg;
+      } catch {
+        // fallback message
       }
-    } catch (serverErr) {
-      console.warn('Direct server upload error, using local fallback:', serverErr);
+      throw new Error(errMsg);
     }
 
-    // 3. Fallback: If server is offline or unreachable, return the compact, high-quality DataURL
-    if (fallbackDataUrl) {
+    const data = await res.json();
+    if (data && (data.relative_url || data.url)) {
       return {
-        url: fallbackDataUrl,
-        filename: uploadFile.name,
+        url: data.relative_url || data.url,
+        filename: data.filename || uploadFile.name,
         original_name: file.name,
-        size: optimizedSize,
+        size: data.size || optimizedSize,
         reduction: reductionPercent,
       };
     }
 
-    // 4. Ultimate fallback if canvas optimization was unsupported
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        resolve({
-          url: reader.result as string,
-          filename: file.name,
-          original_name: file.name,
-          size: file.size,
-          reduction: 0,
-        });
-      };
-      reader.onerror = () => reject(new Error('Faylni yuklashda xatolik yuz berdi'));
-      reader.readAsDataURL(file);
-    });
+    throw new Error('Serverdan noto‘g‘ri javob olindi.');
   },
 
   // --- DASHBOARD ANALYTICS ---
