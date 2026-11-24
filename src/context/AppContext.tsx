@@ -432,50 +432,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, []);
 
-  // Yandex Metrika SPA virtual page tracking (sent after page title is updated)
-  const isFirstPathRef = useRef(true);
-  const previousPathRef = useRef<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (isFirstPathRef.current) {
-      isFirstPathRef.current = false;
-      previousPathRef.current = typeof window !== 'undefined' ? window.location.href : undefined;
-      return;
-    }
-
-    const currentUrl = (window.location.pathname || '/') + (window.location.search || '');
-    let sent = false;
-
-    const sendHit = () => {
-      if (sent) return;
-      sent = true;
-      analytics.trackPageView(currentUrl, previousPathRef.current, document.title);
-      previousPathRef.current = window.location.href;
-    };
-
-    // Watch for title update via MutationObserver
-    let observer: MutationObserver | null = null;
-    const titleEl = typeof document !== 'undefined' ? document.querySelector('title') : null;
-    if (titleEl && typeof MutationObserver !== 'undefined') {
-      observer = new MutationObserver(() => {
-        sendHit();
-        observer?.disconnect();
-      });
-      observer.observe(titleEl, { childList: true, characterData: true, subtree: true });
-    }
-
-    // Fallback: send hit after 150ms if title was already updated or didn't change
-    const timer = setTimeout(() => {
-      sendHit();
-      observer?.disconnect();
-    }, 150);
-
-    return () => {
-      clearTimeout(timer);
-      observer?.disconnect();
-    };
-  }, [currentPath]);
-
   const t = useMemo(() => translations[language], [language]);
 
   const getProductName = (p: Product): string => {

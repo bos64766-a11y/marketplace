@@ -124,6 +124,7 @@ const AppContent: React.FC = () => {
   useSEO({
     noindex: isAdminPage,
     lang: language,
+    trackPageView: false,
   });
 
   // Admin pages get their own layout — no Header, Footer, or MobileBottomNav

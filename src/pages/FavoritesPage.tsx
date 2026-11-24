@@ -1,10 +1,17 @@
 import React from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { ProductCard } from '../components/ProductCard';
 import { Heart, ArrowRight } from 'lucide-react';
 
 export const FavoritesPage: React.FC = () => {
-  const { favorites, navigate, products, t } = useApp();
+  const { favorites, navigate, products, t, language } = useApp();
+
+  useSEO({
+    title: language === 'ru' ? 'Избранное' : 'Saralanganlar',
+    description: language === 'ru' ? 'Список избранных товаров' : "Tanlangan mahsulotlar ro'yxati",
+    lang: language,
+  });
 
   const favoriteProducts = products.filter((p) => favorites.includes(p.id));
 

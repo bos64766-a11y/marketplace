@@ -19,6 +19,15 @@ import {
 export const RequestPage: React.FC = () => {
   const { cart, cartTotal, submitRequest, profile, updateProfile, navigate, language, t, getProductName, formatUnit } = useApp();
 
+  useSEO({
+    title: language === 'ru' ? 'Оформление заявки' : 'Zayavka qoldirish',
+    description:
+      language === 'ru'
+        ? 'Оформите заказ или быструю заявку на оптовые поставки товаров в Ташкенте.'
+        : "Toshkentda ulgurji tovarlar yetkazib berish bo'yicha zayavka qoldiring.",
+    lang: language,
+  });
+
   const hasSavedContact = Boolean(profile?.hasOrderedBefore && profile?.phone && profile?.name);
   const [isEditingContact, setIsEditingContact] = useState(!hasSavedContact);
 

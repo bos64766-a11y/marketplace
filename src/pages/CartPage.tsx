@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { getMediaUrl } from '../services/api';
 import {
@@ -24,6 +25,12 @@ export const CartPage: React.FC = () => {
     getProductName,
     formatUnit,
   } = useApp();
+
+  useSEO({
+    title: language === 'ru' ? 'Корзина' : 'Savatcha',
+    description: language === 'ru' ? 'Корзина оптового заказа SNAB.UZ' : "SNAB.UZ ulgurji buyurtma savatchasi",
+    lang: language,
+  });
 
   if (cart.length === 0) {
     return (

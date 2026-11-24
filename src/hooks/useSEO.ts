@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { analytics } from '../services/analytics';
 
 export interface SEOBreadcrumb {
   name: string;
@@ -38,7 +39,13 @@ export interface SEOProps {
   breadcrumbs?: SEOBreadcrumb[];
   faqs?: SEOFAQItem[];
   schema?: Record<string, any>;
+  trackPageView?: boolean;
 }
+
+// Module-level deduplication and referer tracking for Yandex Metrika SPA virtual page views
+let isInitialPageLoad = true;
+let lastTrackedUrl = '';
+let previousUrlForReferer: string | undefined = undefined;
 
 const DEFAULT_ORIGIN = 'https://www.snab.uz';
 const DEFAULT_IMAGE = 'https://www.snab.uz/logo-horizontal.png';
@@ -90,6 +97,7 @@ export function useSEO({
   breadcrumbs,
   faqs,
   schema,
+  trackPageView = true,
 }: SEOProps) {
   useEffect(() => {
     const prevTitle = typeof document !== 'undefined' ? document.title : '';
@@ -125,6 +133,21 @@ export function useSEO({
 
     // 1. Page Title
     document.title = resolvedTitle;
+
+    // Yandex Metrika SPA virtual page tracking (sent after document.title is updated)
+    if (trackPageView && typeof window !== 'undefined') {
+      const currentUrl = (window.location.pathname || '/') + (window.location.search || '');
+      if (isInitialPageLoad) {
+        // Tag already automatically tracked initial load
+        isInitialPageLoad = false;
+        lastTrackedUrl = currentUrl;
+        previousUrlForReferer = window.location.href;
+      } else if (lastTrackedUrl !== currentUrl) {
+        lastTrackedUrl = currentUrl;
+        analytics.trackPageView(currentUrl, previousUrlForReferer, resolvedTitle);
+        previousUrlForReferer = window.location.href;
+      }
+    }
 
     // 2. Primary Meta Tags
     getOrCreateMeta('name', 'title').setAttribute('content', resolvedTitle);

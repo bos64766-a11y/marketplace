@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { User, Phone, Building2, FileText, Heart, ShoppingBag, Save, LogOut, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 export const ProfilePage: React.FC = () => {
-  const { profile, updateProfile, requests, favorites, cartCount, navigate, t, showToast } = useApp();
+  const { profile, updateProfile, requests, favorites, cartCount, navigate, t, showToast, language } = useApp();
+
+  useSEO({
+    title: language === 'ru' ? 'Личный кабинет' : 'Shaxsiy kabinet',
+    description: language === 'ru' ? 'Профиль покупателя и история заказов' : "Mijoz profili va buyurtmalar tarixi",
+    lang: language,
+  });
 
   const [name, setName] = useState(profile.name);
   const [phone, setPhone] = useState(profile.phone);
