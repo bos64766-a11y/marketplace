@@ -674,7 +674,7 @@ export const translations: Record<Language, Translations> = {
       submit: "Подтвердить заявку",
       submitting: "Отправка...",
       successTitle: "Заявка успешно принята!",
-      successDesc: "Номер заявки: #{id}. Наш менеджер скоро свяжется с вами и выставит официальный счет.",
+      successDesc: "Наш менеджер скоро свяжется с вами и выставит официальный счет.",
       orderNumber: "Номер заявки",
       backHome: "На главную",
     },

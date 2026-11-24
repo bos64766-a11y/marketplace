@@ -11,15 +11,21 @@ export type YmGoal =
 
 declare global {
   interface Window {
-    ym?: (id: number | string, method: string, ...args: any[]) => void;
+    ym?: (id: number, method: string, ...args: any[]) => void;
+    dataLayer?: any[];
     [key: string]: any;
   }
 }
 
 const env = (import.meta as any).env || {};
-const YM_ID = env.VITE_YM_ID || '114479664';
+const YM_ID: number = Number(env.VITE_YM_ID) || 114479664;
 const YM_FORCE = env.VITE_YM_FORCE === 'true';
 const IS_DEV = Boolean(env.DEV);
+
+// Initialize dataLayer for ecommerce if window is available
+if (typeof window !== 'undefined') {
+  window.dataLayer = window.dataLayer || [];
+}
 
 let isInitialized = false;
 
@@ -57,7 +63,9 @@ export function initAnalytics(): void {
   }
 
   try {
-    // Standard Yandex Metrika async snippet
+    window.dataLayer = window.dataLayer || [];
+
+    // Official Yandex Metrika async snippet with tag.js?id={YM_ID}
     (function (m: any, e: any, t: any, r: any, i: any, k?: any, a?: any) {
       m[i] =
         m[i] ||
@@ -75,12 +83,12 @@ export function initAnalytics(): void {
       k.async = 1;
       k.src = r;
       a.parentNode.insertBefore(k, a);
-    })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+    })(window, document, 'script', `https://mc.yandex.ru/metrika/tag.js?id=${YM_ID}`, 'ym');
 
     if (typeof window.ym === 'function') {
       window.ym(YM_ID, 'init', {
         ssr: true,
-        webvisor: true,
+        webvisor: false,
         clickmap: true,
         ecommerce: 'dataLayer',
         accurateTrackBounce: true,
