@@ -368,15 +368,15 @@ export const Header: React.FC = () => {
             </button>
 
             {/* FreshDirect Style Solid Pill Action Button */}
-            <button
+            <a
               id="btn-header-quick-request"
-              onClick={() => navigate('/request')}
+              href={`tel:${(siteSettings?.phone1 || '+998870349779').replace(/\s+/g, '')}`}
               className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white bg-[#FF5A00] hover:bg-[#E54A00] shadow-sm hover:shadow-md hover:shadow-[#FF5A00]/25 transition-all cursor-pointer shrink-0 active:scale-97"
               title={t.header.quickRequest}
             >
-              <FileText className="w-4 h-4 stroke-[2.2]" />
+              <Phone className="w-4 h-4 stroke-[2.2]" />
               <span>{t.header.quickRequest}</span>
-            </button>
+            </a>
 
             {/* Zayavkalar tarixi / Mijoz hisobi */}
             <button
@@ -531,16 +531,17 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Mobile Tezkor zayavka pill button */}
-            <button
+            <a
+              id="btn-mobile-quick-request"
+              href={`tel:${(siteSettings?.phone1 || '+998870349779').replace(/\s+/g, '')}`}
               onClick={() => {
-                navigate('/request');
                 setIsMobileMenuOpen(false);
               }}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-full text-sm font-bold text-white bg-[#FF5A00] shadow-md shadow-[#FF5A00]/25 cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-full text-sm font-bold text-white bg-[#FF5A00] shadow-md shadow-[#FF5A00]/25 cursor-pointer active:scale-98 transition-all"
             >
-              <FileText className="w-4 h-4" />
+              <Phone className="w-4 h-4" />
               <span>{t.header.quickRequest}</span>
-            </button>
+            </a>
           </div>
         )}
       </div>
