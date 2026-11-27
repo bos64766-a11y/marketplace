@@ -435,6 +435,21 @@ export const RequestPage: React.FC = () => {
                 </>
               )}
             </button>
+
+            <p className="text-[11px] text-[#64748B] text-center leading-relaxed">
+              {language === 'ru' ? 'Нажимая кнопку, вы соглашаетесь с ' : 'Zayavkani yuborish orqali siz '}
+              <a
+                href={language === 'ru' ? '/ru/privacy' : '/privacy'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/privacy');
+                }}
+                className="text-[#0B2E73] hover:text-[#FF5A00] underline font-semibold transition-colors"
+              >
+                {t.footer.privacyPolicy}
+              </a>
+              {language === 'ru' ? '.' : ' shartlariga rozilik bildirasiz.'}
+            </p>
           </div>
         </div>
       </div>

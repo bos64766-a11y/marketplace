@@ -23,6 +23,7 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage').then((m) => ({ defa
 const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
 const DeliveryPaymentPage = lazy(() => import('./pages/DeliveryPaymentPage').then((m) => ({ default: m.DeliveryPaymentPage })));
 const ContactsPage = lazy(() => import('./pages/ContactsPage').then((m) => ({ default: m.ContactsPage })));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then((m) => ({ default: m.PrivacyPolicyPage })));
 
 // Admin pages (lazy loaded)
 const AdminLoginPage = lazy(() => import('./pages/admin/AdminLoginPage').then((m) => ({ default: m.AdminLoginPage })));
@@ -108,6 +109,8 @@ const MainRouter: React.FC = () => {
       return <DeliveryPaymentPage />;
     case '/contacts':
       return <ContactsPage />;
+    case '/privacy':
+      return <PrivacyPolicyPage />;
     case '/':
     default:
       return <HomePage />;

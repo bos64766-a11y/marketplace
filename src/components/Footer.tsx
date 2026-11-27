@@ -5,7 +5,7 @@ import { CONTACT_INFO } from '../data/content';
 import { Phone, Send, MapPin, Clock, ShieldCheck, Mail, ArrowUpRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const { navigate, siteSettings, t } = useApp();
+  const { navigate, siteSettings, language, t } = useApp();
 
   return (
     <footer className="bg-[#0B1E48] text-white pt-14 pb-24 md:pb-12 mt-16 border-t border-[#1E356D]">
@@ -67,6 +67,19 @@ export const Footer: React.FC = () => {
                 >
                   {t.footer.ordersHistory}
                 </button>
+              </li>
+              <li>
+                <a
+                  id="footer-link-privacy"
+                  href={language === 'ru' ? '/ru/privacy' : '/privacy'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/privacy');
+                  }}
+                  className="text-gray-300 hover:text-[#FF5A00] transition-colors cursor-pointer"
+                >
+                  {t.footer.privacyPolicy}
+                </a>
               </li>
             </ul>
           </div>
@@ -147,7 +160,11 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
-                <span>{siteSettings?.address || 'Toshkent sh., Chilonzor tumani, Bunyodkor shox ko‘chasi, 42-uy'}</span>
+                <span>
+                  {language === 'ru' && (!siteSettings?.address || siteSettings.address.includes('Chorsu mavzesi'))
+                    ? 'г. Ташкент, Чорсу мавзеси, дом 17'
+                    : (siteSettings?.address || 'Toshkent sh., Chorsu mavzesi, 17-uy')}
+                </span>
               </li>
             </ul>
           </div>
@@ -160,9 +177,23 @@ export const Footer: React.FC = () => {
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
               {t.footer.availableProducts}
             </span>
-            <span>Toshkent shahri, Sergeli tumani, Index A3</span>
+            <span>
+              {language === 'ru'
+                ? 'г. Ташкент, Чорсу мавзеси, дом 17'
+                : (siteSettings?.address || 'Toshkent sh., Chorsu mavzesi, 17-uy')}
+            </span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href={language === 'ru' ? '/ru/privacy' : '/privacy'}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/privacy');
+              }}
+              className="text-gray-400 hover:text-[#FF5A00] transition-colors cursor-pointer font-medium"
+            >
+              {t.footer.privacyPolicy}
+            </a>
             <button
               onClick={() => navigate('/admin')}
               className="text-gray-400 hover:text-[#FF5A00] transition-colors cursor-pointer flex items-center gap-1.5 font-medium"

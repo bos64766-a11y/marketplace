@@ -222,12 +222,17 @@ def import_from_live_backup(bundle_path, backend_dir):
             SiteSettings.objects.update_or_create(
                 id=1,
                 defaults={
-                    'company_name': sett.get('companyName') or sett.get('company_name', 'SNABTASH'),
+                    'company_name': sett.get('companyName') or sett.get('company_name', '"SNABTASH" MCHJ'),
                     'phone_1': sett.get('phone1') or sett.get('phone') or sett.get('phone_1', '+998 87 034 97 79'),
-                    'email': sett.get('email', 'info@snabtash.uz') or 'info@snabtash.uz',
-                    'address': sett.get('address', '') or '',
+                    'phone_2': sett.get('phone2') or sett.get('phone_2', '+998 93 097 96 20') or '+998 93 097 96 20',
+                    'email': sett.get('email', 'regbirolls@gmail.com') or 'regbirolls@gmail.com',
+                    'address': sett.get('address', 'Toshkent sh., Chorsu mavzesi, 17-uy') or 'Toshkent sh., Chorsu mavzesi, 17-uy',
                     'work_hours': sett.get('workHours') or sett.get('workingHours') or sett.get('work_hours', '') or '',
                     'telegram_channel': sett.get('telegramChannel') or sett.get('telegram') or sett.get('telegram_channel', '') or '',
+                    'inn': sett.get('inn', '312622484') or '312622484',
+                    'mfo': sett.get('mfo', '00083') or '00083',
+                    'bank_account': sett.get('bankAccount') or sett.get('bank_account', '20208000907359596001') or '20208000907359596001',
+                    'bank_name': sett.get('bankName') or sett.get('bank_name', '"HAMKORBANK" ATB Bosh ofisi') or '"HAMKORBANK" ATB Bosh ofisi',
                 }
             )
             print(" -> [OK] Sayt sozlamalari tiklandi.")

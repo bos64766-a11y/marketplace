@@ -193,14 +193,16 @@ export const B2B_INFO_CARDS = [
 ];
 
 export const CONTACT_INFO = {
-  phones: ['+998 87 034 97 79', '+998 87 382 97 79'],
-  telegram: '@snabtash',
-  workHours: '09:00–17:00',
-  workDays: 'Dushanba – Juma',
-  address: 'Toshkent shahri, Sergeli tumani, Tashkent Index, A3-blok',
-  email: 'info@snab.uz',
-  inn: '309876543',
-  bank: 'ATB "Kapitalbank" Toshkent sh.',
+  phones: ['+998 87 034 97 79', '+998 93 097 96 20'],
+  telegram: '@snabtash_bot',
+  workHours: '08:30–18:30',
+  workDays: 'Dushanba – Shanba',
+  address: 'Toshkent sh., Chorsu mavzesi, 17-uy',
+  email: 'regbirolls@gmail.com',
+  inn: '312622484',
+  mfo: '00083',
+  bankAccount: '20208000907359596001',
+  bank: '"HAMKORBANK" ATB Bosh ofisi',
 };
 
 export const BUNDLE_PACKAGES: BundlePackage[] = [

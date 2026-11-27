@@ -121,6 +121,14 @@
       "destination": "/ru-request.html"
     },
     {
+      "source": "/ru/privacy",
+      "destination": "/ru-privacy.html"
+    },
+    {
+      "source": "/ru/privacy/",
+      "destination": "/ru-privacy.html"
+    },
+    {
       "source": "/ru/:path*",
       "destination": "/index-ru.html"
     },

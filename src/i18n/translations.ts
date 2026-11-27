@@ -100,6 +100,7 @@ export interface Translations {
     aboutUs: string;
     deliveryPayment: string;
     contacts: string;
+    privacyPolicy: string;
     adminLogin: string;
     rights: string;
     servicesTitle: string;
@@ -382,6 +383,7 @@ export const translations: Record<Language, Translations> = {
       aboutUs: "Biz haqimizda",
       deliveryPayment: "Yetkazib berish va to‘lov",
       contacts: "Bog‘lanish",
+      privacyPolicy: "Maxfiylik siyosati",
       adminLogin: "Admin kirish",
       rights: "Barcha huquqlar himoyalangan.",
       servicesTitle: "Xizmatlar",
@@ -685,6 +687,7 @@ export const translations: Record<Language, Translations> = {
       aboutUs: "О нас",
       deliveryPayment: "Доставка и оплата",
       contacts: "Контакты",
+      privacyPolicy: "Политика конфиденциальности",
       adminLogin: "Вход для администратора",
       rights: "Все права защищены.",
       servicesTitle: "Услуги",

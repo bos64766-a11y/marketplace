@@ -18,6 +18,7 @@ const staticPages = [
   { path: '/about', priority: '0.75', changefreq: 'monthly' },
   { path: '/contacts', priority: '0.75', changefreq: 'monthly' },
   { path: '/request', priority: '0.70', changefreq: 'monthly' },
+  { path: '/privacy', priority: '0.40', changefreq: 'yearly' },
 ];
 
 // All 7 Official Categories

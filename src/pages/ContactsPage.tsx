@@ -3,10 +3,10 @@ import { useSEO } from '../hooks/useSEO';
 import { useApp } from '../context/AppContext';
 import { CONTACT_INFO } from '../data/content';
 import { analytics } from '../services/analytics';
-import { Phone, Send, Clock, MapPin, Mail, MessageSquare, Check, ArrowRight, Loader2 } from 'lucide-react';
+import { Phone, Send, Clock, MapPin, Mail, MessageSquare, Check, ArrowRight, Loader2, Landmark } from 'lucide-react';
 
 export const ContactsPage: React.FC = () => {
-  const { showToast, siteSettings, submitRequest, t, language } = useApp();
+  const { showToast, siteSettings, submitRequest, navigate, t, language } = useApp();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('+998 ');
   const [message, setMessage] = useState('');
@@ -14,12 +14,23 @@ export const ContactsPage: React.FC = () => {
   const [sent, setSent] = useState(false);
 
   const phone1 = siteSettings?.phone1 || CONTACT_INFO.phones[0] || '+998 87 034 97 79';
-  const rawPhone2 = siteSettings?.phone2 || '';
-  const phone2 = (rawPhone2 && rawPhone2.replace(/\D/g, '') !== '998901234567') ? rawPhone2 : '';
+  const rawPhone2 = siteSettings?.phone2 || CONTACT_INFO.phones[1] || '+998 93 097 96 20';
+  const phone2 = (rawPhone2 && rawPhone2.replace(/\D/g, '') !== '998901234567') ? rawPhone2 : '+998 93 097 96 20';
   const telegramBot = siteSettings?.telegramBot || CONTACT_INFO.telegram || '@snabtash_bot';
   const workHours = siteSettings?.workHours || CONTACT_INFO.workHours || (language === 'ru' ? 'Пн - Сб: 08:30 - 18:30' : 'Dush - Shan: 08:30 - 18:30');
-  const address = siteSettings?.address || CONTACT_INFO.address || (language === 'ru' ? 'г. Ташкент, Сергелийский район, Tashkent Index, блок А3' : 'Toshkent sh., Sergeli tumani, Tashkent Index, A3-blok');
-  const email = siteSettings?.email || CONTACT_INFO.email || 'info@snab.uz';
+  const address =
+    language === 'ru' && (!siteSettings?.address || siteSettings.address.includes('Chorsu mavzesi'))
+      ? 'г. Ташкент, Чорсу мавзеси, дом 17'
+      : (siteSettings?.address || CONTACT_INFO.address || 'Toshkent sh., Chorsu mavzesi, 17-uy');
+  const email = siteSettings?.email || CONTACT_INFO.email || 'regbirolls@gmail.com';
+  const companyName =
+    language === 'ru' && (!siteSettings?.companyName || siteSettings.companyName.includes('SNABTASH'))
+      ? 'ООО «SNABTASH»'
+      : (siteSettings?.companyName || '"SNABTASH" MCHJ');
+  const inn = siteSettings?.inn || CONTACT_INFO.inn || '312622484';
+  const mfo = siteSettings?.mfo || CONTACT_INFO.mfo || '00083';
+  const bankAccount = siteSettings?.bankAccount || CONTACT_INFO.bankAccount || '20208000907359596001';
+  const bankName = siteSettings?.bankName || CONTACT_INFO.bank || '"HAMKORBANK" ATB Bosh ofisi';
 
   const contactSchema = {
     '@type': 'LocalBusiness',
@@ -196,6 +207,29 @@ export const ContactsPage: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Card 6: Company Requisites */}
+          <div className="p-6 rounded-3xl bg-white border border-[#E5EAF2] shadow-xs flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-[#F7F9FC] text-[#0B2E73] flex items-center justify-center shrink-0">
+              <Landmark className="w-6 h-6" />
+            </div>
+            <div className="min-w-0 flex-1 space-y-1">
+              <h3 className="font-bold text-sm text-[#0B2E73] uppercase tracking-wider">
+                {language === 'ru' ? 'Банковские реквизиты' : 'Bank rekvizitlari'}
+              </h3>
+              <p className="text-xs sm:text-sm font-extrabold text-[#14213D] pt-1">{companyName}</p>
+              <p className="text-xs text-[#475569]">
+                <span className="font-semibold">{language === 'ru' ? 'ИНН:' : 'STIR (INN):'}</span> {inn}
+              </p>
+              <p className="text-xs text-[#475569] break-all">
+                <span className="font-semibold">{language === 'ru' ? 'р/с:' : 'H/R:'}</span> {bankAccount}
+              </p>
+              <p className="text-xs text-[#475569]">{bankName}</p>
+              <p className="text-xs text-[#475569]">
+                <span className="font-semibold">{language === 'ru' ? 'МФО:' : 'MFO:'}</span> {mfo}
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Right: Interactive Consultation / Message Form (7 cols) */}
@@ -288,6 +322,21 @@ export const ContactsPage: React.FC = () => {
                   </>
                 )}
               </button>
+
+              <p className="text-[11px] text-[#64748B] text-center leading-relaxed">
+                {language === 'ru' ? 'Нажимая кнопку, вы соглашаетесь с ' : 'Tugmani bosish orqali siz '}
+                <a
+                  href={language === 'ru' ? '/ru/privacy' : '/privacy'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/privacy');
+                  }}
+                  className="text-[#0B2E73] hover:text-[#FF5A00] underline font-semibold transition-colors"
+                >
+                  {t.footer.privacyPolicy}
+                </a>
+                {language === 'ru' ? '.' : ' shartlariga rozilik bildirasiz.'}
+              </p>
             </form>
           )}
 
@@ -297,15 +346,15 @@ export const ContactsPage: React.FC = () => {
               <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-[#FF5A00]" />
                 <div>
-                  <h4 className="text-xs font-bold text-[#0B2E73]">Tashkent Index A3-blok</h4>
-                  <p className="text-[11px] text-[#667085]">{language === 'ru' ? 'г. Ташкент, Сергелийский район' : 'Sergeli tumani, Yangi Sergeli ko‘chasi'}</p>
+                  <h4 className="text-xs font-bold text-[#0B2E73]">{address}</h4>
+                  <p className="text-[11px] text-[#667085]">{companyName}</p>
                 </div>
               </div>
               <a
-                href="https://maps.google.com/?q=Tashkent+Index"
+                href="https://maps.google.com/?q=Tashkent+Chorsu+17"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-white border border-[#E5EAF2] text-xs font-semibold text-[#0B2E73] hover:bg-[#FFF1E8] hover:text-[#FF5A00] transition-colors"
+                className="px-3 py-1.5 rounded-lg bg-white border border-[#E5EAF2] text-xs font-semibold text-[#0B2E73] hover:bg-[#FFF1E8] hover:text-[#FF5A00] transition-colors shrink-0"
               >
                 {t.contactsPage.openMap}
               </a>
